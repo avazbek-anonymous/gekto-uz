@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gekto — sayt tayyorlanmoqda</title>
+  <meta name="description" content="Gekto — moliya va boshqaruv yechimlari. Sayt tayyorlanmoqda." />
+  <style>
+    :root { color-scheme: light; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height:1.5; }
+    .wrap { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:32px; background:#f6f7fb; }
+    .card { max-width:820px; width:100%; background:#fff; border:1px solid #e7e9f2; border-radius:16px; padding:28px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+    h1 { margin:0 0 10px; font-size:32px; }
+    p { margin:10px 0; color:#222; }
+    .muted { color:#555; }
+    .grid { display:grid; grid-template-columns: 1fr; gap:14px; margin-top:18px; }
+    .box { border:1px solid #eef0f6; border-radius:12px; padding:14px; background:#fafbff; }
+    .btns { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+    a.btn { text-decoration:none; padding:10px 14px; border-radius:12px; border:1px solid #dfe3f2; background:#fff; color:#111; }
+    a.btn.primary { background:#111; color:#fff; border-color:#111; }
+    footer { margin-top:18px; font-size:13px; color:#666; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="card">
+      <h1>Gekto — sayt tayyorlanmoqda</h1>
+      <p class="muted">Hozir biz platformani va kontentni bosqichma-bosqich yig’yapmiz. Tez orada bu yerda to‘liq sayt ishga tushadi.</p>
+
+      <div class="grid">
+        <div class="box">
+          <strong>Nimalar bo‘ladi?</strong>
+          <p>• Xizmatlar va кейсlar<br/>• Mijozlar uchun portal (keyinroq)<br/>• Loyihalar: <span class="muted">project.gekto.uz</span> kabi subdomenlar</p>
+        </div>
+        <div class="box">
+          <strong>Aloqa</strong>
+          <p>
+            Telegram: <span class="muted">@YOUR_USERNAME</span><br/>
+            Email: <span class="muted">info@gekto.uz</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="btns">
+        <a class="btn primary" href="#" onclick="alert('Tez orada!')">Xizmatlar</a>
+        <a class="btn" href="#" onclick="alert('Tez orada!')">Kейсlar</a>
+        <a class="btn" href="#" onclick="alert('Tez orada!')">Aloqa</a>
+      </div>
+
+      <footer>© <span id="y"></span> Gekto. Barcha huquqlar himoyalangan.</footer>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
