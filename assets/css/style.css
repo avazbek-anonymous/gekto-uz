@@ -1384,7 +1384,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   .green-section .white-text { font-size: 20px !important; margin-top: 0 !important; }
   .green-section .white-section span { font-size: 18px !important; }
   .section-title span {
-	font-size: 22px !important;
+	font-size: 20px !important;
   }
   .section-title span:after {
 	top: 12px !important;
