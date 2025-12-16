@@ -1399,4 +1399,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   .site-hero ul.slides {
 	height: 400px !important;
   }
+  .section-title {
+	width: 70% !important;
+  }
 }
