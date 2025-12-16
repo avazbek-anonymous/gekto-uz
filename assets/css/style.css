@@ -1394,9 +1394,9 @@ img, video, iframe { max-width: 100%; height: auto; }
     margin-top: 20px;
   }
   .site-hero {
-	height: 700px !important;
+	height: 600px !important;
   }
   .site-hero ul.slides {
-	height: 500px !important;
+	height: 400px !important;
   }
 }
