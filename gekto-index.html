@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gekto — Fin System</title>
+	<!-- META TAGS -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+	<meta name="author" content="Amine Akhouad">
+	<meta name="description" content="Gekto — финансовая система, консалтинг и обучение для предпринимателей.">
+
+	<!-- STYLES -->
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/ionicons.min.css">
+	<link rel="stylesheet" href="assets/css/flexslider.css">
+	<link rel="stylesheet" href="assets/css/animsition.min.css">
+	<link rel="stylesheet" href="assets/css/animate.css">
+	<link rel="stylesheet" href="assets/css/style.css">
+
+<!-- GEKTO THEME OVERRIDES -->
+<style id="gekto-theme">
+  :root{
+    --gekto-primary:#003a2f;
+    --gekto-primary-2:#002f26;
+    --gekto-accent:#ffd15c;
+    --gekto-text:#0b1f1a;
+    --gekto-muted:#5a6b65;
+    --gekto-card:#ffffff;
+    --gekto-border:rgba(0,0,0,.08);
+    --gekto-shadow:0 14px 40px rgba(0,0,0,.14);
+    --gekto-radius:18px;
+  }
+
+  /* Global */
+  body{ color:var(--gekto-text); }
+  a{ color:var(--gekto-primary); }
+  a:hover{ color:var(--gekto-primary-2); }
+  .montserrat-text{ letter-spacing:.02em; }
+
+  /* Header */
+  .main-header{
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255,255,255,.82);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+  .main-header .container{ padding-top:14px; padding-bottom:14px; }
+
+  .gekto-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none!important;
+  }
+  .gekto-brand img{ height:32px; width:auto; }
+  .brand-text{
+    font-family:Montserrat, sans-serif;
+    font-weight:800;
+    letter-spacing:.08em;
+    color:var(--gekto-primary);
+    font-size:14px;
+    line-height:1;
+    margin-top:2px;
+  }
+  .brand-sub{
+    font-family:Montserrat, sans-serif;
+    font-weight:600;
+    color:rgba(11,31,26,.62);
+    font-size:12px;
+    line-height:1;
+    margin-top:2px;
+  }
+
+  .desktop-nav ul.first-level > li > a{
+    font-family:Montserrat, sans-serif;
+    font-weight:700;
+    font-size:12px;
+    text-transform:uppercase;
+    color:rgba(11,31,26,.78);
+    transition: all .18s ease;
+  }
+  .desktop-nav ul.first-level > li > a:hover{ color:var(--gekto-primary); }
+  .desktop-nav ul.first-level > li > a.active{ color:var(--gekto-primary); }
+
+  /* Hero (Gekto style) */
+  .site-hero{
+    position:relative;
+    min-height:70vh;
+    background:
+      radial-gradient(1200px 600px at 20% 20%, rgba(255,209,92,.18), transparent 60%),
+      linear-gradient(180deg, var(--gekto-primary) 0%, var(--gekto-primary-2) 100%);
+    overflow:hidden;
+  }
+  .site-hero:before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(0deg, rgba(0,58,47,.92), rgba(0,58,47,.92)),
+      url("assets/img/hero-bg.png");
+    background-size:cover;
+    background-position:center;
+    opacity:.9;
+    pointer-events:none;
+  }
+  .site-hero:after{
+    content:"";
+    position:absolute; inset:-40px;
+    background: radial-gradient(700px 420px at 75% 35%, rgba(255,209,92,.25), transparent 60%);
+    pointer-events:none;
+  }
+  .site-hero .slides li{
+    position:relative;
+    z-index:2;
+    padding:110px 0 90px;
+  }
+  .site-hero .small-title{ color: rgba(255,255,255,.78); }
+  .site-hero .big-title{
+    color:#fff;
+    letter-spacing:-.02em;
+    font-size:56px;
+    line-height:1.06;
+    margin-top:10px;
+  }
+  .site-hero p{
+    color: rgba(255,255,255,.84);
+    max-width: 680px;
+    line-height:1.8;
+    margin-top:18px;
+    font-size:16px;
+  }
+
+  /* Sections */
+  .section-title span{
+    color: var(--gekto-primary);
+    font-family:Montserrat, sans-serif;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .section-title p{ color: var(--gekto-muted); }
+
+  .agency{ margin-top:70px; margin-bottom:70px; }
+  .agency img{
+    border-radius: var(--gekto-radius);
+    box-shadow: var(--gekto-shadow);
+  }
+  .agency p{ color: rgba(11,31,26,.78); line-height:1.85; }
+
+  /* Buttons */
+  .btn{
+    border-radius: 14px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.12);
+    transition: transform .12s ease, box-shadow .12s ease, background .18s ease, color .18s ease;
+  }
+  .btn:hover{ transform: translateY(-1px); box-shadow: 0 16px 36px rgba(0,0,0,.16); }
+  .btn.green{
+    background: var(--gekto-accent);
+    border-color: var(--gekto-accent);
+    color: var(--gekto-primary);
+  }
+  .btn.white{
+    background: transparent;
+    border-color: rgba(255,255,255,.55);
+    color:#fff;
+  }
+
+  /* Services section */
+  .services{
+    background: linear-gradient(180deg, rgba(0,58,47,.06), rgba(0,58,47,.00));
+    padding: 90px 0;
+  }
+  .services .icon{ color: var(--gekto-primary); }
+  .services .service-title{ color: var(--gekto-text); }
+  .services ul li{ color: rgba(11,31,26,.78); }
+  .services-right img{
+    border-radius: var(--gekto-radius);
+    box-shadow: var(--gekto-shadow);
+  }
+
+  /* Portfolio */
+  .portfolio{ padding: 90px 0; }
+  .categories-grid{
+    border:1px solid var(--gekto-border);
+    border-radius: var(--gekto-radius);
+    padding:18px 18px 8px 18px;
+    background: var(--gekto-card);
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  }
+  .categories-grid .portfolio_filter a{
+    border-radius: 10px;
+  }
+  .categories-grid .portfolio_filter a.active{
+    background: rgba(0,58,47,.08);
+    color: var(--gekto-primary);
+  }
+  .portfolio_item img{ border-radius: 16px; }
+  .portfolio_item_hover{ background: rgba(0,58,47,.92); }
+  .portfolio_item_hover .item_info span{ color: #fff; }
+  .portfolio_item_hover .item_info em{ color: var(--gekto-accent); }
+
+  /* CTA section */
+  .green-section{
+    background: linear-gradient(180deg, var(--gekto-primary) 0%, var(--gekto-primary-2) 100%);
+    border-top: 1px solid rgba(255,209,92,.18);
+    border-bottom: 1px solid rgba(255,209,92,.18);
+  }
+  .white-section{
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: var(--gekto-radius);
+  }
+  .white-section p{ color: rgba(255,255,255,.82); }
+  .input_1 input{
+    background: rgba(0,0,0,.18);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 12px;
+    color: #fff;
+  }
+  .input_1 span{ color: rgba(255,255,255,.82); }
+
+  /* Footer */
+  .main-footer{ background: #041b16; }
+  .main-footer .link{ color: rgba(255,255,255,.75)!important; }
+  .main-footer .link:hover{ color: var(--gekto-accent)!important; }
+  .main-footer .gray-text{ color: rgba(255,255,255,.58); }
+  .social-icons i{ color: rgba(255,255,255,.78); }
+  .social-icons a:hover i{ color: var(--gekto-accent); }
+
+  /* Responsive tweaks */
+  @media (max-width: 991px){
+    .site-hero .big-title{ font-size: 42px; }
+    .site-hero .slides li{ padding: 90px 0 70px; }
+    .brand-sub{ display:none; }
+  }
+</style>
+
+</head>
+<body class="animsition">
+	<!-- HEADER  -->
+	<header class="main-header">
+		<div class="container">
+			<div class="logo">
+  <a href="index.html" class="gekto-brand animsition-link" aria-label="Gekto">
+    <img src="assets/img/logo.png" alt="Gekto" />
+    <span class="brand-text">GEKTO</span>
+    <span class="brand-sub">Fin System</span>
+  </a>
+</div>
+
+			<div class="menu">
+				<!-- desktop navbar -->
+				<nav class="desktop-nav">
+					<ul class="first-level">
+						<li><a href="index.html" class="animsition-link">Главная</a></li>
+						<li><a href="about.html" class="animsition-link">О Gekto</a></li>
+						<li><a href="services.html" class="animsition-link">Решения</a></li>
+						<li><a href="">Кейсы</a>
+							<ul class="second-level">
+								<li><a href="portfolio-1.html" class="animsition-link">Список кейсов</a></li>
+								<li><a href="single-project.html" class="animsition-link">Кейс — шаблон 1</a></li>
+								<li><a href="single-project-2.html" class="animsition-link">Кейс — шаблон 2</a></li>
+							</ul>
+						</li>
+						<li><a href="">Блог</a>
+							<ul class="second-level">
+								<li><a href="blog-1.html" class="animsition-link">Список статей</a></li>
+								<li><a href="single-post.html" class="animsition-link">Статья — шаблон</a></li>
+							</ul>
+						</li>
+						<li><a href="contact.html" class="animsition-link">Контакты</a></li>
+					</ul>
+				</nav>
+				<!-- mobile navbar -->
+				<nav class="mobile-nav"></nav>
+				<div class="menu-icon">
+					<div class="line"></div>
+					<div class="line"></div>
+					<div class="line"></div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<!-- HERO SECTION  -->
+	<div class="site-hero">
+		<ul class="slides">
+			<li>
+				<div><span class="small-title uppercase montserrat-text">GEKTO</span></div>
+				<div class="big-title uppercase montserrat-text">финансовая система</div>
+				<p>Покажем прибыль по-настоящему: продажи, касса, склад, расходы, долги и отчёты — в одной системе.</p>
+			</li>
+			<li>
+				<div><span class="small-title uppercase montserrat-text">для бизнеса</span></div>
+				<div class="big-title uppercase montserrat-text">управление деньгами</div>
+				<p>Внедряем финсистему, обучаем команду и сопровождаем — чтобы цифры работали на рост, а не “лежали в таблицах”.</p>
+			</li>
+		</ul>
+	</div>
+
+	<!-- HISTORY OF AGENCY -->
+	<div class="container">
+		<div class="agency">
+			<div class="col-md-5 col-sm-12">
+				<div class="row">
+					<img src="assets/img/agency.jpg" alt="image">
+				</div>
+			</div>
+			<div class="col-md-offset-1 col-md-6 col-sm-12">
+				<div class="row">
+					<div class="section-title">
+						<span>Что такое Gekto</span>
+					</div>
+					<p>
+						Gekto — это набор решений для бизнеса: финансовая система (учёт и отчётность), консалтинг по управлению деньгами и обучение команды. Мы наводим порядок в цифрах и превращаем их в понятные решения.
+					</p>
+					<a href="#" class="btn green" style="float:right;margin-top:30px"><span>Смотреть демо</span></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- WHY CHOOSE US -->
+	<section class="services">
+		<div class="container">
+			<div class="row">
+				<div class="section-title">
+					<span>Почему Gekto</span>
+					<p>Система, которая даёт прозрачность: где деньги, что приносит прибыль, и что съедает маржу — по дням, товарам, отделам и проектам.</p>
+				</div>
+			</div>
+
+			<div class="col-md-7 col-sm-12 services-left wow fadeInUp">
+				<div class="row" style="margin-bottom:50px">
+					<div class="col-md-6 col-sm-12">
+						<div class="row">
+							<i class="icon ion-ios-infinite-outline"></i>
+							<span class="montserrat-text uppercase service-title">Fin System</span>
+							<ul>
+								<li>План/факт и бюджет</li>
+								<li>Продажи, касса, склад</li>
+								<li>Долги и взаиморасчёты</li>
+								<li>Отчёты и аналитика</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="row">
+							<i class="icon ion-ios-shuffle"></i>
+							<span class="montserrat-text uppercase service-title">Консалтинг</span>
+							<ul>
+								<li>Диагностика финансов</li>
+								<li>Построение учёта</li>
+								<li>Финмодель и KPI</li>
+								<li>Сопровождение внедрения</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6 col-sm-12">
+						<div class="row">
+							<i class="icon ion-ios-cart-outline"></i>
+							<span class="montserrat-text uppercase service-title">Академия</span>
+							<ul>
+								<li>Курсы для предпринимателей</li>
+								<li>Финансы для менеджеров</li>
+								<li>Практика на кейсах</li>
+								<li>Материалы и шаблоны</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="row">
+							<i class="icon ion-ios-settings"></i>
+							<span class="montserrat-text uppercase service-title">Автоматизация</span>
+							<ul>
+								<li>Google Sheets + Apps Script</li>
+								<li>Интеграции (CRM/боты)</li>
+								<li>Дашборды и отчёты</li>
+								<li>Контроль качества данных</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-5 col-sm-12 services-right wow fadeInUp" data-wow-delay=".1s">
+				<div class="row">
+					<img src="assets/img/serv.jpg" alt="image">
+				</div>
+			</div>
+
+		</div>
+	</section>
+
+
+	<!-- PORTFOLIO -->
+	<section class="portfolio">
+		<div class="container">
+			<div class="row">
+				<div class="section-title">
+					<span>Кейсы клиентов</span>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+					tempor incididunt ut labore et dolore magna aliqua.</p>
+				</div>
+			</div>
+				
+
+			<!-- categories  -->
+			<div class="col-md-3">
+				<div class="row categories-grid wow fadeInLeft">
+					<span class="montserrat-text uppercase">отрасли</span>
+
+					<nav class="categories">
+						<ul class="portfolio_filter">
+							<li><a href="" class="active" data-filter="*">all</a></li>
+							<li><a href="" data-filter=".photography">photography</a></li>
+							<li><a href="" data-filter=".web">webdesign</a></li>
+							<li><a href="" data-filter=".logo">logo</a></li>
+							<li><a href="" data-filter=".graphics">graphics</a></li>
+							<li><a href="" data-filter=".ads">advertising</a></li>
+							<li><a href="" data-filter=".fashion">fashion</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+
+			<!-- all works -->
+			<div class="col-md-9">
+				<div class="row portfolio_container">
+					<!-- single work -->
+					<div class="col-md-4 photography">
+						<a href="single-project.html" class="portfolio_item work-grid wow fadeInUp">
+							<img src="assets/img/work-1.jpg" alt="image">
+							<div class="portfolio_item_hover">
+								<div class="item_info">
+									<span>Brave man</span>
+									<em>photography</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- end single work -->
+
+					<!-- single work -->
+					<div class="col-md-4 fashion logo">
+						<a href="single-project.html" class="portfolio_item work-grid wow fadeInUp" data-wow-delay=".2s">
+							<img src="assets/img/work-2.jpg" alt="image">
+							<div class="portfolio_item_hover">
+								<div class="item_info">
+									<span>super man</span>
+									<em>photography</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- end single work -->
+
+					<!-- single work -->
+					<div class="col-md-4 ads graphics">
+						<a href="single-project.html" class="portfolio_item work-grid wow fadeInUp" data-wow-delay=".3s">
+							<img src="assets/img/work-3.jpg" alt="image">
+							<div class="portfolio_item_hover">
+								<div class="item_info">
+									<span>bat man</span>
+									<em>photography</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- end single work -->
+
+					<!-- single work -->
+					<div class="col-md-4 fashion ads">
+						<a href="single-project.html" class="portfolio_item work-grid wow fadeInUp" data-wow-delay=".4s">
+							<img src="assets/img/work-1.jpg" alt="image">
+							<div class="portfolio_item_hover">
+								<div class="item_info">
+									<span>spider man</span>
+									<em>photography</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- end single work -->
+
+					<!-- single work -->
+					<div class="col-md-4 graphics ads">
+						<a href="single-project.html" class="portfolio_item work-grid wow fadeInUp" data-wow-delay=".5s">
+							<img src="assets/img/work-3.jpg" alt="image">
+							<div class="portfolio_item_hover">
+								<div class="item_info">
+									<span>iron man</span>
+									<em>photography</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- end single work -->
+
+					<!-- single work -->
+					<div class="col-md-4 logo web photography">
+						<a href="single-project.html" class="portfolio_item work-grid wow fadeInUp" data-wow-delay=".6s">
+							<img src="assets/img/work-2.jpg" alt="image">
+							<div class="portfolio_item_hover">
+								<div class="item_info">
+									<span>iron man</span>
+									<em>photography</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- end single work -->
+
+					<!-- single work -->
+					<div class="col-md-4 ads graphics">
+						<a href="single-project.html" class="portfolio_item work-grid wow fadeInUp" data-wow-delay=".7s">
+							<img src="assets/img/work-2.jpg" alt="image">
+							<div class="portfolio_item_hover">
+								<div class="item_info">
+									<span>iron man</span>
+									<em>photography</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- end single work -->
+
+					<!-- single work -->
+					<div class="col-md-4 web fashion photography">
+						<a href="single-project.html" class="portfolio_item work-grid wow fadeInUp" data-wow-delay=".8s">
+							<img src="assets/img/work-3.jpg" alt="image">
+							<div class="portfolio_item_hover">
+								<div class="item_info">
+									<span>iron man</span>
+									<em>photography</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- end single work -->
+
+					<!-- single work -->
+					<div class="col-md-4 fashion logo">
+						<a href="single-project.html" class="portfolio_item work-grid wow fadeInUp" data-wow-delay=".9s">
+							<img src="assets/img/work-1.jpg" alt="image">
+							<div class="portfolio_item_hover">
+								<div class="item_info">
+									<span>iron man</span>
+									<em>photography</em>
+								</div>
+							</div>
+						</a>
+					</div>
+					<!-- end single work -->
+				</div>
+				<!-- end row -->
+			</div>
+			<!-- all works end -->
+		</div>
+		<!-- end container -->
+	</section>
+	<!-- portfolio -->
+
+	<!-- newsletter -->
+	<section id="contact" class="green-section wow fadeInUp" style="padding:50px 0">
+		<div class="container">
+			<div class="col-md-6 col-sm-12">
+				<div class="row">
+					<span class="white-text montserrat-text uppercase" style="font-size:30px;display:block;">
+						you think GEKTO cool? let's work together
+					</span>
+					<a href="#" class="btn white" style="margin-top:30px"><span>Получить консультацию</span></a>
+				</div>
+			</div>
+
+			<div class="col-md-6 col-sm-12">
+				<div class="row">
+					<div class="white-section" style="padding:20px">
+						<span class="montserrat-text uppercase" style="font-size:24px">Оставьте контакт — мы пришлём план внедрения</span>
+						<p>
+							Напишите почту — и мы отправим короткий чек-лист внедрения, пример отчётов и шаги, чтобы ваша команда быстро начала вести учёт правильно.
+						</p>
+						<form action="#" method="post">
+							<div class="input_1">
+								<input type="text" name="email">
+								<span>ваш e-mail</span>
+							</div>
+							<button type="submit" class="btn green" style="margin-top:20px"><span>отправить</span></button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- FOOTER -->
+	<footer class="main-footer wow fadeInUp">
+		<div class="container">
+			<div class="col-md-8 col-sm-12">
+				<div class="row">
+					<nav class="footer-nav">
+						<ul>
+							<li><a href="index.html" class="animsition-link link">Главная</a></li>
+							<li><a href="about.html" class="animsition-link link">О Gekto</a></li>
+							<li><a href="services.html" class="animsition-link link">Решения</a></li>
+							<li><a href="portfolio-1.html" class="animsition-link link">Кейсы</a></li>
+							<li><a href="blog-1.html" class="animsition-link link">Блог</a></li>
+							<li><a href="contact.html" class="animsition-link link">Контакты</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+
+			<div class="col-md-4 col-sm-12" style="text-align:right">
+				<div class="row">
+					<div class="uppercase gray-text">
+						Gekto &copy; 2025. Все права защищены.
+					</div>
+					<ul class="social-icons" style="margin-top:30px;float:right">
+						<li><a href="#"><i class="icon ion-social-facebook"></i></a></li>
+						<li><a href="#"><i class="icon ion-social-twitter"></i></a></li>
+						<li><a href="#"><i class="icon ion-social-youtube"></i></a></li>
+						<li><a href="#"><i class="icon ion-social-linkedin"></i></a></li>
+						<li><a href="#"><i class="icon ion-social-pinterest"></i></a></li>
+						<li><a href="#"><i class="icon ion-social-instagram"></i></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+	<!-- SCRIPTS -->
+	<script type="text/javascript" src="assets/js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="assets/js/isotope.pkgd.min.js"></script>
+	<script type="text/javascript" src="assets/js/jquery.flexslider.js"></script>
+	<script type="text/javascript" src="assets/js/smoothScroll.js"></script>
+	<script type="text/javascript" src="assets/js/jquery.animsition.min.js"></script>
+	<script type="text/javascript" src="assets/js/wow.min.js"></script>
+	<script type="text/javascript" src="assets/js/main.js"></script>
+
+	<script type="text/javascript" charset="utf-8">
+		$(window).load(function() {
+			new WOW().init();
+
+			// initialise flexslider
+			$('.site-hero').flexslider({
+				animation: "fade",
+				directionNav: false,
+				controlNav: false, 
+				keyboardNav: true,
+				slideToStart: 0,
+				animationLoop: true,
+				pauseOnHover: false,
+				slideshowSpeed: 4000, 
+			});
+
+
+			// initialize isotope
+			var $container = $('.portfolio_container');
+			$container.isotope({
+				filter: '*',
+			});
+		 
+			$('.portfolio_filter a').click(function(){
+				$('.portfolio_filter .active').removeClass('active');
+				$(this).addClass('active');
+		 
+				var selector = $(this).attr('data-filter');
+				$container.isotope({
+					filter: selector,
+					animationOptions: {
+						duration: 500,
+						animationEngine : "jquery"
+					}
+				});
+				return false;
+			}); 
+		});
+	</script>
+</body>
+</html>
