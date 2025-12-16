@@ -1403,3 +1403,53 @@ img, video, iframe { max-width: 100%; height: auto; }
 	width: 70% !important;
   }
 }
+/* ===== ABOUT (mobile fix) ===== */
+@media (max-width: 767px) {
+
+  /* 2 колонки -> в столбик */
+  .about-split .col-md-6{
+    float: none !important;
+    width: 100% !important;
+    display: block !important;
+  }
+  .about-split .col-md-6 + .col-md-6{
+    margin-top: 26px;
+  }
+
+  /* убираем “обтекание” заголовка */
+  .about-split .section-title{
+    float: none !important;
+    width: 100% !important;
+    text-align: center !important;
+    margin-bottom: 12px !important;
+    clear: both !important;
+  }
+  .about-split .section-title span{
+    float: none !important;
+    display: inline-block !important;
+    width: auto !important;
+    margin: 0 auto 8px !important;
+  }
+  .about-split .section-title p{
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+  }
+
+  /* основной текст: читабельно + переносы */
+  .about-split > .container p{
+    font-size: 14px;
+    line-height: 1.65;
+    text-align: left;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  /* если у тебя “подчёркивание/полоска” у span уезжает — центрируем */
+  .about-split .section-title span:after,
+  .about-split .section-title span::after{
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+}
