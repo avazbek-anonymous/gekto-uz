@@ -1349,3 +1349,38 @@ footer.main-footer nav.footer-nav ul li a{
   }
   .history-panel.is-active{ opacity: 1; transform: none; }
 }
+/* ===== Mobile fixes ===== */
+html, body { overflow-x: hidden; }
+img, video, iframe { max-width: 100%; height: auto; }
+
+/* иногда помогает bootstrap-колонкам не раздувать ширину */
+[class*="col-"] { min-width: 0; }
+
+@media (max-width: 767px) {
+  /* УБИРАЕМ раздувающий padding в футере */
+  .main-footer p[style*="padding-right"] { padding-right: 0 !important; }
+
+  /* Центрируем футер в мобилке */
+  .main-footer .col-md-4,
+  .main-footer .col-md-8 { text-align: center !important; }
+
+  .main-footer .social-icons {
+    float: none !important;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 15px !important;
+  }
+
+  /* Кнопку "Biz haqimizda" не держим float-right на мобилке */
+  .agency a.btn.green { float: none !important; display: inline-block; }
+
+  /* HERO уменьшить */
+  .site-hero .big-title { font-size: 28px !important; line-height: 1.15 !important; }
+  .site-hero .small-title { font-size: 12px !important; }
+  .site-hero p { font-size: 14px !important; line-height: 1.5 !important; }
+
+  /* newsletter тексты уменьшить (у тебя там inline font-size) */
+  .green-section .white-text { font-size: 20px !important; margin-top: 0 !important; }
+  .green-section .white-section span { font-size: 18px !important; }
+}
