@@ -107,26 +107,12 @@
   </footer>
 
   <!-- SCRIPTS -->
-  <script src="/assets/js/jquery-2.1.4.min.js"></script>
-  <script src="/assets/js/isotope.pkgd.min.js"></script>
-  <script src="/assets/js/jquery.flexslider.js"></script>
-  <script src="/assets/js/smoothScroll.js"></script>
-  <script src="/assets/js/jquery.animsition.min.js"></script>
-  <script src="/assets/js/wow.min.js"></script>
-  <script src="/assets/js/main.js"></script>
-
-  <!-- header scrolled -->
-  <script>
-    (function () {
-      const header = document.querySelector('header.main-header');
-      if (!header) return;
-      const toggle = () => header.classList.toggle('scrolled', window.scrollY > 10);
-      toggle();
-      window.addEventListener('scroll', toggle, { passive: true });
-    })();
-  </script>
-  
-<script type="text/javascript" src="assets/js/wow.min.js"></script>
+  <script type="text/javascript" src="assets/js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="assets/js/smoothScroll.js"></script>
+	<script type="text/javascript" src="assets/js/jquery.flexslider.js"></script>
+	<script type="text/javascript" src="assets/js/jquery.animsition.min.js"></script>
+	<script type="text/javascript" src="assets/js/wow.min.js"></script>
+	<script type="text/javascript" src="assets/js/main.js"></script>
 	<script type="text/javascript">
 		$(window).load(function () {
 			new WOW().init();
@@ -137,6 +123,17 @@
 				slideshowSpeed: 3000,
 			});
 		});
+	</script>
+
+  <!-- header scrolled -->
+  <script>
+    (function () {
+      const header = document.querySelector('header.main-header');
+      if (!header) return;
+      const toggle = () => header.classList.toggle('scrolled', window.scrollY > 10);
+      toggle();
+      window.addEventListener('scroll', toggle, { passive: true });
+    })();
   </script>
   <!-- SPA LOADER -->
   <script>
