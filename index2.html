@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gekto — aqilli moliya</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Avazbek Kurbanmuradov">
+  <meta name="theme-color" content="#003a2f">
+  <meta name="description" content="Gekto — moliya va boshqaruv yechimlari">
+
+  <link rel="icon" href="assets/img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/img/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/img/android-chrome-512x512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/ionicons.min.css">
+  <link rel="stylesheet" href="assets/css/flexslider.css">
+  <link rel="stylesheet" href="assets/css/animsition.min.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="animsition">
+
+  <!-- HEADER (скопируй свой 1-в-1) -->
+  <header class="main-header">
+    <div class="container">
+      <div class="logo">
+        <a href="index.html"><img src="assets/img/logo.png" alt="logo"></a>
+      </div>
+
+      <div class="menu">
+        <nav class="desktop-nav">
+          <ul class="first-level">
+            <li><a href="main.html" class="animsition-link">Asosiy</a></li>
+            <li><a href="about.html" class="animsition-link">Biz haqimizda</a></li>
+            <li><a href="services.html" class="animsition-link">Xizmatlarimiz</a></li>
+            <li><a href="">Portfolio</a>
+              <ul class="second-level">
+                <li><a href="portfolio-1.html" class="animsition-link">Proyektlarimiz</a></li>
+                <li><a href="single-project.html" class="animsition-link">Moliya tizimi</a></li>
+                <li><a href="single-project-2.html" class="animsition-link">Moliya modeli</a></li>
+              </ul>
+            </li>
+            <li><a href="">Kurslarimiz</a>
+              <ul class="second-level">
+                <li><a href="blog-1.html" class="animsition-link">Maxsus moliya</a></li>
+                <li><a href="single-post.html" class="animsition-link">Oson moliya</a></li>
+              </ul>
+            </li>
+            <li><a href="contact.html" class="animsition-link">Kontaktlarimiz</a></li>
+          </ul>
+        </nav>
+
+        <nav class="mobile-nav"></nav>
+        <div class="menu-icon">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- СЮДА ГРУЗИМ СТРАНИЦЫ -->
+  <div id="page-wrapper"></div>
+
+  <!-- FOOTER (скопируй свой 1-в-1) -->
+  <footer class="main-footer wow fadeInUp">
+    <div class="container">
+      <div class="col-md-8 col-sm-12">
+        <div class="row">
+          <nav class="footer-nav">
+            <p style="font-weight: bold;">“Murakkab moliyani sodda tilda tushuntiramiz”</p>
+            <p style="text-align: center;font-weight: bold;padding-right: 22rem;">Fazliddin Davronov</p>
+            <ul>
+              <li><a href="main.html" class="animsition-link link">Home</a></li>
+              <li><a href="about.html" class="animsition-link link">about us</a></li>
+              <li><a href="services.html" class="animsition-link link">services</a></li>
+              <li><a href="portfolio-1.html" class="animsition-link link">portfolio</a></li>
+              <li><a href="blog-1.html" class="animsition-link link">blog</a></li>
+              <li><a href="contact.html" class="animsition-link link">contact us</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-sm-12" style="text-align:right">
+        <div class="row">
+          <div class="gray-text">
+            Created by Gekto &copy;2022. Huquqlar himoyalangan.
+          </div>
+          <ul class="social-icons" style="margin-top:30px;float:right">
+            <li><a href="#"><i class="icon ion-social-facebook"></i></a></li>
+            <li><a href="#"><i class="icon ion-social-twitter"></i></a></li>
+            <li><a href="#"><i class="icon ion-social-youtube"></i></a></li>
+            <li><a href="#"><i class="icon ion-social-linkedin"></i></a></li>
+            <li><a href="#"><i class="icon ion-social-pinterest"></i></a></li>
+            <li><a href="#"><i class="icon ion-social-instagram"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="assets/js/jquery-2.1.4.min.js"></script>
+  <script src="assets/js/isotope.pkgd.min.js"></script>
+  <script src="assets/js/jquery.flexslider.js"></script>
+  <script src="assets/js/smoothScroll.js"></script>
+  <script src="assets/js/jquery.animsition.min.js"></script>
+  <script src="assets/js/wow.min.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <!-- header scrolled -->
+  <script>
+    (function () {
+      const header = document.querySelector('header.main-header');
+      if (!header) return;
+      const toggle = () => header.classList.toggle('scrolled', window.scrollY > 10);
+      toggle();
+      window.addEventListener('scroll', toggle, { passive: true });
+    })();
+  </script>
+
+  <!-- SPA LOADER -->
+  <script>
+    (function () {
+      const wrapper = document.getElementById('page-wrapper');
+
+      function initPlugins() {
+        if (window.WOW) new WOW().init();
+
+        if (window.jQuery) {
+          const $ = window.jQuery;
+
+          if ($('.site-hero').length && $.fn.flexslider) {
+            $('.site-hero').flexslider({
+              animation: "fade",
+              directionNav: false,
+              controlNav: false,
+              keyboardNav: true,
+              slideToStart: 0,
+              animationLoop: true,
+              pauseOnHover: false,
+              slideshowSpeed: 7000,
+            });
+          }
+
+          if ($('.portfolio_container').length && $.fn.isotope) {
+            var $container = $('.portfolio_container');
+            $container.isotope({ filter: '*' });
+
+            $('.portfolio_filter a').off('click').on('click', function (e) {
+              e.preventDefault();
+              $('.portfolio_filter .active').removeClass('active');
+              $(this).addClass('active');
+              var selector = $(this).attr('data-filter');
+              $container.isotope({
+                filter: selector,
+                animationOptions: { duration: 500, animationEngine: "jquery" }
+              });
+            });
+          }
+        }
+      }
+
+      async function loadPage(url) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+
+          // поддержка и "partial" (main.html без html/body), и "full page"
+          const pageContent = doc.querySelector('#page-content') || doc.body || doc;
+
+          // если вдруг в файле остались header/footer — вырезаем
+          pageContent.querySelectorAll('header.main-header, footer.main-footer, script').forEach(n => n.remove());
+
+          wrapper.innerHTML = pageContent.innerHTML;
+          window.scrollTo(0, 0);
+          initPlugins();
+        } catch (e) {
+          console.error(e);
+          wrapper.innerHTML = '<div class="container" style="padding:40px 0">' +
+            '<div class="alert alert-danger">Sahifa yuklanmadi: ' + url + '</div></div>';
+        }
+      }
+
+      // клики по ссылкам -> грузим внутрь, header/footer остаются
+      document.addEventListener('click', function (e) {
+        const a = e.target.closest('a');
+        if (!a) return;
+
+        const href = a.getAttribute('href') || '';
+        if (!href) return;
+        if (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+        if (href.startsWith('#')) return;
+        if (!href.endsWith('.html')) return; // только страницы
+
+        // новые вкладки — пусть работают обычно
+        if (a.target === '_blank' || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+
+        e.preventDefault();
+        // чтобы при обновлении страницы не открывался "голый" main.html — используем hash
+        location.hash = '#/' + href.replace(/\.html$/i, '');
+      });
+
+      function hashToFile() {
+        const h = (location.hash || '').replace(/^#\/?/, '');
+        return (h ? (h + '.html') : 'main.html');
+      }
+
+      window.addEventListener('hashchange', () => loadPage(hashToFile()));
+
+      // старт
+      loadPage(hashToFile());
+    })();
+  </script>
+
+</body>
+</html>
