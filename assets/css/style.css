@@ -156,7 +156,7 @@ ul.social-icons li a:hover{
 		margin : 0 auto 50px;
 	}
 	.section-title span:after{
-		left:50%;
+		left:10%;
 		-webkit-transform:translateX(-50%);
 		    -ms-transform:translateX(-50%);
 		        transform:translateX(-50%);
