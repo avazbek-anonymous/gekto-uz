@@ -537,7 +537,7 @@ footer.main-footer nav.footer-nav ul li a{
 .site-hero{
 	height: 850px;
 	width: 100%;
-	background: #fff url("../img/site-hero.jpg") no-repeat;
+	background: #fff url("../img/first-page-hero.png") no-repeat;
 	background-size: cover;
 	position: relative;
 	overflow: hidden;
@@ -1373,7 +1373,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   }
 
   /* Кнопку "Biz haqimizda" не держим float-right на мобилке */
-  .agency a.btn.green { float: none !important; display: inline-block; }
+  .agency a.btn.green {display: inline-block; }
 
   /* HERO уменьшить */
   .site-hero .big-title { font-size: 20px !important; line-height: 1.15 !important; }
@@ -1389,4 +1389,14 @@ img, video, iframe { max-width: 100%; height: auto; }
   .section-title span:after {
 	top: 12px !important;
   };
+  .portfolio .categories-grid span {
+	font-size: 20px;
+    margin-top: 20px;
+  }
+  .site-hero {
+	height: 700px !important;
+  }
+  .site-hero ul.slides {
+	height: 500px !important;
+  }
 }
