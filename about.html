@@ -651,135 +651,171 @@
 			});
 		});
 	</script>
+	
 	<!-- history scroll script -->
-<script>
-(() => {
-  const BP = 767; // mobile breakpoint
-  let io = null;
-  let currentRoot = null;
-  let currentMode = null; // "mobile" | "desktop"
+	<script>
+		(() => {
+			const BP = 767; // телефон
+			let io = null;
 
-  const isMobile = () => window.matchMedia(`(max-width:${BP}px)`).matches;
+			const root = document.querySelector(".history-scroll");
+			if (!root) return;
 
-  function teardown() {
-    if (io) { io.disconnect(); io = null; }
-    if (!currentRoot) return;
+			const container = root.querySelector(".container");
+			const sticky = root.querySelector(".history-sticky");
+			const rail = root.querySelector(".history-rail");
+			const yearBtns = Array.from(root.querySelectorAll(".history-year"));
+			const panels = Array.from(root.querySelectorAll(".history-panel"));
+			const steps = Array.from(root.querySelectorAll(".history-step"));
 
-    currentRoot.querySelectorAll(".history-year").forEach(btn => {
-      if (btn.__hsHandler) {
-        btn.removeEventListener("click", btn.__hsHandler);
-        btn.__hsHandler = null;
-      }
-    });
+			if (!container || !sticky || !rail || !yearBtns.length || !panels.length || !steps.length) return;
 
-    currentRoot = null;
-    currentMode = null;
-  }
+			// spacer чтобы контент не прыгал, когда sticky становится fixed/absolute
+			const spacer = document.createElement("div");
+			spacer.className = "history-sticky-spacer";
+			sticky.before(spacer);
 
-  function init(root) {
-    const mode = isMobile() ? "mobile" : "desktop";
+			const isMobile = () => window.matchMedia(`(max-width:${BP}px)`).matches;
 
-    // если уже инициализировано в этом режиме — ничего не делаем
-    if (root === currentRoot && mode === currentMode) return;
+			const getTopOffset = () => {
+				const v = getComputedStyle(root).getPropertyValue("--history-top").trim();
+				const n = parseFloat(v);
+				return Number.isFinite(n) ? n : 120;
+			};
 
-    teardown();
-    currentRoot = root;
-    currentMode = mode;
+			function setActive(year) {
+				yearBtns.forEach(b => b.classList.toggle("active", b.dataset.year === year));
+				panels.forEach(p => p.classList.toggle("is-active", p.dataset.year === year));
 
-    const rail    = root.querySelector(".history-rail");
-    const yearBtns = Array.from(root.querySelectorAll(".history-year"));
-    const panels   = Array.from(root.querySelectorAll(".history-panel"));
-    const steps    = Array.from(root.querySelectorAll(".history-step"));
+				const idx = steps.findIndex(s => s.dataset.year === year);
+				const denom = Math.max(steps.length - 1, 1);
+				const prog = Math.max(0, idx) / denom;
+				rail.style.setProperty("--progress", `${(prog * 100).toFixed(2)}%`);
+			}
 
-    // mobile: просто показываем все панели (CSS уже делает их “карточками”)
-    if (mode === "mobile") {
-      panels.forEach(p => p.classList.add("is-active"));
-      return;
-    }
+			// click year -> scroll
+			const stepByYear = new Map(steps.map(s => [s.dataset.year, s]));
+			yearBtns.forEach(btn => {
+				btn.addEventListener("click", (e) => {
+					e.preventDefault();
+					const s = stepByYear.get(btn.dataset.year);
+					if (s) s.scrollIntoView({
+						behavior: "smooth",
+						block: "center"
+					});
+				});
+			});
 
-    // desktop: нужна вся структура
-    if (!rail || !yearBtns.length || !panels.length || !steps.length) return;
+			// observer (переключение лет)
+			function ensureObserver() {
+				if (io) {
+					io.disconnect();
+					io = null;
+				}
 
-    const stepByYear = new Map(steps.map(s => [s.dataset.year, s]));
+				if (isMobile()) {
+					// на телефоне показываем всё подряд
+					panels.forEach(p => p.classList.add("is-active"));
+					return;
+				}
 
-    function setActive(year) {
-      yearBtns.forEach(b => b.classList.toggle("active", b.dataset.year === year));
-      panels.forEach(p => p.classList.toggle("is-active", p.dataset.year === year));
+				io = new IntersectionObserver((entries) => {
+					const visible = entries.filter(e => e.isIntersecting);
+					if (!visible.length) return;
 
-      const idx = steps.findIndex(s => s.dataset.year === year);
-      const denom = Math.max(steps.length - 1, 1);
-      const prog = Math.max(0, idx) / denom;
-      rail.style.setProperty("--progress", `${(prog * 100).toFixed(2)}%`);
-    }
+					const center = window.innerHeight / 2;
+					visible.sort((a, b) => {
+						const ca = a.boundingClientRect.top + a.boundingClientRect.height / 2;
+						const cb = b.boundingClientRect.top + b.boundingClientRect.height / 2;
+						return Math.abs(ca - center) - Math.abs(cb - center);
+					});
 
-    // click year -> scroll to step
-    yearBtns.forEach(btn => {
-      const handler = (e) => {
-        e.preventDefault();
-        const s = stepByYear.get(btn.dataset.year);
-        if (s) s.scrollIntoView({ behavior: "smooth", block: "center" });
-      };
-      btn.__hsHandler = handler;
-      btn.addEventListener("click", handler);
-    });
+					setActive(visible[0].target.dataset.year);
+				}, {
+					rootMargin: "-45% 0px -45% 0px",
+					threshold: 0
+				});
 
-    // scroll-driven switch
-    io = new IntersectionObserver((entries) => {
-      const visible = entries.filter(e => e.isIntersecting);
-      if (!visible.length) return;
+				steps.forEach(s => io.observe(s));
+				setActive(steps[0].dataset.year);
+			}
 
-      const center = window.innerHeight / 2;
-      visible.sort((a, b) => {
-        const ca = a.boundingClientRect.top + a.boundingClientRect.height / 2;
-        const cb = b.boundingClientRect.top + b.boundingClientRect.height / 2;
-        return Math.abs(ca - center) - Math.abs(cb - center);
-      });
+			// "липкость" (fixed внутри секции, absolute внизу секции)
+			function applyStickyHold() {
+				if (isMobile()) {
+					spacer.style.height = "0px";
+					sticky.style.position = "";
+					sticky.style.top = "";
+					sticky.style.left = "";
+					sticky.style.width = "";
+					sticky.style.transform = "";
+					return;
+				}
 
-      setActive(visible[0].target.dataset.year);
-    }, {
-      root: null,
-      rootMargin: "-45% 0px -45% 0px",
-      threshold: 0
-    });
+				const top = getTopOffset();
 
-    steps.forEach(s => io.observe(s));
-    setActive(steps[0].dataset.year);
-  }
+				const contRect = container.getBoundingClientRect();
+				const scrollY = window.pageYOffset;
 
-  function boot() {
-    const root = document.querySelector(".history-scroll");
-    if (!root) return false;
-    init(root);
-    return true;
-  }
+				const contTop = scrollY + contRect.top;
+				const stickyOffsetTop = sticky.offsetTop; // позиция sticky внутри container
+				const start = contTop + stickyOffsetTop; // когда sticky доезжает до top
+				const stickyH = sticky.offsetHeight;
+				const end = contTop + container.offsetHeight - stickyH;
 
-  function start() {
-    if (boot()) return;
+				const pinLine = scrollY + top;
 
-    // если about подгружается динамически — ждём появления блока
-    const mo = new MutationObserver(() => {
-      if (boot()) { mo.disconnect(); }
-    });
-    mo.observe(document.body, { childList: true, subtree: true });
-  }
+				if (pinLine >= start && pinLine < end) {
+					spacer.style.height = stickyH + "px";
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", start);
-  } else {
-    start();
-  }
+					sticky.style.position = "fixed";
+					sticky.style.top = top + "px";
+					sticky.style.left = contRect.left + "px";
+					sticky.style.width = contRect.width + "px";
+				} else if (pinLine >= end) {
+					spacer.style.height = stickyH + "px";
 
-  // переинициализация при смене ширины
-  let t = null;
-  window.addEventListener("resize", () => {
-    clearTimeout(t);
-    t = setTimeout(() => {
-      const root = document.querySelector(".history-scroll");
-      if (root) init(root);
-    }, 200);
-  }, { passive: true });
-})();
-</script>
+					sticky.style.position = "absolute";
+					sticky.style.top = (container.offsetHeight - stickyH) + "px";
+					sticky.style.left = "0px";
+					sticky.style.width = "100%";
+				} else {
+					spacer.style.height = "0px";
+
+					sticky.style.position = "";
+					sticky.style.top = "";
+					sticky.style.left = "";
+					sticky.style.width = "";
+				}
+			}
+
+			// loop with rAF (плавно и без лагов)
+			let ticking = false;
+
+			function onScrollOrResize() {
+				if (ticking) return;
+				ticking = true;
+				requestAnimationFrame(() => {
+					ticking = false;
+					applyStickyHold();
+				});
+			}
+
+			ensureObserver();
+			applyStickyHold();
+
+			window.addEventListener("scroll", onScrollOrResize, {
+				passive: true
+			});
+			window.addEventListener("resize", () => {
+				ensureObserver();
+				onScrollOrResize();
+			}, {
+				passive: true
+			});
+		})();
+	</script>
+
 
 
 </body>

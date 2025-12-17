@@ -1247,17 +1247,25 @@ footer.main-footer nav.footer-nav ul li a{
 }
 
 
-/* ===== History timeline (final) ===== */
+/* ===== History timeline (stable) ===== */
 .history-scroll{
   position: relative;
-  --history-top: 120px;     /* отступ под fixed header */
-  --step-h: 18vh;           /* длина одного шага (меньше = ближе следующие секции) */
+  --history-top: 120px;   /* высота твоего fixed header + небольшой запас */
+  --step-h: 32vh;         /* длина шага: меньше = ближе следующие секции */
+  scroll-margin-top: 140px; /* чтобы при переходе по #history не пряталось под header */
 }
 
-/* sticky layout */
+/* важно: контейнер должен быть relative для режима "прилип внизу" */
+.history-scroll .container{
+  position: relative;
+  overflow: visible;
+}
+
+/* spacer (JS будет менять высоту, чтобы контент не прыгал) */
+.history-sticky-spacer{ height: 0; }
+
+/* мы НЕ используем CSS sticky — липкость делаем JS */
 .history-sticky{
-  position: sticky;
-  top: var(--history-top);
   display: grid;
   grid-template-columns: 220px 1fr;
   gap: 26px;
@@ -1265,24 +1273,18 @@ footer.main-footer nav.footer-nav ul li a{
   z-index: 2;
 }
 
-.history-left{ min-width: 0; }
-.history-right{ position: relative; min-height: 280px; }
-
 /* rail + years */
 .history-rail{ position: relative; padding-left: 26px; }
 .history-rail::before{
-  content:"";
-  position:absolute; left:10px; top:0; bottom:0; width:2px;
+  content:""; position:absolute; left:10px; top:0; bottom:0; width:2px;
   background: rgba(0,0,0,.12);
 }
 .history-rail::after{
-  content:"";
-  position:absolute; left:10px; top:0; width:2px;
+  content:""; position:absolute; left:10px; top:0; width:2px;
   height: var(--progress, 0%);
   background: #00a651;
   transition: height .12s linear;
 }
-
 .history-years{ list-style:none; margin:0; padding:0; }
 .history-years li{ margin: 10px 0; }
 
@@ -1300,8 +1302,10 @@ footer.main-footer nav.footer-nav ul li a{
 .history-year::before{
   content:"";
   position:absolute;
-  left:-3px; top:50%;
-  width:12px; height:12px;
+  left:-3px;
+  top:50%;
+  width:12px;
+  height:12px;
   transform: translateY(-50%);
   border-radius:50%;
   background:#fff;
@@ -1310,7 +1314,8 @@ footer.main-footer nav.footer-nav ul li a{
 .history-year.active{ opacity: 1; }
 .history-year.active::before{ border-color:#00a651; }
 
-/* panels (desktop) */
+/* right panels */
+.history-right{ min-height: 280px; position: relative; }
 .history-panel{
   position: absolute;
   inset: 0;
@@ -1333,29 +1338,24 @@ footer.main-footer nav.footer-nav ul li a{
 .history-panel__year{ font-size: 22px; font-weight: 800; margin-bottom: 6px; }
 .history-panel__title{ margin-bottom: 10px; }
 
-/* steps = scroll length driver */
+/* steps = длина скролла */
 .history-steps{ position: relative; z-index: 1; }
 .history-step{
   height: var(--step-h);
-  min-height: 120px;     /* чтобы observer не “терял” шаг */
+  min-height: 200px;  /* чтобы observer не “пропускал” шаги */
 }
 .history-step:last-child{
   height: calc(var(--step-h) / 2);
-  min-height: 70px;      /* чтобы после таймлайна не было огромной пустоты */
+  min-height: 140px;
 }
 
-/* mobile (phones only) */
+/* mobile (телефоны) */
 @media (max-width: 767px){
-  .history-sticky{
-    position: static;
-    top: auto;
-    display: block;
-  }
   .history-left{ display:none; }
   .history-steps{ display:none; }
+  .history-sticky{ display:block; }
 
-  .history-right{ position: static; min-height: auto; }
-
+  .history-right{ min-height: auto; position: static; }
   .history-panel{
     position: static;
     inset: auto;
@@ -1365,6 +1365,7 @@ footer.main-footer nav.footer-nav ul li a{
     margin-bottom: 18px;
   }
 }
+
 
 /* ===== Mobile fixes ===== */
 html, body { overflow-x: hidden; }
