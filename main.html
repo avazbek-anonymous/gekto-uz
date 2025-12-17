@@ -430,7 +430,8 @@
 						</p>
 						<form action="#" method="post">
 							<div class="input_1">
-								<input type="text" name="mail">
+								<input id="phone" type="tel" name="phone" inputmode="numeric" autocomplete="tel"
+									maxlength="13" />
 								<span>Raqamingiz</span>
 							</div>
 							<button type="submit" class="btn green"
@@ -439,6 +440,85 @@
 					</div>
 				</div>
 			</div>
+			<script>
+				document.addEventListener('DOMContentLoaded', () => {
+					const input = document.getElementById('phone');
+					if (!input) return;
+
+					const PREFIX = '+998';
+					const MAX_DIGITS_AFTER = 9; // 2 raqam operator + 7 raqam
+
+					function normalize(value) {
+						// faqat raqamlarni olib qolamiz
+						let digits = String(value || '').replace(/\D/g, '');
+
+						// agar odam 998 bilan boshlab yozsa (99890...), 998 ni olib tashlaymiz
+						if (digits.startsWith('998')) digits = digits.slice(3);
+
+						// 9 ta raqamdan ortig'ini kesamiz
+						digits = digits.slice(0, MAX_DIGITS_AFTER);
+
+						return PREFIX + digits;
+					}
+
+					function fixCaret() {
+						const pos = input.selectionStart ? ? 0;
+						if (pos < PREFIX.length) {
+							input.setSelectionRange(PREFIX.length, PREFIX.length);
+						}
+					}
+
+					input.addEventListener('focus', () => {
+						if (!input.value) input.value = PREFIX;
+						if (!input.value.startsWith(PREFIX)) input.value = normalize(input.value);
+						fixCaret();
+					});
+
+					input.addEventListener('click', fixCaret);
+
+					input.addEventListener('keydown', (e) => {
+						const selStart = input.selectionStart ? ? 0;
+						const selEnd = input.selectionEnd ? ? 0;
+
+						// Ctrl/Cmd kombinatsiyalariga tegmaymiz
+						if (e.ctrlKey || e.metaKey) return;
+
+						// PREFIX ichida caret bo'lsa Backspace/Delete ni bloklaymiz (lekin seleksiya raqamlarni ham qamrab olsa — ruxsat)
+						const selectionTouchesPrefix = selStart < PREFIX.length;
+						const selectionOnlyInPrefix = selEnd <= PREFIX.length;
+
+						if ((e.key === 'Backspace' || e.key === 'Delete') && selectionTouchesPrefix &&
+							selectionOnlyInPrefix) {
+							e.preventDefault();
+							fixCaret();
+							return;
+						}
+
+						// bitta belgi kiritilsa — faqat raqamga ruxsat (bo'sh joy, tire, harf yo'q)
+						if (e.key.length === 1 && !/[0-9]/.test(e.key)) {
+							e.preventDefault();
+						}
+					});
+
+					input.addEventListener('input', () => {
+						const caret = input.selectionStart ? ? input.value.length;
+						input.value = normalize(input.value);
+
+						// caret PREFIX dan oldinga ketmasin
+						if (caret < PREFIX.length) {
+							input.setSelectionRange(PREFIX.length, PREFIX.length);
+						}
+					});
+
+					input.addEventListener('paste', (e) => {
+						e.preventDefault();
+						const text = (e.clipboardData || window.clipboardData).getData('text');
+						input.value = normalize(text);
+						input.setSelectionRange(input.value.length, input.value.length);
+					});
+				});
+			</script>
+
 		</div>
 	</section>
 
