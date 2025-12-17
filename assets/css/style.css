@@ -1005,6 +1005,17 @@ footer.main-footer nav.footer-nav ul li a{
   text-align: center;
 }
 
+.pricing_plans .row{
+  display: flex;
+  flex-wrap: wrap;
+}
+.pricing_plans .row > [class*="col-"]{
+  display: flex;
+}
+.pricing_plans .pricing_plan{
+  width: 100%;
+}
+
 
 
 /* ##### 08 : TEAM STYLES  ##### */
