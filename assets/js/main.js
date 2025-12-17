@@ -123,7 +123,11 @@
 
 // HISTORY SCROLL
 (function () {
-  function initHistoryScroll() {
+  let io = null;
+
+  window.initHistoryScroll = function () {
+    if (io) { io.disconnect(); io = null; }
+
     const root = document.querySelector(".history-scroll");
     if (!root) return;
 
@@ -132,17 +136,13 @@
     const panels = Array.from(root.querySelectorAll(".history-panel"));
     const steps  = Array.from(root.querySelectorAll(".history-step"));
 
-    // если на мобилке нет rail/steps — не выходим!
     const isMobile = window.matchMedia("(max-width: 991px)").matches;
 
-    // MOBILE: просто показываем все панели вниз, без скролл-привязки
     if (isMobile) {
-      // скрывать/показывать тут не надо — это делает CSS
       panels.forEach(p => p.classList.add("is-active"));
       return;
     }
 
-    // DESKTOP: нужна вся логика (rail + steps)
     if (!rail || !yearBtns.length || !panels.length || !steps.length) return;
 
     const stepByYear = new Map(steps.map(s => [s.dataset.year, s]));
@@ -151,44 +151,32 @@
       yearBtns.forEach(b => b.classList.toggle("active", b.dataset.year === year));
       panels.forEach(p => p.classList.toggle("is-active", p.dataset.year === year));
 
-      // progress line by index
       const idx = steps.findIndex(s => s.dataset.year === year);
       const prog = (idx <= 0) ? 0 : (idx / (steps.length - 1));
       rail.style.setProperty("--progress", (prog * 100).toFixed(2) + "%");
     }
 
-    // click year -> scroll to its step
     yearBtns.forEach(btn => {
-      btn.addEventListener("click", () => {
+      btn.onclick = () => {
         const s = stepByYear.get(btn.dataset.year);
         if (s) s.scrollIntoView({ behavior: "smooth", block: "center" });
-      });
+      };
     });
 
-    // scroll-driven switch (forward/back)
-    const io = new IntersectionObserver((entries) => {
+    io = new IntersectionObserver((entries) => {
       const visible = entries.filter(e => e.isIntersecting);
       if (!visible.length) return;
 
-      visible.sort((a, b) => (b.intersectionRatio - a.intersectionRatio));
-      const year = visible[0].target.dataset.year;
-      setActive(year);
+      visible.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      setActive(visible[0].target.dataset.year);
     }, {
       rootMargin: "-35% 0px -45% 0px",
       threshold: [0.25, 0.5, 0.75]
     });
 
     steps.forEach(s => io.observe(s));
-
-    // init
     setActive(steps[0].dataset.year);
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initHistoryScroll);
-  } else {
-    initHistoryScroll();
-  }
+  };
 })();
-
+window.initHistoryScroll?.();
 
