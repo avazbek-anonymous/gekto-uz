@@ -80,7 +80,7 @@
 		</div>
 	</div>
 
-	<section class="about-split"> 
+	<section class="about-split">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6 col-sm-12 col-xs-12">
@@ -469,7 +469,8 @@
 									<img src="assets/img/Ibrohim.jpg" alt="Ibrohim">
 								</div>
 								<p>
-									"Moliya tizimini to'liq avtomatlashtirib berdilar, endi hamma narsa aniq va oson boshqarilyapti"
+									"Moliya tizimini to'liq avtomatlashtirib berdilar, endi hamma narsa aniq va oson
+									boshqarilyapti"
 									<br>
 									Ibrohim Eminov
 								</p>
@@ -481,7 +482,8 @@
 									<img src="assets/img/Asror.jpg" alt="Asror">
 								</div>
 								<p>
-									Ustozim: "O'z biznesini sonlarda ko'rolmagan tadbirkor raqobatda bardavom bo'lishi uzoqqa borishi qiyin"
+									Ustozim: "O'z biznesini sonlarda ko'rolmagan tadbirkor raqobatda bardavom bo'lishi
+									uzoqqa borishi qiyin"
 									<br>
 									Asror Iskandarov
 								</p>
@@ -649,7 +651,145 @@
 			});
 		});
 	</script>
-	<script type="text/javascript" src="assets/js/history-scroll.js"></script>
+	<!-- history scroll script -->
+	<script type="text/javascript">
+		(() => {
+			let io = null;
+			let mo = null;
+			let lastMode = null; // "mobile" | "desktop"
+
+			function cleanup(root) {
+				if (io) {
+					io.disconnect();
+					io = null;
+				}
+				if (!root) return;
+
+				// снять старые обработчики, если были
+				root.querySelectorAll(".history-year").forEach(btn => {
+					if (btn.__hsClick) btn.removeEventListener("click", btn.__hsClick);
+					btn.__hsClick = null;
+				});
+			}
+
+			function initForRoot(root) {
+				if (!root) return;
+
+				// чтобы не инициализировать 100 раз подряд
+				if (root.dataset.hsInited === "1") return;
+				root.dataset.hsInited = "1";
+
+				const rail = root.querySelector(".history-rail");
+				const yearBtns = Array.from(root.querySelectorAll(".history-year"));
+				const panels = Array.from(root.querySelectorAll(".history-panel"));
+				const steps = Array.from(root.querySelectorAll(".history-step"));
+
+				const isMobile = window.matchMedia("(max-width: 991px)").matches;
+				const mode = isMobile ? "mobile" : "desktop";
+				lastMode = mode;
+
+				// MOBILE: просто показать все панели
+				if (isMobile) {
+					panels.forEach(p => p.classList.add("is-active"));
+					return;
+				}
+
+				// DESKTOP: нужна вся структура
+				if (!rail || !yearBtns.length || !panels.length || !steps.length) return;
+
+				const stepByYear = new Map(steps.map(s => [s.dataset.year, s]));
+
+				function setActive(year) {
+					yearBtns.forEach(b => b.classList.toggle("active", b.dataset.year === year));
+					panels.forEach(p => p.classList.toggle("is-active", p.dataset.year === year));
+
+					const idx = steps.findIndex(s => s.dataset.year === year);
+					const prog = (idx <= 0) ? 0 : (idx / (steps.length - 1));
+					rail.style.setProperty("--progress", (prog * 100).toFixed(2) + "%");
+				}
+
+				// click year -> scroll to step
+				yearBtns.forEach(btn => {
+					const handler = () => {
+						const s = stepByYear.get(btn.dataset.year);
+						if (s) s.scrollIntoView({
+							behavior: "smooth",
+							block: "center"
+						});
+					};
+					btn.__hsClick = handler;
+					btn.addEventListener("click", handler);
+				});
+
+				io = new IntersectionObserver((entries) => {
+					const visible = entries.filter(e => e.isIntersecting);
+					if (!visible.length) return;
+
+					visible.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+					const year = visible[0].target.dataset.year;
+					setActive(year);
+				}, {
+					rootMargin: "-35% 0px -45% 0px",
+					threshold: [0.25, 0.5, 0.75]
+				});
+
+				steps.forEach(s => io.observe(s));
+				setActive(steps[0].dataset.year);
+			}
+
+			function tryInit() {
+				const root = document.querySelector(".history-scroll");
+				if (!root) return false;
+
+				// если режим (mobile/desktop) поменялся — переинициализируем
+				const isMobile = window.matchMedia("(max-width: 991px)").matches;
+				const mode = isMobile ? "mobile" : "desktop";
+				if (lastMode && mode !== lastMode) {
+					root.dataset.hsInited = "";
+					cleanup(root);
+				}
+
+				initForRoot(root);
+				return true;
+			}
+
+			function startWatching() {
+				// 1) пробуем сразу
+				if (tryInit()) return;
+
+				// 2) если блока ещё нет — ждём, пока появится в body
+				mo = new MutationObserver(() => {
+					if (tryInit()) {
+						mo.disconnect();
+						mo = null;
+					}
+				});
+				mo.observe(document.body, {
+					childList: true,
+					subtree: true
+				});
+			}
+
+			// debounce на resize, чтобы при смене ширины переинициализировать
+			let t = null;
+			window.addEventListener("resize", () => {
+				clearTimeout(t);
+				t = setTimeout(() => {
+					const root = document.querySelector(".history-scroll");
+					if (!root) return;
+					root.dataset.hsInited = "";
+					cleanup(root);
+					tryInit();
+				}, 200);
+			});
+
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", startWatching);
+			} else {
+				startWatching();
+			}
+		})();
+	</script>
 
 </body>
 

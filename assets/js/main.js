@@ -120,6 +120,3 @@
 
 	});
 })(jQuery);
-
-window.initHistoryScroll?.();
-
