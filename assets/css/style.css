@@ -1247,33 +1247,42 @@ footer.main-footer nav.footer-nav ul li a{
 }
 
 
-/* ===== History timeline ===== */
-.history-scroll{ position: relative; }
+/* ===== History timeline (final) ===== */
+.history-scroll{
+  position: relative;
+  --history-top: 120px;     /* отступ под fixed header */
+  --step-h: 18vh;           /* длина одного шага (меньше = ближе следующие секции) */
+}
 
+/* sticky layout */
 .history-sticky{
   position: sticky;
-  top: 120px;         /* подстрой под твой fixed header */
-  display: flex;
+  top: var(--history-top);
+  display: grid;
+  grid-template-columns: 220px 1fr;
   gap: 26px;
-  align-items: flex-start;
+  align-items: start;
   z-index: 2;
 }
 
-.history-left{ flex: 0 0 220px; }
-.history-right{ flex: 1 1 auto; min-height: 260px; position: relative; }
+.history-left{ min-width: 0; }
+.history-right{ position: relative; min-height: 280px; }
 
 /* rail + years */
 .history-rail{ position: relative; padding-left: 26px; }
 .history-rail::before{
-  content:""; position:absolute; left:10px; top:0; bottom:0; width:2px;
+  content:"";
+  position:absolute; left:10px; top:0; bottom:0; width:2px;
   background: rgba(0,0,0,.12);
 }
 .history-rail::after{
-  content:""; position:absolute; left:10px; top:0; width:2px;
+  content:"";
+  position:absolute; left:10px; top:0; width:2px;
   height: var(--progress, 0%);
   background: #00a651;
   transition: height .12s linear;
 }
+
 .history-years{ list-style:none; margin:0; padding:0; }
 .history-years li{ margin: 10px 0; }
 
@@ -1291,10 +1300,8 @@ footer.main-footer nav.footer-nav ul li a{
 .history-year::before{
   content:"";
   position:absolute;
-  left:-3px;
-  top:50%;
-  width:12px;
-  height:12px;
+  left:-3px; top:50%;
+  width:12px; height:12px;
   transform: translateY(-50%);
   border-radius:50%;
   background:#fff;
@@ -1303,7 +1310,7 @@ footer.main-footer nav.footer-nav ul li a{
 .history-year.active{ opacity: 1; }
 .history-year.active::before{ border-color:#00a651; }
 
-/* right panels: only active visible */
+/* panels (desktop) */
 .history-panel{
   position: absolute;
   inset: 0;
@@ -1326,29 +1333,39 @@ footer.main-footer nav.footer-nav ul li a{
 .history-panel__year{ font-size: 22px; font-weight: 800; margin-bottom: 6px; }
 .history-panel__title{ margin-bottom: 10px; }
 
-/* scroll steps = drives the change */
+/* steps = scroll length driver */
 .history-steps{ position: relative; z-index: 1; }
-.history-step{ height: 70vh; } /* шаг скролла на один год */
+.history-step{
+  height: var(--step-h);
+  min-height: 120px;     /* чтобы observer не “терял” шаг */
+}
+.history-step:last-child{
+  height: calc(var(--step-h) / 2);
+  min-height: 70px;      /* чтобы после таймлайна не было огромной пустоты */
+}
 
-/* mobile */
-@media (max-width: 991px){
-  /* убираем sticky-двухколоночность */
-  .history-sticky{ position: relative; top:auto; display:block; }
-  .history-left{ display:none; }        /* слева годы скрываем */
-  .history-steps{ display:none; }       /* шаги для скролла не нужны */
+/* mobile (phones only) */
+@media (max-width: 767px){
+  .history-sticky{
+    position: static;
+    top: auto;
+    display: block;
+  }
+  .history-left{ display:none; }
+  .history-steps{ display:none; }
 
-  /* справа панели становятся обычными карточками вниз */
-  .history-right{ min-height: auto; position: relative; }
+  .history-right{ position: static; min-height: auto; }
+
   .history-panel{
-    position: relative;
+    position: static;
     inset: auto;
-    opacity: 1 !important;
-    transform: none !important;
-    pointer-events: auto !important;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
     margin-bottom: 18px;
   }
-  .history-panel.is-active{ opacity: 1; transform: none; }
 }
+
 /* ===== Mobile fixes ===== */
 html, body { overflow-x: hidden; }
 img, video, iframe { max-width: 100%; height: auto; }

@@ -652,144 +652,135 @@
 		});
 	</script>
 	<!-- history scroll script -->
-	<script type="text/javascript">
-		(() => {
-			let io = null;
-			let mo = null;
-			let lastMode = null; // "mobile" | "desktop"
+<script>
+(() => {
+  const BP = 767; // mobile breakpoint
+  let io = null;
+  let currentRoot = null;
+  let currentMode = null; // "mobile" | "desktop"
 
-			function cleanup(root) {
-				if (io) {
-					io.disconnect();
-					io = null;
-				}
-				if (!root) return;
+  const isMobile = () => window.matchMedia(`(max-width:${BP}px)`).matches;
 
-				// снять старые обработчики, если были
-				root.querySelectorAll(".history-year").forEach(btn => {
-					if (btn.__hsClick) btn.removeEventListener("click", btn.__hsClick);
-					btn.__hsClick = null;
-				});
-			}
+  function teardown() {
+    if (io) { io.disconnect(); io = null; }
+    if (!currentRoot) return;
 
-			function initForRoot(root) {
-				if (!root) return;
+    currentRoot.querySelectorAll(".history-year").forEach(btn => {
+      if (btn.__hsHandler) {
+        btn.removeEventListener("click", btn.__hsHandler);
+        btn.__hsHandler = null;
+      }
+    });
 
-				// чтобы не инициализировать 100 раз подряд
-				if (root.dataset.hsInited === "1") return;
-				root.dataset.hsInited = "1";
+    currentRoot = null;
+    currentMode = null;
+  }
 
-				const rail = root.querySelector(".history-rail");
-				const yearBtns = Array.from(root.querySelectorAll(".history-year"));
-				const panels = Array.from(root.querySelectorAll(".history-panel"));
-				const steps = Array.from(root.querySelectorAll(".history-step"));
+  function init(root) {
+    const mode = isMobile() ? "mobile" : "desktop";
 
-				const isMobile = window.matchMedia("(max-width: 991px)").matches;
-				const mode = isMobile ? "mobile" : "desktop";
-				lastMode = mode;
+    // если уже инициализировано в этом режиме — ничего не делаем
+    if (root === currentRoot && mode === currentMode) return;
 
-				// MOBILE: просто показать все панели
-				if (isMobile) {
-					panels.forEach(p => p.classList.add("is-active"));
-					return;
-				}
+    teardown();
+    currentRoot = root;
+    currentMode = mode;
 
-				// DESKTOP: нужна вся структура
-				if (!rail || !yearBtns.length || !panels.length || !steps.length) return;
+    const rail    = root.querySelector(".history-rail");
+    const yearBtns = Array.from(root.querySelectorAll(".history-year"));
+    const panels   = Array.from(root.querySelectorAll(".history-panel"));
+    const steps    = Array.from(root.querySelectorAll(".history-step"));
 
-				const stepByYear = new Map(steps.map(s => [s.dataset.year, s]));
+    // mobile: просто показываем все панели (CSS уже делает их “карточками”)
+    if (mode === "mobile") {
+      panels.forEach(p => p.classList.add("is-active"));
+      return;
+    }
 
-				function setActive(year) {
-					yearBtns.forEach(b => b.classList.toggle("active", b.dataset.year === year));
-					panels.forEach(p => p.classList.toggle("is-active", p.dataset.year === year));
+    // desktop: нужна вся структура
+    if (!rail || !yearBtns.length || !panels.length || !steps.length) return;
 
-					const idx = steps.findIndex(s => s.dataset.year === year);
-					const prog = (idx <= 0) ? 0 : (idx / (steps.length - 1));
-					rail.style.setProperty("--progress", (prog * 100).toFixed(2) + "%");
-				}
+    const stepByYear = new Map(steps.map(s => [s.dataset.year, s]));
 
-				// click year -> scroll to step
-				yearBtns.forEach(btn => {
-					const handler = () => {
-						const s = stepByYear.get(btn.dataset.year);
-						if (s) s.scrollIntoView({
-							behavior: "smooth",
-							block: "center"
-						});
-					};
-					btn.__hsClick = handler;
-					btn.addEventListener("click", handler);
-				});
+    function setActive(year) {
+      yearBtns.forEach(b => b.classList.toggle("active", b.dataset.year === year));
+      panels.forEach(p => p.classList.toggle("is-active", p.dataset.year === year));
 
-				io = new IntersectionObserver((entries) => {
-					const visible = entries.filter(e => e.isIntersecting);
-					if (!visible.length) return;
+      const idx = steps.findIndex(s => s.dataset.year === year);
+      const denom = Math.max(steps.length - 1, 1);
+      const prog = Math.max(0, idx) / denom;
+      rail.style.setProperty("--progress", `${(prog * 100).toFixed(2)}%`);
+    }
 
-					visible.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-					const year = visible[0].target.dataset.year;
-					setActive(year);
-				}, {
-					rootMargin: "-35% 0px -45% 0px",
-					threshold: [0.25, 0.5, 0.75]
-				});
+    // click year -> scroll to step
+    yearBtns.forEach(btn => {
+      const handler = (e) => {
+        e.preventDefault();
+        const s = stepByYear.get(btn.dataset.year);
+        if (s) s.scrollIntoView({ behavior: "smooth", block: "center" });
+      };
+      btn.__hsHandler = handler;
+      btn.addEventListener("click", handler);
+    });
 
-				steps.forEach(s => io.observe(s));
-				setActive(steps[0].dataset.year);
-			}
+    // scroll-driven switch
+    io = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting);
+      if (!visible.length) return;
 
-			function tryInit() {
-				const root = document.querySelector(".history-scroll");
-				if (!root) return false;
+      const center = window.innerHeight / 2;
+      visible.sort((a, b) => {
+        const ca = a.boundingClientRect.top + a.boundingClientRect.height / 2;
+        const cb = b.boundingClientRect.top + b.boundingClientRect.height / 2;
+        return Math.abs(ca - center) - Math.abs(cb - center);
+      });
 
-				// если режим (mobile/desktop) поменялся — переинициализируем
-				const isMobile = window.matchMedia("(max-width: 991px)").matches;
-				const mode = isMobile ? "mobile" : "desktop";
-				if (lastMode && mode !== lastMode) {
-					root.dataset.hsInited = "";
-					cleanup(root);
-				}
+      setActive(visible[0].target.dataset.year);
+    }, {
+      root: null,
+      rootMargin: "-45% 0px -45% 0px",
+      threshold: 0
+    });
 
-				initForRoot(root);
-				return true;
-			}
+    steps.forEach(s => io.observe(s));
+    setActive(steps[0].dataset.year);
+  }
 
-			function startWatching() {
-				// 1) пробуем сразу
-				if (tryInit()) return;
+  function boot() {
+    const root = document.querySelector(".history-scroll");
+    if (!root) return false;
+    init(root);
+    return true;
+  }
 
-				// 2) если блока ещё нет — ждём, пока появится в body
-				mo = new MutationObserver(() => {
-					if (tryInit()) {
-						mo.disconnect();
-						mo = null;
-					}
-				});
-				mo.observe(document.body, {
-					childList: true,
-					subtree: true
-				});
-			}
+  function start() {
+    if (boot()) return;
 
-			// debounce на resize, чтобы при смене ширины переинициализировать
-			let t = null;
-			window.addEventListener("resize", () => {
-				clearTimeout(t);
-				t = setTimeout(() => {
-					const root = document.querySelector(".history-scroll");
-					if (!root) return;
-					root.dataset.hsInited = "";
-					cleanup(root);
-					tryInit();
-				}, 200);
-			});
+    // если about подгружается динамически — ждём появления блока
+    const mo = new MutationObserver(() => {
+      if (boot()) { mo.disconnect(); }
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+  }
 
-			if (document.readyState === "loading") {
-				document.addEventListener("DOMContentLoaded", startWatching);
-			} else {
-				startWatching();
-			}
-		})();
-	</script>
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
+  }
+
+  // переинициализация при смене ширины
+  let t = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      const root = document.querySelector(".history-scroll");
+      if (root) init(root);
+    }, 200);
+  }, { passive: true });
+})();
+</script>
+
 
 </body>
 
