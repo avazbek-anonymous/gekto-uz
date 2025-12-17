@@ -987,6 +987,25 @@ footer.main-footer nav.footer-nav ul li a{
 	margin: 50px 0;
 }
 
+/* pricing: button same level */
+.pricing_plan{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.pricing_plan .list{
+  flex: 1 1 auto;     /* список занимает место */
+  margin-bottom: 18px;
+}
+
+.pricing_plan .btn{
+  margin-top: auto;   /* кнопка уходит вниз */
+  align-self: stretch; /* если хочешь одинаковую ширину */
+  text-align: center;
+}
+
+
 
 /* ##### 08 : TEAM STYLES  ##### */
 .team_member{
