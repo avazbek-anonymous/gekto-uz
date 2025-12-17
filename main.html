@@ -430,11 +430,10 @@
 						</p>
 						<form action="#" method="post">
 							<div class="input_1">
-								<input type="tel" name="phone" class="js-uz-phone" inputmode="numeric"
-									autocomplete="tel">
+								<input id="phone" type="text" name="mail" inputmode="numeric" autocomplete="tel"
+									maxlength="13" />
 								<span>Raqamingiz</span>
 							</div>
-
 							<button type="submit" class="btn green"
 								style="margin-top:20px"><span>Jo'natish</span></button>
 						</form>
@@ -589,88 +588,6 @@
 			});
 		});
 	</script>
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			const PREFIX = '+998';
-			const MAX_DIGITS_AFTER = 9; // 90XXXXXXX (9 raqam)
-
-			function onlyDigitsAfter998(value) {
-				let d = String(value || '').replace(/\D/g, ''); // hammasini raqamga tozalaymiz
-				if (d.startsWith('998')) d = d.slice(3); // 998 yozib yuborsa ham
-				return d.slice(0, MAX_DIGITS_AFTER);
-			}
-
-			function setCaret(input, pos) {
-				requestAnimationFrame(() => input.setSelectionRange(pos, pos));
-			}
-
-			document.querySelectorAll('.js-uz-phone').forEach((input) => {
-
-				input.addEventListener('focus', () => {
-					if (!input.value) input.value = PREFIX;
-					const d = onlyDigitsAfter998(input.value);
-					input.value = PREFIX + d;
-					setCaret(input, input.value.length);
-				});
-
-				input.addEventListener('blur', () => {
-					const d = onlyDigitsAfter998(input.value);
-					input.value = d ? (PREFIX + d) : ''; // faqat +998 bo'lsa — yo'qolsin
-				});
-
-				input.addEventListener('beforeinput', (e) => {
-					// harf, probel, tire va hokazolarni kiritishni bloklaydi
-					if (e.data && !/^\d+$/.test(e.data)) e.preventDefault();
-				});
-
-				input.addEventListener('keydown', (e) => {
-					const s = input.selectionStart ? ? 0;
-					const epos = input.selectionEnd ? ? 0;
-
-					// +998 ni o'chirishni bloklaymiz
-					if ((e.key === 'Backspace' || e.key === 'Delete') && s <= PREFIX.length && epos <=
-						PREFIX.length) {
-						e.preventDefault();
-						setCaret(input, PREFIX.length);
-						return;
-					}
-
-					// oddiy bosishda faqat raqamga ruxsat
-					if (e.key.length === 1 && !/\d/.test(e.key) && !(e.ctrlKey || e.metaKey || e
-							.altKey)) {
-						e.preventDefault();
-					}
-				});
-
-				input.addEventListener('input', () => {
-					const d = onlyDigitsAfter998(input.value);
-
-					if (document.activeElement === input) {
-						input.value = PREFIX + d;
-						if ((input.selectionStart ? ? 0) < PREFIX.length) setCaret(input, PREFIX
-							.length);
-					} else {
-						input.value = d ? (PREFIX + d) : '';
-					}
-				});
-
-				input.addEventListener('paste', (e) => {
-					e.preventDefault();
-					const text = (e.clipboardData || window.clipboardData).getData('text');
-					const d = onlyDigitsAfter998(text);
-					input.value = document.activeElement === input ? (PREFIX + d) : (d ? PREFIX + d :
-						'');
-					setCaret(input, input.value.length);
-				});
-
-				input.addEventListener('click', () => {
-					if ((input.selectionStart ? ? 0) < PREFIX.length) setCaret(input, PREFIX.length);
-				});
-
-			});
-		});
-	</script>
-
 </body>
 
 </html>
