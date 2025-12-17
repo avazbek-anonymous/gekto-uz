@@ -430,10 +430,11 @@
 						</p>
 						<form action="#" method="post">
 							<div class="input_1">
-								<input id="phone" type="text" name="mail" inputmode="numeric" autocomplete="tel"
-									maxlength="13" />
+								<input type="tel" name="phone" class="js-uz-phone" inputmode="numeric"
+									autocomplete="tel">
 								<span>Raqamingiz</span>
 							</div>
+
 							<button type="submit" class="btn green"
 								style="margin-top:20px"><span>Jo'natish</span></button>
 						</form>
@@ -590,82 +591,86 @@
 	</script>
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
-			const input = document.getElementById('phone');
-			if (!input) return;
-
 			const PREFIX = '+998';
-			const MAX_DIGITS_AFTER = 9; // 2 raqam operator + 7 raqam
+			const MAX_DIGITS_AFTER = 9; // 90XXXXXXX (9 raqam)
 
-			function normalize(value) {
-				// faqat raqamlarni olib qolamiz
-				let digits = String(value || '').replace(/\D/g, '');
-
-				// agar odam 998 bilan boshlab yozsa (99890...), 998 ni olib tashlaymiz
-				if (digits.startsWith('998')) digits = digits.slice(3);
-
-				// 9 ta raqamdan ortig'ini kesamiz
-				digits = digits.slice(0, MAX_DIGITS_AFTER);
-
-				return PREFIX + digits;
+			function onlyDigitsAfter998(value) {
+				let d = String(value || '').replace(/\D/g, ''); // hammasini raqamga tozalaymiz
+				if (d.startsWith('998')) d = d.slice(3); // 998 yozib yuborsa ham
+				return d.slice(0, MAX_DIGITS_AFTER);
 			}
 
-			function fixCaret() {
-				const pos = input.selectionStart ? ? 0;
-				if (pos < PREFIX.length) {
-					input.setSelectionRange(PREFIX.length, PREFIX.length);
-				}
+			function setCaret(input, pos) {
+				requestAnimationFrame(() => input.setSelectionRange(pos, pos));
 			}
 
-			input.addEventListener('focus', () => {
-				if (!input.value) input.value = PREFIX;
-				if (!input.value.startsWith(PREFIX)) input.value = normalize(input.value);
-				fixCaret();
-			});
+			document.querySelectorAll('.js-uz-phone').forEach((input) => {
 
-			input.addEventListener('click', fixCaret);
+				input.addEventListener('focus', () => {
+					if (!input.value) input.value = PREFIX;
+					const d = onlyDigitsAfter998(input.value);
+					input.value = PREFIX + d;
+					setCaret(input, input.value.length);
+				});
 
-			input.addEventListener('keydown', (e) => {
-				const selStart = input.selectionStart ? ? 0;
-				const selEnd = input.selectionEnd ? ? 0;
+				input.addEventListener('blur', () => {
+					const d = onlyDigitsAfter998(input.value);
+					input.value = d ? (PREFIX + d) : ''; // faqat +998 bo'lsa — yo'qolsin
+				});
 
-				// Ctrl/Cmd kombinatsiyalariga tegmaymiz
-				if (e.ctrlKey || e.metaKey) return;
+				input.addEventListener('beforeinput', (e) => {
+					// harf, probel, tire va hokazolarni kiritishni bloklaydi
+					if (e.data && !/^\d+$/.test(e.data)) e.preventDefault();
+				});
 
-				// PREFIX ichida caret bo'lsa Backspace/Delete ni bloklaymiz (lekin seleksiya raqamlarni ham qamrab olsa — ruxsat)
-				const selectionTouchesPrefix = selStart < PREFIX.length;
-				const selectionOnlyInPrefix = selEnd <= PREFIX.length;
+				input.addEventListener('keydown', (e) => {
+					const s = input.selectionStart ? ? 0;
+					const epos = input.selectionEnd ? ? 0;
 
-				if ((e.key === 'Backspace' || e.key === 'Delete') && selectionTouchesPrefix &&
-					selectionOnlyInPrefix) {
+					// +998 ni o'chirishni bloklaymiz
+					if ((e.key === 'Backspace' || e.key === 'Delete') && s <= PREFIX.length && epos <=
+						PREFIX.length) {
+						e.preventDefault();
+						setCaret(input, PREFIX.length);
+						return;
+					}
+
+					// oddiy bosishda faqat raqamga ruxsat
+					if (e.key.length === 1 && !/\d/.test(e.key) && !(e.ctrlKey || e.metaKey || e
+							.altKey)) {
+						e.preventDefault();
+					}
+				});
+
+				input.addEventListener('input', () => {
+					const d = onlyDigitsAfter998(input.value);
+
+					if (document.activeElement === input) {
+						input.value = PREFIX + d;
+						if ((input.selectionStart ? ? 0) < PREFIX.length) setCaret(input, PREFIX
+							.length);
+					} else {
+						input.value = d ? (PREFIX + d) : '';
+					}
+				});
+
+				input.addEventListener('paste', (e) => {
 					e.preventDefault();
-					fixCaret();
-					return;
-				}
+					const text = (e.clipboardData || window.clipboardData).getData('text');
+					const d = onlyDigitsAfter998(text);
+					input.value = document.activeElement === input ? (PREFIX + d) : (d ? PREFIX + d :
+						'');
+					setCaret(input, input.value.length);
+				});
 
-				// bitta belgi kiritilsa — faqat raqamga ruxsat (bo'sh joy, tire, harf yo'q)
-				if (e.key.length === 1 && !/[0-9]/.test(e.key)) {
-					e.preventDefault();
-				}
-			});
+				input.addEventListener('click', () => {
+					if ((input.selectionStart ? ? 0) < PREFIX.length) setCaret(input, PREFIX.length);
+				});
 
-			input.addEventListener('input', () => {
-				const caret = input.selectionStart ? ? input.value.length;
-				input.value = normalize(input.value);
-
-				// caret PREFIX dan oldinga ketmasin
-				if (caret < PREFIX.length) {
-					input.setSelectionRange(PREFIX.length, PREFIX.length);
-				}
-			});
-
-			input.addEventListener('paste', (e) => {
-				e.preventDefault();
-				const text = (e.clipboardData || window.clipboardData).getData('text');
-				input.value = normalize(text);
-				input.setSelectionRange(input.value.length, input.value.length);
 			});
 		});
 	</script>
+
 </body>
 
 </html>
