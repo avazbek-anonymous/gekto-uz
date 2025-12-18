@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>BPS Kassa</title>
+
+  <style>
+    :root{
+      --bg:#07121b;
+      --card:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.10);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.65);
+      --ok:#10b981;
+      --bad:#ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+      --r: 16px;
+
+      --rowH: 36px;
+      --rowsVisible: 15;
+    }
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      background:
+        radial-gradient(1000px 520px at 18% 12%, rgba(16,185,129,.18), transparent 60%),
+        radial-gradient(900px 520px at 88% 38%, rgba(59,130,246,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      overflow:hidden;
+    }
+    .wrap{
+      height:100vh;
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:0;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 14px;
+      min-height:0;
+    }
+    .titleRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    h1{ margin:0; font-size: 18px; letter-spacing:.2px; }
+    .sub{ margin:6px 0 0; color:var(--muted); font-size: 13px; }
+
+    .btn{
+      border:0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 900;
+      cursor:pointer;
+      background: var(--ok);
+      color:#062a1b;
+      box-shadow: var(--shadow);
+      white-space:nowrap;
+    }
+    .btn.secondary{
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.92);
+      border: 1px solid var(--line);
+      box-shadow:none;
+    }
+    .btn:disabled{ opacity:.7; cursor:not-allowed; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size: 13px;
+      white-space:nowrap;
+    }
+    .pill.ok{ color: rgba(16,185,129,.95); border-color: rgba(16,185,129,.35); background: rgba(16,185,129,.10); }
+    .pill.err{ color: rgba(239,68,68,.95); border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.10); }
+
+    .spinner{
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.18);
+      border-top-color: rgba(255,255,255,.75);
+      animation: spin .8s linear infinite;
+      flex: 0 0 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg);} }
+
+    .field{
+      display:flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      min-height: 40px;
+    }
+    .field label{
+      font-size: 12px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .field input, .field select{
+      width:100%;
+      border:0;
+      outline:none;
+      background: transparent;
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      padding:0;
+    }
+
+    /* фикс для select: чтобы не было белое на белом */
+    select{
+      background: rgba(10,18,26,.65);
+      border-radius: 10px;
+      padding: 6px 10px;
+      color: rgba(255,255,255,.92);
+    }
+    option{ color:#0b1220; background:#fff; }
+
+    /* login overlay */
+    .overlay{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 16px;
+      background: rgba(3,7,12,.62);
+      backdrop-filter: blur(8px);
+      z-index: 50;
+    }
+    .loginCard{
+      width: min(440px, 100%);
+      background: rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .loginCard h2{ margin:0; font-size: 18px; }
+    .loginCard p{ margin:8px 0 14px; color:var(--muted); font-size: 13px; }
+    .loginGrid{ display:grid; gap:10px; margin-top:10px; }
+    .loginActions{ display:flex; justify-content:flex-end; gap:10px; margin-top:12px; }
+
+    /* layout top: filters + balances */
+    .topGrid{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:12px;
+      align-items:stretch;
+    }
+
+    /* filters like sketch */
+    .filtersTitle{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      margin-bottom: 10px;
+    }
+    .filtersGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .filtersGrid .full{ grid-column: 1 / -1; }
+
+    /* balances list */
+    .balList{ display:grid; gap:10px; margin-top: 10px; }
+    .balItem{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+    }
+    .balItem .w{ font-weight:900; }
+    .balItem .nums{
+      text-align:right;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: rgba(255,255,255,.88);
+      line-height: 1.25;
+    }
+    .muted{ color: rgba(255,255,255,.62); font-size:12px; }
+
+    /* totals bar */
+    .totalsBar{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+      align-items:stretch;
+    }
+    .totBox{
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+    }
+    .totLbl{
+      font-size:12px;
+      color: rgba(255,255,255,.70);
+      text-transform: uppercase;
+      letter-spacing:.25px;
+      font-weight:900;
+    }
+    .totVal{
+      margin-top: 6px;
+      font-weight: 1000;
+      font-size: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+    .in{ color: rgba(16,185,129,.95); }
+    .out{ color: rgba(239,68,68,.95); }
+
+    /* table */
+    .tableCard{
+      padding: 0;
+      overflow:hidden;
+      flex: 1;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+    }
+    .tableScroll{
+      overflow-y:auto;
+      overflow-x:hidden;
+      height: calc(var(--rowsVisible) * var(--rowH) + 44px);
+      scrollbar-gutter: stable;
+
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,.20) transparent;
+    }
+    .tableScroll:hover{
+      scrollbar-color: rgba(255,255,255,.45) transparent;
+    }
+    .tableScroll::-webkit-scrollbar{ width: 10px; }
+    .tableScroll::-webkit-scrollbar-thumb{
+      background: rgba(255,255,255,.12);
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+    .tableScroll:hover::-webkit-scrollbar-thumb{
+      background: rgba(255,255,255,.35);
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+
+    table{ width:100%; border-collapse: collapse; }
+    thead th{
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      text-align:left;
+      padding: 10px 12px;
+      font-size: 12px;
+      letter-spacing:.25px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.72);
+      background: rgba(10,18,26,.96);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      white-space: nowrap;
+    }
+    tbody tr{ height: var(--rowH); }
+    tbody td{
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: 13px;
+      color: rgba(255,255,255,.92);
+      white-space: nowrap;
+      max-width: 380px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    tbody tr:hover td{ background: rgba(255,255,255,.03); }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: rgba(255,255,255,.88);
+    }
+    .empty{
+      padding: 16px 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1100px){
+      body{ overflow:auto; }
+      .wrap{ height:auto; }
+      .topGrid{ grid-template-columns: 1fr; }
+      .totalsBar{ grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px){
+      .totalsBar{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- LOGIN OVERLAY -->
+  <div id="loginOverlay" class="overlay">
+    <div class="loginCard">
+      <h2>BPS Kassa</h2>
+      <p>Login/Parol tekshiriladi (Users). So‘ng baza yuklanadi.</p>
+
+      <div class="loginGrid">
+        <div class="field">
+          <label>Login</label>
+          <input id="login" autocomplete="username" placeholder="login"/>
+        </div>
+        <div class="field">
+          <label>Parol</label>
+          <input id="pass" type="password" autocomplete="current-password" placeholder="••••••••"/>
+        </div>
+      </div>
+
+      <div class="loginActions">
+        <span id="loginMsg" class="pill" style="display:none;"></span>
+        <button id="btnLogin" class="btn" type="button">Kirish</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div class="wrap">
+    <div class="card">
+      <div class="titleRow">
+        <div>
+          <h1>/bpskassa — Kassa server</h1>
+          <div class="sub">Qoldiq (hammasi) o‘ngda, filtr chapda, jadval pastda (15 qator + skroll).</div>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;">
+          <span id="userPill" class="pill">👤 -</span>
+          <button id="btnReload" class="btn secondary" type="button">Yangilash</button>
+          <span id="status" class="pill"><span class="muted">Tayyor</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="topGrid">
+      <!-- FILTERS -->
+      <div class="card">
+        <div class="filtersTitle">
+          <b>Filtrlar</b>
+          <button id="btnClear" class="btn secondary" type="button">Reset</button>
+        </div>
+
+        <div class="filtersGrid">
+          <div class="field full">
+            <label>Дата от / до</label>
+            <input id="dateFrom" type="date"/>
+            <span class="muted">—</span>
+            <input id="dateTo" type="date"/>
+          </div>
+
+          <div class="field">
+            <label>По кошелькам</label>
+            <select id="fWallet">
+              <option value="all">Все</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>По категориям</label>
+            <select id="fCat">
+              <option value="all">Все</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>По суб категориям</label>
+            <select id="fSub">
+              <option value="all">Все</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Типы (Расход/Приход)</label>
+            <select id="fType">
+              <option value="all">Все</option>
+              <option value="in">Приход</option>
+              <option value="out">Расход</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Валюта</label>
+            <select id="fCur">
+              <option value="all">Все</option>
+              <option value="uzs">UZS</option>
+              <option value="usd">USD</option>
+              <option value="both">UZS+USD</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- BALANCES -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:center;">
+          <b>Qoldiq (hamma sana bo‘yicha)</b>
+          <span id="updatedAt" class="muted"></span>
+        </div>
+        <div id="balances" class="balList"></div>
+      </div>
+    </div>
+
+    <!-- totals -->
+    <div class="card">
+      <div class="totalsBar">
+        <div class="totBox">
+          <div class="totLbl">Kirim Summa (UZS)</div>
+          <div id="tInU" class="totVal in">0</div>
+        </div>
+        <div class="totBox">
+          <div class="totLbl">Chiqim summa (UZS)</div>
+          <div id="tOutU" class="totVal out">0</div>
+        </div>
+        <div class="totBox">
+          <div class="totLbl">Kirim $ Summa (USD)</div>
+          <div id="tInD" class="totVal in">0</div>
+        </div>
+        <div class="totBox">
+          <div class="totLbl">Chiqim $ summa (USD)</div>
+          <div id="tOutD" class="totVal out">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- table -->
+    <div class="card tableCard">
+      <div class="tableScroll" id="tableScroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Sana</th>
+              <th>Koshelok</th>
+              <th>Kategoriya</th>
+              <th>Subkategoriya</th>
+              <th>Izoh</th>
+              <th>Kirim Summa</th>
+              <th>Chiqim summa</th>
+              <th>Kirim $ Summa</th>
+              <th>Chiqim $ summa</th>
+              <th>Kurs</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="10" class="empty">Operatsiyalar yoq</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /************ CONFIG ************/
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbyZD2z3CcNpQhGFh-e_Qfmhu91B7imqNKQ0dr2Gm4_V2KzTlvNEJMpRYnjOAfu_CCwiQg/exec"; // <-- сюда .../exec
+    const API_SECRET = "bpsSecret123"; // если включил API_SECRET в Apps Script — пропиши тут
+
+    /************ STATE ************/
+    let TOKEN = localStorage.getItem("bps_token") || "";
+    let USER = null;
+    let ALL_ROWS = [];
+    let OPTIONS = { wallets:[], categories:[], subAll:[], subByCat:{} };
+    let BALANCES = [];
+
+    /************ DOM ************/
+    const loginOverlay = document.getElementById("loginOverlay");
+    const btnLogin = document.getElementById("btnLogin");
+    const loginMsg = document.getElementById("loginMsg");
+    const inpLogin = document.getElementById("login");
+    const inpPass = document.getElementById("pass");
+
+    const userPill = document.getElementById("userPill");
+    const status = document.getElementById("status");
+    const btnReload = document.getElementById("btnReload");
+    const btnClear = document.getElementById("btnClear");
+    const updatedAt = document.getElementById("updatedAt");
+
+    const dateFrom = document.getElementById("dateFrom");
+    const dateTo = document.getElementById("dateTo");
+    const fWallet = document.getElementById("fWallet");
+    const fCat = document.getElementById("fCat");
+    const fSub = document.getElementById("fSub");
+    const fType = document.getElementById("fType");
+    const fCur = document.getElementById("fCur");
+
+    const balancesBox = document.getElementById("balances");
+    const tbody = document.getElementById("tbody");
+    const tableScroll = document.getElementById("tableScroll");
+
+    const tInU = document.getElementById("tInU");
+    const tOutU = document.getElementById("tOutU");
+    const tInD = document.getElementById("tInD");
+    const tOutD = document.getElementById("tOutD");
+
+    /************ HELPERS ************/
+    function setStatus(type, text, loading=false){
+      status.className = "pill";
+      status.innerHTML = "";
+      if (loading) status.innerHTML = '<span class="spinner"></span>';
+      status.innerHTML += `<span>${text}</span>`;
+      if (type === "ok") status.classList.add("ok");
+      if (type === "err") status.classList.add("err");
+    }
+
+    function setLoginMsg(type, text, loading=false){
+      loginMsg.style.display = "inline-flex";
+      loginMsg.className = "pill";
+      loginMsg.innerHTML = "";
+      if (loading) loginMsg.innerHTML = '<span class="spinner"></span>';
+      loginMsg.innerHTML += `<span>${text}</span>`;
+      if (type === "ok") loginMsg.classList.add("ok");
+      if (type === "err") loginMsg.classList.add("err");
+    }
+    function hideLoginMsg(){ loginMsg.style.display = "none"; }
+
+    function fmt(n){
+      const x = Number(n);
+      if (!isFinite(x)) return "0";
+      return x.toLocaleString("ru-RU", { maximumFractionDigits: 2 });
+    }
+    function toNum(n){ const x = Number(n); return isFinite(x) ? x : 0; }
+
+    function todayISO(){
+      const d = new Date();
+      const pad = x => String(x).padStart(2,"0");
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    }
+    function esc(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // JSONP loader
+    function loadJSONP(url){
+      return new Promise((resolve, reject) => {
+        const cbName = "__bps_cb_" + Math.random().toString(36).slice(2);
+        const script = document.createElement("script");
+
+        window[cbName] = (data) => {
+          cleanup();
+          resolve(data);
+        };
+
+        function cleanup(){
+          try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        script.onerror = () => {
+          cleanup();
+          reject(new Error("JSONP load error"));
+        };
+
+        const sep = url.includes("?") ? "&" : "?";
+        script.src = url + sep + "callback=" + cbName + "&_=" + Date.now();
+        document.body.appendChild(script);
+      });
+    }
+
+    function apiUrl(params){
+      const u = new URL(ENDPOINT);
+      Object.entries(params).forEach(([k,v]) => u.searchParams.set(k, v));
+      if (API_SECRET) u.searchParams.set("api_secret", API_SECRET);
+      return u.toString();
+    }
+
+    /************ RENDER ************/
+    function renderOptions(){
+      fWallet.innerHTML = `<option value="all">Все</option>` + (OPTIONS.wallets || []).map(w =>
+        `<option value="${esc(w)}">${esc(w)}</option>`
+      ).join("");
+
+      fCat.innerHTML = `<option value="all">Все</option>` + (OPTIONS.categories || []).map(c =>
+        `<option value="${esc(c)}">${esc(c)}</option>`
+      ).join("");
+
+      renderSubOptions("all");
+    }
+
+    function renderSubOptions(catVal){
+      let list = [];
+      if (catVal && catVal !== "all" && OPTIONS.subByCat && OPTIONS.subByCat[catVal]) list = OPTIONS.subByCat[catVal];
+      else list = OPTIONS.subAll || [];
+
+      const prev = fSub.value;
+      fSub.innerHTML = `<option value="all">Все</option>` + list.map(s =>
+        `<option value="${esc(s)}">${esc(s)}</option>`
+      ).join("");
+
+      if (prev && (prev === "all" || list.includes(prev))) fSub.value = prev;
+      else fSub.value = "all";
+    }
+
+    function renderBalances(){
+      if (!BALANCES || BALANCES.length === 0){
+        balancesBox.innerHTML = `<div class="muted">Qoldiq yo‘q</div>`;
+        return;
+      }
+      balancesBox.innerHTML = BALANCES.map(b => `
+        <div class="balItem">
+          <div>
+            <div class="w">${esc(b.wallet)}</div>
+            <div class="muted">UZS / USD</div>
+          </div>
+          <div class="nums">
+            <div>${fmt(b.uzs)} <span class="muted">UZS</span></div>
+            <div>${fmt(b.usd)} <span class="muted">USD</span></div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function rowHasUZS(r){ return (toNum(r.kirimUzs) !== 0) || (toNum(r.chiqimUzs) !== 0); }
+    function rowHasUSD(r){ return (toNum(r.kirimUsd) !== 0) || (toNum(r.chiqimUsd) !== 0); }
+    function rowHasIN(r){ return (toNum(r.kirimUzs) > 0) || (toNum(r.kirimUsd) > 0); }
+    function rowHasOUT(r){ return (toNum(r.chiqimUzs) > 0) || (toNum(r.chiqimUsd) > 0); }
+
+    function applyFilters(){
+      const df = dateFrom.value || "";
+      const dt = dateTo.value || "";
+      const w = fWallet.value;
+      const c = fCat.value;
+      const s = fSub.value;
+      const t = fType.value;
+      const cur = fCur.value;
+
+      const filtered = ALL_ROWS.filter(r => {
+        if (df && r.sana < df) return false;
+        if (dt && r.sana > dt) return false;
+
+        if (w !== "all" && r.koshelok !== w) return false;
+        if (c !== "all" && r.kategoriya !== c) return false;
+        if (s !== "all" && r.subkategoriya !== s) return false;
+
+        if (t === "in" && !rowHasIN(r)) return false;
+        if (t === "out" && !rowHasOUT(r)) return false;
+
+        if (cur === "uzs" && !rowHasUZS(r)) return false;
+        if (cur === "usd" && !rowHasUSD(r)) return false;
+        if (cur === "both" && !(rowHasUZS(r) && rowHasUSD(r))) return false;
+
+        return true;
+      });
+
+      renderTotals(filtered);
+      renderTable(filtered);
+    }
+
+    function renderTotals(list){
+      let inU=0, outU=0, inD=0, outD=0;
+      for (const r of list){
+        inU += toNum(r.kirimUzs);
+        outU += toNum(r.chiqimUzs);
+        inD += toNum(r.kirimUsd);
+        outD += toNum(r.chiqimUsd);
+      }
+      tInU.textContent = fmt(inU);
+      tOutU.textContent = fmt(outU);
+      tInD.textContent = fmt(inD);
+      tOutD.textContent = fmt(outD);
+    }
+
+    function renderTable(list){
+      if (!list || list.length === 0){
+        tbody.innerHTML = `<tr><td colspan="10" class="empty">Operatsiyalar yoq</td></tr>`;
+        return;
+      }
+
+      const sorted = [...list].sort((a,b) => (a.sana < b.sana ? 1 : a.sana > b.sana ? -1 : 0));
+
+      tbody.innerHTML = sorted.map(r => `
+        <tr>
+          <td class="mono">${esc(r.sana || "-")}</td>
+          <td>${esc(r.koshelok || "-")}</td>
+          <td>${esc(r.kategoriya || "-")}</td>
+          <td>${esc(r.subkategoriya || "-")}</td>
+          <td title="${esc(r.izoh || "")}">${esc(r.izoh || "-")}</td>
+          <td class="mono">${fmt(r.kirimUzs)}</td>
+          <td class="mono">${fmt(r.chiqimUzs)}</td>
+          <td class="mono">${fmt(r.kirimUsd)}</td>
+          <td class="mono">${fmt(r.chiqimUsd)}</td>
+          <td class="mono">${fmt(r.kurs)}</td>
+        </tr>
+      `).join("");
+
+      tableScroll.scrollTop = 0;
+    }
+
+    /************ API CALLS ************/
+    async function apiLogin(login, parol){
+      const url = apiUrl({ action:"login", login, parol });
+      return await loadJSONP(url);
+    }
+
+    async function apiRefresh(token){
+      const url = apiUrl({ action:"refresh", token });
+      return await loadJSONP(url);
+    }
+
+    function setDataFromApi(res){
+      ALL_ROWS = res.rows || [];
+      OPTIONS = res.options || OPTIONS;
+      BALANCES = res.balances || BALANCES;
+      updatedAt.textContent = res.updatedAt ? ("update: " + res.updatedAt) : "";
+
+      renderOptions();
+      renderBalances();
+
+      // дата для показа (но база уже вся загружена)
+      const t = todayISO();
+      dateFrom.value = dateFrom.value || t;
+      dateTo.value = dateTo.value || t;
+
+      applyFilters();
+    }
+
+    /************ LOGIN FLOW ************/
+    async function doLogin(){
+      hideLoginMsg();
+      const lg = inpLogin.value.trim();
+      const ps = inpPass.value.trim();
+      if (!lg || !ps){
+        setLoginMsg("err","Login/Parol bo‘sh");
+        return;
+      }
+
+      btnLogin.disabled = true;
+      setLoginMsg("", "Bazani yuklayapmiz...", true);
+
+      try{
+        const res = await apiLogin(lg, ps);
+        if (!res || !res.ok){
+          setLoginMsg("err", "Login yoki parol xato");
+          btnLogin.disabled = false;
+          return;
+        }
+
+        TOKEN = res.token;
+        USER = res.user;
+        localStorage.setItem("bps_token", TOKEN);
+
+        userPill.textContent = `👤 ${USER?.ism || USER?.login || "-"}`;
+
+        setDataFromApi(res);
+        setStatus("ok","Tayyor");
+        loginOverlay.style.display = "none";
+      }catch(e){
+        console.error(e);
+        setLoginMsg("err","Xatolik: serverga ulanib bo‘lmadi");
+      }finally{
+        btnLogin.disabled = false;
+      }
+    }
+
+    async function bootByToken(){
+      if (!TOKEN) return;
+      setStatus("", "Yuklanmoqda...", true);
+      try{
+        const res = await apiRefresh(TOKEN);
+        if (!res || !res.ok) throw new Error(res?.error || "bad_response");
+        setDataFromApi(res);
+        setStatus("ok","Tayyor");
+        loginOverlay.style.display = "none";
+      }catch(e){
+        console.warn("token invalid:", e);
+        localStorage.removeItem("bps_token");
+        TOKEN = "";
+        loginOverlay.style.display = "";
+      }
+    }
+
+    /************ FILTER EVENTS ************/
+    function resetFilters(){
+      const t = todayISO();
+      dateFrom.value = t;
+      dateTo.value = t;
+      fWallet.value = "all";
+      fCat.value = "all";
+      renderSubOptions("all");
+      fSub.value = "all";
+      fType.value = "all";
+      fCur.value = "all";
+      applyFilters();
+    }
+
+    btnLogin.addEventListener("click", doLogin);
+    inpPass.addEventListener("keydown", (e)=>{ if(e.key==="Enter") doLogin(); });
+
+    document.getElementById("btnReload").addEventListener("click", async () => {
+      if (!TOKEN) return;
+      setStatus("", "Yangilanmoqda...", true);
+      try{
+        const res = await apiRefresh(TOKEN);
+        if (!res || !res.ok) throw new Error(res?.error || "bad_response");
+        setDataFromApi(res);
+        setStatus("ok","Yangilandi");
+      }catch(e){
+        console.error(e);
+        setStatus("err","Xatolik");
+      }
+    });
+
+    btnClear.addEventListener("click", resetFilters);
+
+    dateFrom.addEventListener("change", applyFilters);
+    dateTo.addEventListener("change", applyFilters);
+    fWallet.addEventListener("change", applyFilters);
+
+    fCat.addEventListener("change", () => {
+      renderSubOptions(fCat.value);
+      applyFilters();
+    });
+
+    fSub.addEventListener("change", applyFilters);
+    fType.addEventListener("change", applyFilters);
+    fCur.addEventListener("change", applyFilters);
+
+    /************ TABLE RIGHT-CLICK DRAG SCROLL ************/
+    (function enableRightDragScroll(){
+      let dragging = false;
+      let startY = 0;
+      let startTop = 0;
+
+      tableScroll.addEventListener("contextmenu", (e) => e.preventDefault()); // отключаем меню, чтобы правой тянуть
+
+      tableScroll.addEventListener("mousedown", (e) => {
+        if (e.button !== 2) return; // только правая кнопка
+        dragging = true;
+        startY = e.clientY;
+        startTop = tableScroll.scrollTop;
+        tableScroll.style.cursor = "grabbing";
+        e.preventDefault();
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (!dragging) return;
+        const dy = e.clientY - startY;
+        tableScroll.scrollTop = startTop - dy;
+      });
+
+      window.addEventListener("mouseup", (e) => {
+        if (e.button !== 2) return;
+        dragging = false;
+        tableScroll.style.cursor = "";
+      });
+    })();
+
+    /************ INIT ************/
+    resetFilters();     // установит дату = сегодня (для вида)
+    bootByToken();      // если токен есть — зайдет сразу
+  </script>
+</body>
+</html>
