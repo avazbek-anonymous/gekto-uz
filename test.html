@@ -30,21 +30,14 @@
         var(--bg);
     }
     .wrap{ max-width: 1200px; margin:0 auto; }
+
     .top{
       display:flex; gap:12px; flex-wrap:wrap;
       align-items:flex-end; justify-content:space-between;
       margin-bottom: 14px;
     }
-    h1{
-      margin:0;
-      font-size: 20px;
-      letter-spacing:.2px;
-    }
-    .sub{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size: 13px;
-    }
+    h1{ margin:0; font-size: 20px; letter-spacing:.2px; }
+    .sub{ margin:6px 0 0; color:var(--muted); font-size: 13px; }
 
     .toolbar{
       display:flex; gap:10px; flex-wrap:wrap;
@@ -126,12 +119,8 @@
       gap: 12px;
       margin-bottom: 14px;
     }
-    @media (max-width: 1000px){
-      .grid4{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-    }
-    @media (max-width: 560px){
-      .grid4{ grid-template-columns: 1fr; }
-    }
+    @media (max-width: 1000px){ .grid4{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 560px){ .grid4{ grid-template-columns: 1fr; } }
 
     .card{
       background: var(--card);
@@ -170,9 +159,7 @@
       gap: 12px;
       margin-bottom: 14px;
     }
-    @media (max-width: 1000px){
-      .panel{ grid-template-columns: 1fr; }
-    }
+    @media (max-width: 1000px){ .panel{ grid-template-columns: 1fr; } }
 
     .toggle{
       display:flex; gap:8px;
@@ -191,8 +178,8 @@
       background: transparent;
       color: rgba(255,255,255,.75);
     }
-    .tbtn.active.in{ background: rgba(16,185,129,.15); color: rgba(16,185,129,.95); }
-    .tbtn.active.out{ background: rgba(239,68,68,.15); color: rgba(239,68,68,.95); }
+    .tbtn.in.active{ background: rgba(16,185,129,.15); color: rgba(16,185,129,.95); }
+    .tbtn.out.active{ background: rgba(239,68,68,.15); color: rgba(239,68,68,.95); }
 
     .formgrid{
       display:grid;
@@ -221,6 +208,15 @@
       color: rgba(255,255,255,.75);
       white-space: nowrap;
     }
+
+    /* RIGHT SIDE: table + filters */
+    .opsGrid{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap: 12px;
+      align-items:start;
+    }
+    @media (max-width: 1100px){ .opsGrid{ grid-template-columns: 1fr; } }
 
     .table-wrap{
       background: var(--card);
@@ -261,10 +257,22 @@
       font-size: 13px;
     }
 
-    .rightcol{
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-      justify-content:flex-end;
+    /* Filters card */
+    .filters h3{ margin-bottom: 10px; }
+    .filtersGrid{ display:grid; gap:10px; margin-top: 10px; }
+    .divider{
+      height:1px; background: rgba(255,255,255,.10);
+      margin: 12px 0;
     }
+    .totRow{
+      display:flex; justify-content:space-between; align-items:center;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(255,255,255,.10);
+    }
+    .totRow:last-child{ border-bottom:0; }
+    .totLbl{ color: rgba(255,255,255,.70); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing:.25px; }
+    .totVal{ font-size: 14px; font-weight: 900; }
+    .tiny{ font-size: 12px; color: rgba(255,255,255,.65); }
   </style>
 </head>
 
@@ -317,13 +325,14 @@
 
     <!-- entry + operations -->
     <div class="panel">
+      <!-- left: add operation -->
       <div class="card">
         <h3>Yangi operatsiya</h3>
 
         <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
           <div class="toggle" aria-label="operation type">
-            <button id="tIn" class="tbtn in active">Приход</button>
-            <button id="tOut" class="tbtn out">Расход</button>
+            <button id="tIn" class="tbtn in active" type="button">Приход</button>
+            <button id="tOut" class="tbtn out" type="button">Расход</button>
           </div>
 
           <span id="formMsg" class="pill" style="display:none;"></span>
@@ -366,37 +375,100 @@
           </div>
 
           <div class="full" style="display:flex; gap:10px; justify-content:flex-end; align-items:center;">
-            <button id="btnAdd" class="btn">OK</button>
+            <button id="btnAdd" class="btn" type="button">OK</button>
           </div>
         </div>
       </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Дата</th>
-              <th>Кошелек</th>
-              <th>Валюта</th>
-              <th>Статья</th>
-              <th>Контрагент</th>
-              <th>Приход</th>
-              <th>Расход</th>
-              <th>Курс</th>
-            </tr>
-          </thead>
-          <tbody id="tbody">
-            <tr><td colspan="8" class="empty">Yuklanmoqda...</td></tr>
-          </tbody>
-        </table>
+      <!-- right: ops table + filters -->
+      <div class="opsGrid">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Кошелек</th>
+                <th>Валюта</th>
+                <th>Статья</th>
+                <th>Контрагент</th>
+                <th>Приход</th>
+                <th>Расход</th>
+                <th>Курс</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <tr><td colspan="8" class="empty">Yuklanmoqda...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card filters">
+          <h3>Filtrlar</h3>
+
+          <div class="filtersGrid">
+            <div class="field">
+              <label>Дата</label>
+              <input id="fDate" type="date" />
+            </div>
+
+            <div class="field">
+              <label>Кошелек</label>
+              <select id="fWallet">
+                <option value="all">Barchasi</option>
+                <option value="Банк">Банк</option>
+                <option value="Наличные">Наличные</option>
+                <option value="Карта">Карта</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Контрагент</label>
+              <select id="fCounterparty">
+                <option value="all">Barchasi</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Тип</label>
+              <select id="fType">
+                <option value="all">Barchasi</option>
+                <option value="IN">Приход</option>
+                <option value="OUT">Расход</option>
+              </select>
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+              <button id="btnClearFilters" class="btn secondary" type="button">Tozalash</button>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="totRow">
+            <div>
+              <div class="totLbl">Итого Приход</div>
+              <div class="tiny">faqat filtr bo‘yicha</div>
+            </div>
+            <div id="totIn" class="totVal sum-in">0</div>
+          </div>
+
+          <div class="totRow">
+            <div>
+              <div class="totLbl">Итого Расход</div>
+              <div class="tiny">faqat filtr bo‘yicha</div>
+            </div>
+            <div id="totOut" class="totVal sum-out">0</div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
   <script>
     // === CONFIG ===
     const ENDPOINT = "https://script.google.com/macros/s/AKfycbzTaq3om6frUJHzbbh_3KYYgW0B0KQCDC8ZDNzkBaF9D8bcoRlr7zyuApY4K2AnNX85/exec";
-    const SECRETS = "mySecret123";
+    const SECRET = "mySecret123";
     const SHEET = "Tests";
     const DEFAULT_RATE = 12050;
 
@@ -424,9 +496,18 @@
     const btnAdd = document.getElementById("btnAdd");
     const formMsg = document.getElementById("formMsg");
 
+    // filters
+    const fDate = document.getElementById("fDate");
+    const fWallet = document.getElementById("fWallet");
+    const fCounterparty = document.getElementById("fCounterparty");
+    const fType = document.getElementById("fType");
+    const btnClearFilters = document.getElementById("btnClearFilters");
+    const totIn = document.getElementById("totIn");
+    const totOut = document.getElementById("totOut");
+
     // === STATE ===
     let opType = "IN"; // IN | OUT
-    let rows = [];
+    let rows = [];     // normalized rows
 
     // === UI helpers ===
     function setStatus(type, text, loading=false){
@@ -441,11 +522,12 @@
     function showFormMsg(type, text){
       formMsg.style.display = "inline-flex";
       formMsg.className = "pill";
-      formMsg.textContent = text;
       if (type === "ok") formMsg.classList.add("ok");
       if (type === "err") formMsg.classList.add("err");
       if (type === "load") {
         formMsg.innerHTML = '<span class="spinner"></span><span>' + text + '</span>';
+      } else {
+        formMsg.textContent = text;
       }
       if (type === "hide") formMsg.style.display = "none";
     }
@@ -466,7 +548,6 @@
     }
 
     function parseAmount(s){
-      // 12 500,50 / 12,500.50 / 12500 -> number
       const v = String(s || "")
         .replace(/\s/g, "")
         .replace(/,/g, ".")
@@ -479,6 +560,20 @@
       const d = new Date();
       const pad = (x) => String(x).padStart(2,"0");
       return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function dateOnly(isoLike){
+      // expects "YYYY-MM-DD ..." -> "YYYY-MM-DD"
+      const s = String(isoLike || "");
+      const m = s.match(/^(\d{4}-\d{2}-\d{2})/);
+      if (m) return m[1];
+      // fallback
+      const d = new Date(s);
+      if (!isNaN(d.getTime())) {
+        const pad = (x) => String(x).padStart(2,"0");
+        return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+      }
+      return "";
     }
 
     // JSONP loader (CORS bypass)
@@ -515,11 +610,10 @@
     }
 
     function normalizeRow(r){
-      // expected keys: date,wallet,currency,article,counterparty,income,expense,rate
       return {
         date: String(r.date || r.ts || ""),
         wallet: String(r.wallet || ""),
-        currency: String(r.currency || "UZS"),
+        currency: String(r.currency || "UZS").toUpperCase(),
         article: String(r.article || ""),
         counterparty: String(r.counterparty || ""),
         income: Number(r.income || 0) || 0,
@@ -529,38 +623,23 @@
     }
 
     function computeBalances(list){
-      // display:
-      // Bank -> UZS (USD converted)
-      // Card -> UZS (USD converted)
-      // Cash UZS -> UZS
-      // Cash USD -> USD
       const topRate = getTopRate();
-
-      let bankUZS = 0;
-      let cardUZS = 0;
-      let cashUZS = 0;
-      let cashUSD = 0;
+      let bankUZS = 0, cardUZS = 0, cashUZS = 0, cashUSD = 0;
 
       for (const rr of list){
         const r = normalizeRow(rr);
         const net = (r.income - r.expense);
-        const cur = (r.currency || "UZS").toUpperCase();
-        const w = r.wallet;
-
         const rate = r.rate > 0 ? r.rate : topRate;
 
-        if (w === "Наличные"){
-          if (cur === "USD") cashUSD += net;
+        if (r.wallet === "Наличные"){
+          if (r.currency === "USD") cashUSD += net;
           else cashUZS += net;
-        } else if (w === "Банк"){
-          if (cur === "USD") bankUZS += net * rate;
-          else bankUZS += net;
-        } else if (w === "Карта"){
-          if (cur === "USD") cardUZS += net * rate;
-          else cardUZS += net;
+        } else if (r.wallet === "Банк"){
+          bankUZS += (r.currency === "USD") ? net * rate : net;
+        } else if (r.wallet === "Карта"){
+          cardUZS += (r.currency === "USD") ? net * rate : net;
         }
       }
-
       return { bankUZS, cardUZS, cashUZS, cashUSD };
     }
 
@@ -572,23 +651,23 @@
       balCashUsd.textContent = formatNum(b.cashUSD);
     }
 
-    function renderTable(){
-      if (!rows || rows.length === 0){
-        tbody.innerHTML = `<tr><td colspan="8" class="empty">Hali operatsiyalar yo‘q.</td></tr>`;
+    function renderTable(list){
+      if (!list || list.length === 0){
+        tbody.innerHTML = `<tr><td colspan="8" class="empty">Operatsiyalar yoq</td></tr>`;
         return;
       }
 
-      // newest first
-      const sorted = [...rows].reverse().map(normalizeRow);
+      const sorted = [...list].reverse();
 
-      tbody.innerHTML = sorted.map(r => {
+      tbody.innerHTML = sorted.map(r0 => {
+        const r = normalizeRow(r0);
         const inc = r.income ? `<span class="sum-in">${formatNum(r.income)}</span>` : `<span class="mono">-</span>`;
         const exp = r.expense ? `<span class="sum-out">${formatNum(r.expense)}</span>` : `<span class="mono">-</span>`;
-        const rate = r.currency.toUpperCase()==="USD" ? (r.rate || getTopRate()) : (r.rate || "-");
+        const rate = (r.currency === "USD") ? (r.rate || getTopRate()) : "-";
 
         return `
           <tr>
-            <td class="mono">${escapeHtml(r.date || "-")}</td>
+            <td class="mono">${escapeHtml(dateOnly(r.date) || "-")}</td>
             <td>${escapeHtml(r.wallet || "-")}</td>
             <td class="mono">${escapeHtml(r.currency || "UZS")}</td>
             <td>${escapeHtml(r.article || "-")}</td>
@@ -601,25 +680,99 @@
       }).join("");
     }
 
+    function buildCounterpartyOptions(keepValue){
+      const set = new Set();
+      for (const r0 of rows){
+        const c = (normalizeRow(r0).counterparty || "").trim();
+        if (c) set.add(c);
+      }
+      const list = Array.from(set).sort((a,b)=>a.localeCompare(b,"ru"));
+      const prev = keepValue ?? fCounterparty.value;
+
+      fCounterparty.innerHTML = `<option value="all">Barchasi</option>` + list.map(x =>
+        `<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`
+      ).join("");
+
+      // restore selection if possible
+      if (prev && (prev === "all" || list.includes(prev))) fCounterparty.value = prev;
+      else fCounterparty.value = "all";
+    }
+
+    function applyFilters(){
+      const d = fDate.value;                 // YYYY-MM-DD or ""
+      const w = fWallet.value;               // all or wallet
+      const c = fCounterparty.value;         // all or counterparty
+      const t = fType.value;                 // all | IN | OUT
+
+      const filtered = rows.filter(r0 => {
+        const r = normalizeRow(r0);
+
+        if (d && dateOnly(r.date) !== d) return false;
+        if (w !== "all" && r.wallet !== w) return false;
+        if (c !== "all" && r.counterparty !== c) return false;
+
+        if (t === "IN" && !(r.income > 0)) return false;
+        if (t === "OUT" && !(r.expense > 0)) return false;
+
+        return true;
+      });
+
+      renderTable(filtered);
+      renderTotals(filtered);
+      return filtered;
+    }
+
+    function renderTotals(list){
+      let inUZS=0, inUSD=0, outUZS=0, outUSD=0;
+
+      for (const r0 of list){
+        const r = normalizeRow(r0);
+        if (r.currency === "USD") {
+          inUSD += r.income;
+          outUSD += r.expense;
+        } else {
+          inUZS += r.income;
+          outUZS += r.expense;
+        }
+      }
+
+      const inParts = [];
+      const outParts = [];
+
+      if (inUZS) inParts.push(`${formatNum(inUZS)} UZS`);
+      if (inUSD) inParts.push(`${formatNum(inUSD)} USD`);
+      if (!inParts.length) inParts.push("0");
+
+      if (outUZS) outParts.push(`${formatNum(outUZS)} UZS`);
+      if (outUSD) outParts.push(`${formatNum(outUSD)} USD`);
+      if (!outParts.length) outParts.push("0");
+
+      totIn.textContent = inParts.join(" · ");
+      totOut.textContent = outParts.join(" · ");
+    }
+
     async function refresh(){
       setStatus("", "Yuklanmoqda...", true);
       btnRefresh.disabled = true;
 
       try {
-        const url = `${ENDPOINT}?secret=${encodeURIComponent(SECRETS)}&sheet=${encodeURIComponent(SHEET)}&limit=2000`;
+        const url = `${ENDPOINT}?secret=${encodeURIComponent(SECRET)}&sheet=${encodeURIComponent(SHEET)}&limit=5000`;
         const data = await loadJSONP(url);
-
         if (!data || data.ok !== true) throw new Error(data?.error || "unknown_error");
 
-        rows = Array.isArray(data.rows) ? data.rows : [];
+        rows = Array.isArray(data.rows) ? data.rows.map(normalizeRow) : [];
         renderBalances();
-        renderTable();
+
+        buildCounterpartyOptions();   // обновить список контрагентов
+        applyFilters();               // применить текущие фильтры
 
         setStatus("ok", `Yuklandi: ${rows.length} ta`);
       } catch (e){
         console.error(e);
         setStatus("err", "Xatolik: ma'lumot olinmadi");
-        tbody.innerHTML = `<tr><td colspan="8" class="empty">Xatolik: ma'lumot olinmadi.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="empty">Operatsiyalar yoq</td></tr>`;
+        totIn.textContent = "0";
+        totOut.textContent = "0";
       } finally {
         btnRefresh.disabled = false;
       }
@@ -630,10 +783,6 @@
       opType = type;
       tIn.classList.toggle("active", type==="IN");
       tOut.classList.toggle("active", type==="OUT");
-      tIn.classList.toggle("in", type==="IN");
-      tOut.classList.toggle("out", type==="OUT");
-      if (type==="IN") { tIn.classList.add("active","in"); tOut.classList.remove("active"); }
-      if (type==="OUT"){ tOut.classList.add("active","out"); tIn.classList.remove("active"); }
     }
 
     function updateWalletUI(){
@@ -647,12 +796,8 @@
       amountCur.textContent = currencyEl.value;
     }
 
-    // amount formatting (light)
     amountEl.addEventListener("input", () => {
-      // allow user typing; we only keep digits separators
-      const raw = amountEl.value;
-      const cleaned = raw.replace(/[^\d.,\s]/g, "");
-      amountEl.value = cleaned;
+      amountEl.value = amountEl.value.replace(/[^\d.,\s]/g, "");
     });
 
     tIn.addEventListener("click", () => setOpType("IN"));
@@ -661,6 +806,26 @@
     currencyEl.addEventListener("change", () => amountCur.textContent = currencyEl.value);
 
     btnRefresh.addEventListener("click", refresh);
+
+    // filters events
+    fDate.addEventListener("change", applyFilters);
+    fWallet.addEventListener("change", applyFilters);
+    fCounterparty.addEventListener("change", applyFilters);
+    fType.addEventListener("change", applyFilters);
+
+    btnClearFilters.addEventListener("click", () => {
+      fDate.value = "";
+      fWallet.value = "all";
+      fCounterparty.value = "all";
+      fType.value = "all";
+      applyFilters();
+    });
+
+    // rate change should re-render balances + table (rate column for USD)
+    rateTop.addEventListener("input", () => {
+      renderBalances();
+      applyFilters();
+    });
 
     async function addOperation(){
       const wallet = walletEl.value;
@@ -675,11 +840,10 @@
       const article = (articleEl.value || "").trim();
       const counterparty = (counterpartyEl.value || "").trim();
 
-      // rate only needed if USD
       const rate = (currency === "USD") ? getTopRate() : "";
 
       const payload = {
-        secret: SECRETS,
+        secret: SECRET,
         action: "add",
         sheet: SHEET,
         date: nowISO(),
@@ -696,7 +860,6 @@
       showFormMsg("load", "Yuborilmoqda...");
 
       try {
-        // POST without CORS read (ok), then refresh data
         await fetch(ENDPOINT, {
           method: "POST",
           mode: "no-cors",
@@ -704,15 +867,13 @@
           body: JSON.stringify(payload)
         });
 
-        // clear inputs
         amountEl.value = "";
         articleEl.value = "";
         counterpartyEl.value = "";
 
         showFormMsg("ok", "Qabul qilindi ✅");
-        setTimeout(() => showFormMsg("hide",""), 1800);
+        setTimeout(() => showFormMsg("hide",""), 1600);
 
-        // reload everything
         await new Promise(r => setTimeout(r, 600));
         await refresh();
       } catch (e){
