@@ -14,27 +14,36 @@
       --muted:rgba(255,255,255,.65);
       --ok:#10b981;
       --bad:#ef4444;
-      --blue:#3b82f6;
       --shadow: 0 10px 30px rgba(0,0,0,.25);
       --r: 16px;
     }
     *{ box-sizing:border-box; }
+    html, body { height: 100%; }
     body{
       margin:0;
-      padding: 22px;
+      padding: 16px;
       color:var(--text);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background:
         radial-gradient(1000px 520px at 18% 12%, rgba(16,185,129,.18), transparent 60%),
         radial-gradient(900px 520px at 88% 38%, rgba(59,130,246,.14), transparent 55%),
         var(--bg);
+      overflow: hidden; /* чтобы всё помещалось в окно */
     }
-    .wrap{ max-width: 1200px; margin:0 auto; }
+    .wrap{
+      height: calc(100vh - 32px);
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      max-width: 1400px;
+      margin: 0 auto;
+      min-height: 0;
+    }
 
+    /* top header */
     .top{
       display:flex; gap:12px; flex-wrap:wrap;
       align-items:flex-end; justify-content:space-between;
-      margin-bottom: 14px;
     }
     h1{ margin:0; font-size: 20px; letter-spacing:.2px; }
     .sub{ margin:6px 0 0; color:var(--muted); font-size: 13px; }
@@ -44,6 +53,7 @@
       align-items:center; justify-content:flex-end;
     }
 
+    /* small UI */
     .pill{
       display:inline-flex; align-items:center; gap:10px;
       padding: 10px 12px;
@@ -52,6 +62,7 @@
       background: rgba(255,255,255,.04);
       color: var(--muted);
       font-size: 13px;
+      white-space: nowrap;
     }
     .pill.ok{ color: rgba(16,185,129,.95); border-color: rgba(16,185,129,.35); background: rgba(16,185,129,.10); }
     .pill.err{ color: rgba(239,68,68,.95); border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.10); }
@@ -74,6 +85,7 @@
       background: var(--ok);
       color:#062a1b;
       box-shadow: var(--shadow);
+      white-space: nowrap;
     }
     .btn.secondary{
       background: rgba(255,255,255,.08);
@@ -113,20 +125,25 @@
       white-space: nowrap;
     }
 
+    /* balances */
     .grid4{
       display:grid;
       grid-template-columns: repeat(4, minmax(0,1fr));
       gap: 12px;
-      margin-bottom: 14px;
     }
-    @media (max-width: 1000px){ .grid4{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-    @media (max-width: 560px){ .grid4{ grid-template-columns: 1fr; } }
+    @media (max-width: 1100px){ .grid4{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 560px){
+      body{ overflow:auto; }
+      .wrap{ height:auto; }
+      .grid4{ grid-template-columns: 1fr; }
+    }
 
     .card{
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: var(--r);
       padding: 14px;
+      min-height: 0;
     }
     .card h3{
       margin:0;
@@ -153,14 +170,14 @@
       font-size: 12px;
     }
 
-    .panel{
-      display:grid;
-      grid-template-columns: 420px 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
+    /* horizontal entry form */
+    .entryHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
     }
-    @media (max-width: 1000px){ .panel{ grid-template-columns: 1fr; } }
-
     .toggle{
       display:flex; gap:8px;
       background: rgba(255,255,255,.04);
@@ -177,17 +194,26 @@
       font-weight: 900;
       background: transparent;
       color: rgba(255,255,255,.75);
+      white-space: nowrap;
     }
     .tbtn.in.active{ background: rgba(16,185,129,.15); color: rgba(16,185,129,.95); }
     .tbtn.out.active{ background: rgba(239,68,68,.15); color: rgba(239,68,68,.95); }
 
-    .formgrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    .entryGrid{
       margin-top: 12px;
+      display:grid;
+      grid-template-columns: 200px 200px 240px 1fr 1fr auto;
+      gap: 10px;
+      align-items: end;
     }
-    .formgrid .full{ grid-column: 1 / -1; }
+    @media (max-width: 1200px){
+      .entryGrid{ grid-template-columns: 1fr 1fr 1fr; }
+    }
+    @media (max-width: 820px){
+      body{ overflow:auto; }
+      .wrap{ height:auto; }
+      .entryGrid{ grid-template-columns: 1fr; }
+    }
 
     .amountwrap{
       display:flex; gap:10px; align-items:center;
@@ -209,61 +235,24 @@
       white-space: nowrap;
     }
 
-    /* RIGHT SIDE: table + filters */
-    .opsGrid{
+    /* bottom: filters left + table right */
+    .bottom{
+      flex: 1;
+      min-height: 0; /* важно для скролла внутри */
       display:grid;
-      grid-template-columns: 1fr 320px;
+      grid-template-columns: 320px 1fr;
       gap: 12px;
-      align-items:start;
+      align-items: stretch;
     }
-    @media (max-width: 1100px){ .opsGrid{ grid-template-columns: 1fr; } }
-
-    .table-wrap{
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--r);
-      overflow:hidden;
-    }
-    table{ width:100%; border-collapse: collapse; }
-    thead th{
-      text-align:left;
-      font-size: 12px;
-      letter-spacing:.3px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.70);
-      padding: 12px 14px;
-      background: rgba(255,255,255,.04);
-      border-bottom: 1px solid var(--line);
-      white-space: nowrap;
-    }
-    tbody td{
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      font-size: 13px;
-      color: rgba(255,255,255,.90);
-      vertical-align: top;
-    }
-    tbody tr:hover td{ background: rgba(255,255,255,.03); }
-    .mono{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      color: rgba(255,255,255,.78);
-      white-space: nowrap;
-    }
-    .sum-in{ color: rgba(16,185,129,.95); font-weight: 900; }
-    .sum-out{ color: rgba(239,68,68,.95); font-weight: 900; }
-    .empty{
-      padding: 16px 14px;
-      color: var(--muted);
-      font-size: 13px;
+    @media (max-width: 980px){
+      body{ overflow:auto; }
+      .wrap{ height:auto; }
+      .bottom{ grid-template-columns: 1fr; }
     }
 
-    /* Filters card */
-    .filters h3{ margin-bottom: 10px; }
+    /* filters */
     .filtersGrid{ display:grid; gap:10px; margin-top: 10px; }
-    .divider{
-      height:1px; background: rgba(255,255,255,.10);
-      margin: 12px 0;
-    }
+    .divider{ height:1px; background: rgba(255,255,255,.10); margin: 12px 0; }
     .totRow{
       display:flex; justify-content:space-between; align-items:center;
       padding: 10px 0;
@@ -273,11 +262,84 @@
     .totLbl{ color: rgba(255,255,255,.70); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing:.25px; }
     .totVal{ font-size: 14px; font-weight: 900; }
     .tiny{ font-size: 12px; color: rgba(255,255,255,.65); }
+
+    /* table with scroll */
+    .table-wrap{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      overflow: hidden;
+      min-height: 0;
+      display:flex;
+      flex-direction:column;
+    }
+    .table-scroll{
+      min-height: 0;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-gutter: stable;
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,.12) transparent;
+    }
+    .table-scroll:hover{
+      scrollbar-color: rgba(255,255,255,.38) transparent;
+    }
+
+    /* Webkit scrollbar */
+    .table-scroll::-webkit-scrollbar{ width: 10px; }
+    .table-scroll::-webkit-scrollbar-track{ background: transparent; }
+    .table-scroll::-webkit-scrollbar-thumb{
+      background: rgba(255,255,255,.10);
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+    .table-scroll:hover::-webkit-scrollbar-thumb{
+      background: rgba(255,255,255,.32);
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+
+    table{ width:100%; border-collapse: collapse; }
+    thead th{
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      text-align:left;
+      font-size: 12px;
+      letter-spacing:.3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      padding: 11px 12px;
+      background: rgba(10,18,26,.96);
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+    tbody td{
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: 13px;
+      color: rgba(255,255,255,.90);
+      vertical-align: top;
+    }
+    tbody tr:hover td{ background: rgba(255,255,255,.03); }
+
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: rgba(255,255,255,.78);
+      white-space: nowrap;
+    }
+    .sum-in{ color: rgba(16,185,129,.95); font-weight: 900; }
+    .sum-out{ color: rgba(239,68,68,.95); font-weight: 900; }
+    .empty{ padding: 16px 14px; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 
 <body>
   <div class="wrap">
+    <!-- header -->
     <div class="top">
       <div>
         <h1>Tests — Cash Tracker</h1>
@@ -291,7 +353,7 @@
           <small>UZS</small>
         </div>
 
-        <button id="btnRefresh" class="btn secondary">Yangilash</button>
+        <button id="btnRefresh" class="btn secondary" type="button">Yangilash</button>
         <span id="status" class="pill"><span>Guruh</span></span>
       </div>
     </div>
@@ -323,13 +385,12 @@
       </div>
     </div>
 
-    <!-- entry + operations -->
-    <div class="panel">
-      <!-- left: add operation -->
-      <div class="card">
-        <h3>Yangi operatsiya</h3>
+    <!-- horizontal entry -->
+    <div class="card">
+      <div class="entryHead">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <h3 style="margin:0;">Yangi operatsiya</h3>
 
-        <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
           <div class="toggle" aria-label="operation type">
             <button id="tIn" class="tbtn in active" type="button">Приход</button>
             <button id="tOut" class="tbtn out" type="button">Расход</button>
@@ -338,51 +399,114 @@
           <span id="formMsg" class="pill" style="display:none;"></span>
         </div>
 
-        <div class="formgrid">
+        <button id="btnAdd" class="btn" type="button">OK</button>
+      </div>
+
+      <div class="entryGrid">
+        <div class="field">
+          <label>Кошелек</label>
+          <select id="wallet">
+            <option value="Банк">Банк</option>
+            <option value="Наличные">Наличные</option>
+            <option value="Карта">Карта</option>
+          </select>
+        </div>
+
+        <div class="field" id="currencyBox" style="display:none;">
+          <label>Тип валюты</label>
+          <select id="currency">
+            <option value="UZS">UZS</option>
+            <option value="USD">USD</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Сумма</label>
+          <div class="amountwrap">
+            <input id="amount" type="text" inputmode="decimal" placeholder="0" />
+            <span id="amountCur" class="badge">UZS</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Статья</label>
+          <input id="article" type="text" placeholder="Masalan: Reklama, Oylik, Xarid..." />
+        </div>
+
+        <div class="field">
+          <label>Контрагент</label>
+          <input id="counterparty" type="text" placeholder="Masalan: Yetkazib beruvchi / Mijoz..." />
+        </div>
+
+        <div class="pill" style="justify-content:center;">
+          <span class="mono">Дата: avtomatik</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- bottom: filters left + list right -->
+    <div class="bottom">
+      <div class="card">
+        <h3>Filtrlar</h3>
+
+        <div class="filtersGrid">
+          <div class="field">
+            <label>Дата</label>
+            <input id="fDate" type="date" />
+          </div>
+
           <div class="field">
             <label>Кошелек</label>
-            <select id="wallet">
+            <select id="fWallet">
+              <option value="all">Barchasi</option>
               <option value="Банк">Банк</option>
               <option value="Наличные">Наличные</option>
               <option value="Карта">Карта</option>
             </select>
           </div>
 
-          <div class="field" id="currencyBox" style="display:none;">
-            <label>Тип валюты</label>
-            <select id="currency">
-              <option value="UZS">UZS</option>
-              <option value="USD">USD</option>
+          <div class="field">
+            <label>Контрагент</label>
+            <select id="fCounterparty">
+              <option value="all">Barchasi</option>
             </select>
           </div>
 
-          <div class="field full">
-            <label>Сумма</label>
-            <div class="amountwrap">
-              <input id="amount" type="text" inputmode="decimal" placeholder="0" />
-              <span id="amountCur" class="badge">UZS</span>
-            </div>
+          <div class="field">
+            <label>Тип</label>
+            <select id="fType">
+              <option value="all">Barchasi</option>
+              <option value="IN">Приход</option>
+              <option value="OUT">Расход</option>
+            </select>
           </div>
 
-          <div class="field full">
-            <label>Статья</label>
-            <input id="article" type="text" placeholder="Masalan: Reklama, Oylik, Xarid..." />
+          <div style="display:flex; gap:10px; justify-content:flex-end;">
+            <button id="btnClearFilters" class="btn secondary" type="button">Tozalash</button>
           </div>
+        </div>
 
-          <div class="field full">
-            <label>Контрагент</label>
-            <input id="counterparty" type="text" placeholder="Masalan: Yetkazib beruvchi / Mijoz..." />
-          </div>
+        <div class="divider"></div>
 
-          <div class="full" style="display:flex; gap:10px; justify-content:flex-end; align-items:center;">
-            <button id="btnAdd" class="btn" type="button">OK</button>
+        <div class="totRow">
+          <div>
+            <div class="totLbl">Итого Приход</div>
+            <div class="tiny">filtr bo‘yicha</div>
           </div>
+          <div id="totIn" class="totVal sum-in">0</div>
+        </div>
+
+        <div class="totRow">
+          <div>
+            <div class="totLbl">Итого Расход</div>
+            <div class="tiny">filtr bo‘yicha</div>
+          </div>
+          <div id="totOut" class="totVal sum-out">0</div>
         </div>
       </div>
 
-      <!-- right: ops table + filters -->
-      <div class="opsGrid">
-        <div class="table-wrap">
+      <div class="table-wrap">
+        <div class="table-scroll" id="tableScroll">
           <table>
             <thead>
               <tr>
@@ -401,68 +525,9 @@
             </tbody>
           </table>
         </div>
-
-        <div class="card filters">
-          <h3>Filtrlar</h3>
-
-          <div class="filtersGrid">
-            <div class="field">
-              <label>Дата</label>
-              <input id="fDate" type="date" />
-            </div>
-
-            <div class="field">
-              <label>Кошелек</label>
-              <select id="fWallet">
-                <option value="all">Barchasi</option>
-                <option value="Банк">Банк</option>
-                <option value="Наличные">Наличные</option>
-                <option value="Карта">Карта</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label>Контрагент</label>
-              <select id="fCounterparty">
-                <option value="all">Barchasi</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label>Тип</label>
-              <select id="fType">
-                <option value="all">Barchasi</option>
-                <option value="IN">Приход</option>
-                <option value="OUT">Расход</option>
-              </select>
-            </div>
-
-            <div style="display:flex; gap:10px; justify-content:flex-end;">
-              <button id="btnClearFilters" class="btn secondary" type="button">Tozalash</button>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="totRow">
-            <div>
-              <div class="totLbl">Итого Приход</div>
-              <div class="tiny">faqat filtr bo‘yicha</div>
-            </div>
-            <div id="totIn" class="totVal sum-in">0</div>
-          </div>
-
-          <div class="totRow">
-            <div>
-              <div class="totLbl">Итого Расход</div>
-              <div class="tiny">faqat filtr bo‘yicha</div>
-            </div>
-            <div id="totOut" class="totVal sum-out">0</div>
-          </div>
-        </div>
       </div>
-
     </div>
+
   </div>
 
   <script>
@@ -475,6 +540,7 @@
     // === DOM ===
     const statusEl = document.getElementById("status");
     const tbody = document.getElementById("tbody");
+    const tableScroll = document.getElementById("tableScroll");
 
     const rateTop = document.getElementById("rateTop");
     const btnRefresh = document.getElementById("btnRefresh");
@@ -563,11 +629,9 @@
     }
 
     function dateOnly(isoLike){
-      // expects "YYYY-MM-DD ..." -> "YYYY-MM-DD"
       const s = String(isoLike || "");
       const m = s.match(/^(\d{4}-\d{2}-\d{2})/);
       if (m) return m[1];
-      // fallback
       const d = new Date(s);
       if (!isNaN(d.getTime())) {
         const pad = (x) => String(x).padStart(2,"0");
@@ -678,6 +742,9 @@
           </tr>
         `;
       }).join("");
+
+      // чтобы “10 строк” визуально было стабильно — всегда сверху
+      tableScroll.scrollTop = 0;
     }
 
     function buildCounterpartyOptions(keepValue){
@@ -693,33 +760,8 @@
         `<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`
       ).join("");
 
-      // restore selection if possible
       if (prev && (prev === "all" || list.includes(prev))) fCounterparty.value = prev;
       else fCounterparty.value = "all";
-    }
-
-    function applyFilters(){
-      const d = fDate.value;                 // YYYY-MM-DD or ""
-      const w = fWallet.value;               // all or wallet
-      const c = fCounterparty.value;         // all or counterparty
-      const t = fType.value;                 // all | IN | OUT
-
-      const filtered = rows.filter(r0 => {
-        const r = normalizeRow(r0);
-
-        if (d && dateOnly(r.date) !== d) return false;
-        if (w !== "all" && r.wallet !== w) return false;
-        if (c !== "all" && r.counterparty !== c) return false;
-
-        if (t === "IN" && !(r.income > 0)) return false;
-        if (t === "OUT" && !(r.expense > 0)) return false;
-
-        return true;
-      });
-
-      renderTable(filtered);
-      renderTotals(filtered);
-      return filtered;
     }
 
     function renderTotals(list){
@@ -751,6 +793,30 @@
       totOut.textContent = outParts.join(" · ");
     }
 
+    function applyFilters(){
+      const d = fDate.value;
+      const w = fWallet.value;
+      const c = fCounterparty.value;
+      const t = fType.value;
+
+      const filtered = rows.filter(r0 => {
+        const r = normalizeRow(r0);
+
+        if (d && dateOnly(r.date) !== d) return false;
+        if (w !== "all" && r.wallet !== w) return false;
+        if (c !== "all" && r.counterparty !== c) return false;
+
+        if (t === "IN" && !(r.income > 0)) return false;
+        if (t === "OUT" && !(r.expense > 0)) return false;
+
+        return true;
+      });
+
+      renderTable(filtered);
+      renderTotals(filtered);
+      return filtered;
+    }
+
     async function refresh(){
       setStatus("", "Yuklanmoqda...", true);
       btnRefresh.disabled = true;
@@ -763,8 +829,8 @@
         rows = Array.isArray(data.rows) ? data.rows.map(normalizeRow) : [];
         renderBalances();
 
-        buildCounterpartyOptions();   // обновить список контрагентов
-        applyFilters();               // применить текущие фильтры
+        buildCounterpartyOptions();
+        applyFilters();
 
         setStatus("ok", `Yuklandi: ${rows.length} ta`);
       } catch (e){
@@ -821,7 +887,6 @@
       applyFilters();
     });
 
-    // rate change should re-render balances + table (rate column for USD)
     rateTop.addEventListener("input", () => {
       renderBalances();
       applyFilters();
@@ -839,7 +904,6 @@
 
       const article = (articleEl.value || "").trim();
       const counterparty = (counterpartyEl.value || "").trim();
-
       const rate = (currency === "USD") ? getTopRate() : "";
 
       const payload = {
@@ -872,9 +936,9 @@
         counterpartyEl.value = "";
 
         showFormMsg("ok", "Qabul qilindi ✅");
-        setTimeout(() => showFormMsg("hide",""), 1600);
+        setTimeout(() => showFormMsg("hide",""), 1400);
 
-        await new Promise(r => setTimeout(r, 600));
+        await new Promise(r => setTimeout(r, 500));
         await refresh();
       } catch (e){
         console.error(e);
