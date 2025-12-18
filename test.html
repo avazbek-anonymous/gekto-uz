@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Leads Test</title>
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.10);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.65);
+      --ok:#10b981;
+      --err:#ef4444;
+    }
+    body{
+      margin:0;
+      background: radial-gradient(900px 500px at 20% 10%, rgba(16,185,129,.16), transparent 60%),
+                  radial-gradient(900px 500px at 90% 40%, rgba(59,130,246,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      padding: 28px;
+    }
+    .wrap{ max-width: 1100px; margin: 0 auto; }
+    h1{ margin:0 0 10px; font-size: 22px; letter-spacing:.2px; }
+    .sub{ color:var(--muted); margin:0 0 18px; }
+
+    .bar{
+      display:flex; flex-wrap:wrap; gap:10px;
+      align-items:center;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .btn{
+      border:0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor:pointer;
+      background: var(--ok);
+      color:#062a1b;
+    }
+    .btn:disabled{ opacity:.7; cursor: not-allowed; }
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .pill.ok{ color: rgba(16,185,129,.95); border-color: rgba(16,185,129,.35); background: rgba(16,185,129,.10); }
+    .pill.err{ color: rgba(239,68,68,.95); border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.10); }
+
+    .spinner{
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.18);
+      border-top-color: rgba(255,255,255,.75);
+      animation: spin .8s linear infinite;
+      flex: 0 0 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg);} }
+
+    .table-wrap{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow:hidden;
+    }
+    table{
+      width:100%;
+      border-collapse: collapse;
+    }
+    thead th{
+      text-align:left;
+      font-size: 12px;
+      letter-spacing:.3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      padding: 12px 14px;
+      background: rgba(255,255,255,.04);
+      border-bottom: 1px solid var(--line);
+    }
+    tbody td{
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: 13px;
+      color: rgba(255,255,255,.90);
+      vertical-align: top;
+    }
+    tbody tr:hover td{ background: rgba(255,255,255,.03); }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; color: rgba(255,255,255,.78); }
+    .link{
+      color: rgba(59,130,246,.95);
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .link:hover{ text-decoration: underline; }
+
+    .empty{
+      padding: 16px 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>SiteLeads — test</h1>
+    <p class="sub">Нажми «Получить», чтобы загрузить все записи из листа <b>SiteLeads</b>.</p>
+
+    <div class="bar">
+      <button id="btnLoad" class="btn">Получить</button>
+      <span id="status" class="pill"><span>Готово</span></span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Sana</th>
+            <th>Ism</th>
+            <th>Tel</th>
+            <th>Sahifa</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="4" class="empty">Пока пусто. Нажми «Получить».</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec";
+    const SECRET = "mySecret123";
+
+    const btn = document.getElementById("btnLoad");
+    const statusEl = document.getElementById("status");
+    const tbody = document.getElementById("tbody");
+
+    function setStatus(type, text, loading=false){
+      statusEl.className = "pill";
+      statusEl.innerHTML = "";
+      if (loading) statusEl.innerHTML = '<span class="spinner"></span>';
+      statusEl.innerHTML += `<span>${text}</span>`;
+      if (type === "ok") statusEl.classList.add("ok");
+      if (type === "err") statusEl.classList.add("err");
+    }
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // JSONP loader (обходит CORS)
+    function loadJSONP(url){
+      return new Promise((resolve, reject) => {
+        const cbName = "__leads_cb_" + Math.random().toString(36).slice(2);
+        const script = document.createElement("script");
+
+        window[cbName] = (data) => {
+          cleanup();
+          resolve(data);
+        };
+
+        function cleanup(){
+          try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        script.onerror = () => {
+          cleanup();
+          reject(new Error("JSONP load error"));
+        };
+
+        const sep = url.includes("?") ? "&" : "?";
+        script.src = url + sep + "callback=" + cbName + "&_=" + Date.now();
+        document.body.appendChild(script);
+      });
+    }
+
+    function render(rows){
+      if (!rows || rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="empty">Записей нет.</td></tr>`;
+        return;
+      }
+
+      // новые сверху
+      const sorted = [...rows].reverse();
+
+      tbody.innerHTML = sorted.map(r => {
+        const ts = escapeHtml(r.ts || "");
+        const name = escapeHtml(r.name || "");
+        const phone = escapeHtml(r.phone || "");
+        const page = r.page ? String(r.page) : "";
+        const pageCell = page
+          ? `<a class="link" href="${escapeHtml(page)}" target="_blank" rel="noopener">${escapeHtml(page)}</a>`
+          : `<span class="mono">-</span>`;
+
+        return `
+          <tr>
+            <td class="mono">${ts || "-"}</td>
+            <td>${name || "-"}</td>
+            <td class="mono">${phone || "-"}</td>
+            <td>${pageCell}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    btn.addEventListener("click", async () => {
+      btn.disabled = true;
+      setStatus("", "Yuklanmoqda...", true);
+
+      try {
+        const url = `${ENDPOINT}?secret=${encodeURIComponent(SECRET)}&limit=2000`;
+        const data = await loadJSONP(url);
+
+        if (!data || data.ok !== true) {
+          throw new Error((data && data.error) ? data.error : "unknown_error");
+        }
+
+        render(data.rows);
+        setStatus("ok", `Yuklandi: ${data.rows.length} ta`);
+      } catch (err) {
+        console.error(err);
+        setStatus("err", "Xatolik: ma'lumot olinmadi");
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
