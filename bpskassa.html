@@ -226,6 +226,7 @@
     .field label{ font-size: 12px; color: var(--muted); white-space:nowrap; }
     .field input, .field select{
       width:100%;
+      min-width:0;
       border:0; outline:none;
       background: transparent;
       color: rgba(255,255,255,.92);
@@ -397,21 +398,95 @@
     .opAmts .lbl{ color: rgba(255,255,255,.62); font-size: 11px; text-transform: uppercase; font-weight: 900; }
     .opAmts .val{ margin-top:4px; font-weight: 1000; }
 
-    /* MOBILE FIX (только мобилка) */
+    /* =======================
+       MOBILE FIX (Только мобилка)
+       ======================= */
     @media (max-width: 980px){
       html, body{ height:auto; }
-      body{ overflow:auto; }
+      body{
+        overflow:auto;
+        overflow-x:hidden;                 /* чтобы не было горизонтального "съезда" */
+        -webkit-overflow-scrolling: touch; /* плавный скролл iOS */
+      }
+
       .sidebar{ display:none; }
-      .content{ overflow:visible; padding: 12px; gap: 10px; }
       .burger{ display:inline-flex; align-items:center; justify-content:center; }
 
-      .topArea{ height:auto; min-height:0; grid-template-columns: 1fr; gap: 10px; }
-      .bottomArea{ height:auto; min-height:0; overflow:visible; }
+      /* чтобы хедер и контент были одной ширины */
+      .topHeader,
+      .content{
+        width:100%;
+        max-width:100%;
+        padding-left: calc(12px + env(safe-area-inset-left));
+        padding-right: calc(12px + env(safe-area-inset-right));
+      }
+      .topHeader{
+        padding-top: calc(12px + env(safe-area-inset-top));
+        padding-bottom: 12px;
+
+        /* фикс наложений: на мобилке делаем хедер в 2 строки */
+        flex-direction: column;
+        align-items: stretch;
+
+        /* iOS blur иногда вызывает "призраки" и наложения */
+        backdrop-filter: none;
+        background: rgba(8,16,24,.92);
+
+        position: sticky; top: 0;
+        z-index: 60;
+      }
+
+      .hdrLeft{ width:100%; }
+      .hdrRight{
+        width:100%;
+        justify-content:flex-start;
+        gap:8px;
+      }
+
+      /* элементы справа: аккуратно в 2 колонки + статус на всю ширину */
+      .hdrRight > *{
+        flex: 1 1 calc(50% - 8px);
+        min-width: 0;
+      }
+      #burger{
+        flex: 0 0 46px;
+        margin-left: auto;
+      }
+      #status{
+        flex: 1 1 100%;
+        justify-content:center;
+      }
+      #userPill{
+        justify-content:center;
+      }
+      .btn{
+        text-align:center;
+        justify-content:center;
+      }
+
+      .content{
+        overflow:visible;
+        padding-top: 12px;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
+        gap: 10px;
+      }
+
+      .topArea{
+        height:auto;
+        min-height:0;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .bottomArea{
+        height:auto;
+        min-height:0;
+        overflow:visible;
+      }
 
       .tableScroll{ display:none; }
       .opsCards{ display:grid; padding: 0; }
 
-      /* фильтры в 1 колонку, чтобы не налезало */
+      /* фильтры в 1 колонку, чтобы ничего не налезало */
       .filtersGrid{ grid-template-columns: 1fr; }
       .filtersGrid .full{ grid-column: 1 / -1; }
 
@@ -427,14 +502,25 @@
         white-space: normal;
         line-height: 1.2;
       }
-      /* iPhone: не будет авто-zoom */
+
+      /* iPhone: чтобы не было авто-зума при фокусе */
       .filtersCard .field input,
       .filtersCard .field select,
-      .filtersCard .field .combo{ font-size: 16px; }
+      .filtersCard .field .combo{
+        font-size: 16px;
+      }
+
+      /* дата-поля точно не распирают контейнер */
+      input[type="date"]{
+        width:100%;
+        max-width:100%;
+      }
 
       html{ color-scheme: dark; }
+
       .catTotals{ grid-template-columns: 1fr 1fr; }
     }
+
     @media (max-width: 420px){
       .catTotals{ grid-template-columns: 1fr; }
       .opAmts{ grid-template-columns: 1fr; }
@@ -447,19 +533,19 @@
   <div id="mOverlay" class="mobileMenuOverlay">
     <div class="mobileMenu" onclick="event.stopPropagation()">
       <div class="brand" style="margin-bottom:6px;">
-        <div class="brandLogo">B</div>
-        <div class="brandText" style="opacity:1;transform:none;">BPS.system</div>
+        <div class="brandLogo">G</div>
+        <div class="brandText" style="opacity:1;transform:none;">Gekto</div>
       </div>
       <div class="mNav" id="mNav"></div>
-      <div class="muted" style="margin-top:auto;">BPS.system</div>
+      <div class="muted" style="margin-top:auto;">Gekto</div>
     </div>
   </div>
 
   <div class="appShell">
     <aside class="sidebar">
       <div class="brand">
-        <div class="brandLogo">B</div>
-        <div class="brandText">BPS.system</div>
+        <div class="brandLogo">G</div>
+        <div class="brandText">Gekto</div>
       </div>
       <nav class="nav" id="nav"></nav>
     </aside>
@@ -467,8 +553,8 @@
     <main class="main">
       <header class="topHeader">
         <div class="hdrLeft">
-          <div class="hdrTitle">BPS.system</div>
-          <div class="hdrSub">Kassa server — filtr / kategoriya / operatsiyalar</div>
+          <div class="hdrTitle">BPS <b>(Erkin)></b></div>
+          <div class="hdrSub">Kassa hisototi</div>
         </div>
 
         <div class="hdrRight">
@@ -834,8 +920,6 @@
           lockToLogin();
         }
       }catch(e){
-        // если сеть временно упала — не сразу выкидываем
-        // но если токен реально умер, следующий refresh это покажет
       }
     }
 
@@ -855,7 +939,6 @@
 
       updatedAt.textContent = res.updatedAt ? ("update: " + res.updatedAt) : "";
 
-      // user
       if (res.user){
         USER = res.user;
         localStorage.setItem("bps_user", JSON.stringify(USER));
@@ -865,7 +948,6 @@
       renderOptions();
       renderBalances();
 
-      // default dates = today (для показа)
       const t = todayISO();
       if (!dateFrom.value) dateFrom.value = t;
       if (!dateTo.value) dateTo.value = t;
@@ -1008,7 +1090,6 @@
 
       const sorted = [...list].sort((a,b) => (a.sana < b.sana ? 1 : a.sana > b.sana ? -1 : 0));
 
-      // desktop table
       tbody.innerHTML = sorted.map(r => {
         const inU = toNum(r.kirimUzs);
         const outU = toNum(r.chiqimUzs);
@@ -1031,7 +1112,6 @@
         `;
       }).join("");
 
-      // mobile cards
       opsCards.innerHTML = sorted.map(r => {
         const inU = toNum(r.kirimUzs);
         const outU = toNum(r.chiqimUzs);
@@ -1075,7 +1155,6 @@
       if (!isMobile()) tableScroll.scrollTop = 0;
     }
 
-    /************ Right-click drag scroll ************/
     function enableRightDragScroll(el){
       let dragging = false;
       let startX=0, startY=0, startLeft=0, startTop=0;
@@ -1106,7 +1185,6 @@
       });
     }
 
-    /************ icons ************/
     function svgIcon(pathD){
       return `
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -1123,7 +1201,6 @@
     function boxIcon(){ return svgIcon("M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8"); }
     function usersIcon(){ return svgIcon("M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m10 10v-2a4 4 0 0 0-3-3.87"); }
 
-    /************ UI actions ************/
     function resetFilters(){
       const t = todayISO();
       dateFrom.value = t;
@@ -1173,27 +1250,23 @@
       lockToLogin();
     });
 
-    // mobile menu
     burger.addEventListener("click", () => { mOverlay.style.display = "block"; });
     mOverlay.addEventListener("click", () => { mOverlay.style.display = "none"; });
 
     window.addEventListener("resize", () => applyFilters());
 
-    /************ BOOT ************/
     (async function boot(){
       renderNav();
       enableRightDragScroll(tableScroll);
       bindActivityEvents();
       startIdleWatch();
 
-      // обязательная проверка токена
       setStatus("", "Yuklanmoqda...", true);
       try{
         const res = await apiRefresh();
         if (!res || !res.ok) return lockToLogin();
         setDataFromApi(res);
         setStatus("ok","Tayyor");
-        // старт активности
         if (!localStorage.getItem("bps_lastActivity")) localStorage.setItem("bps_lastActivity", String(Date.now()));
       }catch(e){
         lockToLogin();
