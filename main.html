@@ -443,7 +443,7 @@
 								<span>Jo'natish</span>
 							</button>
 
-							<div id="leadMsg" style="margin-top:12px;"></div>
+							<div id="leadMsg"></div>
 						</form>
 
 					</div>
@@ -597,46 +597,140 @@
 			});
 		});
 	</script>
+
+	<!-- lead form script -->
 	<script>
-		const ENDPOINT = "https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec"; // .../exec
-		const SECRET = "mySecret123"; // должен совпадать с Apps Script (или уберите совсем)
+		const ENDPOINT =
+			"https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec";
+		const SECRET = "mySecret123";
 
 		const form = document.getElementById("leadForm");
 		const phoneEl = document.getElementById("phone");
 		const nameEl = document.getElementById("name");
 		const msgEl = document.getElementById("leadMsg");
+		const btn = form.querySelector('button[type="submit"]');
+		const btnTextEl = btn ? btn.querySelector("span") : null;
 
-		// авто +998 при фокусе
+		// --- inject styles for loader + messages ---
+		(function injectLeadStyles() {
+			const css = `
+      .lead-msg{
+        margin-top: 14px;
+        font-family: "Montserrat", sans-serif;
+        font-size: 13px;
+        line-height: 1.35;
+        letter-spacing: .2px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        display: none;
+      }
+      .lead-msg.is-loading{
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(255,255,255,.9);
+        background: rgba(255,255,255,.08);
+        border: 1px solid rgba(255,255,255,.12);
+      }
+      .lead-msg.is-success{
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: #0b5f3b;
+        background: rgba(16,185,129,.14);
+        border: 1px solid rgba(16,185,129,.28);
+        font-weight: 600;
+      }
+      .lead-msg.is-error{
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: #8a1f11;
+        background: rgba(239,68,68,.12);
+        border: 1px solid rgba(239,68,68,.25);
+        font-weight: 600;
+      }
+      .lead-spinner{
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid rgba(255,255,255,.25);
+        border-top-color: rgba(255,255,255,.9);
+        animation: leadspin .8s linear infinite;
+        flex: 0 0 16px;
+      }
+      @keyframes leadspin { to { transform: rotate(360deg); } }
+      .btn.is-loading{
+        opacity: .85;
+        pointer-events: none;
+      }
+    `;
+			const style = document.createElement("style");
+			style.setAttribute("data-lead-styles", "1");
+			style.textContent = css;
+			document.head.appendChild(style);
+		})();
+
+		function setMsg(type, text) {
+			msgEl.className = "lead-msg";
+			msgEl.innerHTML = "";
+			msgEl.style.display = "none";
+
+			if (type === "loading") {
+				msgEl.classList.add("is-loading");
+				msgEl.innerHTML = `<span class="lead-spinner"></span><span>${text}</span>`;
+				msgEl.style.display = "inline-flex";
+				return;
+			}
+			if (type === "success") {
+				msgEl.classList.add("is-success");
+				msgEl.innerHTML = `<span>✅</span><span>${text}</span>`;
+				msgEl.style.display = "inline-flex";
+				return;
+			}
+			if (type === "error") {
+				msgEl.classList.add("is-error");
+				msgEl.innerHTML = `<span>⚠️</span><span>${text}</span>`;
+				msgEl.style.display = "inline-flex";
+				return;
+			}
+		}
+
+		function setLoading(on) {
+			if (!btn) return;
+			btn.classList.toggle("is-loading", on);
+			if (btnTextEl) btnTextEl.textContent = on ? "Yuborilmoqda..." : "Jo'natish";
+		}
+
+		// --- phone behavior ---
 		phoneEl.addEventListener("focus", () => {
 			if (!phoneEl.value) phoneEl.value = "+998";
 		});
 
-		// только цифры после +998, максимум 9 цифр
 		phoneEl.addEventListener("input", () => {
 			let v = phoneEl.value;
 
-			// оставим + и цифры
+			// keep only + and digits
 			v = v.replace(/[^\d+]/g, "");
 
-			// принудительно начинаем с +998
+			// force +998 prefix
 			if (!v.startsWith("+998")) {
 				const onlyDigits = v.replace(/\D/g, "");
 				v = "+998" + (onlyDigits.startsWith("998") ? onlyDigits.slice(3) : onlyDigits);
 			}
 
-			// оставим только 9 цифр после +998
+			// limit to 9 digits after +998
 			const tail = v.slice(4).replace(/\D/g, "").slice(0, 9);
 			phoneEl.value = "+998" + tail;
 		});
 
-		// если вышли и осталось только +998 — очистить
 		phoneEl.addEventListener("blur", () => {
 			if (phoneEl.value === "+998") phoneEl.value = "";
 		});
 
+		// --- submit ---
 		form.addEventListener("submit", async (e) => {
 			e.preventDefault();
-			msgEl.textContent = "";
 
 			const payload = {
 				name: (nameEl.value || "").trim(),
@@ -645,14 +739,15 @@
 				secret: SECRET
 			};
 
-			// минимальная проверка
 			if (!payload.phone || payload.phone.length < 13) {
-				msgEl.textContent = "Telefon raqamini to‘liq kiriting.";
+				setMsg("error", "Telefon raqamini to‘liq kiriting.");
 				return;
 			}
 
+			setLoading(true);
+			setMsg("loading", "Yuborilmoqda");
+
 			try {
-				// ВАЖНО: иногда CORS мешает читать ответ, поэтому ставим no-cors.
 				await fetch(ENDPOINT, {
 					method: "POST",
 					mode: "no-cors",
@@ -663,13 +758,16 @@
 				});
 
 				form.reset();
-				msgEl.textContent = "Yuborildi ✅ Tez orada bog‘lanamiz.";
+				setMsg("success", "Qabul qilindi! Rahmat! Tez orada bog'lanamiz...");
 			} catch (err) {
-				msgEl.textContent = "Xatolik. Qayta urinib ko‘ring.";
 				console.error(err);
+				setMsg("error", "Xatolik. Qayta urinib ko‘ring.");
+			} finally {
+				setLoading(false);
 			}
 		});
 	</script>
+
 
 </body>
 
