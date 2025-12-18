@@ -3,50 +3,54 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Leads Test</title>
+  <title>Tests — Cash Tracker</title>
 
   <style>
     :root{
-      --bg:#0b1220;
+      --bg:#07121b;
       --card:rgba(255,255,255,.06);
       --line:rgba(255,255,255,.10);
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.65);
       --ok:#10b981;
-      --err:#ef4444;
+      --bad:#ef4444;
+      --blue:#3b82f6;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+      --r: 16px;
     }
+    *{ box-sizing:border-box; }
     body{
       margin:0;
-      background: radial-gradient(900px 500px at 20% 10%, rgba(16,185,129,.16), transparent 60%),
-                  radial-gradient(900px 500px at 90% 40%, rgba(59,130,246,.12), transparent 55%),
-                  var(--bg);
+      padding: 22px;
       color:var(--text);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      padding: 28px;
+      background:
+        radial-gradient(1000px 520px at 18% 12%, rgba(16,185,129,.18), transparent 60%),
+        radial-gradient(900px 520px at 88% 38%, rgba(59,130,246,.14), transparent 55%),
+        var(--bg);
     }
-    .wrap{ max-width: 1100px; margin: 0 auto; }
-    h1{ margin:0 0 10px; font-size: 22px; letter-spacing:.2px; }
-    .sub{ color:var(--muted); margin:0 0 18px; }
-
-    .bar{
-      display:flex; flex-wrap:wrap; gap:10px;
-      align-items:center;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px;
+    .wrap{ max-width: 1200px; margin:0 auto; }
+    .top{
+      display:flex; gap:12px; flex-wrap:wrap;
+      align-items:flex-end; justify-content:space-between;
       margin-bottom: 14px;
     }
-    .btn{
-      border:0;
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-weight: 700;
-      cursor:pointer;
-      background: var(--ok);
-      color:#062a1b;
+    h1{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:.2px;
     }
-    .btn:disabled{ opacity:.7; cursor: not-allowed; }
+    .sub{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size: 13px;
+    }
+
+    .toolbar{
+      display:flex; gap:10px; flex-wrap:wrap;
+      align-items:center; justify-content:flex-end;
+    }
+
     .pill{
       display:inline-flex; align-items:center; gap:10px;
       padding: 10px 12px;
@@ -68,16 +72,163 @@
     }
     @keyframes spin { to { transform: rotate(360deg);} }
 
+    .btn{
+      border:0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor:pointer;
+      background: var(--ok);
+      color:#062a1b;
+      box-shadow: var(--shadow);
+    }
+    .btn.secondary{
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.9);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+    .btn:disabled{ opacity:.7; cursor:not-allowed; pointer-events:none; }
+
+    .field{
+      display:flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      min-height: 40px;
+    }
+    .field label{
+      font-size: 12px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .field input, .field select{
+      width: 100%;
+      border:0;
+      outline: none;
+      background: transparent;
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      padding: 0;
+      appearance: none;
+    }
+    .field input::placeholder{ color: rgba(255,255,255,.45); }
+    .field small{
+      color: rgba(255,255,255,.55);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .grid4{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 1000px){
+      .grid4{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 560px){
+      .grid4{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 14px;
+    }
+    .card h3{
+      margin:0;
+      font-size: 12px;
+      letter-spacing:.3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.75);
+    }
+    .balance{
+      margin-top: 8px;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing:.2px;
+    }
+    .balance .cur{
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(255,255,255,.65);
+      margin-left: 6px;
+    }
+    .hint{
+      margin-top: 6px;
+      color: rgba(255,255,255,.55);
+      font-size: 12px;
+    }
+
+    .panel{
+      display:grid;
+      grid-template-columns: 420px 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 1000px){
+      .panel{ grid-template-columns: 1fr; }
+    }
+
+    .toggle{
+      display:flex; gap:8px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 6px;
+      width: fit-content;
+    }
+    .tbtn{
+      border:0;
+      border-radius: 10px;
+      padding: 9px 12px;
+      cursor:pointer;
+      font-weight: 900;
+      background: transparent;
+      color: rgba(255,255,255,.75);
+    }
+    .tbtn.active.in{ background: rgba(16,185,129,.15); color: rgba(16,185,129,.95); }
+    .tbtn.active.out{ background: rgba(239,68,68,.15); color: rgba(239,68,68,.95); }
+
+    .formgrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .formgrid .full{ grid-column: 1 / -1; }
+
+    .amountwrap{
+      display:flex; gap:10px; align-items:center;
+      width:100%;
+    }
+    .amountwrap input{
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing:.2px;
+    }
+    .badge{
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(255,255,255,.75);
+      white-space: nowrap;
+    }
+
     .table-wrap{
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: var(--r);
       overflow:hidden;
     }
-    table{
-      width:100%;
-      border-collapse: collapse;
-    }
+    table{ width:100%; border-collapse: collapse; }
     thead th{
       text-align:left;
       font-size: 12px;
@@ -87,6 +238,7 @@
       padding: 12px 14px;
       background: rgba(255,255,255,.04);
       border-bottom: 1px solid var(--line);
+      white-space: nowrap;
     }
     tbody td{
       padding: 12px 14px;
@@ -96,56 +248,187 @@
       vertical-align: top;
     }
     tbody tr:hover td{ background: rgba(255,255,255,.03); }
-    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; color: rgba(255,255,255,.78); }
-    .link{
-      color: rgba(59,130,246,.95);
-      text-decoration: none;
-      word-break: break-all;
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      color: rgba(255,255,255,.78);
+      white-space: nowrap;
     }
-    .link:hover{ text-decoration: underline; }
-
+    .sum-in{ color: rgba(16,185,129,.95); font-weight: 900; }
+    .sum-out{ color: rgba(239,68,68,.95); font-weight: 900; }
     .empty{
       padding: 16px 14px;
       color: var(--muted);
       font-size: 13px;
     }
+
+    .rightcol{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      justify-content:flex-end;
+    }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <h1>SiteLeads — test</h1>
-    <p class="sub">Нажми «Получить», чтобы загрузить все записи из листа <b>SiteLeads</b>.</p>
+    <div class="top">
+      <div>
+        <h1>Tests — Cash Tracker</h1>
+        <div class="sub">Ma’lumotlar Google Sheets → <b>Tests</b> listidan olinadi va JS ichida hisoblanadi.</div>
+      </div>
 
-    <div class="bar">
-      <button id="btnLoad" class="btn">Получить</button>
-      <span id="status" class="pill"><span>Готово</span></span>
+      <div class="toolbar">
+        <div class="field" style="min-width:220px">
+          <label>Kurs (USD→UZS)</label>
+          <input id="rateTop" type="number" step="1" min="1" placeholder="12050" />
+          <small>UZS</small>
+        </div>
+
+        <button id="btnRefresh" class="btn secondary">Yangilash</button>
+        <span id="status" class="pill"><span>Guruh</span></span>
+      </div>
     </div>
 
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Sana</th>
-            <th>Ism</th>
-            <th>Tel</th>
-            <th>Sahifa</th>
-          </tr>
-        </thead>
-        <tbody id="tbody">
-          <tr><td colspan="4" class="empty">Пока пусто. Нажми «Получить».</td></tr>
-        </tbody>
-      </table>
+    <!-- balances -->
+    <div class="grid4">
+      <div class="card">
+        <h3>Банк</h3>
+        <div class="balance"><span id="balBank">0</span><span class="cur">UZS</span></div>
+        <div class="hint">Prihod − Rashod</div>
+      </div>
+
+      <div class="card">
+        <h3>Наличные UZS</h3>
+        <div class="balance"><span id="balCashUzs">0</span><span class="cur">UZS</span></div>
+        <div class="hint">Naqd UZS</div>
+      </div>
+
+      <div class="card">
+        <h3>Наличные USD</h3>
+        <div class="balance"><span id="balCashUsd">0</span><span class="cur">USD</span></div>
+        <div class="hint">Naqd USD</div>
+      </div>
+
+      <div class="card">
+        <h3>Карта</h3>
+        <div class="balance"><span id="balCard">0</span><span class="cur">UZS</span></div>
+        <div class="hint">Prihod − Rashod</div>
+      </div>
+    </div>
+
+    <!-- entry + operations -->
+    <div class="panel">
+      <div class="card">
+        <h3>Yangi operatsiya</h3>
+
+        <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <div class="toggle" aria-label="operation type">
+            <button id="tIn" class="tbtn in active">Приход</button>
+            <button id="tOut" class="tbtn out">Расход</button>
+          </div>
+
+          <span id="formMsg" class="pill" style="display:none;"></span>
+        </div>
+
+        <div class="formgrid">
+          <div class="field">
+            <label>Кошелек</label>
+            <select id="wallet">
+              <option value="Банк">Банк</option>
+              <option value="Наличные">Наличные</option>
+              <option value="Карта">Карта</option>
+            </select>
+          </div>
+
+          <div class="field" id="currencyBox" style="display:none;">
+            <label>Тип валюты</label>
+            <select id="currency">
+              <option value="UZS">UZS</option>
+              <option value="USD">USD</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label>Сумма</label>
+            <div class="amountwrap">
+              <input id="amount" type="text" inputmode="decimal" placeholder="0" />
+              <span id="amountCur" class="badge">UZS</span>
+            </div>
+          </div>
+
+          <div class="field full">
+            <label>Статья</label>
+            <input id="article" type="text" placeholder="Masalan: Reklama, Oylik, Xarid..." />
+          </div>
+
+          <div class="field full">
+            <label>Контрагент</label>
+            <input id="counterparty" type="text" placeholder="Masalan: Yetkazib beruvchi / Mijoz..." />
+          </div>
+
+          <div class="full" style="display:flex; gap:10px; justify-content:flex-end; align-items:center;">
+            <button id="btnAdd" class="btn">OK</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Дата</th>
+              <th>Кошелек</th>
+              <th>Валюта</th>
+              <th>Статья</th>
+              <th>Контрагент</th>
+              <th>Приход</th>
+              <th>Расход</th>
+              <th>Курс</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="8" class="empty">Yuklanmoqda...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <script>
-    const ENDPOINT = "https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec";
-    const SECRET = "mySecret123";
+    // === CONFIG ===
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbzTaq3om6frUJHzbbh_3KYYgW0B0KQCDC8ZDNzkBaF9D8bcoRlr7zyuApY4K2AnNX85/exec";
+    const SECRETS = "mySecret123";
+    const SHEET = "Tests";
+    const DEFAULT_RATE = 12050;
 
-    const btn = document.getElementById("btnLoad");
+    // === DOM ===
     const statusEl = document.getElementById("status");
     const tbody = document.getElementById("tbody");
 
+    const rateTop = document.getElementById("rateTop");
+    const btnRefresh = document.getElementById("btnRefresh");
+
+    const balBank = document.getElementById("balBank");
+    const balCashUzs = document.getElementById("balCashUzs");
+    const balCashUsd = document.getElementById("balCashUsd");
+    const balCard = document.getElementById("balCard");
+
+    const tIn = document.getElementById("tIn");
+    const tOut = document.getElementById("tOut");
+    const walletEl = document.getElementById("wallet");
+    const currencyBox = document.getElementById("currencyBox");
+    const currencyEl = document.getElementById("currency");
+    const amountEl = document.getElementById("amount");
+    const amountCur = document.getElementById("amountCur");
+    const articleEl = document.getElementById("article");
+    const counterpartyEl = document.getElementById("counterparty");
+    const btnAdd = document.getElementById("btnAdd");
+    const formMsg = document.getElementById("formMsg");
+
+    // === STATE ===
+    let opType = "IN"; // IN | OUT
+    let rows = [];
+
+    // === UI helpers ===
     function setStatus(type, text, loading=false){
       statusEl.className = "pill";
       statusEl.innerHTML = "";
@@ -155,8 +438,20 @@
       if (type === "err") statusEl.classList.add("err");
     }
 
+    function showFormMsg(type, text){
+      formMsg.style.display = "inline-flex";
+      formMsg.className = "pill";
+      formMsg.textContent = text;
+      if (type === "ok") formMsg.classList.add("ok");
+      if (type === "err") formMsg.classList.add("err");
+      if (type === "load") {
+        formMsg.innerHTML = '<span class="spinner"></span><span>' + text + '</span>';
+      }
+      if (type === "hide") formMsg.style.display = "none";
+    }
+
     function escapeHtml(s){
-      return String(s)
+      return String(s ?? "")
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
@@ -164,10 +459,32 @@
         .replaceAll("'","&#039;");
     }
 
-    // JSONP loader (обходит CORS)
+    function formatNum(n){
+      const x = Number(n);
+      if (!isFinite(x)) return "0";
+      return x.toLocaleString("ru-RU", { maximumFractionDigits: 2 });
+    }
+
+    function parseAmount(s){
+      // 12 500,50 / 12,500.50 / 12500 -> number
+      const v = String(s || "")
+        .replace(/\s/g, "")
+        .replace(/,/g, ".")
+        .replace(/[^\d.]/g, "");
+      const num = Number(v);
+      return isFinite(num) ? num : 0;
+    }
+
+    function nowISO(){
+      const d = new Date();
+      const pad = (x) => String(x).padStart(2,"0");
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    // JSONP loader (CORS bypass)
     function loadJSONP(url){
       return new Promise((resolve, reject) => {
-        const cbName = "__leads_cb_" + Math.random().toString(36).slice(2);
+        const cbName = "__cb_" + Math.random().toString(36).slice(2);
         const script = document.createElement("script");
 
         window[cbName] = (data) => {
@@ -191,56 +508,228 @@
       });
     }
 
-    function render(rows){
-      if (!rows || rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="empty">Записей нет.</td></tr>`;
+    // === Data logic ===
+    function getTopRate(){
+      const r = Number(rateTop.value || DEFAULT_RATE);
+      return (isFinite(r) && r > 0) ? r : DEFAULT_RATE;
+    }
+
+    function normalizeRow(r){
+      // expected keys: date,wallet,currency,article,counterparty,income,expense,rate
+      return {
+        date: String(r.date || r.ts || ""),
+        wallet: String(r.wallet || ""),
+        currency: String(r.currency || "UZS"),
+        article: String(r.article || ""),
+        counterparty: String(r.counterparty || ""),
+        income: Number(r.income || 0) || 0,
+        expense: Number(r.expense || 0) || 0,
+        rate: Number(r.rate || 0) || 0
+      };
+    }
+
+    function computeBalances(list){
+      // display:
+      // Bank -> UZS (USD converted)
+      // Card -> UZS (USD converted)
+      // Cash UZS -> UZS
+      // Cash USD -> USD
+      const topRate = getTopRate();
+
+      let bankUZS = 0;
+      let cardUZS = 0;
+      let cashUZS = 0;
+      let cashUSD = 0;
+
+      for (const rr of list){
+        const r = normalizeRow(rr);
+        const net = (r.income - r.expense);
+        const cur = (r.currency || "UZS").toUpperCase();
+        const w = r.wallet;
+
+        const rate = r.rate > 0 ? r.rate : topRate;
+
+        if (w === "Наличные"){
+          if (cur === "USD") cashUSD += net;
+          else cashUZS += net;
+        } else if (w === "Банк"){
+          if (cur === "USD") bankUZS += net * rate;
+          else bankUZS += net;
+        } else if (w === "Карта"){
+          if (cur === "USD") cardUZS += net * rate;
+          else cardUZS += net;
+        }
+      }
+
+      return { bankUZS, cardUZS, cashUZS, cashUSD };
+    }
+
+    function renderBalances(){
+      const b = computeBalances(rows);
+      balBank.textContent = formatNum(b.bankUZS);
+      balCard.textContent = formatNum(b.cardUZS);
+      balCashUzs.textContent = formatNum(b.cashUZS);
+      balCashUsd.textContent = formatNum(b.cashUSD);
+    }
+
+    function renderTable(){
+      if (!rows || rows.length === 0){
+        tbody.innerHTML = `<tr><td colspan="8" class="empty">Hali operatsiyalar yo‘q.</td></tr>`;
         return;
       }
 
-      // новые сверху
-      const sorted = [...rows].reverse();
+      // newest first
+      const sorted = [...rows].reverse().map(normalizeRow);
 
       tbody.innerHTML = sorted.map(r => {
-        const ts = escapeHtml(r.ts || "");
-        const name = escapeHtml(r.name || "");
-        const phone = escapeHtml(r.phone || "");
-        const page = r.page ? String(r.page) : "";
-        const pageCell = page
-          ? `<a class="link" href="${escapeHtml(page)}" target="_blank" rel="noopener">${escapeHtml(page)}</a>`
-          : `<span class="mono">-</span>`;
+        const inc = r.income ? `<span class="sum-in">${formatNum(r.income)}</span>` : `<span class="mono">-</span>`;
+        const exp = r.expense ? `<span class="sum-out">${formatNum(r.expense)}</span>` : `<span class="mono">-</span>`;
+        const rate = r.currency.toUpperCase()==="USD" ? (r.rate || getTopRate()) : (r.rate || "-");
 
         return `
           <tr>
-            <td class="mono">${ts || "-"}</td>
-            <td>${name || "-"}</td>
-            <td class="mono">${phone || "-"}</td>
-            <td>${pageCell}</td>
+            <td class="mono">${escapeHtml(r.date || "-")}</td>
+            <td>${escapeHtml(r.wallet || "-")}</td>
+            <td class="mono">${escapeHtml(r.currency || "UZS")}</td>
+            <td>${escapeHtml(r.article || "-")}</td>
+            <td>${escapeHtml(r.counterparty || "-")}</td>
+            <td>${inc}</td>
+            <td>${exp}</td>
+            <td class="mono">${escapeHtml(String(rate))}</td>
           </tr>
         `;
       }).join("");
     }
 
-    btn.addEventListener("click", async () => {
-      btn.disabled = true;
+    async function refresh(){
       setStatus("", "Yuklanmoqda...", true);
+      btnRefresh.disabled = true;
 
       try {
-        const url = `${ENDPOINT}?secret=${encodeURIComponent(SECRET)}&limit=2000`;
+        const url = `${ENDPOINT}?secret=${encodeURIComponent(SECRETS)}&sheet=${encodeURIComponent(SHEET)}&limit=2000`;
         const data = await loadJSONP(url);
 
-        if (!data || data.ok !== true) {
-          throw new Error((data && data.error) ? data.error : "unknown_error");
-        }
+        if (!data || data.ok !== true) throw new Error(data?.error || "unknown_error");
 
-        render(data.rows);
-        setStatus("ok", `Yuklandi: ${data.rows.length} ta`);
-      } catch (err) {
-        console.error(err);
+        rows = Array.isArray(data.rows) ? data.rows : [];
+        renderBalances();
+        renderTable();
+
+        setStatus("ok", `Yuklandi: ${rows.length} ta`);
+      } catch (e){
+        console.error(e);
         setStatus("err", "Xatolik: ma'lumot olinmadi");
+        tbody.innerHTML = `<tr><td colspan="8" class="empty">Xatolik: ma'lumot olinmadi.</td></tr>`;
       } finally {
-        btn.disabled = false;
+        btnRefresh.disabled = false;
       }
+    }
+
+    // === Form logic ===
+    function setOpType(type){
+      opType = type;
+      tIn.classList.toggle("active", type==="IN");
+      tOut.classList.toggle("active", type==="OUT");
+      tIn.classList.toggle("in", type==="IN");
+      tOut.classList.toggle("out", type==="OUT");
+      if (type==="IN") { tIn.classList.add("active","in"); tOut.classList.remove("active"); }
+      if (type==="OUT"){ tOut.classList.add("active","out"); tIn.classList.remove("active"); }
+    }
+
+    function updateWalletUI(){
+      const w = walletEl.value;
+      if (w === "Наличные"){
+        currencyBox.style.display = "";
+      } else {
+        currencyBox.style.display = "none";
+        currencyEl.value = "UZS";
+      }
+      amountCur.textContent = currencyEl.value;
+    }
+
+    // amount formatting (light)
+    amountEl.addEventListener("input", () => {
+      // allow user typing; we only keep digits separators
+      const raw = amountEl.value;
+      const cleaned = raw.replace(/[^\d.,\s]/g, "");
+      amountEl.value = cleaned;
     });
+
+    tIn.addEventListener("click", () => setOpType("IN"));
+    tOut.addEventListener("click", () => setOpType("OUT"));
+    walletEl.addEventListener("change", updateWalletUI);
+    currencyEl.addEventListener("change", () => amountCur.textContent = currencyEl.value);
+
+    btnRefresh.addEventListener("click", refresh);
+
+    async function addOperation(){
+      const wallet = walletEl.value;
+      const currency = (wallet === "Наличные") ? currencyEl.value : "UZS";
+
+      const amount = parseAmount(amountEl.value);
+      if (!amount || amount <= 0){
+        showFormMsg("err", "Summa 0 bo‘lishi mumkin emas");
+        return;
+      }
+
+      const article = (articleEl.value || "").trim();
+      const counterparty = (counterpartyEl.value || "").trim();
+
+      // rate only needed if USD
+      const rate = (currency === "USD") ? getTopRate() : "";
+
+      const payload = {
+        secret: SECRETS,
+        action: "add",
+        sheet: SHEET,
+        date: nowISO(),
+        wallet,
+        currency,
+        article,
+        counterparty,
+        income: (opType === "IN") ? amount : 0,
+        expense: (opType === "OUT") ? amount : 0,
+        rate: (currency === "USD") ? Number(rate) : ""
+      };
+
+      btnAdd.disabled = true;
+      showFormMsg("load", "Yuborilmoqda...");
+
+      try {
+        // POST without CORS read (ok), then refresh data
+        await fetch(ENDPOINT, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        // clear inputs
+        amountEl.value = "";
+        articleEl.value = "";
+        counterpartyEl.value = "";
+
+        showFormMsg("ok", "Qabul qilindi ✅");
+        setTimeout(() => showFormMsg("hide",""), 1800);
+
+        // reload everything
+        await new Promise(r => setTimeout(r, 600));
+        await refresh();
+      } catch (e){
+        console.error(e);
+        showFormMsg("err", "Xatolik. Qayta urinib ko‘ring.");
+      } finally {
+        btnAdd.disabled = false;
+      }
+    }
+
+    btnAdd.addEventListener("click", addOperation);
+
+    // init
+    rateTop.value = DEFAULT_RATE;
+    setOpType("IN");
+    updateWalletUI();
+    refresh();
   </script>
 </body>
 </html>
