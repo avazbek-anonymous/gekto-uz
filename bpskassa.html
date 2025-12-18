@@ -994,6 +994,175 @@
                 grid-template-columns: 1fr;
             }
         }
+
+
+        /* ===== Brand Date Picker ===== */
+        .dateRangeBtn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, .10);
+            background: rgba(255, 255, 255, .04);
+            color: rgba(255, 255, 255, .92);
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .dateRangeBtn:hover {
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .dateRangeIco {
+            opacity: .85;
+        }
+
+        .datePicker {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, .48);
+            z-index: 2000;
+            padding: 14px;
+        }
+
+        .datePicker.open {
+            display: flex;
+        }
+
+        .dpCard {
+            width: min(420px, 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, .12);
+            background: rgba(8, 16, 24, .94);
+            box-shadow: 0 18px 50px rgba(0, 0, 0, .45);
+            padding: 12px;
+        }
+
+        .dpHead {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .dpTitle {
+            flex: 1;
+            text-align: center;
+            font-weight: 1000;
+            letter-spacing: .2px;
+        }
+
+        .dpNav,
+        .dpClose {
+            width: 38px;
+            height: 36px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, .12);
+            background: rgba(255, 255, 255, .06);
+            color: rgba(255, 255, 255, .92);
+            cursor: pointer;
+        }
+
+        .dpClose {
+            margin-left: auto;
+        }
+
+        .dpWeek {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            padding: 6px 4px 8px;
+            color: rgba(255, 255, 255, .65);
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .dpGrid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            padding: 4px;
+        }
+
+        .dpDay {
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, .10);
+            background: rgba(255, 255, 255, .04);
+            color: rgba(255, 255, 255, .90);
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .dpDay.muted {
+            opacity: .40;
+            border-color: rgba(255, 255, 255, .06);
+        }
+
+        .dpDay:hover {
+            background: rgba(255, 255, 255, .07);
+        }
+
+        .dpDay.start,
+        .dpDay.end {
+            background: rgba(16, 185, 129, .16);
+            border-color: rgba(16, 185, 129, .35);
+            color: rgba(255, 255, 255, .95);
+        }
+
+        .dpDay.inRange {
+            background: rgba(16, 185, 129, .08);
+            border-color: rgba(16, 185, 129, .18);
+        }
+
+        .dpActions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .dpBtn {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, .12);
+            background: rgba(255, 255, 255, .06);
+            color: rgba(255, 255, 255, .92);
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .dpBtnOk {
+            background: rgba(16, 185, 129, .85);
+            color: #062a1b;
+            border-color: rgba(16, 185, 129, .35);
+        }
+
+        /* Mobile: делаем календарь как “bottom sheet” */
+        @media (max-width: 980px) {
+            .datePicker {
+                align-items: flex-end;
+                padding: 10px;
+            }
+
+            .dpCard {
+                width: 100%;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            }
+
+            .dpDay {
+                height: 44px;
+            }
+        }
     </style>
 </head>
 
@@ -1056,11 +1225,43 @@
 
                         <div class="filtersGrid">
                             <div class="field full">
-                                <label>Дата от / до</label>
-                                <input id="dateFrom" type="date" />
-                                <span class="muted">—</span>
-                                <input id="dateTo" type="date" />
+                                <label>Sana (oraliq)</label>
+
+                                <button type="button" id="dateRangeBtn" class="dateRangeBtn">
+                                    <span id="dateRangeText">Bugun</span>
+                                    <span class="dateRangeIco">📅</span>
+                                </button>
+
+                                <!-- оставляем эти id для твоего текущего JS фильтра -->
+                                <input id="dateFrom" type="hidden" />
+                                <input id="dateTo" type="hidden" />
                             </div>
+
+                            <!-- Brand Date Picker -->
+                            <div id="datePicker" class="datePicker" aria-hidden="true">
+                                <div class="dpCard" role="dialog" aria-modal="true">
+                                    <div class="dpHead">
+                                        <button type="button" class="dpNav" id="dpPrev"
+                                            aria-label="Prev month">‹</button>
+                                        <div class="dpTitle" id="dpTitle">—</div>
+                                        <button type="button" class="dpNav" id="dpNext"
+                                            aria-label="Next month">›</button>
+                                        <button type="button" class="dpClose" id="dpClose" aria-label="Close">✕</button>
+                                    </div>
+
+                                    <div class="dpWeek">
+                                        <span>Du</span><span>Se</span><span>Ch</span><span>Pa</span><span>Ju</span><span>Sh</span><span>Ya</span>
+                                    </div>
+
+                                    <div class="dpGrid" id="dpGrid"></div>
+
+                                    <div class="dpActions">
+                                        <button type="button" class="dpBtn" id="dpClear">Tozalash</button>
+                                        <button type="button" class="dpBtn dpBtnOk" id="dpToday">Bugun</button>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <!-- общий текстовый поиск -->
                             <div class="field full">
@@ -1339,7 +1540,7 @@
         }
 
         function escapeHtml(s) {
-            return String(s ? ? "")
+            return String(s ?? "")
                 .replaceAll("&", "&amp;")
                 .replaceAll("<", "&lt;")
                 .replaceAll(">", "&gt;")
@@ -1798,7 +1999,7 @@
         function usersIcon() {
             return svgIcon(
                 "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m10 10v-2a4 4 0 0 0-3-3.87"
-                );
+            );
         }
 
         function resetFilters() {
@@ -1885,6 +2086,248 @@
         });
 
         window.addEventListener("resize", () => applyFilters());
+
+        /* ===== Brand Date Range Picker (2-click) ===== */
+        (function () {
+            const btn = document.getElementById("dateRangeBtn");
+            const textEl = document.getElementById("dateRangeText");
+            const dp = document.getElementById("datePicker");
+            const grid = document.getElementById("dpGrid");
+            const title = document.getElementById("dpTitle");
+            const prev = document.getElementById("dpPrev");
+            const next = document.getElementById("dpNext");
+            const close = document.getElementById("dpClose");
+            const clear = document.getElementById("dpClear");
+            const todayBtn = document.getElementById("dpToday");
+
+            const fromEl = document.getElementById("dateFrom");
+            const toEl = document.getElementById("dateTo");
+
+            const monthNames = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr",
+                "Oktabr", "Noyabr", "Dekabr"
+            ];
+
+            let view = new Date(); // текущий месяц в календаре
+            view.setDate(1);
+
+            let start = ""; // YYYY-MM-DD
+            let end = ""; // YYYY-MM-DD
+
+            function pad(n) {
+                return String(n).padStart(2, "0");
+            }
+
+            function iso(d) {
+                return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+            }
+
+            function parseISO(s) {
+                const [y, m, dd] = s.split("-").map(Number);
+                return new Date(y, m - 1, dd);
+            }
+
+            function fmtUZ(s) { // dd.mm.yyyy
+                if (!s) return "";
+                const d = parseISO(s);
+                return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}`;
+            }
+
+            function openDP() {
+                // синхронизируем из инпутов
+                start = fromEl.value || "";
+                end = toEl.value || "";
+
+                // если пусто — покажем текущий месяц
+                if (start) {
+                    const d = parseISO(start);
+                    view = new Date(d.getFullYear(), d.getMonth(), 1);
+                } else {
+                    const now = new Date();
+                    view = new Date(now.getFullYear(), now.getMonth(), 1);
+                }
+
+                render();
+                dp.classList.add("open");
+                dp.setAttribute("aria-hidden", "false");
+            }
+
+            function closeDP() {
+                dp.classList.remove("open");
+                dp.setAttribute("aria-hidden", "true");
+            }
+
+            function commitRange() {
+                fromEl.value = start || "";
+                toEl.value = end || start || "";
+
+                // обновить подпись
+                syncLabel();
+
+                // триггерим твой существующий обработчик
+                fromEl.dispatchEvent(new Event("change", {
+                    bubbles: true
+                }));
+                toEl.dispatchEvent(new Event("change", {
+                    bubbles: true
+                }));
+            }
+
+            function syncLabel() {
+                const a = fromEl.value || "";
+                const b = toEl.value || "";
+                if (!a && !b) {
+                    textEl.textContent = "Barcha sana";
+                    return;
+                }
+                if (a && (!b || a === b)) {
+                    textEl.textContent = fmtUZ(a);
+                    return;
+                }
+                textEl.textContent = `${fmtUZ(a)} — ${fmtUZ(b)}`;
+            }
+
+            function daysInMonth(y, m) {
+                return new Date(y, m + 1, 0).getDate();
+            } // m=0..11
+            function weekdayMon0(d) { // Monday=0..Sunday=6
+                const w = d.getDay(); // Sun=0
+                return (w + 6) % 7;
+            }
+
+            function inRange(dayISO) {
+                if (!start) return false;
+                if (!end) return dayISO === start;
+                return (dayISO >= start && dayISO <= end);
+            }
+
+            function render() {
+                const y = view.getFullYear();
+                const m = view.getMonth();
+                title.textContent = `${monthNames[m]} ${y}`;
+
+                const first = new Date(y, m, 1);
+                const lead = weekdayMon0(first);
+                const dim = daysInMonth(y, m);
+
+                // предыдущий месяц для "пустых" ячеек
+                const prevDim = daysInMonth(y, m - 1);
+
+                const cells = [];
+                for (let i = 0; i < lead; i++) {
+                    const d = prevDim - lead + 1 + i;
+                    const dd = new Date(y, m - 1, d);
+                    cells.push({
+                        iso: iso(dd),
+                        day: d,
+                        muted: true
+                    });
+                }
+                for (let d = 1; d <= dim; d++) {
+                    const dd = new Date(y, m, d);
+                    cells.push({
+                        iso: iso(dd),
+                        day: d,
+                        muted: false
+                    });
+                }
+                while (cells.length % 7 !== 0) {
+                    const d = cells.length - (lead + dim) + 1;
+                    const dd = new Date(y, m + 1, d);
+                    cells.push({
+                        iso: iso(dd),
+                        day: dd.getDate(),
+                        muted: true
+                    });
+                }
+
+                grid.innerHTML = cells.map(c => {
+                    const cls = ["dpDay"];
+                    if (c.muted) cls.push("muted");
+                    if (start && c.iso === start) cls.push("start");
+                    if (end && c.iso === end) cls.push("end");
+                    if (inRange(c.iso) && c.iso !== start && c.iso !== end) cls.push("inRange");
+
+                    return `<button type="button" class="${cls.join(" ")}" data-iso="${c.iso}">${c.day}</button>`;
+                }).join("");
+            }
+
+            function handlePick(dayISO) {
+                // 1-й клик -> start
+                if (!start || (start && end)) {
+                    start = dayISO;
+                    end = "";
+                    render();
+                    return;
+                }
+
+                // 2-й клик -> end
+                end = dayISO;
+                if (end < start) {
+                    const t = start;
+                    start = end;
+                    end = t;
+                }
+                render();
+                commitRange();
+                closeDP();
+            }
+
+            // Events
+            btn.addEventListener("click", openDP);
+
+            dp.addEventListener("click", (e) => {
+                // клик по фону — закрыть
+                if (e.target === dp) closeDP();
+            });
+
+            grid.addEventListener("click", (e) => {
+                const b = e.target.closest(".dpDay");
+                if (!b) return;
+                handlePick(b.dataset.iso);
+            });
+
+            prev.addEventListener("click", () => {
+                view = new Date(view.getFullYear(), view.getMonth() - 1, 1);
+                render();
+            });
+            next.addEventListener("click", () => {
+                view = new Date(view.getFullYear(), view.getMonth() + 1, 1);
+                render();
+            });
+            close.addEventListener("click", closeDP);
+
+            clear.addEventListener("click", () => {
+                start = "";
+                end = "";
+                fromEl.value = "";
+                toEl.value = "";
+                syncLabel();
+                fromEl.dispatchEvent(new Event("change", {
+                    bubbles: true
+                }));
+                toEl.dispatchEvent(new Event("change", {
+                    bubbles: true
+                }));
+                closeDP();
+            });
+
+            todayBtn.addEventListener("click", () => {
+                const t = iso(new Date());
+                start = t;
+                end = t;
+                commitRange();
+                closeDP();
+            });
+
+            // при первом запуске — если уже есть значения (например, ты ставишь today в boot)
+            // обновим текст на кнопке
+            setTimeout(syncLabel, 0);
+
+            // чтобы при ручном изменении hidden inputs (если где-то меняешь) текст тоже обновлялся
+            fromEl.addEventListener("change", syncLabel);
+            toEl.addEventListener("change", syncLabel);
+        })();
+
 
         (async function boot() {
             renderNav();
