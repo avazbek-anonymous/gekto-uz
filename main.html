@@ -428,15 +428,24 @@
 						<p>
 							+998 XX XXX XX XX
 						</p>
-						<form action="#" method="post">
+						<form id="leadForm">
 							<div class="input_1">
-								<input id="phone" type="text" name="mail" inputmode="numeric" autocomplete="tel"
-									maxlength="13" />
+								<input id="name" type="text" autocomplete="name" />
+								<span>Ismingiz</span>
+							</div>
+
+							<div class="input_1">
+								<input id="phone" type="text" inputmode="numeric" autocomplete="tel" maxlength="13" />
 								<span>Raqamingiz</span>
 							</div>
-							<button type="submit" class="btn green"
-								style="margin-top:20px"><span>Jo'natish</span></button>
+
+							<button type="submit" class="btn green" style="margin-top:20px">
+								<span>Jo'natish</span>
+							</button>
+
+							<div id="leadMsg" style="margin-top:12px;"></div>
 						</form>
+
 					</div>
 				</div>
 			</div>
@@ -588,6 +597,80 @@
 			});
 		});
 	</script>
+	<script>
+		const ENDPOINT = "https://script.google.com/macros/s/AKfycbxf2b2jJd3SRXTUsdxpcX_7SAj6KT6ivIFwA4uNbQmZW1EAQ3hCZBMmVsmiB9mIjTf8/exec"; // .../exec
+		const SECRET = "mySecret123"; // должен совпадать с Apps Script (или уберите совсем)
+
+		const form = document.getElementById("leadForm");
+		const phoneEl = document.getElementById("phone");
+		const nameEl = document.getElementById("name");
+		const msgEl = document.getElementById("leadMsg");
+
+		// авто +998 при фокусе
+		phoneEl.addEventListener("focus", () => {
+			if (!phoneEl.value) phoneEl.value = "+998";
+		});
+
+		// только цифры после +998, максимум 9 цифр
+		phoneEl.addEventListener("input", () => {
+			let v = phoneEl.value;
+
+			// оставим + и цифры
+			v = v.replace(/[^\d+]/g, "");
+
+			// принудительно начинаем с +998
+			if (!v.startsWith("+998")) {
+				const onlyDigits = v.replace(/\D/g, "");
+				v = "+998" + (onlyDigits.startsWith("998") ? onlyDigits.slice(3) : onlyDigits);
+			}
+
+			// оставим только 9 цифр после +998
+			const tail = v.slice(4).replace(/\D/g, "").slice(0, 9);
+			phoneEl.value = "+998" + tail;
+		});
+
+		// если вышли и осталось только +998 — очистить
+		phoneEl.addEventListener("blur", () => {
+			if (phoneEl.value === "+998") phoneEl.value = "";
+		});
+
+		form.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			msgEl.textContent = "";
+
+			const payload = {
+				name: (nameEl.value || "").trim(),
+				phone: (phoneEl.value || "").trim(),
+				page: location.href,
+				secret: SECRET
+			};
+
+			// минимальная проверка
+			if (!payload.phone || payload.phone.length < 13) {
+				msgEl.textContent = "Telefon raqamini to‘liq kiriting.";
+				return;
+			}
+
+			try {
+				// ВАЖНО: иногда CORS мешает читать ответ, поэтому ставим no-cors.
+				await fetch(ENDPOINT, {
+					method: "POST",
+					mode: "no-cors",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(payload)
+				});
+
+				form.reset();
+				msgEl.textContent = "Yuborildi ✅ Tez orada bog‘lanamiz.";
+			} catch (err) {
+				msgEl.textContent = "Xatolik. Qayta urinib ko‘ring.";
+				console.error(err);
+			}
+		});
+	</script>
+
 </body>
 
 </html>
