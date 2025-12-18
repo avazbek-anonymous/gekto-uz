@@ -12,19 +12,15 @@
       --line:rgba(255,255,255,.10);
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.65);
-
       --ok:#10b981;
-      --bad:#f16262; /* мягкий красный как ты просил */
+      --bad:#f16262; /* мягкий красный */
       --shadow: 0 10px 30px rgba(0,0,0,.25);
-
-      --r: 16px;
-      --gap: 12px;
-
-      --sidebar-collapsed: 64px;
-      --sidebar-expanded: 230px;
-
-      --topH: 35vh;     /* верх 35% */
-      --bottomH: 65vh;  /* низ 65% */
+      --r:16px;
+      --gap:12px;
+      --sidebar-collapsed:64px;
+      --sidebar-expanded:230px;
+      --topH:35vh;
+      --bottomH:65vh;
     }
 
     *{ box-sizing:border-box; }
@@ -40,14 +36,9 @@
       overflow:hidden;
     }
 
-    /* ---------- Shell ---------- */
-    .appShell{
-      height:100vh;
-      display:flex;
-      min-height:0;
-    }
+    .appShell{ height:100vh; display:flex; min-height:0; }
 
-    /* ---------- Sidebar (desktop) ---------- */
+    /* Sidebar */
     .sidebar{
       width: var(--sidebar-collapsed);
       transition: width .22s ease;
@@ -59,14 +50,11 @@
       flex-direction:column;
       gap: 10px;
       min-height:0;
-      position:relative;
     }
     .sidebar:hover{ width: var(--sidebar-expanded); }
 
     .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
+      display:flex; align-items:center; gap:10px;
       padding: 10px 10px;
       border-radius: 14px;
       background: rgba(255,255,255,.04);
@@ -91,125 +79,46 @@
       transform: translateX(-4px);
       transition: opacity .16s ease, transform .16s ease;
     }
-    .sidebar:hover .brandText{
-      opacity:1;
-      transform: translateX(0);
-    }
+    .sidebar:hover .brandText{ opacity:1; transform: translateX(0); }
 
-    .nav{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      padding-top: 6px;
-      min-height:0;
-    }
-
+    .nav{ display:flex; flex-direction:column; gap:6px; padding-top:6px; min-height:0; }
     .navItem{
-      display:flex;
-      align-items:center;
-      gap:10px;
+      display:flex; align-items:center; gap:10px;
       padding: 10px 10px;
       border-radius: 14px;
       color: rgba(255,255,255,.85);
       text-decoration:none;
       border: 1px solid transparent;
-      background: transparent;
-      cursor:pointer;
-      user-select:none;
     }
-    .navItem:hover{
-      background: rgba(255,255,255,.05);
-      border-color: rgba(255,255,255,.08);
-    }
+    .navItem:hover{ background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.08); }
     .navItem.active{
       background: rgba(16,185,129,.12);
       border-color: rgba(16,185,129,.28);
       color: rgba(255,255,255,.95);
     }
-    .navIcon{
-      width: 22px; height: 22px;
-      display:grid;
-      place-items:center;
-      flex: 0 0 22px;
-      opacity:.95;
-    }
+    .navIcon{ width: 22px; height: 22px; display:grid; place-items:center; flex: 0 0 22px; }
     .navText{
-      white-space:nowrap;
-      overflow:hidden;
-      opacity:0;
-      transform: translateX(-4px);
+      white-space:nowrap; overflow:hidden;
+      opacity:0; transform: translateX(-4px);
       transition: opacity .16s ease, transform .16s ease;
     }
-    .sidebar:hover .navText{
-      opacity:1;
-      transform: translateX(0);
-    }
+    .sidebar:hover .navText{ opacity:1; transform: translateX(0); }
 
-    .sidebarFoot{
-      margin-top:auto;
-      padding-top: 8px;
-      border-top: 1px solid rgba(255,255,255,.08);
-      color: rgba(255,255,255,.55);
-      font-size: 12px;
-      padding-left: 10px;
-      padding-right: 10px;
-      opacity:0;
-      transform: translateX(-4px);
-      transition: opacity .16s ease, transform .16s ease;
-    }
-    .sidebar:hover .sidebarFoot{
-      opacity:1;
-      transform: translateX(0);
-    }
+    /* Main */
+    .main{ flex:1; min-width:0; display:flex; flex-direction:column; min-height:0; }
 
-    /* ---------- Main ---------- */
-    .main{
-      flex:1;
-      min-width:0;
-      display:flex;
-      flex-direction:column;
-      min-height:0;
-    }
-
-    /* header (desktop+mobile) */
     .topHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
       padding: 12px 14px;
       border-bottom: 1px solid rgba(255,255,255,.08);
       background: rgba(255,255,255,.03);
       backdrop-filter: blur(10px);
     }
-    .hdrLeft{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-      min-width:0;
-    }
-    .hdrTitle{
-      font-weight: 900;
-      font-size: 14px;
-      letter-spacing:.25px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .hdrSub{
-      font-size: 12px;
-      color: var(--muted);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .hdrRight{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
+    .hdrLeft{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .hdrTitle{ font-weight: 1000; font-size: 14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .hdrSub{ font-size: 12px; color: var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    .hdrRight{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 
     .pill{
       display:inline-flex; align-items:center; gap:10px;
@@ -225,22 +134,15 @@
     .pill.err{ color: rgba(241,98,98,.95); border-color: rgba(241,98,98,.28); background: rgba(241,98,98,.10); }
 
     .btn{
-      border:0;
-      border-radius: 12px;
-      padding: 9px 12px;
-      font-weight: 900;
-      cursor:pointer;
+      border:0; border-radius: 12px; padding: 9px 12px;
+      font-weight: 900; cursor:pointer;
       background: rgba(255,255,255,.08);
       color: rgba(255,255,255,.92);
       border: 1px solid rgba(255,255,255,.10);
       white-space:nowrap;
     }
-    .btn.primary{
-      background: var(--ok);
-      color:#062a1b;
-      border-color: rgba(16,185,129,.35);
-      box-shadow: var(--shadow);
-    }
+    .btn.primary{ background: var(--ok); color:#062a1b; border-color: rgba(16,185,129,.35); box-shadow: var(--shadow); }
+    .btn.danger{ background: rgba(241,98,98,.14); border-color: rgba(241,98,98,.28); }
     .btn:disabled{ opacity:.7; cursor:not-allowed; }
 
     .spinner{
@@ -252,13 +154,10 @@
     }
     @keyframes spin { to { transform: rotate(360deg);} }
 
-    /* content layout: top 35% + bottom 65% */
     .content{
-      flex:1;
-      min-height:0;
+      flex:1; min-height:0;
       padding: var(--gap);
-      display:flex;
-      flex-direction:column;
+      display:flex; flex-direction:column;
       gap: var(--gap);
       overflow:hidden;
     }
@@ -267,7 +166,6 @@
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: var(--r);
-      box-shadow: none;
       min-height:0;
     }
 
@@ -275,115 +173,68 @@
       height: var(--topH);
       min-height: 260px;
       display:grid;
-      grid-template-columns: 1fr 1fr 1fr; /* 33% / 33% / 33% */
+      grid-template-columns: 1fr 1fr 1fr;
       gap: var(--gap);
       min-height:0;
     }
 
-    /* balances card */
-    .balancesCard{
+    .balancesCard, .filtersCard, .catCard{
       padding: 14px;
-      display:flex;
-      flex-direction:column;
+      display:flex; flex-direction:column;
       gap:10px;
       min-height:0;
     }
-    .cardTitleRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .cardTitle{
-      font-weight: 1000;
-      letter-spacing:.2px;
-      font-size: 14px;
-    }
+
+    .cardTitleRow{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .cardTitle{ font-weight: 1000; font-size: 14px; }
     .muted{ color: rgba(255,255,255,.62); font-size: 12px; }
 
+    /* balances list */
     .balList{
-      display:grid;
-      gap:10px;
-      overflow:auto;
-      padding-right: 2px;
+      display:grid; gap:10px;
+      overflow:auto; padding-right:2px;
       min-height:0;
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,.22) transparent;
     }
-    .balList::-webkit-scrollbar{ width: 10px; }
-    .balList::-webkit-scrollbar-thumb{
-      background: rgba(255,255,255,.12);
-      border-radius: 999px;
-      border: 2px solid transparent;
-      background-clip: content-box;
-    }
-    .balList:hover::-webkit-scrollbar-thumb{
-      background: rgba(255,255,255,.30);
-      background-clip: content-box;
-    }
+    .balList::-webkit-scrollbar{ width:10px; }
+    .balList::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.12); border-radius:999px; border:2px solid transparent; background-clip:content-box; }
+    .balList:hover::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.30); background-clip:content-box; }
+
     .balItem{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
+      display:flex; justify-content:space-between; gap:10px;
       padding: 10px 12px;
       border-radius: 12px;
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
     }
     .balItem .w{ font-weight: 900; }
-    .balItem .nums{
-      text-align:right;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      color: rgba(255,255,255,.88);
-      line-height: 1.25;
-    }
+    .nums{ text-align:right; font-family: ui-monospace, Menlo, Consolas, monospace; line-height:1.25; }
 
-    /* filters card */
-    .filtersCard{
-      padding: 14px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      min-height:0;
-    }
-    .filtersGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      min-height:0;
-    }
+    /* filters */
+    .filtersGrid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
     .filtersGrid .full{ grid-column: 1 / -1; }
 
     .field{
-      display:flex;
-      align-items:center;
-      gap:10px;
+      display:flex; align-items:center; gap:10px;
       padding: 10px 12px;
       border-radius: 12px;
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
       min-height: 40px;
     }
-    .field label{
-      font-size: 12px;
-      color: var(--muted);
-      white-space:nowrap;
-    }
+    .field label{ font-size: 12px; color: var(--muted); white-space:nowrap; }
     .field input, .field select{
       width:100%;
-      border:0;
-      outline:none;
+      border:0; outline:none;
       background: transparent;
       color: rgba(255,255,255,.92);
       font-size: 13px;
       padding:0;
     }
-    input[type="date"]{
-      color: rgba(255,255,255,.92);
-      background: transparent;
-    }
+    input[type="date"]{ color: rgba(255,255,255,.92); }
 
-    /* select readable */
+    /* readable selects */
     select{
       background: rgba(10,18,26,.65);
       border-radius: 10px;
@@ -393,19 +244,20 @@
     }
     option{ color:#0b1220; background:#fff; }
 
-    /* category summary card */
-    .catCard{
-      padding: 14px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      min-height:0;
+    /* datalist input style */
+    .combo{
+      background: rgba(10,18,26,.65);
+      border-radius: 10px;
+      padding: 6px 10px;
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      width:100%;
+      outline:none;
     }
-    .catTotals{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap:10px;
-    }
+
+    /* category summary */
+    .catTotals{ display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; }
     .totBox{
       padding: 10px 12px;
       border-radius: 12px;
@@ -413,22 +265,8 @@
       background: rgba(255,255,255,.04);
       min-height: 54px;
     }
-    .totLbl{
-      font-size:11px;
-      color: rgba(255,255,255,.68);
-      text-transform: uppercase;
-      letter-spacing:.2px;
-      font-weight: 900;
-    }
-    .totVal{
-      margin-top: 6px;
-      font-weight: 1000;
-      font-size: 13px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
+    .totLbl{ font-size:11px; color: rgba(255,255,255,.68); text-transform: uppercase; font-weight: 900; }
+    .totVal{ margin-top:6px; font-weight:1000; font-size: 13px; font-family: ui-monospace, Menlo, Consolas, monospace; }
     .in{ color: rgba(16,185,129,.95); }
     .out{ color: rgba(241,98,98,.95); }
 
@@ -442,29 +280,16 @@
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,.22) transparent;
     }
-    .catListWrap::-webkit-scrollbar{ width: 10px; }
-    .catListWrap::-webkit-scrollbar-thumb{
-      background: rgba(255,255,255,.12);
-      border-radius: 999px;
-      border: 2px solid transparent;
-      background-clip: content-box;
-    }
-    .catListWrap:hover::-webkit-scrollbar-thumb{
-      background: rgba(255,255,255,.30);
-      background-clip: content-box;
-    }
-    .catTable{
-      width:100%;
-      border-collapse: collapse;
-    }
+    .catListWrap::-webkit-scrollbar{ width:10px; }
+    .catListWrap::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.12); border-radius:999px; border:2px solid transparent; background-clip:content-box; }
+    .catListWrap:hover::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.30); background-clip:content-box; }
+
+    .catTable{ width:100%; border-collapse: collapse; }
     .catTable thead th{
-      position: sticky;
-      top: 0;
-      z-index: 2;
+      position: sticky; top:0; z-index:2;
       text-align:left;
       padding: 10px 10px;
       font-size: 11px;
-      letter-spacing:.2px;
       text-transform: uppercase;
       color: rgba(255,255,255,.72);
       background: rgba(10,18,26,.96);
@@ -477,62 +302,38 @@
       font-size: 12px;
       white-space: nowrap;
     }
-    .catName{
-      font-weight: 900;
-      color: rgba(255,255,255,.92);
-      max-width: 220px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .mono{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      color: rgba(255,255,255,.88);
-    }
+    .catName{ font-weight: 900; max-width: 220px; overflow:hidden; text-overflow:ellipsis; }
 
     /* bottom table */
     .bottomArea{
       height: var(--bottomH);
       min-height: 320px;
-      padding: 0;
       overflow:hidden;
-      display:flex;
-      flex-direction:column;
+      display:flex; flex-direction:column;
       min-height:0;
     }
 
     .tableScroll{
-      flex:1;
-      min-height:0;
-      overflow:auto; /* BOTH directions */
+      flex:1; min-height:0;
+      overflow:auto;
       scrollbar-gutter: stable;
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,.22) transparent;
     }
-    .tableScroll::-webkit-scrollbar{ width: 10px; height: 10px; }
-    .tableScroll::-webkit-scrollbar-thumb{
-      background: rgba(255,255,255,.12);
-      border-radius: 999px;
-      border: 2px solid transparent;
-      background-clip: content-box;
-    }
-    .tableScroll:hover::-webkit-scrollbar-thumb{
-      background: rgba(255,255,255,.30);
-      background-clip: content-box;
-    }
+    .tableScroll::-webkit-scrollbar{ width:10px; height:10px; }
+    .tableScroll::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.12); border-radius:999px; border:2px solid transparent; background-clip:content-box; }
+    .tableScroll:hover::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.30); background-clip:content-box; }
 
     table.opsTable{
       width:100%;
       border-collapse: collapse;
-      min-width: 1200px; /* чтобы колонки точно влезли с горизонтальным скроллом */
+      min-width: 1400px;
     }
     table.opsTable thead th{
-      position: sticky;
-      top: 0;
-      z-index: 2;
+      position: sticky; top:0; z-index:2;
       text-align:left;
       padding: 10px 12px;
       font-size: 11px;
-      letter-spacing:.2px;
       text-transform: uppercase;
       color: rgba(255,255,255,.72);
       background: rgba(10,18,26,.96);
@@ -545,74 +346,26 @@
       font-size: 13px;
       white-space: nowrap;
       max-width: 420px;
-      overflow: hidden;
+      overflow:hidden;
       text-overflow: ellipsis;
     }
     table.opsTable tbody tr:hover td{ background: rgba(255,255,255,.03); }
 
+    .mono{ font-family: ui-monospace, Menlo, Consolas, monospace; }
     .amtIn{ color: rgba(16,185,129,.95); font-weight: 900; }
     .amtOut{ color: rgba(241,98,98,.95); font-weight: 900; }
+    .empty{ padding: 16px 12px; color: var(--muted); font-size: 13px; }
 
-    .empty{
-      padding: 16px 12px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    /* ---------- Login overlay ---------- */
-    .overlay{
-      position:fixed;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 16px;
-      background: rgba(3,7,12,.62);
-      backdrop-filter: blur(8px);
-      z-index: 80;
-    }
-    .loginCard{
-      width: min(440px, 100%);
-      background: rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-    }
-    .loginCard h2{ margin:0; font-size: 18px; }
-    .loginCard p{ margin:8px 0 14px; color:var(--muted); font-size: 13px; }
-    .loginGrid{ display:grid; gap:10px; margin-top:10px; }
-    .loginActions{ display:flex; justify-content:flex-end; gap:10px; margin-top:12px; }
-
-    /* ---------- Mobile ---------- */
-    .burger{
-      display:none;
-      width: 42px;
-      height: 38px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.92);
-      cursor:pointer;
-    }
-
-    .mobileMenuOverlay{
-      position:fixed;
-      inset:0;
-      background: rgba(0,0,0,.45);
-      z-index: 70;
-      display:none;
-    }
+    /* Mobile меню */
+    .burger{ display:none; width: 42px; height: 38px; border-radius: 12px; border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06); color: rgba(255,255,255,.92); cursor:pointer; }
+    .mobileMenuOverlay{ position:fixed; inset:0; background: rgba(0,0,0,.45); z-index:70; display:none; }
     .mobileMenu{
-      width: 78%;
-      max-width: 320px;
-      height: 100%;
+      width: 78%; max-width: 320px; height: 100%;
       background: rgba(8,16,24,.95);
       border-right: 1px solid rgba(255,255,255,.12);
       padding: 14px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
+      display:flex; flex-direction:column; gap:10px;
     }
     .mNav a{
       display:block;
@@ -624,17 +377,10 @@
       background: rgba(255,255,255,.05);
       font-weight: 900;
     }
-    .mNav a.active{
-      background: rgba(16,185,129,.12);
-      border-color: rgba(16,185,129,.30);
-    }
+    .mNav a.active{ background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.30); }
 
-    /* mobile ops list (cards) */
-    .opsCards{
-      display:none;
-      padding: 12px;
-      gap:10px;
-    }
+    /* mobile ops cards */
+    .opsCards{ display:none; padding: 12px; gap:10px; }
     .opCard{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
@@ -643,150 +389,60 @@
       display:grid;
       gap:6px;
     }
-    .opTop{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      font-weight: 900;
-    }
-    .opMid{
-      color: rgba(255,255,255,.78);
-      font-size: 12px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .opNote{
-      color: rgba(255,255,255,.70);
-      font-size: 12px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-    .opAmts{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-top:4px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size: 12px;
-    }
-    .opAmts .box{
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 12px;
-      padding: 8px 10px;
-      background: rgba(255,255,255,.03);
-    }
-    .opAmts .lbl{ color: rgba(255,255,255,.62); font-size: 11px; text-transform: uppercase; letter-spacing:.2px; font-weight: 900;}
+    .opTop{ display:flex; justify-content:space-between; gap:10px; font-weight: 900; }
+    .opMid{ color: rgba(255,255,255,.78); font-size: 12px; display:flex; justify-content:space-between; gap:10px; }
+    .opNote{ color: rgba(255,255,255,.70); font-size: 12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .opAmts{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:4px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+    .opAmts .box{ border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 8px 10px; background: rgba(255,255,255,.03); }
+    .opAmts .lbl{ color: rgba(255,255,255,.62); font-size: 11px; text-transform: uppercase; font-weight: 900; }
     .opAmts .val{ margin-top:4px; font-weight: 1000; }
 
+    /* MOBILE FIX (только мобилка) */
     @media (max-width: 980px){
-  /* чтобы не было внутреннего “двойного” скролла и странностей iOS */
-  html, body{ height:auto; }
-  body{ overflow:auto; }
+      html, body{ height:auto; }
+      body{ overflow:auto; }
+      .sidebar{ display:none; }
+      .content{ overflow:visible; padding: 12px; gap: 10px; }
+      .burger{ display:inline-flex; align-items:center; justify-content:center; }
 
-  .appShell{ height:auto; min-height:100vh; }
-  .main{ min-height:100vh; }
+      .topArea{ height:auto; min-height:0; grid-template-columns: 1fr; gap: 10px; }
+      .bottomArea{ height:auto; min-height:0; overflow:visible; }
 
-  .sidebar{ display:none; }
-  .content{
-    flex:none;
-    overflow:visible;
-    padding: 12px;
-    gap: 10px;
-  }
+      .tableScroll{ display:none; }
+      .opsCards{ display:grid; padding: 0; }
 
-  .burger{ display:inline-flex; align-items:center; justify-content:center; }
+      /* фильтры в 1 колонку, чтобы не налезало */
+      .filtersGrid{ grid-template-columns: 1fr; }
+      .filtersGrid .full{ grid-column: 1 / -1; }
 
-  .topArea{
-    height:auto;
-    min-height:0;
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
+      .filtersCard .field{
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        padding: 12px;
+        min-height: auto;
+      }
+      .filtersCard .field label{
+        width:100%;
+        white-space: normal;
+        line-height: 1.2;
+      }
+      /* iPhone: не будет авто-zoom */
+      .filtersCard .field input,
+      .filtersCard .field select,
+      .filtersCard .field .combo{ font-size: 16px; }
 
-  .bottomArea{
-    height:auto;
-    min-height:0;
-    overflow:visible;
-  }
-
-  /* в мобилке: таблицу прячем, показываем карточки */
-  .tableScroll{ display:none; }
-  .opsCards{ display:grid; padding: 0; }
-
-  /* --- ФИЛЬТРЫ: в 1 колонку, без наложений --- */
-  .filtersGrid{ grid-template-columns: 1fr; }
-  .filtersGrid .full{ grid-column: 1 / -1; }
-
-  .filtersCard .field{
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-    padding: 12px;
-    min-height: auto;
-  }
-
-  .filtersCard .field label{
-    width:100%;
-    white-space: normal; /* длинные подписи больше не ломают */
-    line-height: 1.2;
-  }
-
-  /* важно для iPhone: чтобы НЕ было авто-zoom */
-  .filtersCard .field input,
-  .filtersCard .field select{
-    width:100%;
-    font-size: 16px;
-  }
-
-  /* date range: переносим нормально, тире скрываем */
-  .filtersCard .field.full{ flex-wrap: wrap; }
-  .filtersCard .field.full span.muted{ display:none; }
-
-  /* делаем системные контролы “тёмными” в Safari */
-  html{ color-scheme: dark; }
-
-  /* категории/итоги: компактнее */
-  .catTotals{ grid-template-columns: 1fr 1fr; }
-
-  /* карточки операций на очень узких экранах */
-  .opAmts{ grid-template-columns: 1fr 1fr; }
-}
-
-@media (max-width: 420px){
-  .catTotals{ grid-template-columns: 1fr; }
-  .opAmts{ grid-template-columns: 1fr; }
-}
-
+      html{ color-scheme: dark; }
+      .catTotals{ grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 420px){
+      .catTotals{ grid-template-columns: 1fr; }
+      .opAmts{ grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 
 <body>
-  <!-- LOGIN -->
-  <div id="loginOverlay" class="overlay">
-    <div class="loginCard">
-      <h2>BPS.system</h2>
-      <p>Login/Parol tekshiriladi (Users). So‘ng baza yuklanadi.</p>
-
-      <div class="loginGrid">
-        <div class="field">
-          <label>Login</label>
-          <input id="login" autocomplete="username" placeholder="login"/>
-        </div>
-        <div class="field">
-          <label>Parol</label>
-          <input id="pass" type="password" autocomplete="current-password" placeholder="••••••••"/>
-        </div>
-      </div>
-
-      <div class="loginActions">
-        <span id="loginMsg" class="pill" style="display:none;"></span>
-        <button id="btnLogin" class="btn primary" type="button">Kirish</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Mobile menu -->
   <div id="mOverlay" class="mobileMenuOverlay">
     <div class="mobileMenu" onclick="event.stopPropagation()">
@@ -800,19 +456,14 @@
   </div>
 
   <div class="appShell">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar">
       <div class="brand">
         <div class="brandLogo">B</div>
         <div class="brandText">BPS.system</div>
       </div>
-
       <nav class="nav" id="nav"></nav>
-
-      <div class="sidebarFoot">BPS.system</div>
     </aside>
 
-    <!-- Main -->
     <main class="main">
       <header class="topHeader">
         <div class="hdrLeft">
@@ -823,13 +474,14 @@
         <div class="hdrRight">
           <span id="userPill" class="pill">👤 -</span>
           <button id="btnReload" class="btn">Yangilash</button>
-          <span id="status" class="pill"><span class="muted">Tayyor</span></span>
+          <button id="btnLogout" class="btn danger">Chiqish</button>
+          <span id="status" class="pill"><span class="muted">Yuklanmoqda...</span></span>
           <button id="burger" class="burger" title="Menu">☰</button>
         </div>
       </header>
 
       <section class="content">
-        <!-- TOP 35% -->
+        <!-- TOP -->
         <div class="topArea">
           <!-- balances -->
           <div class="card balancesCard">
@@ -855,25 +507,31 @@
                 <input id="dateTo" type="date"/>
               </div>
 
+              <!-- общий текстовый поиск -->
+              <div class="field full">
+                <label>Qidiruv (matn)</label>
+                <input id="qText" placeholder="Koshelok / Kategoriya / Subkategoriya / Izoh..."/>
+              </div>
+
+              <!-- Wallet typed -->
               <div class="field">
                 <label>По кошелькам</label>
-                <select id="fWallet">
-                  <option value="all">Все</option>
-                </select>
+                <input id="fWallet" class="combo" list="walletList" placeholder="Все"/>
+                <datalist id="walletList"></datalist>
               </div>
 
+              <!-- Category typed -->
               <div class="field">
                 <label>По категориям</label>
-                <select id="fCat">
-                  <option value="all">Все</option>
-                </select>
+                <input id="fCat" class="combo" list="catList" placeholder="Все"/>
+                <datalist id="catList"></datalist>
               </div>
 
+              <!-- Sub typed -->
               <div class="field">
                 <label>По суб категориям</label>
-                <select id="fSub">
-                  <option value="all">Все</option>
-                </select>
+                <input id="fSub" class="combo" list="subList" placeholder="Все"/>
+                <datalist id="subList"></datalist>
               </div>
 
               <div class="field">
@@ -897,7 +555,7 @@
             </div>
           </div>
 
-          <!-- categories summary -->
+          <!-- category summary -->
           <div class="card catCard">
             <div class="cardTitleRow">
               <div class="cardTitle">Kategoriya bo‘yicha</div>
@@ -942,9 +600,8 @@
           </div>
         </div>
 
-        <!-- BOTTOM 65% -->
+        <!-- BOTTOM -->
         <div class="card bottomArea">
-          <!-- desktop table -->
           <div class="tableScroll" id="tableScroll">
             <table class="opsTable">
               <thead>
@@ -962,12 +619,11 @@
                 </tr>
               </thead>
               <tbody id="tbody">
-                <tr><td colspan="10" class="empty">Operatsiyalar yoq</td></tr>
+                <tr><td colspan="10" class="empty">Yuklanmoqda...</td></tr>
               </tbody>
             </table>
           </div>
 
-          <!-- mobile cards -->
           <div id="opsCards" class="opsCards"></div>
         </div>
       </section>
@@ -976,19 +632,24 @@
 
   <script>
     /************ CONFIG ************/
-    const ENDPOINT = "https://script.google.com/macros/s/AKfycbyZD2z3CcNpQhGFh-e_Qfmhu91B7imqNKQ0dr2Gm4_V2KzTlvNEJMpRYnjOAfu_CCwiQg/exec"; // <-- сюда .../exec
-    const API_SECRET = "bpsSecret123"; // если включил API_SECRET в Apps Script — пропиши тут
+    const ENDPOINT  = "https://script.google.com/macros/s/AKfycbyZD2z3CcNpQhGFh-e_Qfmhu91B7imqNKQ0dr2Gm4_V2KzTlvNEJMpRYnjOAfu_CCwiQg/exec";
+    const API_SECRET = "bpsSecret123"; // если включил в Apps Script — пропиши
 
-    /************ NAV CONFIG ************/
+    const LOGIN_URL = "/bpslogin"; // или "/bpslogin.html"
+    const KASSA_URL = "/bpskassa"; // текущая страница
+
+    const IDLE_MS = 3 * 60 * 1000;      // 3 минуты
+    const TOUCH_DEBOUNCE_MS = 25000;    // touch не чаще чем раз в ~25 сек
+
+    /************ NAV ************/
     const NAV_ITEMS = [
-      { key:"home",  label:"Главная",       href:"/bpsmain",  icon: homeIcon() },
-      { key:"kassa", label:"Касса",         href:"/bpskassa", icon: cashIcon() },
-      { key:"prod",  label:"Производство",  href:"/bpsprod",  icon: factoryIcon() },
-      { key:"sale",  label:"Продажа",       href:"/bpssale",  icon: saleIcon() },
-      { key:"stock", label:"Склад",         href:"/bpsstock", icon: boxIcon() },
-      { key:"users", label:"Пользователи",  href:"/bpsusers", icon: usersIcon() },
+      { key:"home",  label:"Главная",      href:"/bpsmain",  icon: homeIcon() },
+      { key:"kassa", label:"Касса",        href:"/bpskassa", icon: cashIcon() },
+      { key:"prod",  label:"Производство", href:"/bpsprod",  icon: factoryIcon() },
+      { key:"sale",  label:"Продажа",      href:"/bpssale",  icon: saleIcon() },
+      { key:"stock", label:"Склад",        href:"/bpsstock", icon: boxIcon() },
+      { key:"users", label:"Пользователи", href:"/bpsusers", icon: usersIcon() },
     ];
-
     function currentKeyFromPath(){
       const p = (location.pathname || "").toLowerCase();
       if (p.includes("bpskassa")) return "kassa";
@@ -997,9 +658,8 @@
       if (p.includes("bpssale")) return "sale";
       if (p.includes("bpsstock")) return "stock";
       if (p.includes("bpsusers")) return "users";
-      return "kassa"; // по умолчанию
+      return "kassa";
     }
-
     function renderNav(){
       const activeKey = currentKeyFromPath();
       const nav = document.getElementById("nav");
@@ -1012,7 +672,6 @@
         </a>
       `).join("");
 
-      // mobile: только тексты
       mNav.innerHTML = NAV_ITEMS.map(i => `
         <a class="${i.key===activeKey ? "active":""}" href="${i.href}">${escapeHtml(i.label)}</a>
       `).join("");
@@ -1020,52 +679,54 @@
 
     /************ STATE ************/
     let TOKEN = localStorage.getItem("bps_token") || "";
-    let USER = null;
+    let USER  = safeParse(localStorage.getItem("bps_user")) || null;
 
     let ALL_ROWS = [];
     let OPTIONS = { wallets:[], categories:[], subAll:[], subByCat:{} };
     let BALANCES = [];
 
-    /************ DOM ************/
-    const loginOverlay = document.getElementById("loginOverlay");
-    const btnLogin = document.getElementById("btnLogin");
-    const loginMsg = document.getElementById("loginMsg");
-    const inpLogin = document.getElementById("login");
-    const inpPass = document.getElementById("pass");
+    let lastTouchSentAt = 0;
 
+    /************ DOM ************/
     const userPill = document.getElementById("userPill");
     const status = document.getElementById("status");
     const btnReload = document.getElementById("btnReload");
+    const btnLogout = document.getElementById("btnLogout");
     const btnClear = document.getElementById("btnClear");
     const updatedAt = document.getElementById("updatedAt");
 
     const dateFrom = document.getElementById("dateFrom");
     const dateTo = document.getElementById("dateTo");
+    const qText = document.getElementById("qText");
+
     const fWallet = document.getElementById("fWallet");
     const fCat = document.getElementById("fCat");
     const fSub = document.getElementById("fSub");
     const fType = document.getElementById("fType");
     const fCur = document.getElementById("fCur");
 
+    const walletList = document.getElementById("walletList");
+    const catList = document.getElementById("catList");
+    const subList = document.getElementById("subList");
+
     const balancesBox = document.getElementById("balances");
 
     const tbody = document.getElementById("tbody");
     const tableScroll = document.getElementById("tableScroll");
-
     const opsCards = document.getElementById("opsCards");
 
     const catBody = document.getElementById("catBody");
-
     const tInU = document.getElementById("tInU");
     const tOutU = document.getElementById("tOutU");
     const tInD = document.getElementById("tInD");
     const tOutD = document.getElementById("tOutD");
 
-    // mobile menu
     const burger = document.getElementById("burger");
     const mOverlay = document.getElementById("mOverlay");
 
-    /************ UI helpers ************/
+    /************ helpers ************/
+    function safeParse(s){ try{ return JSON.parse(s); }catch(e){ return null; } }
+
     function setStatus(type, text, loading=false){
       status.className = "pill";
       status.innerHTML = "";
@@ -1075,16 +736,14 @@
       if (type === "err") status.classList.add("err");
     }
 
-    function setLoginMsg(type, text, loading=false){
-      loginMsg.style.display = "inline-flex";
-      loginMsg.className = "pill";
-      loginMsg.innerHTML = "";
-      if (loading) loginMsg.innerHTML = '<span class="spinner"></span>';
-      loginMsg.innerHTML += `<span>${escapeHtml(text)}</span>`;
-      if (type === "ok") loginMsg.classList.add("ok");
-      if (type === "err") loginMsg.classList.add("err");
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
-    function hideLoginMsg(){ loginMsg.style.display = "none"; }
 
     function fmt(n){
       const x = Number(n);
@@ -1098,18 +757,23 @@
       const pad = x => String(x).padStart(2,"0");
       return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
     }
+    function isMobile(){ return window.matchMedia("(max-width: 980px)").matches; }
 
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    function clearSession(){
+      localStorage.removeItem("bps_token");
+      localStorage.removeItem("bps_user");
+      localStorage.removeItem("bps_lastActivity");
+      TOKEN = "";
+      USER = null;
+    }
+    function lockToLogin(){
+      clearSession();
+      location.replace(LOGIN_URL);
     }
 
-    function isMobile(){
-      return window.matchMedia("(max-width: 980px)").matches;
+    /************ AUTH GATE (no token => redirect) ************/
+    if (!TOKEN){
+      location.replace(LOGIN_URL);
     }
 
     /************ JSONP ************/
@@ -1117,59 +781,110 @@
       return new Promise((resolve, reject) => {
         const cbName = "__bps_cb_" + Math.random().toString(36).slice(2);
         const script = document.createElement("script");
-
         window[cbName] = (data) => { cleanup(); resolve(data); };
         function cleanup(){
-          try { delete window[cbName]; } catch(e){ window[cbName] = undefined; }
-          if (script.parentNode) script.parentNode.removeChild(script);
+          try{ delete window[cbName]; }catch(e){ window[cbName] = undefined; }
+          script.remove();
         }
         script.onerror = () => { cleanup(); reject(new Error("JSONP load error")); };
-
         const sep = url.includes("?") ? "&" : "?";
         script.src = url + sep + "callback=" + cbName + "&_=" + Date.now();
         document.body.appendChild(script);
       });
     }
-
     function apiUrl(params){
       const u = new URL(ENDPOINT);
       Object.entries(params).forEach(([k,v]) => u.searchParams.set(k, v));
       if (API_SECRET) u.searchParams.set("api_secret", API_SECRET);
       return u.toString();
     }
+    async function apiRefresh(){ return await loadJSONP(apiUrl({ action:"refresh", token:TOKEN })); }
+    async function apiTouch(){ return await loadJSONP(apiUrl({ action:"touch", token:TOKEN })); }
+    async function apiLogout(){ return await loadJSONP(apiUrl({ action:"logout", token:TOKEN })); }
 
-    async function apiLogin(login, parol){
-      return await loadJSONP(apiUrl({ action:"login", login, parol }));
-    }
-    async function apiRefresh(token){
-      return await loadJSONP(apiUrl({ action:"refresh", token }));
+    /************ idle control (3 min) ************/
+    function markActivity(){
+      localStorage.setItem("bps_lastActivity", String(Date.now()));
+      maybeTouch();
     }
 
-    /************ render options/balances ************/
+    function getLastActivity(){
+      const x = Number(localStorage.getItem("bps_lastActivity") || "0");
+      return isFinite(x) ? x : 0;
+    }
+
+    function startIdleWatch(){
+      if (!getLastActivity()) localStorage.setItem("bps_lastActivity", String(Date.now()));
+      setInterval(() => {
+        const idle = Date.now() - getLastActivity();
+        if (idle >= IDLE_MS){
+          lockToLogin();
+        }
+      }, 2000);
+    }
+
+    async function maybeTouch(){
+      const now = Date.now();
+      if (now - lastTouchSentAt < TOUCH_DEBOUNCE_MS) return;
+      lastTouchSentAt = now;
+
+      try{
+        const res = await apiTouch();
+        if (!res || !res.ok){
+          lockToLogin();
+        }
+      }catch(e){
+        // если сеть временно упала — не сразу выкидываем
+        // но если токен реально умер, следующий refresh это покажет
+      }
+    }
+
+    function bindActivityEvents(){
+      const events = ["mousemove","keydown","wheel","touchstart","scroll","click"];
+      events.forEach(ev => window.addEventListener(ev, markActivity, { passive:true }));
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) markActivity();
+      });
+    }
+
+    /************ data render ************/
+    function setDataFromApi(res){
+      ALL_ROWS = res.rows || [];
+      OPTIONS = res.options || OPTIONS;
+      BALANCES = res.balances || BALANCES;
+
+      updatedAt.textContent = res.updatedAt ? ("update: " + res.updatedAt) : "";
+
+      // user
+      if (res.user){
+        USER = res.user;
+        localStorage.setItem("bps_user", JSON.stringify(USER));
+      }
+      userPill.textContent = `👤 ${USER?.ism || USER?.login || "-"}`;
+
+      renderOptions();
+      renderBalances();
+
+      // default dates = today (для показа)
+      const t = todayISO();
+      if (!dateFrom.value) dateFrom.value = t;
+      if (!dateTo.value) dateTo.value = t;
+
+      applyFilters();
+    }
+
     function renderOptions(){
-      fWallet.innerHTML = `<option value="all">Все</option>` + (OPTIONS.wallets || []).map(w =>
-        `<option value="${escapeHtml(w)}">${escapeHtml(w)}</option>`
-      ).join("");
-
-      fCat.innerHTML = `<option value="all">Все</option>` + (OPTIONS.categories || []).map(c =>
-        `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`
-      ).join("");
-
-      renderSubOptions("all");
+      walletList.innerHTML = (OPTIONS.wallets || []).map(w => `<option value="${escapeHtml(w)}"></option>`).join("");
+      catList.innerHTML = (OPTIONS.categories || []).map(c => `<option value="${escapeHtml(c)}"></option>`).join("");
+      renderSubOptions(fCat.value);
     }
 
     function renderSubOptions(catVal){
       let list = [];
-      if (catVal && catVal !== "all" && OPTIONS.subByCat && OPTIONS.subByCat[catVal]) list = OPTIONS.subByCat[catVal];
+      const c = (catVal || "").trim();
+      if (c && OPTIONS.subByCat && OPTIONS.subByCat[c]) list = OPTIONS.subByCat[c];
       else list = OPTIONS.subAll || [];
-
-      const prev = fSub.value;
-      fSub.innerHTML = `<option value="all">Все</option>` + list.map(s =>
-        `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`
-      ).join("");
-
-      if (prev && (prev === "all" || list.includes(prev))) fSub.value = prev;
-      else fSub.value = "all";
+      subList.innerHTML = list.map(s => `<option value="${escapeHtml(s)}"></option>`).join("");
     }
 
     function renderBalances(){
@@ -1191,28 +906,34 @@
       `).join("");
     }
 
-    /************ filters + sums ************/
     function rowHasUZS(r){ return (toNum(r.kirimUzs) !== 0) || (toNum(r.chiqimUzs) !== 0); }
     function rowHasUSD(r){ return (toNum(r.kirimUsd) !== 0) || (toNum(r.chiqimUsd) !== 0); }
     function rowHasIN(r){ return (toNum(r.kirimUzs) > 0) || (toNum(r.kirimUsd) > 0); }
     function rowHasOUT(r){ return (toNum(r.chiqimUzs) > 0) || (toNum(r.chiqimUsd) > 0); }
 
+    function normFilterVal(v){
+      v = String(v || "").trim();
+      if (!v || v.toLowerCase() === "все" || v.toLowerCase() === "all") return "all";
+      return v;
+    }
+
     function applyFilters(){
       const df = dateFrom.value || "";
       const dt = dateTo.value || "";
-      const w = fWallet.value;
-      const c = fCat.value;
-      const s = fSub.value;
+      const w = normFilterVal(fWallet.value);
+      const c = normFilterVal(fCat.value);
+      const s = normFilterVal(fSub.value);
       const t = fType.value;
       const cur = fCur.value;
+      const q = (qText.value || "").trim().toLowerCase();
 
       const filtered = ALL_ROWS.filter(r => {
         if (df && r.sana < df) return false;
         if (dt && r.sana > dt) return false;
 
-        if (w !== "all" && r.koshelok !== w) return false;
-        if (c !== "all" && r.kategoriya !== c) return false;
-        if (s !== "all" && r.subkategoriya !== s) return false;
+        if (w !== "all" && String(r.koshelok||"") !== w) return false;
+        if (c !== "all" && String(r.kategoriya||"") !== c) return false;
+        if (s !== "all" && String(r.subkategoriya||"") !== s) return false;
 
         if (t === "in" && !rowHasIN(r)) return false;
         if (t === "out" && !rowHasOUT(r)) return false;
@@ -1220,6 +941,11 @@
         if (cur === "uzs" && !rowHasUZS(r)) return false;
         if (cur === "usd" && !rowHasUSD(r)) return false;
         if (cur === "both" && !(rowHasUZS(r) && rowHasUSD(r))) return false;
+
+        if (q){
+          const hay = `${r.koshelok||""} ${r.kategoriya||""} ${r.subkategoriya||""} ${r.izoh||""}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
 
         return true;
       });
@@ -1260,20 +986,15 @@
         o.outD += toNum(r.chiqimUsd);
       }
 
-      // сортируем по расходу UZS+USD (самые большие сверху)
-      const arr = Array.from(map.values()).sort((a,b) => {
-        const ao = (a.outU + a.outD);
-        const bo = (b.outU + b.outD);
-        return bo - ao;
-      });
+      const arr = Array.from(map.values()).sort((a,b) => ((b.outU+b.outD) - (a.outU+a.outD)));
 
       catBody.innerHTML = arr.map(x => `
         <tr>
           <td class="catName" title="${escapeHtml(x.cat)}">${escapeHtml(x.cat)}</td>
-          <td class="mono"><span class="${x.inU ? "in":""}">${fmt(x.inU)}</span></td>
-          <td class="mono"><span class="${x.outU ? "out":""}">${fmt(x.outU)}</span></td>
-          <td class="mono"><span class="${x.inD ? "in":""}">${fmt(x.inD)}</span></td>
-          <td class="mono"><span class="${x.outD ? "out":""}">${fmt(x.outD)}</span></td>
+          <td class="mono"><span class="in">${fmt(x.inU)}</span></td>
+          <td class="mono"><span class="out">${fmt(x.outU)}</span></td>
+          <td class="mono"><span class="in">${fmt(x.inD)}</span></td>
+          <td class="mono"><span class="out">${fmt(x.outD)}</span></td>
         </tr>
       `).join("");
     }
@@ -1310,7 +1031,7 @@
         `;
       }).join("");
 
-      // mobile cards (две строки логически)
+      // mobile cards
       opsCards.innerHTML = sorted.map(r => {
         const inU = toNum(r.kirimUzs);
         const outU = toNum(r.chiqimUzs);
@@ -1354,91 +1075,7 @@
       if (!isMobile()) tableScroll.scrollTop = 0;
     }
 
-    /************ login/boot ************/
-    function setDataFromApi(res){
-      ALL_ROWS = res.rows || [];
-      OPTIONS = res.options || OPTIONS;
-      BALANCES = res.balances || BALANCES;
-      updatedAt.textContent = res.updatedAt ? ("update: " + res.updatedAt) : "";
-
-      renderOptions();
-      renderBalances();
-
-      // дата по умолчанию = сегодня (для показа)
-      const t = todayISO();
-      if (!dateFrom.value) dateFrom.value = t;
-      if (!dateTo.value) dateTo.value = t;
-
-      applyFilters();
-    }
-
-    async function doLogin(){
-      hideLoginMsg();
-      const lg = inpLogin.value.trim();
-      const ps = inpPass.value.trim();
-      if (!lg || !ps){
-        setLoginMsg("err","Login/Parol bo‘sh");
-        return;
-      }
-
-      btnLogin.disabled = true;
-      setLoginMsg("", "Bazani yuklayapmiz...", true);
-
-      try{
-        const res = await apiLogin(lg, ps);
-        if (!res || !res.ok){
-          setLoginMsg("err", "Login yoki parol xato");
-          return;
-        }
-
-        TOKEN = res.token;
-        USER = res.user;
-        localStorage.setItem("bps_token", TOKEN);
-
-        userPill.textContent = `👤 ${USER?.ism || USER?.login || "-"}`;
-
-        setDataFromApi(res);
-        setStatus("ok","Tayyor");
-        loginOverlay.style.display = "none";
-      }catch(e){
-        console.error(e);
-        setLoginMsg("err","Xatolik: serverga ulanib bo‘lmadi");
-      }finally{
-        btnLogin.disabled = false;
-      }
-    }
-
-    async function bootByToken(){
-      if (!TOKEN) return;
-      setStatus("", "Yuklanmoqda...", true);
-      try{
-        const res = await apiRefresh(TOKEN);
-        if (!res || !res.ok) throw new Error(res?.error || "bad_response");
-        setDataFromApi(res);
-        setStatus("ok","Tayyor");
-        loginOverlay.style.display = "none";
-      }catch(e){
-        console.warn("token invalid:", e);
-        localStorage.removeItem("bps_token");
-        TOKEN = "";
-        loginOverlay.style.display = "";
-      }
-    }
-
-    function resetFilters(){
-      const t = todayISO();
-      dateFrom.value = t;
-      dateTo.value = t;
-      fWallet.value = "all";
-      fCat.value = "all";
-      renderSubOptions("all");
-      fSub.value = "all";
-      fType.value = "all";
-      fCur.value = "all";
-      applyFilters();
-    }
-
-    /************ table drag-scroll right click (both axes) ************/
+    /************ Right-click drag scroll ************/
     function enableRightDragScroll(el){
       let dragging = false;
       let startX=0, startY=0, startLeft=0, startTop=0;
@@ -1458,10 +1095,8 @@
 
       window.addEventListener("mousemove", (e) => {
         if (!dragging) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        el.scrollLeft = startLeft - dx;
-        el.scrollTop = startTop - dy;
+        el.scrollLeft = startLeft - (e.clientX - startX);
+        el.scrollTop  = startTop  - (e.clientY - startY);
       });
 
       window.addEventListener("mouseup", (e) => {
@@ -1471,55 +1106,7 @@
       });
     }
 
-    /************ events ************/
-    btnLogin.addEventListener("click", doLogin);
-    inpPass.addEventListener("keydown", (e)=>{ if(e.key==="Enter") doLogin(); });
-
-    btnReload.addEventListener("click", async () => {
-      if (!TOKEN) return;
-      setStatus("", "Yangilanmoqda...", true);
-      btnReload.disabled = true;
-      try{
-        const res = await apiRefresh(TOKEN);
-        if (!res || !res.ok) throw new Error(res?.error || "bad_response");
-        setDataFromApi(res);
-        setStatus("ok","Yangilandi");
-      }catch(e){
-        console.error(e);
-        setStatus("err","Xatolik");
-      }finally{
-        btnReload.disabled = false;
-      }
-    });
-
-    btnClear.addEventListener("click", resetFilters);
-
-    dateFrom.addEventListener("change", applyFilters);
-    dateTo.addEventListener("change", applyFilters);
-    fWallet.addEventListener("change", applyFilters);
-
-    fCat.addEventListener("change", () => {
-      renderSubOptions(fCat.value);
-      applyFilters();
-    });
-    fSub.addEventListener("change", applyFilters);
-    fType.addEventListener("change", applyFilters);
-    fCur.addEventListener("change", applyFilters);
-
-    // mobile menu
-    burger.addEventListener("click", () => {
-      mOverlay.style.display = "block";
-    });
-    mOverlay.addEventListener("click", () => {
-      mOverlay.style.display = "none";
-    });
-
-    // re-render ops on resize (switch table/cards)
-    window.addEventListener("resize", () => {
-      applyFilters();
-    });
-
-    /************ icons (inline svg) ************/
+    /************ icons ************/
     function svgIcon(pathD){
       return `
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -1536,13 +1123,82 @@
     function boxIcon(){ return svgIcon("M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8"); }
     function usersIcon(){ return svgIcon("M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m10 10v-2a4 4 0 0 0-3-3.87"); }
 
-    /************ init ************/
-    renderNav();
-    enableRightDragScroll(tableScroll);
+    /************ UI actions ************/
+    function resetFilters(){
+      const t = todayISO();
+      dateFrom.value = t;
+      dateTo.value = t;
+      qText.value = "";
+      fWallet.value = "";
+      fCat.value = "";
+      fSub.value = "";
+      fType.value = "all";
+      fCur.value = "all";
+      renderSubOptions("");
+      applyFilters();
+    }
 
-    // default date today
-    resetFilters();
-    bootByToken();
+    btnClear.addEventListener("click", resetFilters);
+
+    dateFrom.addEventListener("change", () => { markActivity(); applyFilters(); });
+    dateTo.addEventListener("change", () => { markActivity(); applyFilters(); });
+
+    qText.addEventListener("input", () => { markActivity(); applyFilters(); });
+
+    fWallet.addEventListener("input", () => { markActivity(); applyFilters(); });
+    fCat.addEventListener("input", () => { markActivity(); renderSubOptions(fCat.value); applyFilters(); });
+    fSub.addEventListener("input", () => { markActivity(); applyFilters(); });
+
+    fType.addEventListener("change", () => { markActivity(); applyFilters(); });
+    fCur.addEventListener("change", () => { markActivity(); applyFilters(); });
+
+    btnReload.addEventListener("click", async () => {
+      markActivity();
+      setStatus("", "Yangilanmoqda...", true);
+      btnReload.disabled = true;
+      try{
+        const res = await apiRefresh();
+        if (!res || !res.ok) return lockToLogin();
+        setDataFromApi(res);
+        setStatus("ok","Yangilandi");
+      }catch(e){
+        setStatus("err","Xatolik");
+      }finally{
+        btnReload.disabled = false;
+      }
+    });
+
+    btnLogout.addEventListener("click", async () => {
+      try{ await apiLogout(); }catch(e){}
+      lockToLogin();
+    });
+
+    // mobile menu
+    burger.addEventListener("click", () => { mOverlay.style.display = "block"; });
+    mOverlay.addEventListener("click", () => { mOverlay.style.display = "none"; });
+
+    window.addEventListener("resize", () => applyFilters());
+
+    /************ BOOT ************/
+    (async function boot(){
+      renderNav();
+      enableRightDragScroll(tableScroll);
+      bindActivityEvents();
+      startIdleWatch();
+
+      // обязательная проверка токена
+      setStatus("", "Yuklanmoqda...", true);
+      try{
+        const res = await apiRefresh();
+        if (!res || !res.ok) return lockToLogin();
+        setDataFromApi(res);
+        setStatus("ok","Tayyor");
+        // старт активности
+        if (!localStorage.getItem("bps_lastActivity")) localStorage.setItem("bps_lastActivity", String(Date.now()));
+      }catch(e){
+        lockToLogin();
+      }
+    })();
   </script>
 </body>
 </html>

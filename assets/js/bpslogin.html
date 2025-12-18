@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>BPS.system — Login</title>
+  <style>
+    :root{
+      --bg:#07121b;
+      --card:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.10);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.65);
+      --ok:#10b981;
+      --bad:#f16262;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+      --r: 16px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; min-height:100vh;
+      background:
+        radial-gradient(1000px 520px at 18% 12%, rgba(16,185,129,.18), transparent 60%),
+        radial-gradient(900px 520px at 88% 38%, rgba(59,130,246,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 16px;
+    }
+    .card{
+      width:min(440px, 100%);
+      background: rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .title{ display:flex; align-items:center; gap:10px; font-weight:1000; margin:0 0 6px; }
+    .logo{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      background: rgba(16,185,129,.18);
+      border: 1px solid rgba(16,185,129,.30);
+      display:grid; place-items:center;
+      font-weight: 900;
+      color: rgba(16,185,129,.95);
+      flex: 0 0 34px;
+    }
+    .sub{ margin:0 0 14px; color:var(--muted); font-size: 13px; }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      margin-bottom: 10px;
+    }
+    .field label{ font-size:12px; color:var(--muted); }
+    .field input{
+      width:100%;
+      border:0;
+      outline:none;
+      background: transparent;
+      color: rgba(255,255,255,.92);
+      font-size: 16px; /* iPhone: без auto-zoom */
+    }
+
+    .row{ display:flex; gap:10px; align-items:center; justify-content:flex-end; }
+    .btn{
+      border:0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 1000;
+      cursor:pointer;
+      background: var(--ok);
+      color:#062a1b;
+      border: 1px solid rgba(16,185,129,.35);
+      box-shadow: var(--shadow);
+      white-space:nowrap;
+    }
+    .btn:disabled{ opacity:.7; cursor:not-allowed; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size: 13px;
+      white-space:nowrap;
+    }
+    .pill.ok{ color: rgba(16,185,129,.95); border-color: rgba(16,185,129,.30); background: rgba(16,185,129,.10); }
+    .pill.err{ color: rgba(241,98,98,.95); border-color: rgba(241,98,98,.28); background: rgba(241,98,98,.10); }
+
+    .spinner{
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.18);
+      border-top-color: rgba(255,255,255,.75);
+      animation: spin .8s linear infinite;
+      flex: 0 0 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg);} }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="title"><div class="logo">B</div> BPS.system</div>
+    <p class="sub">Kassa — kirish uchun login va parol kiriting</p>
+
+    <div class="field">
+      <label>Login</label>
+      <input id="login" autocomplete="username" placeholder="login">
+    </div>
+
+    <div class="field">
+      <label>Parol</label>
+      <input id="pass" type="password" autocomplete="current-password" placeholder="••••••••">
+    </div>
+
+    <div class="row">
+      <span id="msg" class="pill" style="display:none;"></span>
+      <button id="btn" class="btn" type="button">Kirish</button>
+    </div>
+  </div>
+
+  <script>
+    /************ CONFIG ************/
+     const ENDPOINT  = "https://script.google.com/macros/s/AKfycbyZD2z3CcNpQhGFh-e_Qfmhu91B7imqNKQ0dr2Gm4_V2KzTlvNEJMpRYnjOAfu_CCwiQg/exec";
+    const API_SECRET = "bpsSecret123"; // если включил в Apps Script — пропиши
+    const LOGIN_URL = "/bpslogin"; // текущая страница
+    const KASSA_URL = "/bpskassa"; // куда переходим после логина
+
+    /************ JSONP ************/
+    function loadJSONP(url){
+      return new Promise((resolve, reject) => {
+        const cbName = "__bps_cb_" + Math.random().toString(36).slice(2);
+        const script = document.createElement("script");
+        window[cbName] = (data) => { cleanup(); resolve(data); };
+
+        function cleanup(){
+          try{ delete window[cbName]; }catch(e){ window[cbName] = undefined; }
+          script.remove();
+        }
+        script.onerror = () => { cleanup(); reject(new Error("JSONP load error")); };
+
+        const sep = url.includes("?") ? "&" : "?";
+        script.src = url + sep + "callback=" + cbName + "&_=" + Date.now();
+        document.body.appendChild(script);
+      });
+    }
+
+    function apiUrl(params){
+      const u = new URL(ENDPOINT);
+      Object.entries(params).forEach(([k,v]) => u.searchParams.set(k, v));
+      if (API_SECRET) u.searchParams.set("api_secret", API_SECRET);
+      return u.toString();
+    }
+
+    const msg = document.getElementById("msg");
+    const btn = document.getElementById("btn");
+    const inpLogin = document.getElementById("login");
+    const inpPass = document.getElementById("pass");
+
+    function setMsg(type, text, loading=false){
+      msg.style.display = "inline-flex";
+      msg.className = "pill";
+      msg.innerHTML = "";
+      if (loading) msg.innerHTML = '<span class="spinner"></span>';
+      msg.innerHTML += `<span>${text}</span>`;
+      if (type==="ok") msg.classList.add("ok");
+      if (type==="err") msg.classList.add("err");
+    }
+
+    function clearSession(){
+      localStorage.removeItem("bps_token");
+      localStorage.removeItem("bps_user");
+      localStorage.removeItem("bps_lastActivity");
+    }
+
+    // если токен ещё жив — сразу в кассу
+    (async function autoGo(){
+      const t = localStorage.getItem("bps_token") || "";
+      if (!t) return;
+
+      try{
+        const res = await loadJSONP(apiUrl({ action:"refresh", token:t }));
+        if (res && res.ok){
+          location.replace(KASSA_URL);
+        }else{
+          clearSession();
+        }
+      }catch(e){
+        clearSession();
+      }
+    })();
+
+    async function doLogin(){
+      const lg = inpLogin.value.trim();
+      const ps = inpPass.value.trim();
+      if(!lg || !ps){
+        setMsg("err","Login/Parol bo‘sh");
+        return;
+      }
+
+      btn.disabled = true;
+      setMsg("", "Tekshirilmoqda...", true);
+
+      try{
+        const res = await loadJSONP(apiUrl({ action:"login", login:lg, parol:ps }));
+        if(!res || !res.ok){
+          setMsg("err","Login yoki parol xato");
+          return;
+        }
+
+        localStorage.setItem("bps_token", res.token);
+        localStorage.setItem("bps_user", JSON.stringify(res.user || {}));
+        localStorage.setItem("bps_lastActivity", String(Date.now())); // старт активности
+
+        setMsg("ok","Qabul qilindi! O‘tilmoqda...");
+        location.replace(KASSA_URL);
+      }catch(e){
+        setMsg("err","Xatolik: serverga ulanib bo‘lmadi");
+      }finally{
+        btn.disabled = false;
+      }
+    }
+
+    btn.addEventListener("click", doLogin);
+    inpPass.addEventListener("keydown", (e)=>{ if(e.key==="Enter") doLogin(); });
+  </script>
+</body>
+</html>
