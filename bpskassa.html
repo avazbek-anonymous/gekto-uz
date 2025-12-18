@@ -1192,7 +1192,7 @@
             <header class="topHeader">
                 <div class="hdrLeft">
                     <div class="hdrTitle">BPS <b>(Erkin)</b></div>
-                    <div class="hdrSub">Kassa hisototi</div>
+                    <div class="hdrSub">Kassa hisoboti</div>
                 </div>
 
                 <div class="hdrRight">
@@ -2003,16 +2003,33 @@
         }
 
         function resetFilters() {
-            const t = todayISO();
-            dateFrom.value = t;
-            dateTo.value = t;
+            // ДАТА: всегда сегодня + обновить календарь/лейбл
+            if (window.__dpSetToday) {
+                window.__dpSetToday();
+            } else {
+                // fallback (если вдруг календарный блок ещё не загрузился)
+                const t = todayISO();
+                dateFrom.value = t;
+                dateTo.value = t;
+                dateFrom.dispatchEvent(new Event("change", {
+                    bubbles: true
+                }));
+                dateTo.dispatchEvent(new Event("change", {
+                    bubbles: true
+                }));
+            }
+
+            // остальные фильтры
             qText.value = "";
             fWallet.value = "";
             fCat.value = "";
             fSub.value = "";
             fType.value = "all";
             fCur.value = "all";
+
             renderSubOptions("");
+
+            // применяем
             applyFilters();
         }
 
@@ -2326,6 +2343,47 @@
             // чтобы при ручном изменении hidden inputs (если где-то меняешь) текст тоже обновлялся
             fromEl.addEventListener("change", syncLabel);
             toEl.addEventListener("change", syncLabel);
+
+            // ===== API для внешнего reset + дефолт сегодня =====
+            function setRange_(a, b) {
+                start = a || "";
+                end = b || a || "";
+
+                fromEl.value = start;
+                toEl.value = end;
+
+                syncLabel();
+
+                // чтобы твои фильтры/рендер сразу отработали
+                fromEl.dispatchEvent(new Event("change", {
+                    bubbles: true
+                }));
+                toEl.dispatchEvent(new Event("change", {
+                    bubbles: true
+                }));
+
+                // если календарь открыт — перерисуем выделения
+                render();
+            }
+
+            // отдаём наружу, чтобы resetFilters мог вызвать
+            window.__dpSetToday = function () {
+                const t = iso(new Date());
+                // чтобы открывалось на текущем месяце
+                const d = parseISO(t);
+                view = new Date(d.getFullYear(), d.getMonth(), 1);
+
+                setRange_(t, t);
+            };
+
+            // дефолт при входе: всегда сегодня, если даты ещё не установлены
+            if (!fromEl.value && !toEl.value) {
+                window.__dpSetToday();
+            } else {
+                // если уже есть значения (например, после refresh) — просто обновим текст
+                syncLabel();
+            }
+
         })();
 
 
