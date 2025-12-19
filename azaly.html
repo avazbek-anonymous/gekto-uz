@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>G-SOFT</title>
+
+  <style>
+    :root{
+      --bg:#07121b;
+      --card: rgba(255,255,255,.06);
+      --line: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.65);
+      --ok:#10b981;
+      --bad:#f16262;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+      --r:16px;
+      --gap:12px;
+      --dockW: 290px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1000px 520px at 18% 12%, rgba(16,185,129,.18), transparent 60%),
+        radial-gradient(900px 520px at 88% 38%, rgba(59,130,246,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      overflow:hidden;
+    }
+
+    .topHeader{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      backdrop-filter:blur(10px);
+    }
+    .hdrLeft{display:flex;flex-direction:column;gap:2px;min-width:0}
+    .hdrTitle{font-weight:1000;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hdrSub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hdrRight{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .pill{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:9px 12px;border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);font-size:13px;white-space:nowrap;
+    }
+    .pill.ok{color:rgba(16,185,129,.95);border-color:rgba(16,185,129,.30);background:rgba(16,185,129,.10)}
+    .pill.err{color:rgba(241,98,98,.95);border-color:rgba(241,98,98,.28);background:rgba(241,98,98,.10)}
+    .btn{
+      border:0;border-radius:12px;
+      padding:9px 12px;font-weight:1000;cursor:pointer;
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.10);
+      white-space:nowrap;
+    }
+    .btn.danger{background:rgba(241,98,98,.14);border-color:rgba(241,98,98,.28)}
+    .btn:disabled{opacity:.7;cursor:not-allowed}
+    .spinner{
+      width:16px;height:16px;border-radius:50%;
+      border:2px solid rgba(255,255,255,.18);
+      border-top-color:rgba(255,255,255,.75);
+      animation:spin .8s linear infinite;
+      flex:0 0 16px;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .app{
+      height:calc(100vh - 54px);
+      min-height:0;
+      padding:var(--gap);
+      display:flex;
+      gap:var(--gap);
+      overflow:hidden;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      min-height:0;
+    }
+
+    /* ===== Hidden left filters dock ===== */
+    .edgeHotspot{
+      position:fixed;left:0;top:0;bottom:0;width:10px;z-index:40;
+    }
+    .filtersDock{
+      position:fixed;left:0;top:0;bottom:0;
+      width:var(--dockW);
+      transform:translateX(calc(-1 * (var(--dockW) - 12px)));
+      transition:transform .18s ease;
+      z-index:60;
+      padding:12px 10px;
+      background:rgba(8,16,24,.92);
+      border-right:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(10px);
+      display:flex;flex-direction:column;gap:10px;min-height:0;
+    }
+    body.filtersOpen .filtersDock{transform:translateX(0)}
+    .filtersDock .brand{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 10px;border-radius:14px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .brandLogo{
+      width:34px;height:34px;border-radius:12px;
+      background:rgba(16,185,129,.18);
+      border:1px solid rgba(16,185,129,.30);
+      display:grid;place-items:center;font-weight:1000;color:rgba(16,185,129,.95);
+    }
+    .brandText{font-weight:1000}
+    .dockScroll{
+      overflow:auto;min-height:0;padding-right:2px;
+      scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent;
+    }
+    .dockScroll::-webkit-scrollbar{width:10px}
+    .dockScroll::-webkit-scrollbar-thumb{
+      background:rgba(255,255,255,.12);border-radius:999px;border:2px solid transparent;background-clip:content-box
+    }
+    .dockScroll:hover::-webkit-scrollbar-thumb{background:rgba(255,255,255,.30);background-clip:content-box}
+
+    .dockTitleRow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .dockTitle{font-weight:1000;font-size:14px}
+    .muted{color:rgba(255,255,255,.62);font-size:12px}
+
+    .field{
+      display:flex;flex-direction:column;gap:6px;
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      margin-bottom:10px;
+    }
+    .field label{font-size:12px;color:var(--muted)}
+    .field input,.field select{
+      width:100%;
+      border:0;outline:none;background:transparent;color:var(--text);
+      font-size:16px;
+    }
+    select{
+      background:rgba(10,18,26,.65);
+      border-radius:10px;
+      padding:8px 10px;
+      border:1px solid rgba(255,255,255,.12);
+    }
+    option{color:#0b1220;background:#fff}
+
+    /* ===== Table area ===== */
+    .tableCard{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      min-width:0;min-height:0;
+      overflow:hidden;
+    }
+
+    .tableTop{
+      padding:12px 14px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .tableTitle{font-weight:1000}
+    .tableMeta{color:var(--muted);font-size:12px;white-space:nowrap}
+
+    .tableScroll{
+      flex:1;min-height:0;
+      overflow:auto;
+      scrollbar-gutter:stable;
+      scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent;
+    }
+    .tableScroll::-webkit-scrollbar{width:10px;height:10px}
+    .tableScroll::-webkit-scrollbar-thumb{
+      background:rgba(255,255,255,.12);border-radius:999px;border:2px solid transparent;background-clip:content-box
+    }
+    .tableScroll:hover::-webkit-scrollbar-thumb{background:rgba(255,255,255,.30);background-clip:content-box}
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:1600px;
+    }
+    thead th{
+      position:sticky; top:0; z-index:5;
+      text-align:left;
+      padding:10px 10px;
+      font-size:11px;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.72);
+      background:rgba(10,18,26,.96);
+      border-bottom:1px solid rgba(255,255,255,.10);
+      white-space:nowrap;
+    }
+    thead tr.grp th{
+      top:0;
+      z-index:6;
+      background:rgba(10,18,26,.98);
+      font-weight:1000;
+      letter-spacing:.2px;
+    }
+    thead tr.cols th{
+      top:36px; /* высота первой строки */
+      z-index:5;
+    }
+    tbody td{
+      padding:8px 10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      font-size:13px;
+      white-space:nowrap;
+      max-width:520px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    tbody tr:hover td{background:rgba(255,255,255,.03)}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+    .imgCell img{
+      width:44px;height:44px;object-fit:cover;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      display:block;
+    }
+    .empty{padding:16px 12px;color:var(--muted);font-size:13px}
+
+    /* Mobile */
+    .burger{display:none;width:42px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:rgba(255,255,255,.92);cursor:pointer}
+    .mOverlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:80;display:none}
+    @media (max-width: 980px){
+      body{overflow:auto}
+      .app{height:auto;overflow:visible;flex-direction:column}
+      .tableCard{min-height:60vh}
+      .edgeHotspot{display:none}
+      .filtersDock{
+        transform:translateX(-110%);
+        width:min(320px,85vw);
+      }
+      body.filtersOpen .filtersDock{transform:translateX(0)}
+      .burger{display:inline-flex;align-items:center;justify-content:center}
+      thead th{position:static}
+      table{min-width:1200px}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="edgeHotspot" id="edgeHotspot"></div>
+
+  <aside class="filtersDock" id="filtersDock">
+    <div class="brand">
+      <div class="brandLogo">G</div>
+      <div class="brandText">G-SOFT</div>
+    </div>
+
+    <div class="dockTitleRow">
+      <div class="dockTitle">Filtrlar</div>
+      <button id="btnReset" class="btn" type="button">Reset</button>
+    </div>
+
+    <div class="dockScroll">
+      <div class="field">
+        <label>Pоставщик</label>
+        <select id="fSupplier">
+          <option value="all">Barchasi</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Sotilgan</label>
+        <select id="fSold">
+          <option value="all">Barchasi</option>
+          <option value="sold">Sotilgan</option>
+          <option value="unsold">Sotilmagan</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Izoh (Kod / Artikul nomi)</label>
+        <input id="qText" placeholder="qidiruv..."/>
+      </div>
+      
+      <div class="field">
+        <label>Kategoriya</label>
+        <select id="fCategory">
+          <option value="all">Barchasi</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Sezon</label>
+        <select id="fSeason">
+          <option value="all">Barchasi</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Ostatkada</label>
+        <select id="fStock">
+          <option value="all">Barchasi</option>
+          <option value="yes">Ha (bor)</option>
+          <option value="no">Yo‘q</option>
+        </select>
+      </div>
+
+      <div class="muted">* Меню скрыто — наведи мышь на левый край.</div>
+    </div>
+  </aside>
+
+  <div class="mOverlay" id="mOverlay"></div>
+
+  <header class="topHeader">
+    <div class="hdrLeft">
+      <div class="hdrTitle">Azaly — <b>Analiz</b></div>
+      <div class="hdrSub">Лист “Анализ” • 1-строка: группировка • 2-строка: названия</div>
+    </div>
+
+    <div class="hdrRight">
+      <span id="userPill" class="pill">👤 -</span>
+      <button id="btnReload" class="btn">Yangilash</button>
+      <button id="btnLogout" class="btn danger">Chiqish</button>
+      <span id="status" class="pill"><span class="muted">Yuklanmoqda...</span></span>
+      <button id="burger" class="burger" title="Filters">☰</button>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="card tableCard">
+      <div class="tableTop">
+        <div class="tableTitle">Jadval</div>
+        <div id="meta" class="tableMeta">—</div>
+      </div>
+
+      <div class="tableScroll" id="tableScroll">
+        <table>
+          <thead id="thead"></thead>
+          <tbody id="tbody">
+            <tr><td class="empty" colspan="999">Yuklanmoqda...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /************ CONFIG ************/
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbxrHIGjRjAv15oNbT2L8cUnqAP-Tf6AprWRLmv1pu9YxpC6IhbkwMt1rRHuJwRqXW_g-g/exec";
+    const API_SECRET = "Azaly2025";
+
+    const HOME_URL  = "/azaly.html";
+    const LOGIN_URL = "/azalylogin.html";
+
+    const TOKEN_KEY = "azaly_token";
+    const USER_KEY  = "azaly_user";
+    const LAST_KEY  = "azaly_lastActivity";
+
+    const IDLE_MS = 3 * 60 * 1000;
+    const TOUCH_DEBOUNCE_MS = 25000;
+
+    /************ STATE ************/
+    let TOKEN = localStorage.getItem(TOKEN_KEY) || "";
+    let USER = safeParse(localStorage.getItem(USER_KEY)) || null;
+
+    let GROUPS = [];
+    let HEADERS = [];
+    let ROWS = [];
+    let INDEX = {};
+    let OPTIONS = { suppliers:[], categories:[], seasons:[] };
+
+    let lastTouchSentAt = 0;
+
+    /************ DOM ************/
+    const userPill = document.getElementById("userPill");
+    const statusEl = document.getElementById("status");
+    const metaEl = document.getElementById("meta");
+
+    const btnReload = document.getElementById("btnReload");
+    const btnLogout = document.getElementById("btnLogout");
+
+    const thead = document.getElementById("thead");
+    const tbody = document.getElementById("tbody");
+
+    const filtersDock = document.getElementById("filtersDock");
+    const edgeHotspot = document.getElementById("edgeHotspot");
+    const mOverlay = document.getElementById("mOverlay");
+    const burger = document.getElementById("burger");
+
+    const fSupplier = document.getElementById("fSupplier");
+    const fSold = document.getElementById("fSold");
+    const qText = document.getElementById("qText");
+    const fCategory = document.getElementById("fCategory");
+    const fSeason = document.getElementById("fSeason");
+    const fStock = document.getElementById("fStock");
+    const btnReset = document.getElementById("btnReset");
+
+    /************ helpers ************/
+    function safeParse(s){ try{return JSON.parse(s);}catch(e){return null;} }
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    }
+    function setStatus(type,text,loading=false){
+      statusEl.className="pill";
+      statusEl.innerHTML = (loading?'<span class="spinner"></span>':'') + `<span>${escapeHtml(text)}</span>`;
+      if(type==="ok") statusEl.classList.add("ok");
+      if(type==="err") statusEl.classList.add("err");
+    }
+    function toNum(v){
+      if(v==null) return 0;
+      if(typeof v==="number") return isFinite(v)?v:0;
+      const s = String(v).replace(/\s/g,"").replace(",",".");
+      const x = Number(s);
+      return isFinite(x)?x:0;
+    }
+    function normStr(v){ return String(v ?? "").trim(); }
+    function normLower(v){ return normStr(v).toLowerCase(); }
+
+    function clearSession(){
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+      localStorage.removeItem(LAST_KEY);
+      TOKEN=""; USER=null;
+    }
+    function lockToLogin(){
+      clearSession();
+      location.replace(LOGIN_URL);
+    }
+
+    /************ auth gate ************/
+    if(!TOKEN) location.replace(LOGIN_URL);
+
+    /************ JSONP ************/
+    function loadJSONP(url){
+      return new Promise((resolve,reject)=>{
+        const cb="__az_cb_"+Math.random().toString(36).slice(2);
+        const sc=document.createElement("script");
+        window[cb]=(data)=>{ cleanup(); resolve(data); };
+        function cleanup(){ try{delete window[cb];}catch(e){window[cb]=undefined;} sc.remove(); }
+        sc.onerror=()=>{ cleanup(); reject(new Error("jsonp error")); };
+        const sep = url.includes("?") ? "&" : "?";
+        sc.src = url + sep + "callback=" + cb + "&_=" + Date.now();
+        document.body.appendChild(sc);
+      });
+    }
+    function apiUrl(params){
+      const u=new URL(ENDPOINT);
+      Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v));
+      u.searchParams.set("api_secret", API_SECRET);
+      return u.toString();
+    }
+    async function apiRefresh(){ return await loadJSONP(apiUrl({action:"refresh", token:TOKEN})); }
+    async function apiTouch(){ return await loadJSONP(apiUrl({action:"touch", token:TOKEN})); }
+    async function apiLogout(){ return await loadJSONP(apiUrl({action:"logout", token:TOKEN})); }
+
+    /************ idle ************/
+    function markActivity(){
+      localStorage.setItem(LAST_KEY, String(Date.now()));
+      maybeTouch();
+    }
+    function getLastActivity(){
+      const x=Number(localStorage.getItem(LAST_KEY)||"0");
+      return isFinite(x)?x:0;
+    }
+    function startIdleWatch(){
+      if(!getLastActivity()) localStorage.setItem(LAST_KEY, String(Date.now()));
+      setInterval(()=>{
+        const idle = Date.now() - getLastActivity();
+        if(idle >= IDLE_MS) lockToLogin();
+      }, 2000);
+    }
+    async function maybeTouch(){
+      const now=Date.now();
+      if(now - lastTouchSentAt < TOUCH_DEBOUNCE_MS) return;
+      lastTouchSentAt = now;
+      try{
+        const res = await apiTouch();
+        if(!res || !res.ok) lockToLogin();
+      }catch(e){}
+    }
+    function bindActivityEvents(){
+      const evs=["mousemove","keydown","wheel","touchstart","scroll","click"];
+      evs.forEach(ev=>window.addEventListener(ev, markActivity, {passive:true}));
+      document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) markActivity(); });
+    }
+
+    /************ Filters dock open/close ************/
+    let closeT=null;
+    function openDock(){ document.body.classList.add("filtersOpen"); }
+    function closeDock(){ document.body.classList.remove("filtersOpen"); }
+    edgeHotspot.addEventListener("mouseenter", ()=>{ if(closeT) clearTimeout(closeT); openDock(); });
+    filtersDock.addEventListener("mouseenter", ()=>{ if(closeT) clearTimeout(closeT); openDock(); });
+    edgeHotspot.addEventListener("mouseleave", ()=>{ closeT=setTimeout(closeDock, 220); });
+    filtersDock.addEventListener("mouseleave", ()=>{ closeT=setTimeout(closeDock, 220); });
+
+    burger.addEventListener("click", ()=>{
+      openDock();
+      mOverlay.style.display="block";
+    });
+    mOverlay.addEventListener("click", ()=>{
+      mOverlay.style.display="none";
+      closeDock();
+    });
+
+    /************ Build header (groups row1 + columns row2) ************/
+    function buildThead(){
+      // row 1: groups (merge same consecutive)
+      const grp = GROUPS.length ? GROUPS : HEADERS.map(()=> "");
+      const cells = [];
+      let i=0;
+      while(i<HEADERS.length){
+        const label = String(grp[i] || "");
+        let j=i+1;
+        while(j<HEADERS.length && String(grp[j]||"") === label) j++;
+        cells.push({label, colspan: j-i});
+        i=j;
+      }
+
+      const grpHtml = `
+        <tr class="grp">
+          ${cells.map(c=>`<th colspan="${c.colspan}">${escapeHtml(c.label)}</th>`).join("")}
+        </tr>
+      `;
+
+      const colsHtml = `
+        <tr class="cols">
+          ${HEADERS.map(h=>`<th>${escapeHtml(h)}</th>`).join("")}
+        </tr>
+      `;
+
+      thead.innerHTML = grpHtml + colsHtml;
+    }
+
+    /************ Options ************/
+    function fillSelect(selectEl, list){
+      const cur = selectEl.value || "all";
+      const base = selectEl.querySelector('option[value="all"]') ? '<option value="all">Barchasi</option>' : "";
+      selectEl.innerHTML = base + (list||[]).map(v=>`<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join("");
+      selectEl.value = (list||[]).includes(cur) ? cur : "all";
+    }
+
+    /************ Row logic ************/
+    function idx(name){ return (INDEX && name in INDEX) ? INDEX[name] : null; }
+    function cell(row, name){
+      const i = idx(name);
+      return i==null ? "" : row[i];
+    }
+
+    function isSoldRow(row){
+      const v = cell(row, "Сотилган");
+      const s = normLower(v);
+      if(s === "") return false;
+      if(["да","ha","yes","true","1","sotilgan","sold"].some(x=>s===x)) return true;
+      if(s.includes("да")) return true;
+      if(s.includes("ha")) return true;
+      return false;
+    }
+
+    function inStockRow(row){
+      // берем "Нечта колганлиги" как главный критерий
+      const q = toNum(cell(row, "Нечта колганлиги"));
+      if(q > 0) return true;
+      // fallback по сумме, если вдруг количество пусто
+      const s = toNum(cell(row, "Колган суммаси")) || toNum(cell(row, "USD колганлиги"));
+      return s > 0;
+    }
+
+    function matchQuery(row, q){
+      if(!q) return true;
+      const code = normLower(cell(row, "Коди"));
+      const art  = normLower(cell(row, "Артикул номи"));
+      return (code.includes(q) || art.includes(q));
+    }
+
+    function applyFilters(){
+      const sup = fSupplier.value;
+      const sold = fSold.value;
+      const cat = fCategory.value;
+      const sez = fSeason.value;
+      const st  = fStock.value;
+      const q   = normLower(qText.value);
+
+      const out = [];
+      for(const r of ROWS){
+        if(sup !== "all" && normStr(cell(r,"Поставщик")) !== sup) continue;
+
+        if(cat !== "all" && normStr(cell(r,"Категория")) !== cat) continue;
+        if(sez !== "all" && normStr(cell(r,"Сезон")) !== sez) continue;
+
+        if(sold === "sold" && !isSoldRow(r)) continue;
+        if(sold === "unsold" && isSoldRow(r)) continue;
+
+        const stockYes = inStockRow(r);
+        if(st === "yes" && !stockYes) continue;
+        if(st === "no" && stockYes) continue;
+
+        if(!matchQuery(r, q)) continue;
+
+        out.push(r);
+      }
+
+      renderBody(out);
+      metaEl.textContent = `Ko‘rsatildi: ${out.length.toLocaleString("ru-RU")} / ${ROWS.length.toLocaleString("ru-RU")}`;
+    }
+
+    /************ Render body (chunked) ************/
+    function makeImgUrl(u){
+      const s = normStr(u);
+      if(!s) return "";
+      // если это Google Drive share link — пробуем превратить в direct
+      const m = s.match(/\/d\/([a-zA-Z0-9_-]+)/) || s.match(/id=([a-zA-Z0-9_-]+)/);
+      if(m && m[1]) return "https://drive.google.com/uc?export=view&id=" + m[1];
+      return s;
+    }
+
+    function renderBody(list){
+      if(!list || list.length===0){
+        tbody.innerHTML = `<tr><td class="empty" colspan="${Math.max(HEADERS.length,1)}">Ma’lumot yo‘q</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = "";
+      const COL_IMG = idx("Товар расми");
+
+      let i=0;
+      const chunk = 250;
+
+      function step(){
+        const end = Math.min(i+chunk, list.length);
+        let html = "";
+        for(; i<end; i++){
+          const row = list[i];
+          html += "<tr>";
+          for(let c=0;c<HEADERS.length;c++){
+            const v = row[c];
+            if(COL_IMG!=null && c===COL_IMG){
+              const url = makeImgUrl(v);
+              html += `<td class="imgCell">${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener"><img loading="lazy" src="${escapeHtml(url)}" alt="img"></a>` : "-"}</td>`;
+            } else {
+              const txt = (v==null || v==="") ? "-" : String(v);
+              const cls = (typeof v==="number") ? "mono" : "";
+              html += `<td class="${cls}" title="${escapeHtml(txt)}">${escapeHtml(txt)}</td>`;
+            }
+          }
+          html += "</tr>";
+        }
+        tbody.insertAdjacentHTML("beforeend", html);
+        if(i < list.length) requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    /************ UI events ************/
+    function resetFilters(){
+      fSupplier.value="all";
+      fSold.value="all";
+      qText.value="";
+      fCategory.value="all";
+      fSeason.value="all";
+      fStock.value="all";
+      applyFilters();
+    }
+
+    [fSupplier,fSold,qText,fCategory,fSeason,fStock].forEach(el=>{
+      el.addEventListener(el.tagName==="INPUT" ? "input" : "change", ()=>{ markActivity(); applyFilters(); });
+    });
+    btnReset.addEventListener("click", ()=>{ markActivity(); resetFilters(); });
+
+    btnReload.addEventListener("click", async ()=>{
+      markActivity();
+      setStatus("", "Yangilanmoqda...", true);
+      btnReload.disabled=true;
+      try{
+        const res = await apiRefresh();
+        if(!res || !res.ok) return lockToLogin();
+        setData(res);
+        setStatus("ok","Tayyor");
+      }catch(e){
+        setStatus("err","Xatolik");
+      }finally{
+        btnReload.disabled=false;
+      }
+    });
+
+    btnLogout.addEventListener("click", async ()=>{
+      try{ await apiLogout(); }catch(e){}
+      lockToLogin();
+    });
+
+    function setData(res){
+      GROUPS  = res.groupHeaders || [];
+      HEADERS = res.headers || [];
+      ROWS    = res.rows || [];
+      INDEX   = res.index || {};
+      OPTIONS = res.options || OPTIONS;
+
+      if(res.user){
+        USER = res.user;
+        localStorage.setItem(USER_KEY, JSON.stringify(USER));
+      }
+      userPill.textContent = `👤 ${USER?.login || "-"}`;
+
+      fillSelect(fSupplier, OPTIONS.suppliers);
+      fillSelect(fCategory, OPTIONS.categories);
+      fillSelect(fSeason, OPTIONS.seasons);
+
+      buildThead();
+      applyFilters();
+    }
+
+    /************ BOOT ************/
+    (async function boot(){
+      bindActivityEvents();
+      startIdleWatch();
+
+      setStatus("", "Yuklanmoqda...", true);
+      try{
+        const res = await apiRefresh();
+        if(!res || !res.ok) return lockToLogin();
+        setData(res);
+        setStatus("ok","Tayyor");
+        if(!localStorage.getItem(LAST_KEY)) localStorage.setItem(LAST_KEY, String(Date.now()));
+      }catch(e){
+        lockToLogin();
+      }
+    })();
+  </script>
+</body>
+</html>

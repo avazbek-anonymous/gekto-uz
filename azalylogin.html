@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>G-SOFT—Login</title>
+  <style>
+    :root{
+      --bg:#07121b; --card:rgba(255,255,255,.06); --line:rgba(255,255,255,.10);
+      --text:rgba(255,255,255,.92); --muted:rgba(255,255,255,.65);
+      --ok:#10b981; --bad:#f16262; --shadow:0 10px 30px rgba(0,0,0,.25);
+      --r:16px; --gap:12px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; display:grid; place-items:center; padding:16px;
+      background:
+        radial-gradient(1000px 520px at 18% 12%, rgba(16,185,129,.18), transparent 60%),
+        radial-gradient(900px 520px at 88% 38%, rgba(59,130,246,.14), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+    .card{
+      width:min(420px,100%);
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .logo{
+      width:38px;height:38px;border-radius:14px;
+      background:rgba(16,185,129,.18);border:1px solid rgba(16,185,129,.30);
+      display:grid;place-items:center;font-weight:1000;color:rgba(16,185,129,.95);
+    }
+    .title{font-weight:1000}
+    .muted{color:var(--muted);font-size:12px}
+    .field{
+      margin-top:10px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      border-radius:12px;
+      padding:10px 12px;
+      display:flex;flex-direction:column;gap:6px;
+    }
+    label{font-size:12px;color:var(--muted)}
+    input{
+      border:0;outline:none;background:transparent;color:var(--text);
+      font-size:16px;
+    }
+    .row{display:flex;gap:10px;margin-top:12px}
+    .btn{
+      flex:1;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:1000;
+      cursor:pointer;
+    }
+    .btn.primary{background:var(--ok);color:#062a1b;border-color:rgba(16,185,129,.35)}
+    .pill{
+      margin-top:12px;
+      display:flex;align-items:center;gap:10px;
+      padding:9px 12px;border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);font-size:13px;
+    }
+    .pill.ok{color:rgba(16,185,129,.95);border-color:rgba(16,185,129,.30);background:rgba(16,185,129,.10)}
+    .pill.err{color:rgba(241,98,98,.95);border-color:rgba(241,98,98,.28);background:rgba(241,98,98,.10)}
+    .spinner{
+      width:16px;height:16px;border-radius:50%;
+      border:2px solid rgba(255,255,255,.18);
+      border-top-color:rgba(255,255,255,.75);
+      animation:spin .8s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <div class="logo">G</div>
+      <div>
+        <div class="title">G-SOFT | Azaly</div>
+        <div class="muted">Kirish</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Login</label>
+      <input id="login" autocomplete="username" placeholder="login"/>
+    </div>
+
+    <div class="field">
+      <label>Parol</label>
+      <input id="pass" type="password" autocomplete="current-password" placeholder="password"/>
+    </div>
+
+    <div class="row">
+      <button id="btnIn" class="btn primary">Kirish</button>
+      <button id="btnClr" class="btn">Tozalash</button>
+    </div>
+
+    <div id="msg" class="pill"><span class="muted">Login kiriting</span></div>
+  </div>
+
+  <script>
+    /************ CONFIG ************/
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbxrHIGjRjAv15oNbT2L8cUnqAP-Tf6AprWRLmv1pu9YxpC6IhbkwMt1rRHuJwRqXW_g-g/exec";
+    const API_SECRET = "Azaly2025";
+
+    const HOME_URL = "/azaly.html";
+    const TOKEN_KEY = "azaly_token";
+    const USER_KEY  = "azaly_user";
+    const LAST_KEY  = "azaly_lastActivity";
+
+    // ТУТ ЗАДАЁШЬ ДОСТУПЫ:
+    const USERS = [
+      { login: "Azaly", pass: "123" },
+      // { login: "user", pass: "pass" },
+    ];
+
+    /************ helpers ************/
+    const $ = (id)=>document.getElementById(id);
+    const msg = $("msg");
+    function setMsg(type, text, loading=false){
+      msg.className = "pill";
+      msg.innerHTML = (loading?'<span class="spinner"></span>':'') + `<span>${escapeHtml(text)}</span>`;
+      if(type==="ok") msg.classList.add("ok");
+      if(type==="err") msg.classList.add("err");
+    }
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    }
+    function loadJSONP(url){
+      return new Promise((resolve,reject)=>{
+        const cb="__az_cb_"+Math.random().toString(36).slice(2);
+        const sc=document.createElement("script");
+        window[cb]=(data)=>{ cleanup(); resolve(data); };
+        function cleanup(){ try{delete window[cb];}catch(e){window[cb]=undefined;} sc.remove(); }
+        sc.onerror=()=>{ cleanup(); reject(new Error("jsonp error")); };
+        const sep = url.includes("?") ? "&" : "?";
+        sc.src = url + sep + "callback=" + cb + "&_=" + Date.now();
+        document.body.appendChild(sc);
+      });
+    }
+    function apiUrl(params){
+      const u=new URL(ENDPOINT);
+      Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v));
+      u.searchParams.set("api_secret", API_SECRET);
+      return u.toString();
+    }
+    async function apiLogin(login){
+      return await loadJSONP(apiUrl({action:"login", login}));
+    }
+
+    function clearAll(){
+      $( "login").value="";
+      $( "pass").value="";
+      setMsg("", "Login kiriting");
+    }
+
+    $("btnClr").onclick = clearAll;
+
+    $("btnIn").onclick = async ()=>{
+      const login = $("login").value.trim();
+      const pass  = $("pass").value;
+
+      const ok = USERS.some(u => u.login === login && u.pass === pass);
+      if(!ok) return setMsg("err","Login yoki parol xato");
+
+      setMsg("", "Tekshirilmoqda...", true);
+      try{
+        const res = await apiLogin(login);
+        if(!res || !res.ok || !res.token) return setMsg("err","Server xatolik");
+
+        localStorage.setItem(TOKEN_KEY, res.token);
+        localStorage.setItem(USER_KEY, JSON.stringify(res.user || {login}));
+        localStorage.setItem(LAST_KEY, String(Date.now()));
+
+        setMsg("ok","OK");
+        location.replace(HOME_URL);
+      }catch(e){
+        setMsg("err","Ulanish xatolik");
+      }
+    };
+
+    // если уже есть токен — сразу на главную
+    if(localStorage.getItem(TOKEN_KEY)){
+      location.replace(HOME_URL);
+    }
+  </script>
+</body>
+</html>
