@@ -1411,42 +1411,54 @@
 
         /************ NAV ************/
         const NAV_ITEMS = [{
+                type: "link",
                 key: "home",
-                label: "Главная",
+                label: "Asosiy",
                 href: "/bpsmain",
                 icon: homeIcon()
             },
+
             {
-                key: "kassa",
-                label: "Касса",
-                href: "/bpskassa",
-                icon: cashIcon()
+                type: "group",
+                key: "reports",
+                label: "Hisobotlar",
+                icon: reportIcon(),
+                children: [{
+                        key: "kassa",
+                        label: "Kassa",
+                        href: "/bpskassa",
+                        icon: cashIcon()
+                    },
+                    {
+                        key: "prod",
+                        label: "Ishlab chiqarish",
+                        href: "/bpsprod",
+                        icon: factoryIcon()
+                    },
+                    {
+                        key: "sale",
+                        label: "Sotuv",
+                        href: "/bpssale",
+                        icon: saleIcon()
+                    },
+                    {
+                        key: "stock",
+                        label: "Ombor",
+                        href: "/bpsstock",
+                        icon: boxIcon()
+                    },
+                ]
             },
+
             {
-                key: "prod",
-                label: "Производство",
-                href: "/bpsprod",
-                icon: factoryIcon()
-            },
-            {
-                key: "sale",
-                label: "Продажа",
-                href: "/bpssale",
-                icon: saleIcon()
-            },
-            {
-                key: "stock",
-                label: "Склад",
-                href: "/bpsstock",
-                icon: boxIcon()
-            },
-            {
+                type: "link",
                 key: "users",
-                label: "Пользователи",
+                label: "Foydalanuvchilar",
                 href: "/bpsusers",
                 icon: usersIcon()
             },
         ];
+
 
         function currentKeyFromPath() {
             const p = (location.pathname || "").toLowerCase();
@@ -1464,17 +1476,62 @@
             const nav = document.getElementById("nav");
             const mNav = document.getElementById("mNav");
 
-            nav.innerHTML = NAV_ITEMS.map(i => `
-        <a class="navItem ${i.key===activeKey ? "active":""}" href="${i.href}">
-          <span class="navIcon">${i.icon}</span>
-          <span class="navText">${escapeHtml(i.label)}</span>
-        </a>
-      `).join("");
+            const groupHasActive = (g) => (g.children || []).some(ch => ch.key === activeKey);
 
-            mNav.innerHTML = NAV_ITEMS.map(i => `
-        <a class="${i.key===activeKey ? "active":""}" href="${i.href}">${escapeHtml(i.label)}</a>
-      `).join("");
+            nav.innerHTML = NAV_ITEMS.map(item => {
+                if (item.type === "group") {
+                    const isActiveGroup = groupHasActive(item);
+
+                    return `
+        <div class="navGroup open">
+          <div class="navItem navGroupHead ${isActiveGroup ? "active" : ""}">
+            <span class="navIcon">${item.icon || ""}</span>
+            <span class="navText">${escapeHtml(item.label)}</span>
+            <span class="navChevron">▾</span>
+          </div>
+
+          <div class="navGroupBody">
+            ${(item.children || []).map(ch => `
+              <a class="navItem navChild ${ch.key===activeKey ? "active":""}" href="${ch.href}">
+                <span class="navIcon">${ch.icon}</span>
+                <span class="navText">${escapeHtml(ch.label)}</span>
+              </a>
+            `).join("")}
+          </div>
+        </div>
+      `;
+                }
+
+                // обычная ссылка
+                return `
+      <a class="navItem ${item.key===activeKey ? "active":""}" href="${item.href}">
+        <span class="navIcon">${item.icon}</span>
+        <span class="navText">${escapeHtml(item.label)}</span>
+      </a>
+    `;
+            }).join("");
+
+            // Mobile menu
+            mNav.innerHTML = NAV_ITEMS.map(item => {
+                if (item.type === "group") {
+                    return `
+        <div class="mGroup">
+          <div class="mGroupTitle">${escapeHtml(item.label)}</div>
+          ${(item.children || []).map(ch => `
+            <a class="${ch.key===activeKey ? "active":""}" href="${ch.href}">${escapeHtml(ch.label)}</a>
+          `).join("")}
+        </div>
+      `;
+                }
+                return `<a class="${item.key===activeKey ? "active":""}" href="${item.href}">${escapeHtml(item.label)}</a>`;
+            }).join("");
+
+            // (по желанию) сворачивание/разворачивание по клику
+            document.querySelectorAll(".navGroupHead").forEach(h => {
+                h.onclick = () => h.parentElement.classList.toggle("open");
+            });
         }
+
 
         /************ STATE ************/
         let TOKEN = localStorage.getItem("bps_token") || "";
