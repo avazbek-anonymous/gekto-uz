@@ -384,6 +384,11 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
+            overflow: auto;
+            padding-right: 2px;
+            min-height: 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, .22) transparent;
         }
 
         .filtersGrid .full {
@@ -802,7 +807,7 @@
 
             /* Хедер: аккуратно, без наложений */
             .topHeader {
-                position: sticky;
+                position: relative;
                 top: 0;
                 z-index: 999;
 
@@ -867,6 +872,8 @@
                 grid-template-columns: 1fr;
                 gap: 10px;
                 align-content: start;
+                display: flex;
+                flex-direction: column;
             }
 
             .balancesCard,
