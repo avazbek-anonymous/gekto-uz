@@ -137,6 +137,39 @@
             color: rgba(255, 255, 255, .95);
         }
 
+        .navGroupBody {
+            display: none;
+        }
+
+        .navGroup.open .navGroupBody {
+            display: block;
+        }
+
+        .navGroupHead {
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .navChevron {
+            margin-left: auto;
+            opacity: 0;
+            transition: transform .2s ease, opacity .2s ease;
+        }
+
+        .sidebar:hover .navChevron {
+            opacity: .65;
+        }
+
+        .navGroup.open .navChevron {
+            transform: rotate(180deg);
+        }
+
+        /* дети: отступ виден только когда sidebar раскрыт */
+        .sidebar:hover .navChild {
+            padding-left: 28px;
+        }
+
+
         .navIcon {
             width: 22px;
             height: 22px;
@@ -2043,6 +2076,11 @@
         function homeIcon() {
             return svgIcon("M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-10.5z");
         }
+
+        function reportIcon() {
+            return svgIcon("M4 20V10M10 20V4M16 20v-8M22 20v-12");
+        }
+
 
         function cashIcon() {
             return svgIcon("M4 7h16v10H4V7zm3 3h4m6 0h2m-2 4h2M8 14h2");
