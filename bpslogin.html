@@ -136,7 +136,6 @@
      const ENDPOINT  = "https://script.google.com/macros/s/AKfycbyZD2z3CcNpQhGFh-e_Qfmhu91B7imqNKQ0dr2Gm4_V2KzTlvNEJMpRYnjOAfu_CCwiQg/exec";
     const API_SECRET = "bpsSecret123"; // если включил в Apps Script — пропиши
     const LOGIN_URL = "/bpslogin"; // текущая страница
-    const KASSA_URL = "/bpskassa"; // куда переходим после логина
 
     /************ JSONP ************/
     function loadJSONP(url){
@@ -193,7 +192,7 @@
       try{
         const res = await loadJSONP(apiUrl({ action:"refresh", token:t }));
         if (res && res.ok){
-          location.replace(KASSA_URL);
+          location.replace("/bps");
         }else{
           clearSession();
         }
@@ -225,7 +224,7 @@
         localStorage.setItem("bps_lastActivity", String(Date.now())); // старт активности
 
         setMsg("ok","Qabul qilindi! O‘tilmoqda...");
-        location.replace(KASSA_URL);
+        location.replace("/bps");
       }catch(e){
         setMsg("err","Xatolik: serverga ulanib bo‘lmadi");
       }finally{
