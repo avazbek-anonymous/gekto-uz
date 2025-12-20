@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>G-SOFT | Managment</title>
+
+  <style>
+    /* ===== THEME TOKENS ===== */
+    :root{
+      --r:18px;
+      --gap:12px;
+      --shadow:0 18px 55px rgba(0,0,0,.35);
+
+      /* dark default */
+      --bg:#061a14;
+      --bg2:#0b2b23;
+      --card:rgba(255,255,255,.07);
+      --line:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.65);
+      --brand:#ffd15c;
+      --ok:#10b981;
+      --bad:#f16262;
+      --chip:rgba(0,0,0,.18);
+      --input:rgba(0,0,0,.18);
+    }
+
+    [data-theme="light"]{
+      --bg:#f6f8fb;
+      --bg2:#eef2f7;
+      --card:rgba(255,255,255,.85);
+      --line:rgba(9,20,30,.10);
+      --text:rgba(9,20,30,.92);
+      --muted:rgba(9,20,30,.60);
+      --brand:#0ea5e9;
+      --chip:rgba(14,165,233,.08);
+      --input:rgba(9,20,30,.05);
+      --shadow:0 18px 55px rgba(9,20,30,.12);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1000px 520px at 20% 20%, rgba(255,209,92,.14), transparent 60%),
+        radial-gradient(1000px 520px at 85% 35%, rgba(16,185,129,.14), transparent 55%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
+      overflow:hidden;
+    }
+
+    /* ===== LAYOUT ===== */
+    .shell{height:100vh;display:flex;min-height:0}
+    .sidebar{
+      width:74px;
+      transition:width .22s ease;
+      border-right:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      backdrop-filter: blur(12px);
+      padding:12px 10px;
+      display:flex;flex-direction:column;gap:10px;
+      min-height:0;
+    }
+    .sidebar:hover{width:260px}
+
+    .brand{
+      display:flex;align-items:center;gap:10px;
+      padding:10px;border-radius:16px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+    }
+    .logo{
+      width:38px;height:38px;border-radius:14px;
+      display:grid;place-items:center;
+      font-weight:1000;color:var(--brand);
+      background:rgba(255,209,92,.16);
+      border:1px solid rgba(255,209,92,.25);
+      flex:0 0 38px;
+    }
+    [data-theme="light"] .logo{
+      background:rgba(14,165,233,.14);
+      border-color:rgba(14,165,233,.22);
+    }
+    .brandText{
+      font-weight:1000;letter-spacing:.2px;
+      white-space:nowrap;overflow:hidden;
+      opacity:0;transform:translateX(-4px);
+      transition:opacity .16s ease, transform .16s ease;
+    }
+    .sidebar:hover .brandText{opacity:1;transform:translateX(0)}
+
+    .nav{display:flex;flex-direction:column;gap:6px;padding-top:6px}
+    .nav a{
+      display:flex;align-items:center;gap:10px;
+      padding:10px;border-radius:16px;
+      text-decoration:none;color:var(--text);
+      border:1px solid transparent;
+    }
+    .nav a:hover{background:rgba(255,255,255,.06);border-color:var(--line)}
+    .nav a.active{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.28)}
+    [data-theme="light"] .nav a.active{background:rgba(14,165,233,.12);border-color:rgba(14,165,233,.24)}
+
+    .ico{width:22px;height:22px;display:grid;place-items:center;flex:0 0 22px}
+    .txt{
+      white-space:nowrap;overflow:hidden;
+      opacity:0;transform:translateX(-4px);
+      transition:opacity .16s ease, transform .16s ease;
+    }
+    .sidebar:hover .txt{opacity:1;transform:translateX(0)}
+
+    .main{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      backdrop-filter: blur(12px);
+    }
+    .hdrLeft{min-width:0}
+    .hdrTitle{font-weight:1000;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hdrSub{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    .hdrRight{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .pill{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:9px 12px;border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--muted);font-size:13px;white-space:nowrap;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:9px 12px;border-radius:14px;
+      font-weight:900;cursor:pointer;
+    }
+    .btn.danger{background:rgba(241,98,98,.14);border-color:rgba(241,98,98,.24)}
+    .btn.primary{background:rgba(255,209,92,.90);border-color:rgba(255,209,92,.28);color:#062018}
+    [data-theme="light"] .btn.primary{background:rgba(14,165,233,.92);border-color:rgba(14,165,233,.25);color:#061a14}
+
+    .content{
+      flex:1;min-height:0;
+      padding:var(--gap);
+      overflow:auto;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(12px);
+      padding:14px;
+    }
+    .cardTitleRow{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin-bottom:10px;
+    }
+    .cardTitle{font-weight:1000}
+    .muted{color:var(--muted);font-size:12px}
+
+    /* ===== THEME TOGGLE (SUN/MOON) ===== */
+    .themeBtn{
+      width:44px;height:40px;border-radius:14px;
+      display:grid;place-items:center;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+    }
+    .themeIcon{
+      width:22px;height:22px;
+      transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .25s ease;
+    }
+    .themeBtn .sun{opacity:0;transform:translateY(10px) rotate(25deg) scale(.8)}
+    .themeBtn .moon{opacity:1;transform:translateY(0) rotate(0) scale(1)}
+
+    [data-theme="light"] .themeBtn .sun{opacity:1;transform:translateY(0) rotate(0) scale(1)}
+    [data-theme="light"] .themeBtn .moon{opacity:0;transform:translateY(-10px) rotate(-25deg) scale(.8)}
+
+    .themeBtn::after{
+      content:"";
+      position:absolute;inset:-40px;
+      background: radial-gradient(220px 140px at 20% 20%, rgba(255,255,255,.18), transparent 60%);
+      opacity:.35;
+      transform: rotate(0deg);
+      transition: transform .6s ease;
+      pointer-events:none;
+    }
+    [data-theme="light"] .themeBtn::after{transform: rotate(180deg); opacity:.25;}
+
+    /* ===== USERS TABLE ===== */
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .spacer{flex:1}
+
+    table{width:100%;border-collapse:collapse}
+    th,td{
+      text-align:left;
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      font-size:13px;
+      vertical-align:middle;
+      white-space:nowrap;
+    }
+    [data-theme="light"] th,[data-theme="light"] td{border-bottom:1px solid rgba(9,20,30,.08)}
+    th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.3px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid var(--line);
+      background:var(--chip);
+      font-weight:900;
+      font-size:12px;
+      color:var(--text);
+    }
+
+    .iconBtn{
+      width:38px;height:34px;border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      cursor:pointer;
+    }
+    .iconBtn:hover{background:rgba(255,255,255,.08)}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+
+    /* ===== MODAL ===== */
+    .overlay{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.45);
+      display:none;
+      align-items:center;justify-content:center;
+      padding:14px;
+      z-index:999;
+      backdrop-filter: blur(6px);
+    }
+    .overlay.open{display:flex}
+    .modal{
+      width:min(520px,100%);
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:14px;
+    }
+    .modalHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .modalTitle{font-weight:1000}
+    .xBtn{
+      width:38px;height:34px;border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      cursor:pointer;
+      color:var(--text);
+    }
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .grid1{display:grid;grid-template-columns:1fr;gap:10px}
+    .f label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+    .f input,.f select{
+      width:100%;
+      padding:12px 12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background:var(--input);
+      color:var(--text);
+      outline:none;
+    }
+    .f input:focus,.f select:focus{border-color:rgba(255,209,92,.45)}
+    [data-theme="light"] .f input:focus,[data-theme="light"] .f select:focus{border-color:rgba(14,165,233,.45)}
+
+    .modalActions{display:flex;gap:10px;margin-top:12px}
+    .modalActions .btn{flex:1}
+
+    /* ===== MOBILE ===== */
+    .burger{display:none}
+    @media (max-width: 980px){
+      body{overflow:auto}
+      .shell{height:auto;min-height:100vh;display:block}
+      .sidebar{display:none}
+      .burger{display:inline-flex}
+      .topbar{position:sticky;top:0;z-index:10}
+      th,td{white-space:normal}
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">G</div>
+        <div class="brandText">G-SOFT</div>
+      </div>
+
+      <nav class="nav">
+        <a href="#/tasks" data-route="tasks"><span class="ico">🧩</span><span class="txt">Vazifalar</span></a>
+        <a href="#/projects" data-route="projects"><span class="ico">📌</span><span class="txt">Loyihalar</span></a>
+        <a href="#/users" data-route="users"><span class="ico">👥</span><span class="txt">Foydalanuvchilar</span></a>
+      </nav>
+      <div class="muted" style="margin-top:auto;padding:6px 10px;">G-SOFT</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="hdrLeft">
+          <div id="hdrTitle" class="hdrTitle">—</div>
+          <div id="hdrSub" class="hdrSub">—</div>
+        </div>
+
+        <div class="hdrRight">
+          <span id="userPill" class="pill">👤 -</span>
+          <span id="clock" class="pill">--:--:--</span>
+
+          <button id="themeBtn" class="themeBtn" title="Theme">
+            <!-- moon -->
+            <svg class="themeIcon moon" viewBox="0 0 24 24" fill="none">
+              <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7.5 7.5 0 1 0 21 14.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <!-- sun -->
+            <svg class="themeIcon sun" viewBox="0 0 24 24" fill="none">
+              <path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+
+          <button id="btnLogout" class="btn danger">Chiqish</button>
+        </div>
+      </header>
+
+      <section class="content">
+        <div id="page"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL -->
+  <div id="overlay" class="overlay" aria-hidden="true">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modalHead">
+        <div id="modalTitle" class="modalTitle">—</div>
+        <button class="xBtn" id="modalClose">✕</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+<script>
+  /************ CONFIG ************/
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbyGW5vwkyYWmsbSP2_wHFMBoSjJcYLGz7r0gR-R-e5al-efv1hchZIYKCxc5HxG0gvR/exec";
+  const API_SECRET = "Gekto2022@";
+  const LOGIN_URL = "./login.html";
+  const IDLE_MS = 3 * 60 * 1000;
+  const TOUCH_DEBOUNCE_MS = 25000;
+
+  /************ SESSION ************/
+  let TOKEN = localStorage.getItem("gsoft_token") || "";
+  let USER  = safeParse(localStorage.getItem("gsoft_user")) || null;
+  let EXP   = Number(localStorage.getItem("gsoft_exp") || "0");
+  let lastTouch = 0;
+
+  function isExpired(){ return !TOKEN || !EXP || Date.now() > EXP; }
+  function lockToLogin(){
+    localStorage.removeItem("gsoft_token");
+    localStorage.removeItem("gsoft_user");
+    localStorage.removeItem("gsoft_exp");
+    localStorage.removeItem("gsoft_last");
+    location.replace(LOGIN_URL);
+  }
+  if (isExpired()) lockToLogin();
+
+  /************ JSONP API ************/
+  function jsonp(params){
+    return new Promise((resolve,reject)=>{
+      const cb = "__cb_" + Math.random().toString(36).slice(2);
+      params.callback = cb;
+
+      const u = new URL(ENDPOINT);
+      Object.entries(params).forEach(([k,v])=>u.searchParams.set(k, v));
+
+      const s = document.createElement("script");
+      window[cb] = (data)=>{ cleanup(); resolve(data); };
+      function cleanup(){
+        try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
+        s.remove();
+      }
+      s.onerror = ()=>{ cleanup(); reject(new Error("JSONP_ERROR")); };
+      s.src = u.toString();
+      document.body.appendChild(s);
+    });
+  }
+
+  async function api(action, extra={}){
+    const res = await jsonp(Object.assign({
+      action,
+      api_secret: API_SECRET,
+      token: TOKEN
+    }, extra));
+
+    // token expired
+    if(!res || res.ok === false){
+      const err = res?.error || "";
+      if(err === "TOKEN_EXPIRED" || err === "TOKEN_REQUIRED" || err === "USER_INACTIVE"){
+        lockToLogin();
+      }
+    }
+    // refresh client exp after successful calls
+    if(res && res.ok && res.ttlSec){
+      EXP = Date.now() + res.ttlSec * 1000;
+      localStorage.setItem("gsoft_exp", String(EXP));
+      if(res.user){
+        USER = res.user;
+        localStorage.setItem("gsoft_user", JSON.stringify(USER));
+      }
+    }
+    return res;
+  }
+
+  async function touch(){
+    const now = Date.now();
+    if(now - lastTouch < TOUCH_DEBOUNCE_MS) return;
+    lastTouch = now;
+    try{ await api("touch"); }catch(e){}
+  }
+
+  /************ IDLE WATCH ************/
+  function markActivity(){
+    localStorage.setItem("gsoft_last", String(Date.now()));
+    touch();
+  }
+  function startIdle(){
+    if(!localStorage.getItem("gsoft_last")) localStorage.setItem("gsoft_last", String(Date.now()));
+    setInterval(()=>{
+      const last = Number(localStorage.getItem("gsoft_last") || "0");
+      if(last && (Date.now() - last >= IDLE_MS)) lockToLogin();
+    }, 2000);
+  }
+  ["mousemove","keydown","wheel","touchstart","scroll","click"].forEach(ev=>{
+    window.addEventListener(ev, markActivity, {passive:true});
+  });
+  document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) markActivity(); });
+
+  /************ THEME ************/
+  const root = document.documentElement;
+  function loadTheme(){
+    const t = localStorage.getItem("gsoft_theme") || "dark";
+    root.setAttribute("data-theme", t);
+  }
+  function toggleTheme(){
+    const cur = root.getAttribute("data-theme") || "dark";
+    const next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    localStorage.setItem("gsoft_theme", next);
+  }
+  loadTheme();
+  document.getElementById("themeBtn").addEventListener("click", ()=>{ markActivity(); toggleTheme(); });
+
+  /************ TOPBAR ************/
+  function pad(n){ return String(n).padStart(2,"0"); }
+  function tick(){
+    const d = new Date();
+    document.getElementById("clock").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  setInterval(tick, 1000); tick();
+
+  const userPill = document.getElementById("userPill");
+  userPill.textContent = `👤 ${USER?.ism || USER?.login || "-" } • ${USER?.rol || "-"}`;
+
+  document.getElementById("btnLogout").addEventListener("click", async ()=>{
+    try{ await api("logout"); }catch(e){}
+    lockToLogin();
+  });
+
+  /************ ROUTER (HASH SPA) ************/
+  const hdrTitle = document.getElementById("hdrTitle");
+  const hdrSub = document.getElementById("hdrSub");
+  const page = document.getElementById("page");
+
+  const Routes = {
+    tasks: { title:"Vazifalar", sub:"Kanban (Stage 2)", render: renderTasksStub },
+    projects: { title:"Loyihalar", sub:"Projects board (Stage 2)", render: renderProjectsStub },
+    users: { title:"Foydalanuvchilar", sub:"Users & roles", render: renderUsers },
+  };
+
+  function currentRoute(){
+    const h = location.hash || "#/users";
+    const m = h.match(/^#\/([a-z]+)/i);
+    return (m && m[1]) ? m[1].toLowerCase() : "users";
+  }
+
+  function setActiveNav(){
+    const r = currentRoute();
+    document.querySelectorAll(".nav a").forEach(a=>{
+      a.classList.toggle("active", a.dataset.route === r);
+    });
+  }
+
+  function render(){
+    const r = currentRoute();
+    const route = Routes[r] || Routes.users;
+    hdrTitle.textContent = route.title;
+    hdrSub.textContent = route.sub;
+
+    setActiveNav();
+    route.render();
+  }
+
+  window.addEventListener("hashchange", render);
+
+  if(!location.hash) location.hash = "#/users";
+  render();
+
+  /************ MODAL ************/
+  const overlay = document.getElementById("overlay");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalBody = document.getElementById("modalBody");
+  const modalClose = document.getElementById("modalClose");
+  overlay.addEventListener("click", closeModal);
+  modalClose.addEventListener("click", closeModal);
+
+  function openModal(title, html){
+    modalTitle.textContent = title;
+    modalBody.innerHTML = html;
+    overlay.classList.add("open");
+    overlay.setAttribute("aria-hidden","false");
+  }
+  function closeModal(){
+    overlay.classList.remove("open");
+    overlay.setAttribute("aria-hidden","true");
+    modalBody.innerHTML = "";
+  }
+
+  /************ USERS PAGE (Stage 1) ************/
+  let USERS_CACHE = [];
+
+  function isAdmin(){
+    return String(USER?.rol || "").toLowerCase() === "admin";
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  function roleChip(role){
+    const r = String(role||"").toLowerCase();
+    const label = r === "admin" ? "admin" : (r === "pm" ? "pm" : "fin");
+    return `<span class="chip">${label}</span>`;
+  }
+
+  function mask(p){
+    if(!p) return "";
+    const s = String(p);
+    if(s.length <= 2) return "••";
+    return "•".repeat(Math.min(10, s.length));
+  }
+
+  async function renderUsers(){
+    // gate
+    if(!isAdmin()){
+      page.innerHTML = `
+        <div class="card">
+          <div class="cardTitleRow">
+            <div class="cardTitle">Foydalanuvchilar</div>
+            <span class="muted">Faqat admin ko‘ra oladi</span>
+          </div>
+          <div class="muted">Sizda bu sahifaga ruxsat yo‘q.</div>
+        </div>
+      `;
+      return;
+    }
+
+    page.innerHTML = `
+      <div class="card">
+        <div class="cardTitleRow">
+          <div class="cardTitle">Foydalanuvchilar</div>
+          <div class="toolbar">
+            <span class="muted">admin / pm / fin</span>
+            <span class="spacer"></span>
+            <button class="btn primary" id="btnAddUser">+ Qo‘shish</button>
+            <button class="btn" id="btnReloadUsers">Yangilash</button>
+          </div>
+        </div>
+
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Ism</th>
+                <th>Login</th>
+                <th>Parol</th>
+                <th>Rol</th>
+                <th>Active</th>
+                <th style="width:90px">Edit</th>
+              </tr>
+            </thead>
+            <tbody id="uBody">
+              <tr><td colspan="6" class="muted">Yuklanmoqda...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("btnAddUser").onclick = ()=>{ markActivity(); openUserModal(); };
+    document.getElementById("btnReloadUsers").onclick = async ()=>{ markActivity(); await loadUsers(true); };
+
+    await loadUsers();
+  }
+
+  async function loadUsers(force=false){
+    if(!force && USERS_CACHE.length){
+      drawUsers();
+      return;
+    }
+    const res = await api("users_list");
+    if(!res || !res.ok){
+      page.querySelector("#uBody").innerHTML = `<tr><td colspan="6" class="muted">Xatolik: ${escapeHtml(res?.error||"")}</td></tr>`;
+      return;
+    }
+    USERS_CACHE = res.users || [];
+    drawUsers();
+  }
+
+  function drawUsers(){
+    const body = document.getElementById("uBody");
+    if(!body) return;
+
+    if(!USERS_CACHE.length){
+      body.innerHTML = `<tr><td colspan="6" class="muted">Foydalanuvchi yo‘q</td></tr>`;
+      return;
+    }
+
+    body.innerHTML = USERS_CACHE.map(u=>`
+      <tr>
+        <td><b>${escapeHtml(u.ism || "")}</b></td>
+        <td class="mono">${escapeHtml(u.login || "")}</td>
+        <td class="mono" title="${escapeHtml(u.parol||"")}">${escapeHtml(mask(u.parol))}</td>
+        <td>${roleChip(u.rol)}</td>
+        <td>${u.active ? "✅" : "⛔"}</td>
+        <td>
+          <button class="iconBtn" data-edit="${escapeHtml(u.id)}" title="Edit">✏️</button>
+        </td>
+      </tr>
+    `).join("");
+
+    body.querySelectorAll("[data-edit]").forEach(btn=>{
+      btn.onclick = ()=>{
+        markActivity();
+        const id = btn.getAttribute("data-edit");
+        const u = USERS_CACHE.find(x=>String(x.id)===String(id));
+        openUserModal(u);
+      };
+    });
+  }
+
+  function openUserModal(user=null){
+    const isEdit = !!user;
+    openModal(isEdit ? "Edit user" : "Add user", `
+      <div class="grid">
+        <div class="f">
+          <label>Ism</label>
+          <input id="fIsm" value="${escapeHtml(user?.ism||"")}" />
+        </div>
+        <div class="f">
+          <label>Rol</label>
+          <select id="fRol">
+            <option value="admin" ${String(user?.rol||"")==="admin"?"selected":""}>admin</option>
+            <option value="pm" ${String(user?.rol||"")==="pm"?"selected":""}>pm</option>
+            <option value="fin" ${String(user?.rol||"")==="fin"?"selected":""}>fin</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f">
+          <label>Login</label>
+          <input id="fLogin" value="${escapeHtml(user?.login||"")}" />
+        </div>
+        <div class="f">
+          <label>Parol ${isEdit ? '(bo‘sh qoldirsang o‘zgarmaydi)' : ''}</label>
+          <input id="fParol" type="password" value="" />
+        </div>
+      </div>
+
+      <div class="grid1" style="margin-top:10px;">
+        <div class="f">
+          <label>Active</label>
+          <select id="fActive">
+            <option value="true" ${user?.active !== false ? "selected":""}>true</option>
+            <option value="false" ${user?.active === false ? "selected":""}>false</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="fMsg" class="muted" style="margin-top:10px;min-height:18px"></div>
+
+      <div class="modalActions">
+        <button class="btn" id="btnCancel">Bekor</button>
+        <button class="btn primary" id="btnSave">Saqlash</button>
+      </div>
+    `);
+
+    document.getElementById("btnCancel").onclick = ()=>{ markActivity(); closeModal(); };
+    document.getElementById("btnSave").onclick = async ()=>{
+      markActivity();
+      const ism = document.getElementById("fIsm").value.trim();
+      const login = document.getElementById("fLogin").value.trim();
+      const rol = document.getElementById("fRol").value.trim();
+      const parol = document.getElementById("fParol").value.trim();
+      const active = document.getElementById("fActive").value === "true";
+
+      const msg = document.getElementById("fMsg");
+      msg.textContent = "";
+      if(!ism || !login || !rol){
+        msg.textContent = "ism/login/rol shart";
+        return;
+      }
+      if(!isEdit && !parol){
+        msg.textContent = "Yangi user uchun parol shart";
+        return;
+      }
+
+      const payload = {
+        id: user?.id || "",
+        ism, login, rol, active,
+        parol: parol // empty allowed for edit
+      };
+
+      const res = await api("users_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
+      if(!res || !res.ok){
+        msg.textContent = "Xatolik: " + (res?.error || "");
+        return;
+      }
+
+      // refresh list
+      await loadUsers(true);
+      closeModal();
+    };
+  }
+
+  /************ STUB PAGES (Stage 2) ************/
+  function renderTasksStub(){
+    page.innerHTML = `
+      <div class="card">
+        <div class="cardTitleRow">
+          <div class="cardTitle">Vazifalar (Kanban)</div>
+          <span class="muted">Stage 2 da: filter + drag&drop + timer + modal</span>
+        </div>
+        <div class="muted">Keyingi bosqichda to‘liq Kanban + vaqt hisoblash + status rules yozamiz.</div>
+      </div>
+    `;
+  }
+  function renderProjectsStub(){
+    page.innerHTML = `
+      <div class="card">
+        <div class="cardTitleRow">
+          <div class="cardTitle">Loyihalar (Kanban)</div>
+          <span class="muted">Stage 2 da: drag&drop + Info modal + o‘tish</span>
+        </div>
+        <div class="muted">Keyingi bosqichda project board, info oynasi va task filtrga o‘tish qilamiz.</div>
+      </div>
+    `;
+  }
+
+  /************ BOOT ************/
+  (async function boot(){
+    startIdle();
+    await touch(); // refresh token on load
+  })();
+
+  function safeParse(s){ try{ return JSON.parse(s); }catch(e){ return null; } }
+</script>
+</body>
+</html>
