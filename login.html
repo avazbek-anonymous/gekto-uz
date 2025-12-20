@@ -187,7 +187,7 @@
       localStorage.setItem("gsoft_user", JSON.stringify(res.user || {}));
       localStorage.setItem("gsoft_exp", String(exp));
 
-      location.href = OFFICE_URL + "#/users";
+      location.href = OFFICE_URL + "#/tasks";
     }catch(e){
       setMsg("Server bilan aloqa yo‘q", "bad");
     }finally{

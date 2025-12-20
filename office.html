@@ -2,25 +2,64 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>G-SOFT | Managment</title>
 
   <style>
     :root{
-      --r:18px; --gap:12px; --shadow:0 18px 55px rgba(0,0,0,.35);
+      --r:18px; --gap:12px;
+      --shadow:0 18px 55px rgba(0,0,0,.35);
+
       --bg:#061a14; --bg2:#0b2b23;
-      --card:rgba(255,255,255,.07); --line:rgba(255,255,255,.12);
-      --text:rgba(255,255,255,.92); --muted:rgba(255,255,255,.65);
-      --brand:#ffd15c; --ok:#10b981; --bad:#f16262;
-      --chip:rgba(0,0,0,.18); --input:rgba(0,0,0,.18);
-      --colw: 320px;
+      --card:rgba(255,255,255,.07);
+      --line:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.65);
+
+      --brand:#ffd15c;
+      --brand2:rgba(255,209,92,.18);
+      --ok:#10b981;
+      --bad:#f16262;
+
+      --chip:rgba(0,0,0,.18);
+      --input:rgba(0,0,0,.18);
+
+      --topbarH: 64px;
+      --bottomNavH: 64px;
+
+      --scrollTrack: rgba(255,255,255,.06);
+      --scrollThumb: rgba(255,209,92,.55);
+      --scrollThumb2: rgba(16,185,129,.35);
+
+      --menuBg: rgba(6,26,20,.92);
+      --menuBorder: rgba(255,255,255,.14);
+      --menuItemHover: rgba(255,255,255,.06);
+
+      --colMin: 260px;
     }
+
     [data-theme="light"]{
       --bg:#f6f8fb; --bg2:#eef2f7;
-      --card:rgba(255,255,255,.88); --line:rgba(9,20,30,.10);
-      --text:rgba(9,20,30,.92); --muted:rgba(9,20,30,.60);
-      --brand:#0ea5e9; --chip:rgba(14,165,233,.08); --input:rgba(9,20,30,.05);
+      --card:rgba(255,255,255,.92);
+      --line:rgba(9,20,30,.10);
+      --text:rgba(9,20,30,.92);
+      --muted:rgba(9,20,30,.60);
+
+      --brand:#0ea5e9;
+      --brand2:rgba(14,165,233,.12);
+
+      --chip:rgba(14,165,233,.08);
+      --input:rgba(9,20,30,.05);
+
       --shadow:0 18px 55px rgba(9,20,30,.12);
+
+      --scrollTrack: rgba(9,20,30,.08);
+      --scrollThumb: rgba(14,165,233,.55);
+      --scrollThumb2: rgba(16,185,129,.35);
+
+      --menuBg: rgba(255,255,255,.96);
+      --menuBorder: rgba(9,20,30,.12);
+      --menuItemHover: rgba(9,20,30,.05);
     }
 
     *{box-sizing:border-box}
@@ -36,9 +75,32 @@
       overflow:hidden;
     }
 
+    /* ===== Scrollbars (brand) ===== */
+    *{
+      scrollbar-width: thin;
+      scrollbar-color: var(--scrollThumb) var(--scrollTrack);
+      scrollbar-gutter: stable;
+    }
+    ::-webkit-scrollbar{ width:12px; height:12px; }
+    ::-webkit-scrollbar-track{
+      background: var(--scrollTrack);
+      border-radius:999px;
+    }
+    ::-webkit-scrollbar-thumb{
+      background: linear-gradient(180deg, var(--scrollThumb), var(--scrollThumb2));
+      border-radius:999px;
+      border:3px solid transparent;
+      background-clip: content-box;
+    }
+    ::-webkit-scrollbar-thumb:hover{
+      background: linear-gradient(180deg, rgba(255,255,255,.35), var(--scrollThumb));
+      background-clip: content-box;
+    }
+
     /* ===== Global Loading Block ===== */
-    body.isLoading .shell{filter: blur(1px) saturate(.95); opacity:.92}
     body.isLoading{pointer-events:none}
+    body.isLoading .shell{filter: blur(1px) saturate(.96); opacity:.92}
+
     .loadingOverlay{
       position:fixed; inset:0; z-index:2000;
       display:flex; align-items:center; justify-content:center;
@@ -46,11 +108,12 @@
       backdrop-filter: blur(10px);
       opacity:0; visibility:hidden;
       transition: opacity .18s ease, visibility .18s ease;
-      pointer-events:auto; /* must be clickable even when body pointer-events none */
+      pointer-events:auto;
     }
     body.isLoading .loadingOverlay{opacity:1; visibility:visible}
+
     .loadingCard{
-      width:min(520px, calc(100% - 28px));
+      width:min(560px, calc(100% - 28px));
       background:var(--card);
       border:1px solid var(--line);
       border-radius:20px;
@@ -91,13 +154,9 @@
       width:38px;height:38px;border-radius:14px;
       display:grid;place-items:center;
       font-weight:1000;color:var(--brand);
-      background:rgba(255,209,92,.16);
-      border:1px solid rgba(255,209,92,.25);
+      background:var(--brand2);
+      border:1px solid rgba(255,255,255,.08);
       flex:0 0 38px;
-    }
-    [data-theme="light"] .logo{
-      background:rgba(14,165,233,.14);
-      border-color:rgba(14,165,233,.22);
     }
     .brandText{
       font-weight:1000; letter-spacing:.2px;
@@ -126,13 +185,30 @@
     .sidebar:hover .txt{opacity:1; transform:translateX(0)}
 
     .main{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
+
     .topbar{
+      height:var(--topbarH);
       display:flex;align-items:center;justify-content:space-between;gap:10px;
       padding:12px 14px;
       border-bottom:1px solid var(--line);
       background:rgba(255,255,255,.04);
       backdrop-filter: blur(12px);
+      flex:0 0 auto;
     }
+
+    /* Burger (mobile) */
+    .burger{
+      display:none;
+      width:42px;height:40px;border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      cursor:pointer;
+      flex:0 0 auto;
+    }
+    .burger:active{transform:scale(.98)}
+    .burgerIcon{width:20px;height:20px;margin:auto;display:block}
+
     .hdrLeft{min-width:0}
     .hdrTitle{font-weight:1000;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .hdrSub{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -145,33 +221,55 @@
       background:rgba(255,255,255,.05);
       color:var(--muted);font-size:13px;white-space:nowrap;
     }
+
     .btn{
       border:1px solid var(--line);
       background:rgba(255,255,255,.06);
       color:var(--text);
-      padding:9px 12px;border-radius:14px;
+      padding:10px 12px;border-radius:14px;
       font-weight:900;cursor:pointer;
+      display:inline-flex; align-items:center; gap:8px;
     }
     .btn:hover{background:rgba(255,255,255,.08)}
+    .btn:active{transform:scale(.99)}
     .btn.danger{background:rgba(241,98,98,.14);border-color:rgba(241,98,98,.24)}
     .btn.primary{background:rgba(255,209,92,.90);border-color:rgba(255,209,92,.28);color:#062018}
     [data-theme="light"] .btn.primary{background:rgba(14,165,233,.92);border-color:rgba(14,165,233,.25);color:#061a14}
+    .btn.icon{
+      width:42px;height:40px;
+      padding:0;
+      justify-content:center;
+    }
 
-    .content{flex:1;min-height:0;padding:var(--gap);overflow:auto}
+    /* Content must NOT scroll for kanban; columns will scroll instead */
+    .content{
+      flex:1;
+      min-height:0;
+      padding:var(--gap);
+      overflow:hidden;
+    }
+    #page{height:100%; min-height:0;}
 
     .card{
+      height:100%;
+      min-height:0;
       background:var(--card);
       border:1px solid var(--line);
       border-radius:var(--r);
       box-shadow:var(--shadow);
       backdrop-filter: blur(12px);
       padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
     }
+
     .cardTitleRow{
-      display:flex;align-items:center;justify-content:space-between;gap:10px;
-      margin-bottom:10px;
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+      flex:0 0 auto;
     }
-    .cardTitle{font-weight:1000}
+    .cardTitleBlock{min-width:0}
+    .cardTitle{font-weight:1000; font-size:16px}
     .muted{color:var(--muted);font-size:12px}
     .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
     .chip{
@@ -184,7 +282,7 @@
       color:var(--text);
     }
 
-    /* ===== Theme toggle ===== */
+    /* Theme toggle */
     .themeBtn{
       width:44px;height:40px;border-radius:14px;
       display:grid;place-items:center;
@@ -209,51 +307,155 @@
     }
     [data-theme="light"] .themeBtn::after{transform: rotate(180deg); opacity:.25;}
 
-    /* ===== Filters ===== */
-    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .spacer{flex:1}
-    .select{
-      display:inline-flex;align-items:center;gap:8px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.05);
-      padding:8px 10px;border-radius:14px;
+    /* ===== Brand dropdown (custom) ===== */
+    .bsel{
+      position:relative;
+      display:inline-flex;
+      flex-direction:column;
+      gap:6px;
+      min-width: 220px;
     }
-    .select label{color:var(--muted);font-size:12px}
-    .select select{
-      border:0;outline:none;background:transparent;color:var(--text);
+    .bsel.compact{min-width: 170px}
+    .bselLabel{
+      font-size:11px;
+      color:var(--muted);
       font-weight:900;
+      letter-spacing:.2px;
+      text-transform:uppercase;
+      padding-left:6px;
+    }
+    .bselBtn{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      cursor:pointer;
+      user-select:none;
+      min-height:40px;
+    }
+    .bselBtn:hover{background:rgba(255,255,255,.08)}
+    .bselValue{
+      font-weight:900;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 380px;
+    }
+    .bselCaret{opacity:.8}
+    .bselMenu{
+      position:absolute;
+      top: calc(100% + 8px);
+      left:0;
+      right:0;
+      background:var(--menuBg);
+      border:1px solid var(--menuBorder);
+      border-radius:16px;
+      box-shadow: var(--shadow);
+      padding:6px;
+      display:none;
+      z-index:1200;
+      max-height: 320px;
+      overflow:auto;
+      backdrop-filter: blur(16px);
+    }
+    .bsel.open .bselMenu{display:block; animation: pop .14s ease-out}
+    @keyframes pop{
+      from{transform:translateY(-6px); opacity:.5}
+      to{transform:translateY(0); opacity:1}
+    }
+    .bselItem{
+      padding:10px 10px;
+      border-radius:12px;
+      cursor:pointer;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      color:var(--text);
+      border:1px solid transparent;
+    }
+    .bselItem:hover{background: var(--menuItemHover); border-color: var(--line);}
+    .bselItem.active{
+      background: var(--brand2);
+      border-color: rgba(255,255,255,.10);
+    }
+    [data-theme="light"] .bselItem.active{
+      border-color: rgba(9,20,30,.10);
+    }
+    .bselItemSmall{color:var(--muted); font-size:12px}
+
+    .toolbar{
+      display:flex;
+      gap:12px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      flex:0 0 auto;
+    }
+    .toolbarLeft{
+      display:flex;
+      gap:12px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+    }
+    .toolbarRight{
+      display:flex;
+      gap:10px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
     /* ===== Boards ===== */
     .board{
-      display:flex; gap:12px;
-      overflow:auto;
+      flex:1;
+      min-height:0;
+      overflow-x:auto;
+      overflow-y:hidden;
+      display:flex;
+      gap:12px;
       padding-bottom:10px;
-      scroll-snap-type:x mandatory;
     }
+
+    /* Columns should expand to fill width, but keep min width; overflow => horizontal scroll */
     .col{
-      width:var(--colw);
-      flex:0 0 var(--colw);
-      scroll-snap-align:start;
+      flex:1 0 var(--colMin);
+      min-width: var(--colMin);
+      height:100%;
       border:1px solid var(--line);
       background:rgba(255,255,255,.04);
       border-radius:18px;
-      min-height:420px;
-      display:flex;flex-direction:column;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
     }
+
     .colHead{
       padding:10px 10px;
-      display:flex;align-items:center;justify-content:space-between;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap:10px;
       border-bottom:1px solid var(--line);
       font-weight:1000;
+      flex:0 0 auto;
     }
     .colHead small{color:var(--muted);font-weight:800}
+
+    /* IMPORTANT: each column body scrolls vertically */
     .colBody{
-      padding:10px;
-      display:flex;flex-direction:column;gap:10px;
-      min-height:240px;
       flex:1;
+      min-height:0;
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      overflow:auto;
     }
 
     .dropHint{
@@ -280,8 +482,8 @@
     [data-theme="light"] .tCard{background:rgba(9,20,30,.04)}
     .tCard:hover{transform: translateY(-2px); box-shadow:0 14px 40px rgba(0,0,0,.25)}
     .tCard.dragging{opacity:.55; transform: rotate(1deg) scale(.99)}
-    .tTitle{font-weight:1000; line-height:1.2}
     .tTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+    .tTitle{font-weight:1000; line-height:1.2}
     .tBadges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
     .tMeta{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
     .tLine{margin-top:8px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:10px}
@@ -308,6 +510,7 @@
     }
     [data-theme="light"] .pCard{background:rgba(9,20,30,.04)}
     .pCard:hover{transform: translateY(-2px); box-shadow:0 14px 40px rgba(0,0,0,.20)}
+    .pCard.dragging{opacity:.55; transform: rotate(1deg) scale(.99)}
     .pTitle{font-weight:1000}
     .pMeta{margin-top:6px;color:var(--muted);font-size:12px}
     .pBtns{margin-top:10px;display:flex;gap:8px}
@@ -322,17 +525,32 @@
     .miniBtn.primary{background:rgba(16,185,129,.14);border-color:rgba(16,185,129,.22)}
     [data-theme="light"] .miniBtn.primary{background:rgba(14,165,233,.14);border-color:rgba(14,165,233,.22)}
 
-    /* ===== Table for Users (kept) ===== */
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;vertical-align:middle}
-    [data-theme="light"] th,[data-theme="light"] td{border-bottom:1px solid rgba(9,20,30,.08)}
-    th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.3px}
-
+    /* ===== Users list ===== */
+    .tableWrap{
+      flex:1;
+      min-height:0;
+      overflow:auto;
+      border-radius:16px;
+    }
+    table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    thead th{padding:6px 10px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.3px}
+    tbody tr{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+    }
+    [data-theme="light"] tbody tr{background:rgba(9,20,30,.03)}
+    tbody td{padding:12px 10px;border-top:1px solid rgba(255,255,255,.08)}
+    tbody tr td:first-child{border-top:0}
+    [data-theme="light"] tbody td{border-top:1px solid rgba(9,20,30,.08)}
+    .rowCard{border:1px solid var(--line); background:rgba(255,255,255,.04); border-radius:16px;}
     .iconBtn{
-      width:38px;height:34px;border-radius:12px;
+      width:42px;height:40px;border-radius:14px;
       border:1px solid var(--line);
       background:rgba(255,255,255,.06);
       cursor:pointer;
+      display:grid;place-items:center;
     }
 
     /* ===== Modal ===== */
@@ -347,7 +565,9 @@
     }
     .overlay.open{display:flex}
     .modal{
-      width:min(720px,100%);
+      width:min(760px,100%);
+      max-height: min(88vh, 900px);
+      overflow:auto;
       background:var(--card);
       border:1px solid var(--line);
       border-radius:18px;
@@ -357,16 +577,17 @@
     .modalHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
     .modalTitle{font-weight:1000}
     .xBtn{
-      width:38px;height:34px;border-radius:12px;
+      width:42px;height:40px;border-radius:14px;
       border:1px solid var(--line);
       background:rgba(255,255,255,.06);
       cursor:pointer;
       color:var(--text);
+      display:grid;place-items:center;
     }
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .grid1{display:grid;grid-template-columns:1fr;gap:10px}
     .f label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
-    .f input,.f select,.f textarea{
+    .f input,.f textarea{
       width:100%;
       padding:12px 12px;border-radius:14px;
       border:1px solid rgba(255,255,255,.14);
@@ -375,19 +596,142 @@
       outline:none;
       font-family:inherit;
     }
+    [data-theme="light"] .f input,[data-theme="light"] .f textarea{border-color: rgba(9,20,30,.12)}
     .f textarea{min-height:110px;resize:vertical}
     .modalActions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
     .modalActions .btn{flex:1}
 
-    /* ===== Mobile ===== */
+    .warnBox{
+      border:1px dashed rgba(241,98,98,.35);
+      background:rgba(241,98,98,.08);
+      padding:10px;
+      border-radius:14px;
+      color:rgba(241,98,98,.95);
+      font-size:13px;
+    }
+
+    /* ===== Drawer (mobile menu) ===== */
+    .drawerOverlay{
+      position:fixed; inset:0; z-index:1400;
+      background:rgba(0,0,0,.42);
+      backdrop-filter: blur(10px);
+      opacity:0; visibility:hidden;
+      transition: opacity .18s ease, visibility .18s ease;
+      display:flex;
+    }
+    .drawerOverlay.open{opacity:1; visibility:visible}
+    .drawer{
+      width:min(320px, 86vw);
+      height:100%;
+      background:var(--card);
+      border-right:1px solid var(--line);
+      box-shadow:var(--shadow);
+      transform: translateX(-18px);
+      opacity:0;
+      transition: transform .22s ease, opacity .22s ease;
+      padding:12px;
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .drawerOverlay.open .drawer{transform:translateX(0); opacity:1}
+    .drawerTop{display:flex; align-items:center; justify-content:space-between; gap:10px}
+    .drawerTitle{font-weight:1000}
+    .drawerNav a{
+      display:flex; align-items:center; gap:10px;
+      padding:12px; border-radius:16px;
+      text-decoration:none; color:var(--text);
+      border:1px solid transparent;
+    }
+    .drawerNav a:hover{background:rgba(255,255,255,.06); border-color:var(--line)}
+    .drawerNav a.active{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.28)}
+    [data-theme="light"] .drawerNav a.active{background:rgba(14,165,233,.12);border-color:rgba(14,165,233,.24)}
+
+    /* ===== Bottom tab bar (mobile) ===== */
+    .bottomNav{
+      position:fixed;
+      left:0; right:0;
+      bottom:0;
+      height:calc(var(--bottomNavH) + env(safe-area-inset-bottom));
+      padding-bottom:env(safe-area-inset-bottom);
+      display:none;
+      z-index:1200;
+      border-top:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      backdrop-filter: blur(14px);
+    }
+    .bottomNav .row{
+      height:var(--bottomNavH);
+      display:flex;
+      justify-content:space-around;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+    }
+    .bottomNav a{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      text-decoration:none;
+      color:var(--muted);
+      border-radius:16px;
+      padding:8px 6px;
+      border:1px solid transparent;
+      transition: background .15s ease, border-color .15s ease, color .15s ease;
+    }
+    .bottomNav a span{font-size:12px; font-weight:900}
+    .bottomNav a .bico{font-size:18px; line-height:1}
+    .bottomNav a.active{
+      color:var(--text);
+      background:rgba(16,185,129,.12);
+      border-color:rgba(16,185,129,.24);
+    }
+    [data-theme="light"] .bottomNav a.active{
+      background:rgba(14,165,233,.12);
+      border-color:rgba(14,165,233,.24);
+    }
+
+    /* ===== Responsive ===== */
     @media (max-width: 980px){
       body{overflow:auto}
       .shell{height:auto;min-height:100vh;display:block}
       .sidebar{display:none}
+      .burger{display:inline-flex}
       .topbar{position:sticky;top:0;z-index:10}
-      :root{--colw: 85vw;}
-      th,td{white-space:normal}
+
+      .bottomNav{display:block}
+
+      .content{
+        overflow:auto;
+        padding-bottom: calc(var(--gap) + var(--bottomNavH) + env(safe-area-inset-bottom));
+      }
+      #page{height:auto}
+
+      .card{height:auto; min-height: 70vh;}
+
       .grid{grid-template-columns:1fr}
+
+      /* mobile users table -> cards */
+      thead{display:none}
+      tbody tr{display:block; padding:10px; border-radius:18px}
+      tbody td{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:12px;
+        padding:10px 8px;
+        border-top:1px solid rgba(255,255,255,.10);
+      }
+      [data-theme="light"] tbody td{border-top:1px solid rgba(9,20,30,.10)}
+      tbody td::before{
+        content: attr(data-label);
+        color:var(--muted);
+        font-size:12px;
+        font-weight:900;
+        text-transform:uppercase;
+        letter-spacing:.2px;
+      }
     }
   </style>
 </head>
@@ -405,11 +749,18 @@
         <a href="#/projects" data-route="projects"><span class="ico">📌</span><span class="txt">Loyihalar</span></a>
         <a href="#/users" data-route="users"><span class="ico">👥</span><span class="txt">Foydalanuvchilar</span></a>
       </nav>
+
       <div class="muted" style="margin-top:auto;padding:6px 10px;">G-SOFT</div>
     </aside>
 
     <main class="main">
       <header class="topbar">
+        <button class="burger" id="btnBurger" title="Menu">
+          <svg class="burgerIcon" viewBox="0 0 24 24" fill="none">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+
         <div class="hdrLeft">
           <div id="hdrTitle" class="hdrTitle">—</div>
           <div id="hdrSub" class="hdrSub">—</div>
@@ -439,6 +790,37 @@
     </main>
   </div>
 
+  <!-- Drawer (mobile menu) -->
+  <div id="drawerOverlay" class="drawerOverlay" aria-hidden="true">
+    <aside class="drawer" onclick="event.stopPropagation()">
+      <div class="drawerTop">
+        <div class="drawerTitle">G-SOFT</div>
+        <button class="xBtn" id="drawerClose" title="Close">✕</button>
+      </div>
+      <div class="muted" id="drawerUser">—</div>
+
+      <nav class="drawerNav" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+        <a href="#/tasks" data-route="tasks"><span class="ico">🧩</span><span>Vazifalar</span></a>
+        <a href="#/projects" data-route="projects"><span class="ico">📌</span><span>Loyihalar</span></a>
+        <a href="#/users" data-route="users"><span class="ico">👥</span><span>Foydalanuvchilar</span></a>
+      </nav>
+
+      <div style="margin-top:auto;display:flex;gap:10px;">
+        <button class="btn icon" id="drawerTheme" title="Theme">🌓</button>
+        <button class="btn danger" id="drawerLogout" style="flex:1;">Chiqish</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Bottom Nav (mobile) -->
+  <nav class="bottomNav" aria-label="Bottom navigation">
+    <div class="row">
+      <a href="#/tasks" data-route="tasks"><div class="bico">🧩</div><span>Vazifalar</span></a>
+      <a href="#/projects" data-route="projects"><div class="bico">📌</div><span>Loyihalar</span></a>
+      <a href="#/users" data-route="users"><div class="bico">👥</div><span>Users</span></a>
+    </div>
+  </nav>
+
   <!-- MODAL -->
   <div id="overlay" class="overlay" aria-hidden="true">
     <div class="modal" onclick="event.stopPropagation()">
@@ -465,7 +847,7 @@
 
 <script>
   /************ CONFIG ************/
-  const ENDPOINT = "https://script.google.com/macros/s/AKfycbyGW5vwkyYWmsbSP2_wHFMBoSjJcYLGz7r0gR-R-e5al-efv1hchZIYKCxc5HxG0gvR/exec";
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbyGW5vwkyYWmsbSP2_wHFMBoSjJcYLGz7r0gR-R-e5al-efv1hchZIYKCxc5HxG0gvR/exec"; // <-- вставь свой WebApp exec URL
   const API_SECRET = "Gekto2022@";
   const LOGIN_URL = "./login.html";
   const IDLE_MS = 3 * 60 * 1000;
@@ -490,19 +872,15 @@
   /************ LOADING (BLOCK UI) ************/
   const loadingTitleEl = document.getElementById("loadingTitle");
   const loadingSubEl = document.getElementById("loadingSub");
-
   function showLoading(title="Yuklanmoqda…", sub="Iltimos, kuting"){
     loadingTitleEl.textContent = title;
     loadingSubEl.textContent = sub;
     document.body.classList.add("isLoading");
   }
-  function hideLoading(){
-    document.body.classList.remove("isLoading");
-  }
+  function hideLoading(){ document.body.classList.remove("isLoading"); }
   async function withLoading(title, sub, fn){
     showLoading(title, sub);
-    try{ return await fn(); }
-    finally{ hideLoading(); }
+    try{ return await fn(); } finally{ hideLoading(); }
   }
 
   /************ JSONP ************/
@@ -596,7 +974,37 @@
   setInterval(tick, 1000); tick();
 
   document.getElementById("userPill").textContent = `👤 ${USER?.ism || USER?.login || "-" } • ${USER?.rol || "-"}`;
+
   document.getElementById("btnLogout").addEventListener("click", async ()=>{
+    await withLoading("Chiqish…","Sessiya yopilmoqda", async ()=>{
+      try{ await api("logout"); }catch(e){}
+    });
+    lockToLogin();
+  });
+
+  /************ DRAWER (MOBILE MENU) ************/
+  const drawerOverlay = document.getElementById("drawerOverlay");
+  const btnBurger = document.getElementById("btnBurger");
+  const drawerClose = document.getElementById("drawerClose");
+  const drawerUser = document.getElementById("drawerUser");
+  drawerUser.textContent = `👤 ${USER?.ism || USER?.login || "-"} • ${USER?.rol || "-"}`;
+
+  function openDrawer(){
+    drawerOverlay.classList.add("open");
+    drawerOverlay.setAttribute("aria-hidden","false");
+  }
+  function closeDrawer(){
+    drawerOverlay.classList.remove("open");
+    drawerOverlay.setAttribute("aria-hidden","true");
+  }
+  btnBurger.addEventListener("click", ()=>{ markActivity(); openDrawer(); });
+  drawerClose.addEventListener("click", ()=>{ markActivity(); closeDrawer(); });
+  drawerOverlay.addEventListener("click", ()=>{ markActivity(); closeDrawer(); });
+
+  document.getElementById("drawerTheme").addEventListener("click", ()=>{ markActivity(); toggleTheme(); });
+  document.getElementById("drawerLogout").addEventListener("click", async ()=>{
+    markActivity();
+    closeDrawer();
     await withLoading("Chiqish…","Sessiya yopilmoqda", async ()=>{
       try{ await api("logout"); }catch(e){}
     });
@@ -621,73 +1029,6 @@
     overlay.setAttribute("aria-hidden","true");
     modalBody.innerHTML = "";
   }
-
-  /************ ROUTER ************/
-  const hdrTitle = document.getElementById("hdrTitle");
-  const hdrSub = document.getElementById("hdrSub");
-  const page = document.getElementById("page");
-
-  const Routes = {
-    tasks: { title:"Vazifalar", sub:"Kanban • drag & timer", render: renderTasks },
-    projects: { title:"Loyihalar", sub:"Kanban • drag", render: renderProjects },
-    users: { title:"Foydalanuvchilar", sub:"Users & roles", render: renderUsers },
-  };
-
-  function currentRoute(){
-    const h = location.hash || "#/tasks";
-    const m = h.match(/^#\/([a-z]+)/i);
-    return (m && m[1]) ? m[1].toLowerCase() : "tasks";
-  }
-  function setActiveNav(){
-    const r = currentRoute();
-    document.querySelectorAll(".nav a").forEach(a=>{
-      a.classList.toggle("active", a.dataset.route === r);
-    });
-  }
-  function render(){
-    const r = currentRoute();
-    const route = Routes[r] || Routes.tasks;
-    hdrTitle.textContent = route.title;
-    hdrSub.textContent = route.sub;
-    setActiveNav();
-    route.render();
-  }
-  window.addEventListener("hashchange", render);
-  if(!location.hash) location.hash = "#/tasks";
-
-  /************ STATE (CACHES) ************/
-  let USERS_PUBLIC = [];   // {id, ism, rol}
-  let USERS_ADMIN = [];    // full list only admin
-  let PROJECTS = [];       // accessible projects
-  let TASKS = [];          // accessible tasks (already filtered by role; then we filter by UI)
-
-  const TASK_COLS = [
-    {key:"BOSHLANMAGAN", title:"Boshlanmagan", hint:"0 vaqt"},
-    {key:"PAUZA",        title:"Pauza",        hint:"to‘xtatilgan"},
-    {key:"JARAYONDA",    title:"Jarayonda",    hint:"1 ta vazifa"},
-    {key:"BAJARILDI",    title:"Bajarildi",    hint:"✅"},
-    {key:"OTMENA",       title:"Otmena",       hint:"❌"}
-  ];
-
-  const PROJECT_COLS = [
-    {key:"YANGI",         title:"Yangi"},
-    {key:"TZ_BERILDI",    title:"Tz berildi"},
-    {key:"TAKLIF_BERILDI",title:"Taklif berildi"},
-    {key:"PROCESS",       title:"Process"},
-    {key:"OUTSOURCE",     title:"Outsource"},
-    {key:"KEYINROQ",      title:"Keyinroq"},
-    {key:"BAJARILDI",     title:"Bajarildi"},
-    {key:"OTMENA",        title:"Otmena"},
-  ];
-
-  // UI filters
-  let FILTER_PROJECT = "NO_PROJECT"; // NO_PROJECT | ALL | PRJ-...
-  let FILTER_USER = "ALL";           // for admin only
-  let TASKS_TIMER_TICK = null;
-  let TASKS_HEARTBEAT = null;
-
-  function isAdmin(){ return String(USER?.rol||"").toLowerCase() === "admin"; }
-  function isPM(){ return String(USER?.rol||"").toLowerCase() === "pm"; }
 
   /************ HELPERS ************/
   function safeParse(s){ try{ return JSON.parse(s); }catch(e){ return null; } }
@@ -719,19 +1060,196 @@
     if(ttl) return ttl;
     return first3Words(t.description) || "(No title)";
   }
-  function chip(text){ return `<span class="chip">${escapeHtml(text)}</span>`; }
+  function isAdmin(){ return String(USER?.rol||"").toLowerCase() === "admin"; }
+  function isPM(){ return String(USER?.rol||"").toLowerCase() === "pm"; }
+  function isFin(){ return String(USER?.rol||"").toLowerCase() === "fin"; }
 
-  function findUserName(id){
-    const u = USERS_PUBLIC.find(x=>x.id===id);
-    return u ? u.ism : "";
+  /************ BRAND SELECT (custom dropdown) ************/
+  const OPEN_SELECTS = new Set();
+
+  function closeAllSelects(exceptId=null){
+    OPEN_SELECTS.forEach(id=>{
+      if(id !== exceptId){
+        const el = document.getElementById(id);
+        if(el) el.classList.remove("open");
+      }
+    });
+    if(!exceptId) OPEN_SELECTS.clear();
   }
-  function findProjectTitle(id){
-    const p = PROJECTS.find(x=>x.id===id);
-    return p ? p.title : "";
+
+  document.addEventListener("click", (e)=>{
+    // click outside -> close all custom dropdowns
+    const target = e.target;
+    if(!(target && target.closest && target.closest(".bsel"))){
+      closeAllSelects();
+    }
+  });
+
+  function mountSelect(containerEl, cfg){
+    // cfg: {id,label, value, options:[{value,label,small?}], onChange, compact}
+    const id = cfg.id;
+    const label = cfg.label || "";
+    const value = cfg.value ?? "";
+    const compact = !!cfg.compact;
+
+    containerEl.innerHTML = `
+      <div class="bsel ${compact ? "compact":""}" id="${escapeHtml(id)}">
+        ${label ? `<div class="bselLabel">${escapeHtml(label)}</div>` : ``}
+        <div class="bselBtn" role="button" tabindex="0">
+          <div class="bselValue" title="${escapeHtml(getOptLabel(cfg.options, value))}">
+            ${escapeHtml(getOptLabel(cfg.options, value))}
+          </div>
+          <div class="bselCaret">▾</div>
+        </div>
+        <div class="bselMenu"></div>
+      </div>
+    `;
+
+    const rootEl = document.getElementById(id);
+    const btn = rootEl.querySelector(".bselBtn");
+    const menu = rootEl.querySelector(".bselMenu");
+
+    function renderMenu(){
+      menu.innerHTML = cfg.options.map(o=>{
+        const active = String(o.value) === String(cfg.value);
+        return `
+          <div class="bselItem ${active ? "active":""}" data-val="${escapeHtml(o.value)}">
+            <div style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+              ${escapeHtml(o.label)}
+            </div>
+            ${o.small ? `<div class="bselItemSmall">${escapeHtml(o.small)}</div>` : ``}
+          </div>
+        `;
+      }).join("");
+      menu.querySelectorAll(".bselItem").forEach(it=>{
+        it.onclick = ()=>{
+          const v = it.getAttribute("data-val");
+          cfg.value = v;
+          rootEl.classList.remove("open");
+          OPEN_SELECTS.delete(id);
+          btn.querySelector(".bselValue").textContent = getOptLabel(cfg.options, v);
+          btn.querySelector(".bselValue").title = getOptLabel(cfg.options, v);
+          cfg.onChange && cfg.onChange(v);
+        };
+      });
+    }
+    function toggleOpen(){
+      const isOpen = rootEl.classList.contains("open");
+      closeAllSelects(id);
+      if(isOpen){
+        rootEl.classList.remove("open");
+        OPEN_SELECTS.delete(id);
+      }else{
+        rootEl.classList.add("open");
+        OPEN_SELECTS.add(id);
+        renderMenu();
+      }
+    }
+
+    btn.onclick = (e)=>{ e.stopPropagation(); toggleOpen(); };
+    btn.onkeydown = (e)=>{
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        toggleOpen();
+      }
+      if(e.key === "Escape"){
+        rootEl.classList.remove("open");
+        OPEN_SELECTS.delete(id);
+      }
+    };
+
+    renderMenu();
+
+    // return controller
+    return {
+      setValue(v){
+        cfg.value = v;
+        const valEl = btn.querySelector(".bselValue");
+        valEl.textContent = getOptLabel(cfg.options, v);
+        valEl.title = getOptLabel(cfg.options, v);
+        renderMenu();
+      },
+      getValue(){ return cfg.value; },
+      setOptions(opts){
+        cfg.options = opts || [];
+        btn.querySelector(".bselValue").textContent = getOptLabel(cfg.options, cfg.value);
+        btn.querySelector(".bselValue").title = getOptLabel(cfg.options, cfg.value);
+        renderMenu();
+      }
+    };
   }
+
+  function getOptLabel(options, value){
+    const o = (options||[]).find(x=>String(x.value)===String(value));
+    return o ? o.label : (options && options[0] ? options[0].label : "");
+  }
+
+  /************ ROUTER ************/
+  const hdrTitle = document.getElementById("hdrTitle");
+  const hdrSub = document.getElementById("hdrSub");
+  const page = document.getElementById("page");
+
+  const Routes = {
+    tasks:    { title:"Vazifalar", sub:"Kanban • drag & timer", render: renderTasks },
+    projects: { title:"Loyihalar", sub:"Kanban • drag", render: renderProjects },
+    users:    { title:"Foydalanuvchilar", sub:"Users & roles", render: renderUsers },
+  };
+
+  function currentRoute(){
+    const h = location.hash || "#/tasks";
+    const m = h.match(/^#\/([a-z]+)/i);
+    return (m && m[1]) ? m[1].toLowerCase() : "tasks";
+  }
+
+  function setActiveNav(){
+    const r = currentRoute();
+    document.querySelectorAll('[data-route]').forEach(a=>{
+      a.classList.toggle("active", a.dataset.route === r);
+    });
+  }
+
+  function render(){
+    const r = currentRoute();
+    const route = Routes[r] || Routes.tasks;
+    hdrTitle.textContent = route.title;
+    hdrSub.textContent = route.sub;
+    setActiveNav();
+    closeDrawer();
+    route.render();
+  }
+  window.addEventListener("hashchange", render);
+  if(!location.hash) location.hash = "#/tasks";
+
+  /************ STATE (CACHES) ************/
+  let USERS_PUBLIC = [];  // used in selects & names
+  let USERS_ADMIN  = [];  // full users list for admin
+  let PROJECTS     = [];
+  let TASKS        = [];
+
+  const TASK_COLS = [
+    {key:"BOSHLANMAGAN", title:"Boshlanmagan", hint:"0 vaqt"},
+    {key:"PAUZA",        title:"Pauza",        hint:"to‘xtatilgan"},
+    {key:"JARAYONDA",    title:"Jarayonda",    hint:"1 ta vazifa"},
+    {key:"BAJARILDI",    title:"Bajarildi",    hint:"✅"},
+    {key:"OTMENA",       title:"Otmena",       hint:"❌"}
+  ];
+
+  const PROJECT_COLS = [
+    {key:"YANGI",          title:"Yangi"},
+    {key:"TZ_BERILDI",     title:"Tz berildi"},
+    {key:"TAKLIF_BERILDI", title:"Taklif berildi"},
+    {key:"PROCESS",        title:"Process"},
+    {key:"OUTSOURCE",      title:"Outsource"},
+    {key:"KEYINROQ",       title:"Keyinroq"},
+    {key:"BAJARILDI",      title:"Bajarildi"},
+    {key:"OTMENA",         title:"Otmena"},
+  ];
+
+  let FILTER_PROJECT = "NO_PROJECT"; // NO_PROJECT | ALL | projectId
+  let FILTER_USER    = "ALL";        // admin only
+  let TASK_TICK      = null;
 
   function parseHashQuery(){
-    // allow #/tasks?projectId=PRJ-00001
     const h = location.hash || "";
     const q = h.split("?")[1] || "";
     const obj = {};
@@ -743,54 +1261,123 @@
     return obj;
   }
 
-  /************ LOAD BOOT DATA ************/
-  async function ensurePublicUsers(){
-    if(USERS_PUBLIC.length) return;
+  function findUserName(id){
+    const u = USERS_PUBLIC.find(x=>String(x.id)===String(id));
+    return u ? u.ism : "";
+  }
+  function findUserRole(id){
+    const u = USERS_PUBLIC.find(x=>String(x.id)===String(id));
+    return u ? u.rol : "";
+  }
+  function findProjectById(id){
+    return PROJECTS.find(x=>String(x.id)===String(id));
+  }
+  function findProjectTitle(id){
+    const p = findProjectById(id);
+    return p ? p.title : "";
+  }
+
+  /************ LOADERS ************/
+  async function ensurePublicUsers(force=false){
+    if(USERS_PUBLIC.length && !force) return;
     const r = await api("users_public_list");
     if(r?.ok) USERS_PUBLIC = r.users || [];
   }
-
   async function loadProjects(force=false){
     if(PROJECTS.length && !force) return;
     const r = await api("projects_list");
     if(r?.ok) PROJECTS = r.projects || [];
   }
-
   async function loadTasks(projectId, userId){
     const r = await api("tasks_list", { projectId, userId });
     if(r?.ok) TASKS = r.tasks || [];
     else TASKS = [];
   }
 
-  /************ USERS PAGE (admin) ************/
+  /************ PERMISSIONS ************/
+  function canEditProject(project){
+    if(!project) return false;
+    if(isAdmin()) return true;
+    if(isPM() && String(project.pmId) === String(USER.id)) return true;
+    return false;
+  }
+
+  function canEditTask(task){
+    if(!task) return false;
+    if(isAdmin()) return true;
+
+    const hasProject = !!task.projectId && String(task.projectId).trim() !== "";
+    if(hasProject){
+      const p = findProjectById(task.projectId);
+      if(isPM() && p && String(p.pmId) === String(USER.id)) return true; // PM can edit tasks of their project
+      // исполнителю редактировать "минимально" можно, но по твоему правилу главное: PM + admin
+      // оставим: исполнитель может менять статус/таймер в любом случае (иначе ему не работать)
+      if(String(task.assigneeId) === String(USER.id)) return true;
+      return false;
+    }else{
+      // no project: only executor (and admin already)
+      return String(task.assigneeId) === String(USER.id);
+    }
+  }
+
+  function canMoveTask(task){
+    // drag permission
+    if(isAdmin()) return true;
+    const hasProject = !!task.projectId && String(task.projectId).trim() !== "";
+    if(hasProject){
+      const p = findProjectById(task.projectId);
+      if(isPM() && p && String(p.pmId) === String(USER.id)) return true;
+      // allow executor move their own task
+      if(String(task.assigneeId) === String(USER.id)) return true;
+      return false;
+    }else{
+      return String(task.assigneeId) === String(USER.id);
+    }
+  }
+
+  function canCreateProject(){
+    return isAdmin() || isPM();
+  }
+  function canCreateTask(){
+    // allow admin/pm; fin can create only personal no-project tasks
+    return isAdmin() || isPM() || isFin();
+  }
+
+  /************ USERS PAGE ************/
   async function renderUsers(){
+    stopTaskTick();
+
     if(!isAdmin()){
-      page.innerHTML = `<div class="card"><div class="cardTitleRow"><div class="cardTitle">Foydalanuvchilar</div><span class="muted">Faqat admin</span></div><div class="muted">Ruxsat yo‘q.</div></div>`;
+      page.innerHTML = `<div class="card">
+        <div class="cardTitleRow">
+          <div class="cardTitleBlock">
+            <div class="cardTitle">Foydalanuvchilar</div>
+            <div class="muted">Faqat admin</div>
+          </div>
+        </div>
+        <div class="warnBox">Ruxsat yo‘q.</div>
+      </div>`;
       return;
     }
 
     page.innerHTML = `
       <div class="card">
         <div class="cardTitleRow">
-          <div class="cardTitle">Foydalanuvchilar</div>
-          <div class="toolbar">
-            <span class="muted">admin / pm / fin</span>
-            <span class="spacer"></span>
-            <button class="btn primary" id="btnAddUser">+ Qo‘shish</button>
-            <button class="btn" id="btnReloadUsers">Yangilash</button>
+          <div class="cardTitleBlock">
+            <div class="cardTitle">Foydalanuvchilar</div>
+            <div class="muted">admin / pm / fin</div>
+          </div>
+          <div class="toolbarRight">
+            <button class="btn primary" id="btnAddUser">➕ Qo‘shish</button>
+            <button class="btn" id="btnReloadUsers">🔄 Yangilash</button>
           </div>
         </div>
 
-        <div style="overflow:auto">
+        <div class="tableWrap">
           <table>
             <thead>
               <tr>
-                <th>Ism</th>
-                <th>Login</th>
-                <th>Parol</th>
-                <th>Rol</th>
-                <th>Active</th>
-                <th style="width:90px">Edit</th>
+                <th>ISM</th><th>LOGIN</th><th>PAROL</th><th>ROL</th><th>ACTIVE</th><th style="width:88px">EDIT</th>
               </tr>
             </thead>
             <tbody id="uBody">
@@ -811,16 +1398,15 @@
     await withLoading("Foydalanuvchilar…", "Ma’lumotlar yuklanmoqda", async ()=>{
       const r = await api("users_list");
       if(r?.ok) USERS_ADMIN = r.users || [];
-      // also refresh public
-      USERS_PUBLIC = (r?.users||[]).filter(u=>u.active).map(u=>({id:u.id, ism:u.ism, rol:u.rol}));
+      // also rebuild public
+      USERS_PUBLIC = (r?.users||[]).filter(u=>u.active).map(u=>({id:u.id, ism:u.ism, rol:u.rol, login:u.login}));
     });
     drawUsersAdmin();
   }
 
   function roleChip(role){
     const r = String(role||"").toLowerCase();
-    const label = r === "admin" ? "admin" : (r === "pm" ? "pm" : "fin");
-    return `<span class="chip">${label}</span>`;
+    return `<span class="chip">${escapeHtml(r)}</span>`;
   }
   function mask(p){
     if(!p) return "";
@@ -836,14 +1422,17 @@
       body.innerHTML = `<tr><td colspan="6" class="muted">Yo‘q</td></tr>`;
       return;
     }
+
     body.innerHTML = USERS_ADMIN.map(u=>`
-      <tr>
-        <td><b>${escapeHtml(u.ism || "")}</b></td>
-        <td class="mono">${escapeHtml(u.login || "")}</td>
-        <td class="mono" title="${escapeHtml(u.parol||"")}">${escapeHtml(mask(u.parol))}</td>
-        <td>${roleChip(u.rol)}</td>
-        <td>${u.active ? "✅" : "⛔"}</td>
-        <td><button class="iconBtn" data-edit="${escapeHtml(u.id)}">✏️</button></td>
+      <tr class="rowCard">
+        <td data-label="Ism"><b>${escapeHtml(u.ism || "")}</b></td>
+        <td data-label="Login" class="mono">${escapeHtml(u.login || "")}</td>
+        <td data-label="Parol" class="mono" title="${escapeHtml(u.parol||"")}">${escapeHtml(mask(u.parol))}</td>
+        <td data-label="Rol">${roleChip(u.rol)}</td>
+        <td data-label="Active">${u.active ? "✅" : "⛔"}</td>
+        <td data-label="Edit">
+          <button class="iconBtn" data-edit="${escapeHtml(u.id)}" title="Edit">✏️</button>
+        </td>
       </tr>
     `).join("");
 
@@ -859,31 +1448,31 @@
 
   function openUserModal(user=null){
     const isEdit = !!user;
+
     openModal(isEdit ? "Edit user" : "Add user", `
       <div class="grid">
         <div class="f"><label>Ism</label><input id="fIsm" value="${escapeHtml(user?.ism||"")}" /></div>
         <div class="f">
           <label>Rol</label>
-          <select id="fRol">
-            <option value="admin" ${String(user?.rol||"")==="admin"?"selected":""}>admin</option>
-            <option value="pm" ${String(user?.rol||"")==="pm"?"selected":""}>pm</option>
-            <option value="fin" ${String(user?.rol||"")==="fin"?"selected":""}>fin</option>
-          </select>
+          <div id="roleSel"></div>
         </div>
       </div>
       <div class="grid" style="margin-top:10px;">
         <div class="f"><label>Login</label><input id="fLogin" value="${escapeHtml(user?.login||"")}" /></div>
         <div class="f"><label>Parol ${isEdit ? '(bo‘sh qoldirsang o‘zgarmaydi)' : ''}</label><input id="fParol" type="password" value="" /></div>
       </div>
-      <div class="grid1" style="margin-top:10px;">
+
+      <div class="grid" style="margin-top:10px;">
         <div class="f">
           <label>Active</label>
-          <select id="fActive">
-            <option value="true" ${user?.active !== false ? "selected":""}>true</option>
-            <option value="false" ${user?.active === false ? "selected":""}>false</option>
-          </select>
+          <div id="activeSel"></div>
+        </div>
+        <div class="f">
+          <label> </label>
+          <div class="muted" style="padding:10px 6px;">ID ko‘rinmaydi (auto)</div>
         </div>
       </div>
+
       <div id="fMsg" class="muted" style="margin-top:10px;min-height:18px"></div>
       <div class="modalActions">
         <button class="btn" id="btnCancel">Bekor</button>
@@ -891,14 +1480,39 @@
       </div>
     `);
 
+    const roleCtrl = mountSelect(document.getElementById("roleSel"), {
+      id:"sel_role",
+      label:"",
+      value: (user?.rol || "fin"),
+      compact:false,
+      options:[
+        {value:"admin", label:"admin", small:"full access"},
+        {value:"pm", label:"pm", small:"projects"},
+        {value:"fin", label:"fin", small:"tasks inside"},
+      ],
+      onChange:()=>{}
+    });
+
+    const activeCtrl = mountSelect(document.getElementById("activeSel"), {
+      id:"sel_active",
+      label:"",
+      value: String(user?.active !== false ? "true" : "false"),
+      compact:true,
+      options:[
+        {value:"true", label:"true"},
+        {value:"false", label:"false"},
+      ],
+      onChange:()=>{}
+    });
+
     document.getElementById("btnCancel").onclick = ()=>{ markActivity(); closeModal(); };
     document.getElementById("btnSave").onclick = async ()=>{
       markActivity();
       const ism = document.getElementById("fIsm").value.trim();
       const login = document.getElementById("fLogin").value.trim();
-      const rol = document.getElementById("fRol").value.trim();
+      const rol = roleCtrl.getValue();
       const parol = document.getElementById("fParol").value.trim();
-      const active = document.getElementById("fActive").value === "true";
+      const active = activeCtrl.getValue() === "true";
       const msg = document.getElementById("fMsg");
       msg.textContent = "";
 
@@ -912,7 +1526,6 @@
         if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
       });
 
-      // reload without reloading whole app
       await loadUsersAdmin(true);
       closeModal();
     };
@@ -922,26 +1535,33 @@
   let draggingProjectId = null;
 
   async function renderProjects(){
-    clearTimers();
+    stopTaskTick();
 
     page.innerHTML = `
       <div class="card">
         <div class="cardTitleRow">
-          <div>
+          <div class="cardTitleBlock">
             <div class="cardTitle">Loyihalar</div>
-            <div class="muted">Drag & drop bilan status almashtiring • Info -> tahrirlash • O‘tish -> Vazifalar</div>
+            <div class="muted">Drag & drop • Info -> tahrirlash • O‘tish -> Vazifalar</div>
           </div>
-          <div class="toolbar">
-            <button class="btn" id="btnRefreshProjects">Yangilash</button>
+          <div class="toolbarRight">
+            ${canCreateProject() ? `<button class="btn primary" id="btnAddProject">➕ Loyiha</button>` : ``}
+            <button class="btn" id="btnRefreshProjects">🔄 Yangilash</button>
           </div>
         </div>
+
         <div class="board" id="projectsBoard"></div>
       </div>
     `;
 
+    if(canCreateProject()){
+      document.getElementById("btnAddProject").onclick = ()=>{ markActivity(); openProjectCreateModal(); };
+    }
+
     document.getElementById("btnRefreshProjects").onclick = async ()=>{
       markActivity();
       await withLoading("Loyihalar…","Yangilanmoqda", async ()=>{
+        await ensurePublicUsers(true);
         await loadProjects(true);
       });
       drawProjectsBoard();
@@ -969,7 +1589,6 @@
       </div>
     `).join("");
 
-    // fill cards
     const by = {};
     PROJECT_COLS.forEach(c=>by[c.key]=[]);
     PROJECTS.forEach(p=>{
@@ -979,7 +1598,6 @@
 
     PROJECT_COLS.forEach(c=>{
       const list = (by[c.key]||[]).slice().sort((a,b)=>{
-        // deadline asc
         const da = a.deadline ? new Date(a.deadline).getTime() : 9e15;
         const db = b.deadline ? new Date(b.deadline).getTime() : 9e15;
         return da - db;
@@ -988,24 +1606,26 @@
       document.getElementById("pcnt_"+c.key).textContent = String(list.length);
       const col = document.getElementById("pcol_"+c.key);
 
-      col.innerHTML = list.map(p=>`
-        <div class="pCard" draggable="true" data-id="${escapeHtml(p.id)}">
-          <div class="pTitle">${escapeHtml(p.title || "(No title)")}</div>
-          <div class="pMeta">
-            ${p.ownerName ? `👤 ${escapeHtml(p.ownerName)}<br/>` : ""}
-            ${p.product ? `📦 ${escapeHtml(p.product)}<br/>` : ""}
-            ${p.pmName ? `🧭 PM: ${escapeHtml(p.pmName)}<br/>` : ""}
-            ${p.deadline ? `⏳ ${escapeHtml(fmtDate(p.deadline))}` : ""}
+      col.innerHTML = list.map(p=>{
+        const canDrag = canEditProject(p); // only admin or pm(owner) can move
+        return `
+          <div class="pCard" draggable="${canDrag ? "true":"false"}" data-id="${escapeHtml(p.id)}" title="${canDrag ? "Drag to move":"No permission"}">
+            <div class="pTitle">${escapeHtml(p.title || "(No title)")}</div>
+            <div class="pMeta">
+              ${p.ownerName ? `👤 ${escapeHtml(p.ownerName)}<br/>` : ""}
+              ${p.product ? `📦 ${escapeHtml(p.product)}<br/>` : ""}
+              ${p.pmName ? `🧭 PM: ${escapeHtml(p.pmName)}<br/>` : ""}
+              ${p.deadline ? `⏳ ${escapeHtml(fmtDate(p.deadline))}` : ""}
+            </div>
+            <div class="pBtns">
+              <button class="miniBtn" data-info="${escapeHtml(p.id)}">Info</button>
+              <button class="miniBtn primary" data-go="${escapeHtml(p.id)}">O‘tish</button>
+            </div>
           </div>
-          <div class="pBtns">
-            <button class="miniBtn" data-info="${escapeHtml(p.id)}">Info</button>
-            <button class="miniBtn primary" data-go="${escapeHtml(p.id)}">O‘tish</button>
-          </div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
 
-      // events
-      col.querySelectorAll(".pCard").forEach(card=>{
+      col.querySelectorAll(".pCard[draggable='true']").forEach(card=>{
         card.addEventListener("dragstart", (e)=>{
           draggingProjectId = card.getAttribute("data-id");
           card.classList.add("dragging");
@@ -1023,7 +1643,7 @@
       });
     });
 
-    // drop zones
+    // Drop zones
     board.querySelectorAll(".colBody").forEach(zone=>{
       zone.addEventListener("dragover", (e)=>{ e.preventDefault(); zone.classList.add("dropHint"); });
       zone.addEventListener("dragleave", ()=>zone.classList.remove("dropHint"));
@@ -1036,22 +1656,22 @@
         if(!pid || !newStatus) return;
 
         const pr = PROJECTS.find(x=>x.id===pid);
-        if(!pr) return;
-        if(pr.status === newStatus) return;
+        if(!pr || pr.status === newStatus) return;
 
-        // optimistic
+        // permission check
+        if(!canEditProject(pr)) return;
+
+        // optimistic UI
         pr.status = newStatus;
         drawProjectsBoard();
 
         await withLoading("Saqlash…","Loyiha status yangilanmoqda", async ()=>{
           const res = await api("project_update_status", { payload: encodeURIComponent(JSON.stringify({id:pid, status:newStatus})) });
           if(!res?.ok){
-            // rollback by reloading
             await loadProjects(true);
             drawProjectsBoard();
             return;
           }
-          // sync updated
           const upd = res.project;
           const i = PROJECTS.findIndex(x=>x.id===upd.id);
           if(i>=0) PROJECTS[i]=upd;
@@ -1061,21 +1681,119 @@
     });
   }
 
+  function openProjectCreateModal(){
+    const canAssignPM = isAdmin();
+    const pmOptions = USERS_PUBLIC.filter(u=>String(u.rol).toLowerCase()==="pm").map(u=>({value:u.id, label:u.ism, small:u.login||""}));
+    const defaultPm = isPM() ? USER.id : (pmOptions[0]?.value || "");
+
+    openModal("➕ Yangi loyiha", `
+      <div class="grid">
+        <div class="f"><label>Nomi</label><input id="pr_title" placeholder="Project nomi"></div>
+        <div class="f"><label>Status</label><div id="pr_status"></div></div>
+      </div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Owner</label><input id="pr_ownerName" placeholder="Mijoz egasi"></div>
+        <div class="f"><label>Owner phone</label><input id="pr_ownerPhone" placeholder="+998..."></div>
+      </div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Sfera</label><input id="pr_sphere"></div>
+        <div class="f"><label>Manba</label><input id="pr_source"></div>
+      </div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Shahar</label><input id="pr_city"></div>
+        <div class="f"><label>Deadline</label><input id="pr_deadline" placeholder="2025-12-31 18:00"></div>
+      </div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Product/Service</label><input id="pr_product" placeholder="Fin system / Model / TZ..."></div>
+        <div class="f"><label>PM</label><div id="pr_pm"></div></div>
+      </div>
+
+      <div class="grid1" style="margin-top:10px;">
+        <div class="f"><label>Komment</label><textarea id="pr_comment"></textarea></div>
+      </div>
+
+      <div id="pr_msg" class="muted" style="margin-top:10px;min-height:18px"></div>
+
+      <div class="modalActions">
+        <button class="btn" id="pr_close">Bekor</button>
+        <button class="btn primary" id="pr_save">Saqlash</button>
+      </div>
+    `);
+
+    const stCtrl = mountSelect(document.getElementById("pr_status"), {
+      id:"sel_pr_status",
+      label:"",
+      value:"YANGI",
+      options: PROJECT_COLS.map(c=>({value:c.key, label:c.title})),
+      onChange:()=>{}
+    });
+
+    const pmCtrl = mountSelect(document.getElementById("pr_pm"), {
+      id:"sel_pr_pm",
+      label:"",
+      value: defaultPm,
+      options: pmOptions.length ? pmOptions : [{value: defaultPm, label:(USER.ism||USER.login||"PM")}],
+      onChange:()=>{}
+    });
+
+    if(!canAssignPM){
+      // pm can only assign self
+      pmCtrl.setValue(USER.id);
+    }
+
+    document.getElementById("pr_close").onclick = ()=>{ markActivity(); closeModal(); };
+    document.getElementById("pr_save").onclick = async ()=>{
+      markActivity();
+      const msg = document.getElementById("pr_msg");
+      msg.textContent = "";
+
+      const payload = {
+        id:"",
+        title: document.getElementById("pr_title").value.trim(),
+        status: stCtrl.getValue(),
+        ownerName: document.getElementById("pr_ownerName").value.trim(),
+        ownerPhone: document.getElementById("pr_ownerPhone").value.trim(),
+        sphere: document.getElementById("pr_sphere").value.trim(),
+        source: document.getElementById("pr_source").value.trim(),
+        city: document.getElementById("pr_city").value.trim(),
+        comment: document.getElementById("pr_comment").value.trim(),
+        product: document.getElementById("pr_product").value.trim(),
+        deadline: document.getElementById("pr_deadline").value.trim(),
+        pmId: canAssignPM ? pmCtrl.getValue() : USER.id
+      };
+
+      if(!payload.title){ msg.textContent = "Nomi shart"; return; }
+
+      await withLoading("Saqlash…","Loyiha yaratilmoqda", async ()=>{
+        const res = await api("project_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
+        if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
+      });
+
+      await withLoading("Yangilash…","Loyihalar yuklanmoqda", async ()=>{
+        await loadProjects(true);
+      });
+      closeModal();
+      drawProjectsBoard();
+    };
+  }
+
   function openProjectInfo(projectId){
     const p = PROJECTS.find(x=>x.id===projectId);
     if(!p){ alert("Project topilmadi"); return; }
 
-    // only admin or pm-owner can edit
-    const canEdit = isAdmin() || (isPM() && String(p.pmId)===String(USER.id));
+    const canEdit = canEditProject(p);
+
+    const pmOptions = USERS_PUBLIC.filter(u=>String(u.rol).toLowerCase()==="pm").map(u=>({value:u.id, label:u.ism, small:u.login||""}));
+    const defaultPm = p.pmId || "";
 
     openModal("Project Info", `
       <div class="grid">
         <div class="f"><label>Nomi</label><input id="pr_title" value="${escapeHtml(p.title||"")}" ${canEdit?"":"disabled"}></div>
-        <div class="f"><label>Status</label>
-          <select id="pr_status" ${canEdit?"":"disabled"}>
-            ${PROJECT_COLS.map(c=>`<option value="${c.key}" ${p.status===c.key?"selected":""}>${escapeHtml(c.title)}</option>`).join("")}
-          </select>
-        </div>
+        <div class="f"><label>Status</label><div id="pr_status"></div></div>
       </div>
 
       <div class="grid" style="margin-top:10px;">
@@ -1090,11 +1808,12 @@
 
       <div class="grid" style="margin-top:10px;">
         <div class="f"><label>Shahar</label><input id="pr_city" value="${escapeHtml(p.city||"")}" ${canEdit?"":"disabled"}></div>
-        <div class="f"><label>Deadline (ISO yoki matn)</label><input id="pr_deadline" value="${escapeHtml(p.deadline||"")}" ${canEdit?"":"disabled"}></div>
+        <div class="f"><label>Deadline</label><input id="pr_deadline" value="${escapeHtml(p.deadline||"")}" ${canEdit?"":"disabled"}></div>
       </div>
 
-      <div class="grid1" style="margin-top:10px;">
+      <div class="grid" style="margin-top:10px;">
         <div class="f"><label>Product/Service</label><input id="pr_product" value="${escapeHtml(p.product||"")}" ${canEdit?"":"disabled"}></div>
+        <div class="f"><label>PM</label><div id="pr_pm"></div></div>
       </div>
 
       <div class="grid1" style="margin-top:10px;">
@@ -1109,6 +1828,32 @@
         <button class="btn" id="pr_close">Yopish</button>
       </div>
     `);
+
+    const stCtrl = mountSelect(document.getElementById("pr_status"), {
+      id:"sel_pr_status_edit",
+      label:"",
+      value: p.status || "YANGI",
+      options: PROJECT_COLS.map(c=>({value:c.key, label:c.title})),
+      onChange:()=>{}
+    });
+
+    const pmCtrl = mountSelect(document.getElementById("pr_pm"), {
+      id:"sel_pr_pm_edit",
+      label:"",
+      value: defaultPm,
+      options: pmOptions.length ? pmOptions : [{value: defaultPm, label:(p.pmName||"PM")}],
+      onChange:()=>{}
+    });
+
+    if(!isAdmin()){
+      // PM cannot reassign PM
+      pmCtrl.setValue(p.pmId);
+      // visually lock: just prevent open by disabling pointer events
+      const pmRoot = document.getElementById("sel_pr_pm_edit");
+      if(pmRoot) pmRoot.style.pointerEvents = "none";
+      const pmBtn = pmRoot?.querySelector(".bselBtn");
+      if(pmBtn) pmBtn.style.opacity = ".75";
+    }
 
     document.getElementById("pr_go").onclick = ()=>{ markActivity(); closeModal(); goToTasksForProject(projectId); };
     document.getElementById("pr_close").onclick = ()=>{ markActivity(); closeModal(); };
@@ -1130,19 +1875,16 @@
           comment: document.getElementById("pr_comment").value.trim(),
           product: document.getElementById("pr_product").value.trim(),
           deadline: document.getElementById("pr_deadline").value.trim(),
-          status: document.getElementById("pr_status").value.trim(),
-          pmId: p.pmId,
-          pmName: p.pmName
+          status: stCtrl.getValue(),
+          pmId: isAdmin() ? pmCtrl.getValue() : p.pmId
         };
 
         await withLoading("Saqlash…","Project yangilanmoqda", async ()=>{
           const res = await api("project_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
           if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
-          const upd = res.project;
-          const i = PROJECTS.findIndex(x=>x.id===upd.id);
-          if(i>=0) PROJECTS[i]=upd;
         });
 
+        await loadProjects(true);
         closeModal();
         drawProjectsBoard();
       };
@@ -1155,35 +1897,34 @@
   }
 
   /************ TASKS PAGE ************/
+  let selProjectCtrl = null;
+  let selUserCtrl = null;
   let draggingTaskId = null;
-  let suppressClickId = null;
 
   async function renderTasks(){
-    // parse project from hash query (for "O‘tish")
     const q = parseHashQuery();
     if(q.projectId) FILTER_PROJECT = q.projectId;
 
     page.innerHTML = `
       <div class="card">
         <div class="cardTitleRow">
-          <div>
+          <div class="cardTitleBlock">
             <div class="cardTitle">Vazifalar</div>
-            <div class="muted">Boshlanmagan/Pauza -> Jarayonda drag • Jarayonda 1 ta • Bajarildi/Otmena -> Pauza qaytarish</div>
+            <div class="muted">Boshlanmagan/Pauza -> Jarayonda (drag) • Jarayonda: 1 ta/user • Bajarildi/Otmena -> Pauza qaytarish</div>
           </div>
-          <div class="toolbar">
-            <div class="select">
-              <label>Proyekt</label>
-              <select id="fProject"></select>
-            </div>
+          <div class="toolbarRight">
+            ${canCreateTask() ? `<button class="btn primary" id="btnAddTask">➕ Vazifa</button>` : ``}
+            <button class="btn" id="btnRefreshTasks">🔄 Yangilash</button>
+          </div>
+        </div>
 
-            ${isAdmin() ? `
-              <div class="select">
-                <label>User</label>
-                <select id="fUser"></select>
-              </div>
-            ` : ``}
-
-            <button class="btn" id="btnRefreshTasks">Yangilash</button>
+        <div class="toolbar">
+          <div class="toolbarLeft">
+            <div id="filterProject"></div>
+            ${isAdmin() ? `<div id="filterUser"></div>` : ``}
+          </div>
+          <div class="toolbarRight">
+            <span class="pill" id="tasksHint">⚡ tezkor</span>
           </div>
         </div>
 
@@ -1191,71 +1932,151 @@
       </div>
     `;
 
-    await withLoading("Vazifalar…","Yuklanmoqda", async ()=>{
-      await ensurePublicUsers();
-      await loadProjects();
-      // set dropdowns
-      buildFiltersUI();
-      // load tasks by current filters
-      await loadTasks(FILTER_PROJECT || "NO_PROJECT", isAdmin()?FILTER_USER:"ALL");
-    });
-
-    drawTasksBoard();
-    startTaskTimers();
-    startHeartbeat();
-  }
-
-  function buildFiltersUI(){
-    const selP = document.getElementById("fProject");
-    if(selP){
-      const options = [
-        {id:"NO_PROJECT", title:"Bez proyekt (default)"},
-        {id:"ALL", title:"Barcha (ALL)"},
-        ...PROJECTS.map(p=>({id:p.id, title:p.title || p.id}))
-      ];
-      selP.innerHTML = options.map(o=>`<option value="${escapeHtml(o.id)}" ${String(FILTER_PROJECT)===String(o.id)?"selected":""}>${escapeHtml(o.title)}</option>`).join("");
-      selP.onchange = async ()=>{
-        markActivity();
-        FILTER_PROJECT = selP.value;
-        await withLoading("Filtr…","Vazifalar yangilanmoqda", async ()=>{
-          await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
-        });
-        drawTasksBoard();
-      };
-    }
-
-    if(isAdmin()){
-      const selU = document.getElementById("fUser");
-      if(selU){
-        // include ALL + users
-        const options = [{id:"ALL", title:"Barcha"}].concat(USERS_PUBLIC.map(u=>({id:u.id, title:`${u.ism} (${u.rol})`})));
-        selU.innerHTML = options.map(o=>`<option value="${escapeHtml(o.id)}" ${String(FILTER_USER)===String(o.id)?"selected":""}>${escapeHtml(o.title)}</option>`).join("");
-        selU.onchange = async ()=>{
-          markActivity();
-          FILTER_USER = selU.value;
-          await withLoading("Filtr…","Vazifalar yangilanmoqda", async ()=>{
-            await loadTasks(FILTER_PROJECT, FILTER_USER);
-          });
-          drawTasksBoard();
-        };
-      }
+    if(canCreateTask()){
+      document.getElementById("btnAddTask").onclick = ()=>{ markActivity(); openTaskCreateModal(); };
     }
 
     document.getElementById("btnRefreshTasks").onclick = async ()=>{
       markActivity();
       await withLoading("Vazifalar…","Yangilanmoqda", async ()=>{
+        await ensurePublicUsers(true);
         await loadProjects(true);
-        await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+        await loadTasks(FILTER_PROJECT || "NO_PROJECT", isAdmin()?FILTER_USER:"ALL");
       });
-      buildFiltersUI();
+      buildTaskFilters();
       drawTasksBoard();
     };
+
+    await withLoading("Vazifalar…","Yuklanmoqda", async ()=>{
+      await ensurePublicUsers();
+      await loadProjects();
+      await loadTasks(FILTER_PROJECT || "NO_PROJECT", isAdmin()?FILTER_USER:"ALL");
+    });
+
+    buildTaskFilters();
+    drawTasksBoard();
+    startTaskTick();
+  }
+
+  function buildTaskFilters(){
+    const projectContainer = document.getElementById("filterProject");
+    const userContainer = document.getElementById("filterUser");
+
+    const projOptions = [
+      {value:"NO_PROJECT", label:"Bez proyekt (default)"},
+      {value:"ALL", label:"Barcha (ALL)"},
+      ...PROJECTS.map(p=>({value:p.id, label:(p.title || p.id), small:(p.pmName ? `PM: ${p.pmName}`:"")}))
+    ];
+
+    selProjectCtrl = mountSelect(projectContainer, {
+      id:"sel_filter_project",
+      label:"Proyekt",
+      value: FILTER_PROJECT || "NO_PROJECT",
+      compact:false,
+      options: projOptions,
+      onChange: async (v)=>{
+        markActivity();
+        FILTER_PROJECT = v;
+        await withLoading("Filtr…","Vazifalar yangilanmoqda", async ()=>{
+          await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+        });
+        drawTasksBoard();
+      }
+    });
+
+    if(isAdmin() && userContainer){
+      const userOptions = [
+        {value:"ALL", label:"Barcha"},
+        ...USERS_PUBLIC.map(u=>({value:u.id, label:`${u.ism}`, small:(u.rol||"")})),
+      ];
+      selUserCtrl = mountSelect(userContainer, {
+        id:"sel_filter_user",
+        label:"User",
+        value: FILTER_USER || "ALL",
+        compact:true,
+        options: userOptions,
+        onChange: async (v)=>{
+          markActivity();
+          FILTER_USER = v;
+          await withLoading("Filtr…","Vazifalar yangilanmoqda", async ()=>{
+            await loadTasks(FILTER_PROJECT, FILTER_USER);
+          });
+          drawTasksBoard();
+        }
+      });
+    }
+  }
+
+  function sortTasks(list){
+    return list.slice().sort((a,b)=>{
+      const da = a.deadline ? new Date(a.deadline).getTime() : 9e15;
+      const db = b.deadline ? new Date(b.deadline).getTime() : 9e15;
+      if(da !== db) return da - db;
+      const ua = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+      const ub = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+      return ub - ua;
+    });
+  }
+
+  function taskTimerNowMinutes(t){
+    const base = Number(t.spentMin||0);
+    if(String(t.status) !== "JARAYONDA") return base;
+    const s = t.startAt || t.startedAt || t.lastStart || "";
+    if(!s) return base;
+    const ms = new Date(s).getTime();
+    if(isNaN(ms)) return base;
+    const add = (Date.now() - ms) / 60000;
+    return base + add;
+  }
+
+  function renderTaskCard(t){
+    const title = computedTaskTitle(t);
+    const proj = t.projectId ? findProjectTitle(t.projectId) : "";
+    const deadline = t.deadline ? fmtDate(t.deadline) : "";
+    const spent = fmtHM(taskTimerNowMinutes(t));
+    const upd = t.updatedAt ? fmtDate(t.updatedAt) : "";
+    const canSeeAssignee = isAdmin() || isPM();
+    const assName = canSeeAssignee ? findUserName(t.assigneeId) : "";
+    const isRunning = String(t.status)==="JARAYONDA";
+
+    return `
+      <div class="tCard" draggable="${canMoveTask(t) ? "true":"false"}" data-id="${escapeHtml(t.id)}">
+        <div class="tTop">
+          <div style="min-width:0">
+            <div class="tTitle">${escapeHtml(title)}</div>
+            <div class="tMeta">
+              ${proj ? `<span class="chip">📌 ${escapeHtml(proj)}</span>` : ``}
+              ${deadline ? `<span class="chip">⏳ ${escapeHtml(deadline)}</span>` : ``}
+              ${canSeeAssignee && assName ? `<span class="chip">👤 ${escapeHtml(assName)}</span>` : ``}
+            </div>
+          </div>
+          <div class="tBadges">
+            ${isRunning ? `<span class="chip timer" data-timer="${escapeHtml(t.id)}">+ ${escapeHtml(spent)}</span>` : ``}
+            ${!isRunning ? `<span class="chip">${escapeHtml(spent)}</span>` : ``}
+          </div>
+        </div>
+
+        <div class="tLine">
+          <span>${escapeHtml(upd ? ("🕒 "+upd) : "")}</span>
+          <span class="muted">${canMoveTask(t) ? "↔️ drag" : "🔒"}</span>
+        </div>
+
+        ${String(t.status)==="OTMENA" && t.cancelReason ? `<div class="reason">Sabab: ${escapeHtml(t.cancelReason)}</div>` : ``}
+      </div>
+    `;
   }
 
   function drawTasksBoard(){
-    clearTimers();
     const board = document.getElementById("tasksBoard");
     if(!board) return;
+
+    // group
+    const by = {};
+    TASK_COLS.forEach(c=>by[c.key]=[]);
+    TASKS.forEach(t=>{
+      const st = t.status || "BOSHLANMAGAN";
+      (by[st] || (by[st]=[])).push(t);
+    });
 
     board.innerHTML = TASK_COLS.map(c=>`
       <div class="col" data-tstatus="${c.key}">
@@ -1267,322 +2088,432 @@
       </div>
     `).join("");
 
-    const by = {};
-    TASK_COLS.forEach(c=>by[c.key]=[]);
-    TASKS.forEach(t=>{
-      const st = String(t.status||"BOSHLANMAGAN");
-      (by[st] || (by[st]=[])).push(t);
-    });
-
     TASK_COLS.forEach(c=>{
-      const list = (by[c.key]||[]).slice().sort((a,b)=>{
-        const da = a.deadline ? new Date(a.deadline).getTime() : 9e15;
-        const db = b.deadline ? new Date(b.deadline).getTime() : 9e15;
-        return da - db;
-      });
+      const list = sortTasks(by[c.key]||[]);
+      const cnt = document.getElementById("tcnt_"+c.key);
+      if(cnt) cnt.textContent = String(list.length);
 
-      document.getElementById("tcnt_"+c.key).textContent = String(list.length);
       const col = document.getElementById("tcol_"+c.key);
+      col.innerHTML = list.map(t=>renderTaskCard(t)).join("");
 
-      col.innerHTML = list.map(t=>{
-        const title = computedTaskTitle(t);
-        const prTitle = t.projectId ? (t.projectTitle || findProjectTitle(t.projectId) || "") : "";
-        const isRunning = t.status === "JARAYONDA";
-        const spentLabel = fmtHM(t.spentMin || 0);
-        const upd = t.updatedAt ? fmtDate(t.updatedAt) : "";
-
-        const showAssignee = isAdmin() || isPM();
-        const assignee = showAssignee ? (t.assigneeName || findUserName(t.assigneeId) || "") : "";
-
-        const deadlineChip = t.deadline ? chip("⏳ " + fmtDate(t.deadline)) : "";
-        const projectChip = prTitle ? chip("📌 " + prTitle) : "";
-
-        const timerHtml = isRunning
-          ? `<span class="timer" data-timer="${escapeHtml(t.id)}">+ 0m</span>`
-          : "";
-
-        const reasonHtml = (t.status==="OTMENA" && t.cancelReason)
-          ? `<div class="reason">Sabab: ${escapeHtml(t.cancelReason)}</div>`
-          : "";
-
-        return `
-          <div class="tCard" draggable="true" data-id="${escapeHtml(t.id)}">
-            <div class="tTop">
-              <div class="tTitle">${escapeHtml(title)}</div>
-              <div class="tBadges">${projectChip}${deadlineChip}</div>
-            </div>
-
-            <div class="tMeta">
-              ${chip("⏱ " + spentLabel)}
-              ${t.updatedAt ? chip("🕒 " + upd) : ""}
-            </div>
-
-            <div class="tLine">
-              <div>${showAssignee ? `👤 ${escapeHtml(assignee||"-")}` : `👤 ${escapeHtml(t.assigneeName||findUserName(t.assigneeId)||"-")}`}</div>
-              <div>${timerHtml}</div>
-            </div>
-
-            ${reasonHtml}
-          </div>
-        `;
-      }).join("");
-
-      // card events (drag & click)
+      // card click / drag
       col.querySelectorAll(".tCard").forEach(card=>{
-        const id = card.getAttribute("data-id");
+        const tid = card.getAttribute("data-id");
+        const task = TASKS.find(x=>String(x.id)===String(tid));
+        if(!task) return;
 
-        card.addEventListener("dragstart", (e)=>{
-          suppressClickId = id;
-          draggingTaskId = id;
-          card.classList.add("dragging");
-          e.dataTransfer.setData("text/plain", id);
-          e.dataTransfer.effectAllowed = "move";
-        });
-        card.addEventListener("dragend", ()=>{
-          card.classList.remove("dragging");
-          draggingTaskId=null;
-          setTimeout(()=>{ suppressClickId=null; }, 50);
-        });
-
-        card.addEventListener("click", ()=>{
-          if(suppressClickId === id) return; // prevent click after drag
+        card.addEventListener("click", (e)=>{
+          // ignore click if it was drag
           markActivity();
-          openTaskModal(id);
+          openTaskModal(task.id);
         });
+
+        if(card.getAttribute("draggable")==="true"){
+          card.addEventListener("dragstart", (e)=>{
+            draggingTaskId = tid;
+            card.classList.add("dragging");
+            e.dataTransfer.setData("text/plain", tid);
+            e.dataTransfer.effectAllowed = "move";
+          });
+          card.addEventListener("dragend", ()=>{
+            card.classList.remove("dragging");
+            draggingTaskId = null;
+          });
+        }
       });
-    });
 
-    // drop zones
-    board.querySelectorAll(".colBody").forEach(zone=>{
-      zone.addEventListener("dragover", (e)=>{ e.preventDefault(); zone.classList.add("dropHint"); });
-      zone.addEventListener("dragleave", ()=>zone.classList.remove("dropHint"));
-
-      zone.addEventListener("drop", async (e)=>{
+      // drop zones: allowed transitions only
+      col.addEventListener("dragover", (e)=>{ e.preventDefault(); col.classList.add("dropHint"); });
+      col.addEventListener("dragleave", ()=>col.classList.remove("dropHint"));
+      col.addEventListener("drop", async (e)=>{
         e.preventDefault();
-        zone.classList.remove("dropHint");
+        col.classList.remove("dropHint");
 
-        const taskId = e.dataTransfer.getData("text/plain") || draggingTaskId;
-        if(!taskId) return;
+        const tid = e.dataTransfer.getData("text/plain") || draggingTaskId;
+        if(!tid) return;
 
-        const colEl = zone.closest(".col");
-        const toStatus = colEl.getAttribute("data-tstatus");
-        const t = TASKS.find(x=>x.id===taskId);
+        const targetStatus = c.key;
+        const t = TASKS.find(x=>String(x.id)===String(tid));
         if(!t) return;
 
-        // rules:
-        // - to JARAYONDA only from BOSHLANMAGAN/PAUZA
-        // - to PAUZA allowed from OTMENA/BAJARILDI (and also from JARAYONDA if you want)
-        // - to OTMENA needs reason -> open modal reason
-        if (toStatus === "JARAYONDA" && !["BOSHLANMAGAN","PAUZA"].includes(t.status)) return;
+        // permission
+        if(!canMoveTask(t)) return;
 
-        if (toStatus === "OTMENA") {
-          // ask reason in modal flow
-          openCancelReasonFlow(taskId);
-          return;
-        }
+        // allowed transitions by your rules
+        const from = String(t.status||"BOSHLANMAGAN");
+        const to = String(targetStatus);
 
-        // optimistic update
-        const oldStatus = t.status;
-        t.status = toStatus;
-        if(toStatus !== "JARAYONDA") t.startedAt = "";
-        drawTasksBoard();
-        startTaskTimers();
+        // only allow:
+        // - Boshlanmagan/Pauza/Jarayonda -> Jarayonda/Pauza
+        // - Bajarildi/Otmena -> Pauza
+        // (Done/Cancel лучше кнопками)
+        const allowed =
+          (to==="JARAYONDA" && (from==="BOSHLANMAGAN" || from==="PAUZA")) ||
+          (to==="PAUZA" && (from==="JARAYONDA" || from==="BAJARILDI" || from==="OTMENA")) ||
+          (to==="JARAYONDA" && from==="JARAYONDA") ||
+          (to==="PAUZA" && from==="PAUZA");
 
-        await withLoading("Saqlash…","Vazifa status yangilanmoqda", async ()=>{
-          const res = await api("task_update_status", { payload: encodeURIComponent(JSON.stringify({id:taskId, status:toStatus})) });
-          if(!res?.ok){
-            // rollback reload
-            await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
-          } else {
-            // replace updated task (and server might have paused another running task)
-            const upd = res.task;
-            const i = TASKS.findIndex(x=>x.id===upd.id);
-            if(i>=0) TASKS[i]=upd;
-            // reload tasks to reflect "other task dropped from Jarayonda"
-            await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
-          }
-        });
+        if(!allowed) return;
 
-        drawTasksBoard();
-        startTaskTimers();
+        // if moving to JARAYONDA -> must auto pause others for that user (server handles)
+        await setTaskStatus(tid, to, {autoPauseOthers:true, clearReason: (to==="PAUZA")});
       });
     });
   }
 
-  function openCancelReasonFlow(taskId){
-    const t = TASKS.find(x=>x.id===taskId);
+  async function setTaskStatus(taskId, status, opts={}){
+    const t = TASKS.find(x=>String(x.id)===String(taskId));
     if(!t) return;
 
-    openModal("Vazifani bekor qilish", `
-      <div class="muted">Sabab yozmasangiz, bekor qilinmaydi.</div>
-      <div class="grid1" style="margin-top:10px;">
-        <div class="f">
-          <label>Sabab</label>
-          <textarea id="cancelReason" placeholder="Sabab..."></textarea>
-        </div>
+    // optimistic update
+    t.status = status;
+    if(status==="PAUZA" && opts.clearReason) t.cancelReason = "";
+    drawTasksBoard();
+
+    await withLoading("Saqlash…","Vazifa yangilanmoqda", async ()=>{
+      const payload = {
+        id: taskId,
+        status,
+        autoPauseOthers: !!opts.autoPauseOthers,
+        cancelReason: opts.cancelReason || "",
+        clearReason: !!opts.clearReason
+      };
+      const res = await api("task_set_status", { payload: encodeURIComponent(JSON.stringify(payload)) });
+      if(!res?.ok){
+        // rollback by reload
+        await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+        drawTasksBoard();
+        return;
+      }
+      // update from server if provided
+      if(res.task){
+        const i = TASKS.findIndex(x=>String(x.id)===String(res.task.id));
+        if(i>=0) TASKS[i] = res.task;
+      }else{
+        // reload minimal
+        await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+      }
+      drawTasksBoard();
+    });
+  }
+
+  function openTaskCreateModal(){
+    // fin can create only personal NO_PROJECT
+    const canPickProject = isAdmin() || isPM();
+    const canPickAssignee = isAdmin() || isPM(); // fin cannot assign to others
+
+    const projOptions = [
+      {value:"", label:"Bez proyekt"},
+      ...PROJECTS.map(p=>({value:p.id, label:(p.title||p.id), small:(p.pmName?`PM: ${p.pmName}`:"")}))
+    ];
+
+    const userOptions = USERS_PUBLIC.map(u=>({value:u.id, label:u.ism, small:u.rol||""}));
+    const defaultAssignee = USER.id;
+
+    openModal("➕ Yangi vazifa", `
+      <div class="grid">
+        <div class="f"><label>Vazifa nomi (ixtiyoriy)</label><input id="t_title" placeholder="Agar bo‘sh bo‘lsa description 3 so‘z"></div>
+        <div class="f"><label>Deadline</label><input id="t_deadline" placeholder="2025-12-31 18:00"></div>
       </div>
-      <div class="muted" id="cmsg" style="margin-top:10px;min-height:18px"></div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Proyekt</label><div id="t_project"></div></div>
+        <div class="f"><label>Ijrochi</label><div id="t_assignee"></div></div>
+      </div>
+
+      <div class="grid1" style="margin-top:10px;">
+        <div class="f"><label>Izoh / Description</label><textarea id="t_desc" placeholder="Vazifa izohi..."></textarea></div>
+      </div>
+
+      <div id="t_msg" class="muted" style="margin-top:10px;min-height:18px"></div>
+
       <div class="modalActions">
-        <button class="btn" id="cNo">Bekor</button>
-        <button class="btn primary" id="cYes">OTMENA</button>
+        <button class="btn" id="t_close">Bekor</button>
+        <button class="btn primary" id="t_save">Saqlash</button>
       </div>
     `);
 
-    document.getElementById("cNo").onclick = ()=>{ markActivity(); closeModal(); };
-    document.getElementById("cYes").onclick = async ()=>{
+    const projCtrl = mountSelect(document.getElementById("t_project"), {
+      id:"sel_t_project_new",
+      label:"",
+      value:"",
+      options: projOptions,
+      onChange:()=>{}
+    });
+
+    const asgCtrl = mountSelect(document.getElementById("t_assignee"), {
+      id:"sel_t_assignee_new",
+      label:"",
+      value: defaultAssignee,
+      options: userOptions.length ? userOptions : [{value: defaultAssignee, label:(USER.ism||USER.login||"me")}],
+      onChange:()=>{}
+    });
+
+    if(!canPickProject){
+      // fin => force no project
+      const root = document.getElementById("sel_t_project_new");
+      if(root){
+        root.style.pointerEvents = "none";
+        root.querySelector(".bselBtn").style.opacity = ".75";
+      }
+      projCtrl.setValue("");
+    }
+    if(!canPickAssignee){
+      // fin => force self
+      const root = document.getElementById("sel_t_assignee_new");
+      if(root){
+        root.style.pointerEvents = "none";
+        root.querySelector(".bselBtn").style.opacity = ".75";
+      }
+      asgCtrl.setValue(USER.id);
+    }
+
+    document.getElementById("t_close").onclick = ()=>{ markActivity(); closeModal(); };
+    document.getElementById("t_save").onclick = async ()=>{
       markActivity();
-      const reason = document.getElementById("cancelReason").value.trim();
-      const msg = document.getElementById("cmsg");
+      const msg = document.getElementById("t_msg");
       msg.textContent = "";
-      if(!reason){ msg.textContent = "Sabab shart"; return; }
 
-      closeModal();
+      const payload = {
+        id:"",
+        title: document.getElementById("t_title").value.trim(),
+        description: document.getElementById("t_desc").value.trim(),
+        deadline: document.getElementById("t_deadline").value.trim(),
+        projectId: canPickProject ? projCtrl.getValue() : "",
+        assigneeId: canPickAssignee ? asgCtrl.getValue() : USER.id,
+        status: "BOSHLANMAGAN"
+      };
 
-      await withLoading("Saqlash…","Bekor qilinmoqda", async ()=>{
-        const res = await api("task_update_status", { payload: encodeURIComponent(JSON.stringify({id:taskId, status:"OTMENA", reason})) });
-        if(!res?.ok){
-          await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
-          return;
-        }
+      if(!payload.description && !payload.title){
+        msg.textContent = "Title yoki description shart";
+        return;
+      }
+
+      await withLoading("Saqlash…","Vazifa yaratilmoqda", async ()=>{
+        const res = await api("task_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
+        if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
+      });
+
+      await withLoading("Yangilash…","Vazifalar yuklanmoqda", async ()=>{
         await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
       });
 
+      closeModal();
       drawTasksBoard();
-      startTaskTimers();
     };
   }
 
   function openTaskModal(taskId){
-    const t = TASKS.find(x=>x.id===taskId);
+    const t = TASKS.find(x=>String(x.id)===String(taskId));
     if(!t) return;
 
-    const title = computedTaskTitle(t);
-    const prTitle = t.projectId ? (t.projectTitle || findProjectTitle(t.projectId) || "") : "";
-    const assignee = t.assigneeName || findUserName(t.assigneeId) || "";
+    const editable = canEditTask(t);
+    const canSeeAssignee = isAdmin() || isPM();
+    const hasProject = !!t.projectId && String(t.projectId).trim() !== "";
+    const project = hasProject ? findProjectById(t.projectId) : null;
 
-    const canReturn = (isAdmin() || isPM()) && (t.status === "BAJARILDI" || t.status === "OTMENA");
-    const showAssignee = (isAdmin() || isPM());
+    // if task has project, PM(owner) can edit; also admin
+    // if task no project, only executor (admin already)
+    const canEditFields = editable;
 
-    openModal(title, `
+    // assignee control:
+    // - admin always can change
+    // - pm can change only if task belongs to their project
+    // - otherwise no
+    const canChangeAssignee =
+      isAdmin() ||
+      (hasProject && isPM() && project && String(project.pmId)===String(USER.id));
+
+    // project control:
+    // - admin can change
+    // - pm can change for their project tasks (switching project is optional; we allow only for admin to avoid chaos)
+    const canChangeProject = isAdmin();
+
+    const projOptions = [
+      {value:"", label:"Bez proyekt"},
+      ...PROJECTS.map(p=>({value:p.id, label:(p.title||p.id), small:(p.pmName?`PM: ${p.pmName}`:"")}))
+    ];
+    const userOptions = USERS_PUBLIC.map(u=>({value:u.id, label:u.ism, small:u.rol||""}));
+
+    const status = String(t.status||"BOSHLANMAGAN");
+    const spent = fmtHM(taskTimerNowMinutes(t));
+    const upd = t.updatedAt ? fmtDate(t.updatedAt) : "";
+
+    // buttons logic
+    const showStart = editable && (status==="BOSHLANMAGAN" || status==="PAUZA");
+    const showPause = editable && status==="JARAYONDA";
+    const showDone  = editable && (status!=="BAJARILDI");
+    const showCancel= editable && (status!=="OTMENA");
+    const showReturn= (isAdmin() || (hasProject && isPM() && project && String(project.pmId)===String(USER.id))) && (status==="BAJARILDI" || status==="OTMENA");
+
+    openModal("Vazifa", `
       <div class="grid">
-        <div class="f"><label>Proyekt</label><input value="${escapeHtml(prTitle || "Bez proyekt")}" disabled></div>
-        <div class="f"><label>Status</label><input value="${escapeHtml(t.status)}" disabled></div>
+        <div class="f"><label>Title</label><input id="mt_title" value="${escapeHtml(t.title||"")}" ${canEditFields?"":"disabled"}></div>
+        <div class="f"><label>Deadline</label><input id="mt_deadline" value="${escapeHtml(t.deadline||"")}" ${canEditFields?"":"disabled"}></div>
       </div>
 
       <div class="grid" style="margin-top:10px;">
-        <div class="f"><label>Deadline</label><input value="${escapeHtml(t.deadline ? fmtDate(t.deadline) : "")}" disabled></div>
-        <div class="f"><label>Potrachennoe</label><input value="${escapeHtml(fmtHM(t.spentMin||0))}" disabled></div>
-      </div>
-
-      <div class="grid" style="margin-top:10px;">
-        <div class="f"><label>Poslednee izm</label><input value="${escapeHtml(t.updatedAt ? fmtDate(t.updatedAt) : "")}" disabled></div>
-        <div class="f"><label>Otvetstvenniy</label><input value="${escapeHtml(showAssignee ? assignee : (assignee || "-"))}" disabled></div>
+        <div class="f"><label>Proyekt</label><div id="mt_project"></div></div>
+        <div class="f"><label>Ijrochi</label><div id="mt_assignee"></div></div>
       </div>
 
       <div class="grid1" style="margin-top:10px;">
-        <div class="f"><label>Opisanie</label><textarea disabled>${escapeHtml(t.description||"")}</textarea></div>
+        <div class="f"><label>Description</label><textarea id="mt_desc" ${canEditFields?"":"disabled"}>${escapeHtml(t.description||"")}</textarea></div>
       </div>
 
-      ${t.status==="OTMENA" && t.cancelReason ? `
-        <div class="grid1" style="margin-top:10px;">
-          <div class="f"><label>Sabab (Otmena)</label><textarea disabled>${escapeHtml(t.cancelReason)}</textarea></div>
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Status</label>
+          <div class="pill">${escapeHtml(status)}</div>
         </div>
-      ` : ""}
+        <div class="f"><label>Spent / Updated</label>
+          <div class="pill">⏱ ${escapeHtml(spent)} • 🕒 ${escapeHtml(upd||"-")}</div>
+        </div>
+      </div>
+
+      ${status==="OTMENA" && t.cancelReason ? `<div class="warnBox" style="margin-top:10px;">Sabab: ${escapeHtml(t.cancelReason)}</div>` : ``}
+
+      <div id="mt_msg" class="muted" style="margin-top:10px;min-height:18px"></div>
 
       <div class="modalActions">
-        <button class="btn" id="tClose">Yopish</button>
-        <button class="btn" id="tStart">Start</button>
-        <button class="btn" id="tCancel">Otmena</button>
-        <button class="btn primary" id="tDone">Bajarildi</button>
-        ${canReturn ? `<button class="btn" id="tReturn">Vazifani qaytarish (Pauza)</button>` : ``}
+        ${showStart ? `<button class="btn primary" id="mt_start">▶ Start</button>` : ``}
+        ${showPause ? `<button class="btn" id="mt_pause">⏸ Pauza</button>` : ``}
+        ${showDone ? `<button class="btn" id="mt_done">✅ Bajarildi</button>` : ``}
+        ${showCancel ? `<button class="btn danger" id="mt_cancel">❌ Otmena</button>` : ``}
+        ${showReturn ? `<button class="btn" id="mt_return">↩ Vazifani qaytarish</button>` : ``}
+      </div>
+
+      <div class="modalActions">
+        ${canEditFields ? `<button class="btn" id="mt_save">💾 Saqlash</button>` : ``}
+        <button class="btn" id="mt_close">Yopish</button>
       </div>
     `);
 
-    document.getElementById("tClose").onclick = ()=>{ markActivity(); closeModal(); };
-    document.getElementById("tCancel").onclick = ()=>{ markActivity(); closeModal(); openCancelReasonFlow(taskId); };
+    const projCtrl = mountSelect(document.getElementById("mt_project"), {
+      id:"sel_mt_project",
+      label:"",
+      value: t.projectId || "",
+      options: projOptions,
+      onChange:()=>{}
+    });
 
-    document.getElementById("tStart").onclick = async ()=>{
-      markActivity();
-      closeModal();
+    const asgCtrl = mountSelect(document.getElementById("mt_assignee"), {
+      id:"sel_mt_assignee",
+      label:"",
+      value: t.assigneeId || "",
+      options: userOptions,
+      onChange:()=>{}
+    });
 
-      await withLoading("Start…","Jarayonga o‘tkazilmoqda", async ()=>{
-        const res = await api("task_update_status", { payload: encodeURIComponent(JSON.stringify({id:taskId, status:"JARAYONDA"})) });
-        if(!res?.ok){
-          await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
-        } else {
-          // reload because server may pause another task
-          await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
-        }
-      });
+    // lock controls as needed
+    if(!canChangeProject){
+      const root = document.getElementById("sel_mt_project");
+      if(root){ root.style.pointerEvents="none"; root.querySelector(".bselBtn").style.opacity=".75"; }
+    }
+    if(!canChangeAssignee){
+      const root = document.getElementById("sel_mt_assignee");
+      if(root){ root.style.pointerEvents="none"; root.querySelector(".bselBtn").style.opacity=".75"; }
+    }
+    if(!canSeeAssignee){
+      // hide assignee if not allowed (fin)
+      const block = document.getElementById("sel_mt_assignee")?.closest(".f");
+      if(block) block.style.display = "none";
+    }
 
-      drawTasksBoard();
-      startTaskTimers();
-    };
+    document.getElementById("mt_close").onclick = ()=>{ markActivity(); closeModal(); };
 
-    document.getElementById("tDone").onclick = async ()=>{
-      markActivity();
-      closeModal();
+    const msg = document.getElementById("mt_msg");
 
-      await withLoading("Saqlash…","Bajarildi qilinmoqda", async ()=>{
-        const res = await api("task_update_status", { payload: encodeURIComponent(JSON.stringify({id:taskId, status:"BAJARILDI"})) });
-        if(!res?.ok) await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
-        else await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
-      });
-
-      drawTasksBoard();
-      startTaskTimers();
-    };
-
-    const ret = document.getElementById("tReturn");
-    if(ret){
-      ret.onclick = async ()=>{
+    if(canEditFields){
+      document.getElementById("mt_save").onclick = async ()=>{
         markActivity();
-        closeModal();
+        msg.textContent = "";
 
-        await withLoading("Qaytarish…","Pauzaga o‘tkazilmoqda", async ()=>{
-          const res = await api("task_update_status", { payload: encodeURIComponent(JSON.stringify({id:taskId, status:"PAUZA"})) });
-          if(!res?.ok) await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
-          else await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+        const payload = {
+          id: t.id,
+          title: document.getElementById("mt_title").value.trim(),
+          description: document.getElementById("mt_desc").value.trim(),
+          deadline: document.getElementById("mt_deadline").value.trim(),
+          projectId: canChangeProject ? projCtrl.getValue() : (t.projectId||""),
+          assigneeId: canChangeAssignee ? asgCtrl.getValue() : (t.assigneeId||"")
+        };
+
+        // rule: if task becomes no project -> only executor can own; but admin can still
+        if(!isAdmin()){
+          const newHasProject = !!payload.projectId;
+          if(!newHasProject && String(payload.assigneeId)!==String(USER.id)){
+            msg.textContent = "Bez proyekt bo‘lsa, ijrochi faqat o‘zi bo‘lishi mumkin.";
+            return;
+          }
+        }
+
+        await withLoading("Saqlash…","Vazifa saqlanmoqda", async ()=>{
+          const res = await api("task_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
+          if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
         });
 
+        await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
         drawTasksBoard();
-        startTaskTimers();
+        closeModal();
+      };
+    }
+
+    // actions
+    if(showStart){
+      document.getElementById("mt_start").onclick = async ()=>{
+        markActivity();
+        await setTaskStatus(t.id, "JARAYONDA", {autoPauseOthers:true});
+        closeModal();
+      };
+    }
+    if(showPause){
+      document.getElementById("mt_pause").onclick = async ()=>{
+        markActivity();
+        await setTaskStatus(t.id, "PAUZA", {clearReason:true});
+        closeModal();
+      };
+    }
+    if(showDone){
+      document.getElementById("mt_done").onclick = async ()=>{
+        markActivity();
+        await setTaskStatus(t.id, "BAJARILDI", {clearReason:true});
+        closeModal();
+      };
+    }
+    if(showCancel){
+      document.getElementById("mt_cancel").onclick = async ()=>{
+        markActivity();
+        const reason = prompt("Otmena sababi (sabab):", t.cancelReason || "");
+        if(reason === null) return;
+        const r = String(reason||"").trim();
+        if(!r){ alert("Sabab shart"); return; }
+        await setTaskStatus(t.id, "OTMENA", {cancelReason:r});
+        closeModal();
+      };
+    }
+    if(showReturn){
+      document.getElementById("mt_return").onclick = async ()=>{
+        markActivity();
+        await setTaskStatus(t.id, "PAUZA", {clearReason:true});
+        closeModal();
       };
     }
   }
 
-  function startTaskTimers(){
-    // update running timers every second
-    if(TASKS_TIMER_TICK) clearInterval(TASKS_TIMER_TICK);
-    TASKS_TIMER_TICK = setInterval(()=>{
+  function startTaskTick(){
+    stopTaskTick();
+    TASK_TICK = setInterval(()=>{
+      // update only running timers
       document.querySelectorAll("[data-timer]").forEach(el=>{
         const id = el.getAttribute("data-timer");
-        const t = TASKS.find(x=>x.id===id);
-        if(!t || t.status!=="JARAYONDA") { el.textContent = ""; return; }
-        const start = t.startedAt ? new Date(t.startedAt).getTime() : Date.now();
-        const elapsedMin = Math.max(0, Math.floor((Date.now()-start)/60000));
-        const total = (Number(t.spentMin)||0) + elapsedMin;
-        el.textContent = "+ " + fmtHM(total);
+        const t = TASKS.find(x=>String(x.id)===String(id));
+        if(!t) return;
+        const spent = fmtHM(taskTimerNowMinutes(t));
+        el.textContent = "+ " + spent;
       });
     }, 1000);
   }
-
-  function startHeartbeat(){
-    if(TASKS_HEARTBEAT) clearInterval(TASKS_HEARTBEAT);
-    // persist time every 45s for self running task
-    TASKS_HEARTBEAT = setInterval(async ()=>{
-      const running = TASKS.find(t=>t.status==="JARAYONDA" && String(t.assigneeId)===String(USER.id));
-      if(!running) return;
-      try{
-        await api("task_heartbeat", { payload: encodeURIComponent(JSON.stringify({id:running.id})) });
-        // we don’t force reload each time; it’s ok.
-      }catch(e){}
-    }, 45000);
-  }
-
-  function clearTimers(){
-    if(TASKS_TIMER_TICK){ clearInterval(TASKS_TIMER_TICK); TASKS_TIMER_TICK=null; }
-    if(TASKS_HEARTBEAT){ clearInterval(TASKS_HEARTBEAT); TASKS_HEARTBEAT=null; }
+  function stopTaskTick(){
+    if(TASK_TICK){ clearInterval(TASK_TICK); TASK_TICK=null; }
   }
 
   /************ BOOT ************/
