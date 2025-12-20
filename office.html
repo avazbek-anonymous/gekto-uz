@@ -6,36 +6,20 @@
   <title>G-SOFT | Managment</title>
 
   <style>
-    /* ===== THEME TOKENS ===== */
     :root{
-      --r:18px;
-      --gap:12px;
-      --shadow:0 18px 55px rgba(0,0,0,.35);
-
-      /* dark default */
-      --bg:#061a14;
-      --bg2:#0b2b23;
-      --card:rgba(255,255,255,.07);
-      --line:rgba(255,255,255,.12);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.65);
-      --brand:#ffd15c;
-      --ok:#10b981;
-      --bad:#f16262;
-      --chip:rgba(0,0,0,.18);
-      --input:rgba(0,0,0,.18);
+      --r:18px; --gap:12px; --shadow:0 18px 55px rgba(0,0,0,.35);
+      --bg:#061a14; --bg2:#0b2b23;
+      --card:rgba(255,255,255,.07); --line:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92); --muted:rgba(255,255,255,.65);
+      --brand:#ffd15c; --ok:#10b981; --bad:#f16262;
+      --chip:rgba(0,0,0,.18); --input:rgba(0,0,0,.18);
+      --colw: 320px;
     }
-
     [data-theme="light"]{
-      --bg:#f6f8fb;
-      --bg2:#eef2f7;
-      --card:rgba(255,255,255,.85);
-      --line:rgba(9,20,30,.10);
-      --text:rgba(9,20,30,.92);
-      --muted:rgba(9,20,30,.60);
-      --brand:#0ea5e9;
-      --chip:rgba(14,165,233,.08);
-      --input:rgba(9,20,30,.05);
+      --bg:#f6f8fb; --bg2:#eef2f7;
+      --card:rgba(255,255,255,.88); --line:rgba(9,20,30,.10);
+      --text:rgba(9,20,30,.92); --muted:rgba(9,20,30,.60);
+      --brand:#0ea5e9; --chip:rgba(14,165,233,.08); --input:rgba(9,20,30,.05);
       --shadow:0 18px 55px rgba(9,20,30,.12);
     }
 
@@ -52,11 +36,42 @@
       overflow:hidden;
     }
 
-    /* ===== LAYOUT ===== */
+    /* ===== Global Loading Block ===== */
+    body.isLoading .shell{filter: blur(1px) saturate(.95); opacity:.92}
+    body.isLoading{pointer-events:none}
+    .loadingOverlay{
+      position:fixed; inset:0; z-index:2000;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.38);
+      backdrop-filter: blur(10px);
+      opacity:0; visibility:hidden;
+      transition: opacity .18s ease, visibility .18s ease;
+      pointer-events:auto; /* must be clickable even when body pointer-events none */
+    }
+    body.isLoading .loadingOverlay{opacity:1; visibility:visible}
+    .loadingCard{
+      width:min(520px, calc(100% - 28px));
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    .loadingRow{display:flex;align-items:center;gap:12px}
+    .spinner{
+      width:18px;height:18px;border-radius:50%;
+      border:2px solid rgba(255,255,255,.18);
+      border-top-color: rgba(0,0,0,.55);
+      animation:spin .8s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loadingTitle{font-weight:1000}
+    .loadingSub{color:var(--muted);font-size:13px;margin-top:2px}
+
+    /* ===== Layout ===== */
     .shell{height:100vh;display:flex;min-height:0}
     .sidebar{
-      width:74px;
-      transition:width .22s ease;
+      width:74px; transition:width .22s ease;
       border-right:1px solid var(--line);
       background:rgba(255,255,255,.05);
       backdrop-filter: blur(12px);
@@ -85,12 +100,12 @@
       border-color:rgba(14,165,233,.22);
     }
     .brandText{
-      font-weight:1000;letter-spacing:.2px;
-      white-space:nowrap;overflow:hidden;
-      opacity:0;transform:translateX(-4px);
+      font-weight:1000; letter-spacing:.2px;
+      white-space:nowrap; overflow:hidden;
+      opacity:0; transform:translateX(-4px);
       transition:opacity .16s ease, transform .16s ease;
     }
-    .sidebar:hover .brandText{opacity:1;transform:translateX(0)}
+    .sidebar:hover .brandText{opacity:1; transform:translateX(0)}
 
     .nav{display:flex;flex-direction:column;gap:6px;padding-top:6px}
     .nav a{
@@ -102,14 +117,13 @@
     .nav a:hover{background:rgba(255,255,255,.06);border-color:var(--line)}
     .nav a.active{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.28)}
     [data-theme="light"] .nav a.active{background:rgba(14,165,233,.12);border-color:rgba(14,165,233,.24)}
-
     .ico{width:22px;height:22px;display:grid;place-items:center;flex:0 0 22px}
     .txt{
-      white-space:nowrap;overflow:hidden;
-      opacity:0;transform:translateX(-4px);
+      white-space:nowrap; overflow:hidden;
+      opacity:0; transform:translateX(-4px);
       transition:opacity .16s ease, transform .16s ease;
     }
-    .sidebar:hover .txt{opacity:1;transform:translateX(0)}
+    .sidebar:hover .txt{opacity:1; transform:translateX(0)}
 
     .main{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
     .topbar{
@@ -138,15 +152,12 @@
       padding:9px 12px;border-radius:14px;
       font-weight:900;cursor:pointer;
     }
+    .btn:hover{background:rgba(255,255,255,.08)}
     .btn.danger{background:rgba(241,98,98,.14);border-color:rgba(241,98,98,.24)}
     .btn.primary{background:rgba(255,209,92,.90);border-color:rgba(255,209,92,.28);color:#062018}
     [data-theme="light"] .btn.primary{background:rgba(14,165,233,.92);border-color:rgba(14,165,233,.25);color:#061a14}
 
-    .content{
-      flex:1;min-height:0;
-      padding:var(--gap);
-      overflow:auto;
-    }
+    .content{flex:1;min-height:0;padding:var(--gap);overflow:auto}
 
     .card{
       background:var(--card);
@@ -162,27 +173,31 @@
     }
     .cardTitle{font-weight:1000}
     .muted{color:var(--muted);font-size:12px}
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid var(--line);
+      background:var(--chip);
+      font-weight:900;
+      font-size:12px;
+      color:var(--text);
+    }
 
-    /* ===== THEME TOGGLE (SUN/MOON) ===== */
+    /* ===== Theme toggle ===== */
     .themeBtn{
       width:44px;height:40px;border-radius:14px;
       display:grid;place-items:center;
       border:1px solid var(--line);
       background:rgba(255,255,255,.06);
       cursor:pointer;
-      position:relative;
-      overflow:hidden;
+      position:relative;overflow:hidden;
     }
-    .themeIcon{
-      width:22px;height:22px;
-      transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .25s ease;
-    }
+    .themeIcon{width:22px;height:22px;transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .25s ease;}
     .themeBtn .sun{opacity:0;transform:translateY(10px) rotate(25deg) scale(.8)}
     .themeBtn .moon{opacity:1;transform:translateY(0) rotate(0) scale(1)}
-
     [data-theme="light"] .themeBtn .sun{opacity:1;transform:translateY(0) rotate(0) scale(1)}
     [data-theme="light"] .themeBtn .moon{opacity:0;transform:translateY(-10px) rotate(-25deg) scale(.8)}
-
     .themeBtn::after{
       content:"";
       position:absolute;inset:-40px;
@@ -194,30 +209,124 @@
     }
     [data-theme="light"] .themeBtn::after{transform: rotate(180deg); opacity:.25;}
 
-    /* ===== USERS TABLE ===== */
+    /* ===== Filters ===== */
     .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .spacer{flex:1}
-
-    table{width:100%;border-collapse:collapse}
-    th,td{
-      text-align:left;
-      padding:10px 10px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      font-size:13px;
-      vertical-align:middle;
-      white-space:nowrap;
+    .select{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      padding:8px 10px;border-radius:14px;
     }
+    .select label{color:var(--muted);font-size:12px}
+    .select select{
+      border:0;outline:none;background:transparent;color:var(--text);
+      font-weight:900;
+    }
+
+    /* ===== Boards ===== */
+    .board{
+      display:flex; gap:12px;
+      overflow:auto;
+      padding-bottom:10px;
+      scroll-snap-type:x mandatory;
+    }
+    .col{
+      width:var(--colw);
+      flex:0 0 var(--colw);
+      scroll-snap-align:start;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      border-radius:18px;
+      min-height:420px;
+      display:flex;flex-direction:column;
+    }
+    .colHead{
+      padding:10px 10px;
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;
+      border-bottom:1px solid var(--line);
+      font-weight:1000;
+    }
+    .colHead small{color:var(--muted);font-weight:800}
+    .colBody{
+      padding:10px;
+      display:flex;flex-direction:column;gap:10px;
+      min-height:240px;
+      flex:1;
+    }
+
+    .dropHint{
+      outline:2px dashed rgba(255,209,92,.55);
+      outline-offset:-6px;
+      background:rgba(255,209,92,.06);
+    }
+    [data-theme="light"] .dropHint{
+      outline:2px dashed rgba(14,165,233,.55);
+      background:rgba(14,165,233,.06);
+    }
+
+    /* ===== Task card ===== */
+    .tCard{
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:10px;
+      cursor:pointer;
+      user-select:none;
+      transform: translateY(0);
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+    [data-theme="light"] .tCard{background:rgba(9,20,30,.04)}
+    .tCard:hover{transform: translateY(-2px); box-shadow:0 14px 40px rgba(0,0,0,.25)}
+    .tCard.dragging{opacity:.55; transform: rotate(1deg) scale(.99)}
+    .tTitle{font-weight:1000; line-height:1.2}
+    .tTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+    .tBadges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+    .tMeta{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .tLine{margin-top:8px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:10px}
+    .timer{font-weight:1000;color:rgba(255,209,92,.95)}
+    [data-theme="light"] .timer{color:rgba(14,165,233,.95)}
+    .reason{
+      margin-top:8px;
+      padding:8px;
+      border-radius:12px;
+      border:1px dashed rgba(241,98,98,.35);
+      background:rgba(241,98,98,.08);
+      color:rgba(241,98,98,.95);
+      font-size:12px;
+    }
+
+    /* ===== Project card ===== */
+    .pCard{
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:10px;
+      user-select:none;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+    [data-theme="light"] .pCard{background:rgba(9,20,30,.04)}
+    .pCard:hover{transform: translateY(-2px); box-shadow:0 14px 40px rgba(0,0,0,.20)}
+    .pTitle{font-weight:1000}
+    .pMeta{margin-top:6px;color:var(--muted);font-size:12px}
+    .pBtns{margin-top:10px;display:flex;gap:8px}
+    .miniBtn{
+      flex:1;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:8px 10px;border-radius:12px;
+      font-weight:1000; cursor:pointer;
+    }
+    .miniBtn.primary{background:rgba(16,185,129,.14);border-color:rgba(16,185,129,.22)}
+    [data-theme="light"] .miniBtn.primary{background:rgba(14,165,233,.14);border-color:rgba(14,165,233,.22)}
+
+    /* ===== Table for Users (kept) ===== */
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;vertical-align:middle}
     [data-theme="light"] th,[data-theme="light"] td{border-bottom:1px solid rgba(9,20,30,.08)}
     th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.3px}
-    .chip{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:6px 10px;border-radius:999px;
-      border:1px solid var(--line);
-      background:var(--chip);
-      font-weight:900;
-      font-size:12px;
-      color:var(--text);
-    }
 
     .iconBtn{
       width:38px;height:34px;border-radius:12px;
@@ -225,22 +334,20 @@
       background:rgba(255,255,255,.06);
       cursor:pointer;
     }
-    .iconBtn:hover{background:rgba(255,255,255,.08)}
-    .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
 
-    /* ===== MODAL ===== */
+    /* ===== Modal ===== */
     .overlay{
       position:fixed;inset:0;
       background:rgba(0,0,0,.45);
       display:none;
       align-items:center;justify-content:center;
       padding:14px;
-      z-index:999;
-      backdrop-filter: blur(6px);
+      z-index:1500;
+      backdrop-filter: blur(10px);
     }
     .overlay.open{display:flex}
     .modal{
-      width:min(520px,100%);
+      width:min(720px,100%);
       background:var(--card);
       border:1px solid var(--line);
       border-radius:18px;
@@ -259,28 +366,26 @@
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .grid1{display:grid;grid-template-columns:1fr;gap:10px}
     .f label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
-    .f input,.f select{
+    .f input,.f select,.f textarea{
       width:100%;
       padding:12px 12px;border-radius:14px;
       border:1px solid rgba(255,255,255,.14);
       background:var(--input);
       color:var(--text);
       outline:none;
+      font-family:inherit;
     }
-    .f input:focus,.f select:focus{border-color:rgba(255,209,92,.45)}
-    [data-theme="light"] .f input:focus,[data-theme="light"] .f select:focus{border-color:rgba(14,165,233,.45)}
-
-    .modalActions{display:flex;gap:10px;margin-top:12px}
+    .f textarea{min-height:110px;resize:vertical}
+    .modalActions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
     .modalActions .btn{flex:1}
 
-    /* ===== MOBILE ===== */
-    .burger{display:none}
+    /* ===== Mobile ===== */
     @media (max-width: 980px){
       body{overflow:auto}
       .shell{height:auto;min-height:100vh;display:block}
       .sidebar{display:none}
-      .burger{display:inline-flex}
       .topbar{position:sticky;top:0;z-index:10}
+      :root{--colw: 85vw;}
       th,td{white-space:normal}
       .grid{grid-template-columns:1fr}
     }
@@ -315,11 +420,9 @@
           <span id="clock" class="pill">--:--:--</span>
 
           <button id="themeBtn" class="themeBtn" title="Theme">
-            <!-- moon -->
             <svg class="themeIcon moon" viewBox="0 0 24 24" fill="none">
               <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7.5 7.5 0 1 0 21 14.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
             </svg>
-            <!-- sun -->
             <svg class="themeIcon sun" viewBox="0 0 24 24" fill="none">
               <path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" stroke="currentColor" stroke-width="2"/>
               <path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -347,6 +450,19 @@
     </div>
   </div>
 
+  <!-- GLOBAL LOADING -->
+  <div class="loadingOverlay" id="loadingOverlay">
+    <div class="loadingCard">
+      <div class="loadingRow">
+        <div class="spinner"></div>
+        <div>
+          <div class="loadingTitle" id="loadingTitle">Yuklanmoqda…</div>
+          <div class="loadingSub" id="loadingSub">Iltimos, kuting</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
   /************ CONFIG ************/
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbyGW5vwkyYWmsbSP2_wHFMBoSjJcYLGz7r0gR-R-e5al-efv1hchZIYKCxc5HxG0gvR/exec";
@@ -371,7 +487,25 @@
   }
   if (isExpired()) lockToLogin();
 
-  /************ JSONP API ************/
+  /************ LOADING (BLOCK UI) ************/
+  const loadingTitleEl = document.getElementById("loadingTitle");
+  const loadingSubEl = document.getElementById("loadingSub");
+
+  function showLoading(title="Yuklanmoqda…", sub="Iltimos, kuting"){
+    loadingTitleEl.textContent = title;
+    loadingSubEl.textContent = sub;
+    document.body.classList.add("isLoading");
+  }
+  function hideLoading(){
+    document.body.classList.remove("isLoading");
+  }
+  async function withLoading(title, sub, fn){
+    showLoading(title, sub);
+    try{ return await fn(); }
+    finally{ hideLoading(); }
+  }
+
+  /************ JSONP ************/
   function jsonp(params){
     return new Promise((resolve,reject)=>{
       const cb = "__cb_" + Math.random().toString(36).slice(2);
@@ -394,19 +528,15 @@
 
   async function api(action, extra={}){
     const res = await jsonp(Object.assign({
-      action,
-      api_secret: API_SECRET,
-      token: TOKEN
+      action, api_secret: API_SECRET, token: TOKEN
     }, extra));
 
-    // token expired
     if(!res || res.ok === false){
       const err = res?.error || "";
       if(err === "TOKEN_EXPIRED" || err === "TOKEN_REQUIRED" || err === "USER_INACTIVE"){
         lockToLogin();
       }
     }
-    // refresh client exp after successful calls
     if(res && res.ok && res.ttlSec){
       EXP = Date.now() + res.ttlSec * 1000;
       localStorage.setItem("gsoft_exp", String(EXP));
@@ -465,60 +595,20 @@
   }
   setInterval(tick, 1000); tick();
 
-  const userPill = document.getElementById("userPill");
-  userPill.textContent = `👤 ${USER?.ism || USER?.login || "-" } • ${USER?.rol || "-"}`;
-
+  document.getElementById("userPill").textContent = `👤 ${USER?.ism || USER?.login || "-" } • ${USER?.rol || "-"}`;
   document.getElementById("btnLogout").addEventListener("click", async ()=>{
-    try{ await api("logout"); }catch(e){}
+    await withLoading("Chiqish…","Sessiya yopilmoqda", async ()=>{
+      try{ await api("logout"); }catch(e){}
+    });
     lockToLogin();
   });
-
-  /************ ROUTER (HASH SPA) ************/
-  const hdrTitle = document.getElementById("hdrTitle");
-  const hdrSub = document.getElementById("hdrSub");
-  const page = document.getElementById("page");
-
-  const Routes = {
-    tasks: { title:"Vazifalar", sub:"Kanban (Stage 2)", render: renderTasksStub },
-    projects: { title:"Loyihalar", sub:"Projects board (Stage 2)", render: renderProjectsStub },
-    users: { title:"Foydalanuvchilar", sub:"Users & roles", render: renderUsers },
-  };
-
-  function currentRoute(){
-    const h = location.hash || "#/users";
-    const m = h.match(/^#\/([a-z]+)/i);
-    return (m && m[1]) ? m[1].toLowerCase() : "users";
-  }
-
-  function setActiveNav(){
-    const r = currentRoute();
-    document.querySelectorAll(".nav a").forEach(a=>{
-      a.classList.toggle("active", a.dataset.route === r);
-    });
-  }
-
-  function render(){
-    const r = currentRoute();
-    const route = Routes[r] || Routes.users;
-    hdrTitle.textContent = route.title;
-    hdrSub.textContent = route.sub;
-
-    setActiveNav();
-    route.render();
-  }
-
-  window.addEventListener("hashchange", render);
-
-  if(!location.hash) location.hash = "#/users";
-  render();
 
   /************ MODAL ************/
   const overlay = document.getElementById("overlay");
   const modalTitle = document.getElementById("modalTitle");
   const modalBody = document.getElementById("modalBody");
-  const modalClose = document.getElementById("modalClose");
+  document.getElementById("modalClose").addEventListener("click", closeModal);
   overlay.addEventListener("click", closeModal);
-  modalClose.addEventListener("click", closeModal);
 
   function openModal(title, html){
     modalTitle.textContent = title;
@@ -532,44 +622,150 @@
     modalBody.innerHTML = "";
   }
 
-  /************ USERS PAGE (Stage 1) ************/
-  let USERS_CACHE = [];
+  /************ ROUTER ************/
+  const hdrTitle = document.getElementById("hdrTitle");
+  const hdrSub = document.getElementById("hdrSub");
+  const page = document.getElementById("page");
 
-  function isAdmin(){
-    return String(USER?.rol || "").toLowerCase() === "admin";
+  const Routes = {
+    tasks: { title:"Vazifalar", sub:"Kanban • drag & timer", render: renderTasks },
+    projects: { title:"Loyihalar", sub:"Kanban • drag", render: renderProjects },
+    users: { title:"Foydalanuvchilar", sub:"Users & roles", render: renderUsers },
+  };
+
+  function currentRoute(){
+    const h = location.hash || "#/tasks";
+    const m = h.match(/^#\/([a-z]+)/i);
+    return (m && m[1]) ? m[1].toLowerCase() : "tasks";
   }
+  function setActiveNav(){
+    const r = currentRoute();
+    document.querySelectorAll(".nav a").forEach(a=>{
+      a.classList.toggle("active", a.dataset.route === r);
+    });
+  }
+  function render(){
+    const r = currentRoute();
+    const route = Routes[r] || Routes.tasks;
+    hdrTitle.textContent = route.title;
+    hdrSub.textContent = route.sub;
+    setActiveNav();
+    route.render();
+  }
+  window.addEventListener("hashchange", render);
+  if(!location.hash) location.hash = "#/tasks";
 
+  /************ STATE (CACHES) ************/
+  let USERS_PUBLIC = [];   // {id, ism, rol}
+  let USERS_ADMIN = [];    // full list only admin
+  let PROJECTS = [];       // accessible projects
+  let TASKS = [];          // accessible tasks (already filtered by role; then we filter by UI)
+
+  const TASK_COLS = [
+    {key:"BOSHLANMAGAN", title:"Boshlanmagan", hint:"0 vaqt"},
+    {key:"PAUZA",        title:"Pauza",        hint:"to‘xtatilgan"},
+    {key:"JARAYONDA",    title:"Jarayonda",    hint:"1 ta vazifa"},
+    {key:"BAJARILDI",    title:"Bajarildi",    hint:"✅"},
+    {key:"OTMENA",       title:"Otmena",       hint:"❌"}
+  ];
+
+  const PROJECT_COLS = [
+    {key:"YANGI",         title:"Yangi"},
+    {key:"TZ_BERILDI",    title:"Tz berildi"},
+    {key:"TAKLIF_BERILDI",title:"Taklif berildi"},
+    {key:"PROCESS",       title:"Process"},
+    {key:"OUTSOURCE",     title:"Outsource"},
+    {key:"KEYINROQ",      title:"Keyinroq"},
+    {key:"BAJARILDI",     title:"Bajarildi"},
+    {key:"OTMENA",        title:"Otmena"},
+  ];
+
+  // UI filters
+  let FILTER_PROJECT = "NO_PROJECT"; // NO_PROJECT | ALL | PRJ-...
+  let FILTER_USER = "ALL";           // for admin only
+  let TASKS_TIMER_TICK = null;
+  let TASKS_HEARTBEAT = null;
+
+  function isAdmin(){ return String(USER?.rol||"").toLowerCase() === "admin"; }
+  function isPM(){ return String(USER?.rol||"").toLowerCase() === "pm"; }
+
+  /************ HELPERS ************/
+  function safeParse(s){ try{ return JSON.parse(s); }catch(e){ return null; } }
   function escapeHtml(s){
     return String(s ?? "")
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
+  function fmtDate(iso){
+    if(!iso) return "";
+    const d = new Date(iso);
+    if(isNaN(d.getTime())) return String(iso);
+    return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+  function fmtHM(min){
+    const m = Math.max(0, Math.floor(Number(min)||0));
+    const h = Math.floor(m/60);
+    const mm = m%60;
+    if(h<=0) return `${mm}m`;
+    return `${h}h ${mm}m`;
+  }
+  function first3Words(txt){
+    const s = String(txt||"").trim().replace(/\s+/g," ");
+    if(!s) return "";
+    return s.split(" ").slice(0,3).join(" ");
+  }
+  function computedTaskTitle(t){
+    const ttl = String(t.title||"").trim();
+    if(ttl) return ttl;
+    return first3Words(t.description) || "(No title)";
+  }
+  function chip(text){ return `<span class="chip">${escapeHtml(text)}</span>`; }
 
-  function roleChip(role){
-    const r = String(role||"").toLowerCase();
-    const label = r === "admin" ? "admin" : (r === "pm" ? "pm" : "fin");
-    return `<span class="chip">${label}</span>`;
+  function findUserName(id){
+    const u = USERS_PUBLIC.find(x=>x.id===id);
+    return u ? u.ism : "";
+  }
+  function findProjectTitle(id){
+    const p = PROJECTS.find(x=>x.id===id);
+    return p ? p.title : "";
   }
 
-  function mask(p){
-    if(!p) return "";
-    const s = String(p);
-    if(s.length <= 2) return "••";
-    return "•".repeat(Math.min(10, s.length));
+  function parseHashQuery(){
+    // allow #/tasks?projectId=PRJ-00001
+    const h = location.hash || "";
+    const q = h.split("?")[1] || "";
+    const obj = {};
+    q.split("&").forEach(p=>{
+      if(!p) return;
+      const [k,v] = p.split("=");
+      obj[decodeURIComponent(k)] = decodeURIComponent(v||"");
+    });
+    return obj;
   }
 
+  /************ LOAD BOOT DATA ************/
+  async function ensurePublicUsers(){
+    if(USERS_PUBLIC.length) return;
+    const r = await api("users_public_list");
+    if(r?.ok) USERS_PUBLIC = r.users || [];
+  }
+
+  async function loadProjects(force=false){
+    if(PROJECTS.length && !force) return;
+    const r = await api("projects_list");
+    if(r?.ok) PROJECTS = r.projects || [];
+  }
+
+  async function loadTasks(projectId, userId){
+    const r = await api("tasks_list", { projectId, userId });
+    if(r?.ok) TASKS = r.tasks || [];
+    else TASKS = [];
+  }
+
+  /************ USERS PAGE (admin) ************/
   async function renderUsers(){
-    // gate
     if(!isAdmin()){
-      page.innerHTML = `
-        <div class="card">
-          <div class="cardTitleRow">
-            <div class="cardTitle">Foydalanuvchilar</div>
-            <span class="muted">Faqat admin ko‘ra oladi</span>
-          </div>
-          <div class="muted">Sizda bu sahifaga ruxsat yo‘q.</div>
-        </div>
-      `;
+      page.innerHTML = `<div class="card"><div class="cardTitleRow"><div class="cardTitle">Foydalanuvchilar</div><span class="muted">Faqat admin</span></div><div class="muted">Ruxsat yo‘q.</div></div>`;
       return;
     }
 
@@ -606,44 +802,48 @@
     `;
 
     document.getElementById("btnAddUser").onclick = ()=>{ markActivity(); openUserModal(); };
-    document.getElementById("btnReloadUsers").onclick = async ()=>{ markActivity(); await loadUsers(true); };
+    document.getElementById("btnReloadUsers").onclick = async ()=>{ markActivity(); await loadUsersAdmin(true); };
 
-    await loadUsers();
+    await loadUsersAdmin();
   }
 
-  async function loadUsers(force=false){
-    if(!force && USERS_CACHE.length){
-      drawUsers();
-      return;
-    }
-    const res = await api("users_list");
-    if(!res || !res.ok){
-      page.querySelector("#uBody").innerHTML = `<tr><td colspan="6" class="muted">Xatolik: ${escapeHtml(res?.error||"")}</td></tr>`;
-      return;
-    }
-    USERS_CACHE = res.users || [];
-    drawUsers();
+  async function loadUsersAdmin(force=false){
+    await withLoading("Foydalanuvchilar…", "Ma’lumotlar yuklanmoqda", async ()=>{
+      const r = await api("users_list");
+      if(r?.ok) USERS_ADMIN = r.users || [];
+      // also refresh public
+      USERS_PUBLIC = (r?.users||[]).filter(u=>u.active).map(u=>({id:u.id, ism:u.ism, rol:u.rol}));
+    });
+    drawUsersAdmin();
   }
 
-  function drawUsers(){
+  function roleChip(role){
+    const r = String(role||"").toLowerCase();
+    const label = r === "admin" ? "admin" : (r === "pm" ? "pm" : "fin");
+    return `<span class="chip">${label}</span>`;
+  }
+  function mask(p){
+    if(!p) return "";
+    const s = String(p);
+    if(s.length <= 2) return "••";
+    return "•".repeat(Math.min(10, s.length));
+  }
+
+  function drawUsersAdmin(){
     const body = document.getElementById("uBody");
     if(!body) return;
-
-    if(!USERS_CACHE.length){
-      body.innerHTML = `<tr><td colspan="6" class="muted">Foydalanuvchi yo‘q</td></tr>`;
+    if(!USERS_ADMIN.length){
+      body.innerHTML = `<tr><td colspan="6" class="muted">Yo‘q</td></tr>`;
       return;
     }
-
-    body.innerHTML = USERS_CACHE.map(u=>`
+    body.innerHTML = USERS_ADMIN.map(u=>`
       <tr>
         <td><b>${escapeHtml(u.ism || "")}</b></td>
         <td class="mono">${escapeHtml(u.login || "")}</td>
         <td class="mono" title="${escapeHtml(u.parol||"")}">${escapeHtml(mask(u.parol))}</td>
         <td>${roleChip(u.rol)}</td>
         <td>${u.active ? "✅" : "⛔"}</td>
-        <td>
-          <button class="iconBtn" data-edit="${escapeHtml(u.id)}" title="Edit">✏️</button>
-        </td>
+        <td><button class="iconBtn" data-edit="${escapeHtml(u.id)}">✏️</button></td>
       </tr>
     `).join("");
 
@@ -651,7 +851,7 @@
       btn.onclick = ()=>{
         markActivity();
         const id = btn.getAttribute("data-edit");
-        const u = USERS_CACHE.find(x=>String(x.id)===String(id));
+        const u = USERS_ADMIN.find(x=>String(x.id)===String(id));
         openUserModal(u);
       };
     });
@@ -661,10 +861,7 @@
     const isEdit = !!user;
     openModal(isEdit ? "Edit user" : "Add user", `
       <div class="grid">
-        <div class="f">
-          <label>Ism</label>
-          <input id="fIsm" value="${escapeHtml(user?.ism||"")}" />
-        </div>
+        <div class="f"><label>Ism</label><input id="fIsm" value="${escapeHtml(user?.ism||"")}" /></div>
         <div class="f">
           <label>Rol</label>
           <select id="fRol">
@@ -674,18 +871,10 @@
           </select>
         </div>
       </div>
-
       <div class="grid" style="margin-top:10px;">
-        <div class="f">
-          <label>Login</label>
-          <input id="fLogin" value="${escapeHtml(user?.login||"")}" />
-        </div>
-        <div class="f">
-          <label>Parol ${isEdit ? '(bo‘sh qoldirsang o‘zgarmaydi)' : ''}</label>
-          <input id="fParol" type="password" value="" />
-        </div>
+        <div class="f"><label>Login</label><input id="fLogin" value="${escapeHtml(user?.login||"")}" /></div>
+        <div class="f"><label>Parol ${isEdit ? '(bo‘sh qoldirsang o‘zgarmaydi)' : ''}</label><input id="fParol" type="password" value="" /></div>
       </div>
-
       <div class="grid1" style="margin-top:10px;">
         <div class="f">
           <label>Active</label>
@@ -695,9 +884,7 @@
           </select>
         </div>
       </div>
-
       <div id="fMsg" class="muted" style="margin-top:10px;min-height:18px"></div>
-
       <div class="modalActions">
         <button class="btn" id="btnCancel">Bekor</button>
         <button class="btn primary" id="btnSave">Saqlash</button>
@@ -712,67 +899,698 @@
       const rol = document.getElementById("fRol").value.trim();
       const parol = document.getElementById("fParol").value.trim();
       const active = document.getElementById("fActive").value === "true";
-
       const msg = document.getElementById("fMsg");
       msg.textContent = "";
-      if(!ism || !login || !rol){
-        msg.textContent = "ism/login/rol shart";
-        return;
-      }
-      if(!isEdit && !parol){
-        msg.textContent = "Yangi user uchun parol shart";
-        return;
-      }
 
-      const payload = {
-        id: user?.id || "",
-        ism, login, rol, active,
-        parol: parol // empty allowed for edit
-      };
+      if(!ism || !login || !rol){ msg.textContent = "ism/login/rol shart"; return; }
+      if(!isEdit && !parol){ msg.textContent = "Yangi user uchun parol shart"; return; }
 
-      const res = await api("users_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
-      if(!res || !res.ok){
-        msg.textContent = "Xatolik: " + (res?.error || "");
-        return;
-      }
+      const payload = { id:user?.id||"", ism, login, rol, active, parol };
 
-      // refresh list
-      await loadUsers(true);
+      await withLoading("Saqlash…","Foydalanuvchi yangilanmoqda", async ()=>{
+        const res = await api("users_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
+        if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
+      });
+
+      // reload without reloading whole app
+      await loadUsersAdmin(true);
       closeModal();
     };
   }
 
-  /************ STUB PAGES (Stage 2) ************/
-  function renderTasksStub(){
+  /************ PROJECTS PAGE ************/
+  let draggingProjectId = null;
+
+  async function renderProjects(){
+    clearTimers();
+
     page.innerHTML = `
       <div class="card">
         <div class="cardTitleRow">
-          <div class="cardTitle">Vazifalar (Kanban)</div>
-          <span class="muted">Stage 2 da: filter + drag&drop + timer + modal</span>
+          <div>
+            <div class="cardTitle">Loyihalar</div>
+            <div class="muted">Drag & drop bilan status almashtiring • Info -> tahrirlash • O‘tish -> Vazifalar</div>
+          </div>
+          <div class="toolbar">
+            <button class="btn" id="btnRefreshProjects">Yangilash</button>
+          </div>
         </div>
-        <div class="muted">Keyingi bosqichda to‘liq Kanban + vaqt hisoblash + status rules yozamiz.</div>
+        <div class="board" id="projectsBoard"></div>
       </div>
     `;
+
+    document.getElementById("btnRefreshProjects").onclick = async ()=>{
+      markActivity();
+      await withLoading("Loyihalar…","Yangilanmoqda", async ()=>{
+        await loadProjects(true);
+      });
+      drawProjectsBoard();
+    };
+
+    await withLoading("Loyihalar…","Yuklanmoqda", async ()=>{
+      await ensurePublicUsers();
+      await loadProjects();
+    });
+
+    drawProjectsBoard();
   }
-  function renderProjectsStub(){
+
+  function drawProjectsBoard(){
+    const board = document.getElementById("projectsBoard");
+    if(!board) return;
+
+    board.innerHTML = PROJECT_COLS.map(c=>`
+      <div class="col" data-pstatus="${c.key}">
+        <div class="colHead">
+          <div>${escapeHtml(c.title)}</div>
+          <small id="pcnt_${c.key}">0</small>
+        </div>
+        <div class="colBody" id="pcol_${c.key}"></div>
+      </div>
+    `).join("");
+
+    // fill cards
+    const by = {};
+    PROJECT_COLS.forEach(c=>by[c.key]=[]);
+    PROJECTS.forEach(p=>{
+      const st = p.status || "YANGI";
+      (by[st] || (by[st]=[])).push(p);
+    });
+
+    PROJECT_COLS.forEach(c=>{
+      const list = (by[c.key]||[]).slice().sort((a,b)=>{
+        // deadline asc
+        const da = a.deadline ? new Date(a.deadline).getTime() : 9e15;
+        const db = b.deadline ? new Date(b.deadline).getTime() : 9e15;
+        return da - db;
+      });
+
+      document.getElementById("pcnt_"+c.key).textContent = String(list.length);
+      const col = document.getElementById("pcol_"+c.key);
+
+      col.innerHTML = list.map(p=>`
+        <div class="pCard" draggable="true" data-id="${escapeHtml(p.id)}">
+          <div class="pTitle">${escapeHtml(p.title || "(No title)")}</div>
+          <div class="pMeta">
+            ${p.ownerName ? `👤 ${escapeHtml(p.ownerName)}<br/>` : ""}
+            ${p.product ? `📦 ${escapeHtml(p.product)}<br/>` : ""}
+            ${p.pmName ? `🧭 PM: ${escapeHtml(p.pmName)}<br/>` : ""}
+            ${p.deadline ? `⏳ ${escapeHtml(fmtDate(p.deadline))}` : ""}
+          </div>
+          <div class="pBtns">
+            <button class="miniBtn" data-info="${escapeHtml(p.id)}">Info</button>
+            <button class="miniBtn primary" data-go="${escapeHtml(p.id)}">O‘tish</button>
+          </div>
+        </div>
+      `).join("");
+
+      // events
+      col.querySelectorAll(".pCard").forEach(card=>{
+        card.addEventListener("dragstart", (e)=>{
+          draggingProjectId = card.getAttribute("data-id");
+          card.classList.add("dragging");
+          e.dataTransfer.setData("text/plain", draggingProjectId);
+          e.dataTransfer.effectAllowed = "move";
+        });
+        card.addEventListener("dragend", ()=>{ card.classList.remove("dragging"); draggingProjectId=null; });
+      });
+
+      col.querySelectorAll("[data-info]").forEach(b=>{
+        b.onclick = ()=>{ markActivity(); openProjectInfo(b.getAttribute("data-info")); };
+      });
+      col.querySelectorAll("[data-go]").forEach(b=>{
+        b.onclick = ()=>{ markActivity(); goToTasksForProject(b.getAttribute("data-go")); };
+      });
+    });
+
+    // drop zones
+    board.querySelectorAll(".colBody").forEach(zone=>{
+      zone.addEventListener("dragover", (e)=>{ e.preventDefault(); zone.classList.add("dropHint"); });
+      zone.addEventListener("dragleave", ()=>zone.classList.remove("dropHint"));
+      zone.addEventListener("drop", async (e)=>{
+        e.preventDefault();
+        zone.classList.remove("dropHint");
+        const pid = e.dataTransfer.getData("text/plain") || draggingProjectId;
+        const colEl = zone.closest(".col");
+        const newStatus = colEl.getAttribute("data-pstatus");
+        if(!pid || !newStatus) return;
+
+        const pr = PROJECTS.find(x=>x.id===pid);
+        if(!pr) return;
+        if(pr.status === newStatus) return;
+
+        // optimistic
+        pr.status = newStatus;
+        drawProjectsBoard();
+
+        await withLoading("Saqlash…","Loyiha status yangilanmoqda", async ()=>{
+          const res = await api("project_update_status", { payload: encodeURIComponent(JSON.stringify({id:pid, status:newStatus})) });
+          if(!res?.ok){
+            // rollback by reloading
+            await loadProjects(true);
+            drawProjectsBoard();
+            return;
+          }
+          // sync updated
+          const upd = res.project;
+          const i = PROJECTS.findIndex(x=>x.id===upd.id);
+          if(i>=0) PROJECTS[i]=upd;
+          drawProjectsBoard();
+        });
+      });
+    });
+  }
+
+  function openProjectInfo(projectId){
+    const p = PROJECTS.find(x=>x.id===projectId);
+    if(!p){ alert("Project topilmadi"); return; }
+
+    // only admin or pm-owner can edit
+    const canEdit = isAdmin() || (isPM() && String(p.pmId)===String(USER.id));
+
+    openModal("Project Info", `
+      <div class="grid">
+        <div class="f"><label>Nomi</label><input id="pr_title" value="${escapeHtml(p.title||"")}" ${canEdit?"":"disabled"}></div>
+        <div class="f"><label>Status</label>
+          <select id="pr_status" ${canEdit?"":"disabled"}>
+            ${PROJECT_COLS.map(c=>`<option value="${c.key}" ${p.status===c.key?"selected":""}>${escapeHtml(c.title)}</option>`).join("")}
+          </select>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Owner</label><input id="pr_ownerName" value="${escapeHtml(p.ownerName||"")}" ${canEdit?"":"disabled"}></div>
+        <div class="f"><label>Owner phone</label><input id="pr_ownerPhone" value="${escapeHtml(p.ownerPhone||"")}" ${canEdit?"":"disabled"}></div>
+      </div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Sfera</label><input id="pr_sphere" value="${escapeHtml(p.sphere||"")}" ${canEdit?"":"disabled"}></div>
+        <div class="f"><label>Manba</label><input id="pr_source" value="${escapeHtml(p.source||"")}" ${canEdit?"":"disabled"}></div>
+      </div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Shahar</label><input id="pr_city" value="${escapeHtml(p.city||"")}" ${canEdit?"":"disabled"}></div>
+        <div class="f"><label>Deadline (ISO yoki matn)</label><input id="pr_deadline" value="${escapeHtml(p.deadline||"")}" ${canEdit?"":"disabled"}></div>
+      </div>
+
+      <div class="grid1" style="margin-top:10px;">
+        <div class="f"><label>Product/Service</label><input id="pr_product" value="${escapeHtml(p.product||"")}" ${canEdit?"":"disabled"}></div>
+      </div>
+
+      <div class="grid1" style="margin-top:10px;">
+        <div class="f"><label>Komment</label><textarea id="pr_comment" ${canEdit?"":"disabled"}>${escapeHtml(p.comment||"")}</textarea></div>
+      </div>
+
+      <div class="muted" id="pr_msg" style="margin-top:10px;min-height:18px"></div>
+
+      <div class="modalActions">
+        <button class="btn" id="pr_go">O‘tish</button>
+        ${canEdit ? `<button class="btn primary" id="pr_save">Saqlash</button>` : ``}
+        <button class="btn" id="pr_close">Yopish</button>
+      </div>
+    `);
+
+    document.getElementById("pr_go").onclick = ()=>{ markActivity(); closeModal(); goToTasksForProject(projectId); };
+    document.getElementById("pr_close").onclick = ()=>{ markActivity(); closeModal(); };
+
+    if(canEdit){
+      document.getElementById("pr_save").onclick = async ()=>{
+        markActivity();
+        const msg = document.getElementById("pr_msg");
+        msg.textContent = "";
+
+        const payload = {
+          id: p.id,
+          title: document.getElementById("pr_title").value.trim(),
+          ownerName: document.getElementById("pr_ownerName").value.trim(),
+          ownerPhone: document.getElementById("pr_ownerPhone").value.trim(),
+          sphere: document.getElementById("pr_sphere").value.trim(),
+          source: document.getElementById("pr_source").value.trim(),
+          city: document.getElementById("pr_city").value.trim(),
+          comment: document.getElementById("pr_comment").value.trim(),
+          product: document.getElementById("pr_product").value.trim(),
+          deadline: document.getElementById("pr_deadline").value.trim(),
+          status: document.getElementById("pr_status").value.trim(),
+          pmId: p.pmId,
+          pmName: p.pmName
+        };
+
+        await withLoading("Saqlash…","Project yangilanmoqda", async ()=>{
+          const res = await api("project_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
+          if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
+          const upd = res.project;
+          const i = PROJECTS.findIndex(x=>x.id===upd.id);
+          if(i>=0) PROJECTS[i]=upd;
+        });
+
+        closeModal();
+        drawProjectsBoard();
+      };
+    }
+  }
+
+  function goToTasksForProject(projectId){
+    FILTER_PROJECT = projectId;
+    location.hash = "#/tasks?projectId=" + encodeURIComponent(projectId);
+  }
+
+  /************ TASKS PAGE ************/
+  let draggingTaskId = null;
+  let suppressClickId = null;
+
+  async function renderTasks(){
+    // parse project from hash query (for "O‘tish")
+    const q = parseHashQuery();
+    if(q.projectId) FILTER_PROJECT = q.projectId;
+
     page.innerHTML = `
       <div class="card">
         <div class="cardTitleRow">
-          <div class="cardTitle">Loyihalar (Kanban)</div>
-          <span class="muted">Stage 2 da: drag&drop + Info modal + o‘tish</span>
+          <div>
+            <div class="cardTitle">Vazifalar</div>
+            <div class="muted">Boshlanmagan/Pauza -> Jarayonda drag • Jarayonda 1 ta • Bajarildi/Otmena -> Pauza qaytarish</div>
+          </div>
+          <div class="toolbar">
+            <div class="select">
+              <label>Proyekt</label>
+              <select id="fProject"></select>
+            </div>
+
+            ${isAdmin() ? `
+              <div class="select">
+                <label>User</label>
+                <select id="fUser"></select>
+              </div>
+            ` : ``}
+
+            <button class="btn" id="btnRefreshTasks">Yangilash</button>
+          </div>
         </div>
-        <div class="muted">Keyingi bosqichda project board, info oynasi va task filtrga o‘tish qilamiz.</div>
+
+        <div class="board" id="tasksBoard"></div>
       </div>
     `;
+
+    await withLoading("Vazifalar…","Yuklanmoqda", async ()=>{
+      await ensurePublicUsers();
+      await loadProjects();
+      // set dropdowns
+      buildFiltersUI();
+      // load tasks by current filters
+      await loadTasks(FILTER_PROJECT || "NO_PROJECT", isAdmin()?FILTER_USER:"ALL");
+    });
+
+    drawTasksBoard();
+    startTaskTimers();
+    startHeartbeat();
+  }
+
+  function buildFiltersUI(){
+    const selP = document.getElementById("fProject");
+    if(selP){
+      const options = [
+        {id:"NO_PROJECT", title:"Bez proyekt (default)"},
+        {id:"ALL", title:"Barcha (ALL)"},
+        ...PROJECTS.map(p=>({id:p.id, title:p.title || p.id}))
+      ];
+      selP.innerHTML = options.map(o=>`<option value="${escapeHtml(o.id)}" ${String(FILTER_PROJECT)===String(o.id)?"selected":""}>${escapeHtml(o.title)}</option>`).join("");
+      selP.onchange = async ()=>{
+        markActivity();
+        FILTER_PROJECT = selP.value;
+        await withLoading("Filtr…","Vazifalar yangilanmoqda", async ()=>{
+          await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+        });
+        drawTasksBoard();
+      };
+    }
+
+    if(isAdmin()){
+      const selU = document.getElementById("fUser");
+      if(selU){
+        // include ALL + users
+        const options = [{id:"ALL", title:"Barcha"}].concat(USERS_PUBLIC.map(u=>({id:u.id, title:`${u.ism} (${u.rol})`})));
+        selU.innerHTML = options.map(o=>`<option value="${escapeHtml(o.id)}" ${String(FILTER_USER)===String(o.id)?"selected":""}>${escapeHtml(o.title)}</option>`).join("");
+        selU.onchange = async ()=>{
+          markActivity();
+          FILTER_USER = selU.value;
+          await withLoading("Filtr…","Vazifalar yangilanmoqda", async ()=>{
+            await loadTasks(FILTER_PROJECT, FILTER_USER);
+          });
+          drawTasksBoard();
+        };
+      }
+    }
+
+    document.getElementById("btnRefreshTasks").onclick = async ()=>{
+      markActivity();
+      await withLoading("Vazifalar…","Yangilanmoqda", async ()=>{
+        await loadProjects(true);
+        await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+      });
+      buildFiltersUI();
+      drawTasksBoard();
+    };
+  }
+
+  function drawTasksBoard(){
+    clearTimers();
+    const board = document.getElementById("tasksBoard");
+    if(!board) return;
+
+    board.innerHTML = TASK_COLS.map(c=>`
+      <div class="col" data-tstatus="${c.key}">
+        <div class="colHead">
+          <div>${escapeHtml(c.title)} <small>${escapeHtml(c.hint||"")}</small></div>
+          <small id="tcnt_${c.key}">0</small>
+        </div>
+        <div class="colBody" id="tcol_${c.key}"></div>
+      </div>
+    `).join("");
+
+    const by = {};
+    TASK_COLS.forEach(c=>by[c.key]=[]);
+    TASKS.forEach(t=>{
+      const st = String(t.status||"BOSHLANMAGAN");
+      (by[st] || (by[st]=[])).push(t);
+    });
+
+    TASK_COLS.forEach(c=>{
+      const list = (by[c.key]||[]).slice().sort((a,b)=>{
+        const da = a.deadline ? new Date(a.deadline).getTime() : 9e15;
+        const db = b.deadline ? new Date(b.deadline).getTime() : 9e15;
+        return da - db;
+      });
+
+      document.getElementById("tcnt_"+c.key).textContent = String(list.length);
+      const col = document.getElementById("tcol_"+c.key);
+
+      col.innerHTML = list.map(t=>{
+        const title = computedTaskTitle(t);
+        const prTitle = t.projectId ? (t.projectTitle || findProjectTitle(t.projectId) || "") : "";
+        const isRunning = t.status === "JARAYONDA";
+        const spentLabel = fmtHM(t.spentMin || 0);
+        const upd = t.updatedAt ? fmtDate(t.updatedAt) : "";
+
+        const showAssignee = isAdmin() || isPM();
+        const assignee = showAssignee ? (t.assigneeName || findUserName(t.assigneeId) || "") : "";
+
+        const deadlineChip = t.deadline ? chip("⏳ " + fmtDate(t.deadline)) : "";
+        const projectChip = prTitle ? chip("📌 " + prTitle) : "";
+
+        const timerHtml = isRunning
+          ? `<span class="timer" data-timer="${escapeHtml(t.id)}">+ 0m</span>`
+          : "";
+
+        const reasonHtml = (t.status==="OTMENA" && t.cancelReason)
+          ? `<div class="reason">Sabab: ${escapeHtml(t.cancelReason)}</div>`
+          : "";
+
+        return `
+          <div class="tCard" draggable="true" data-id="${escapeHtml(t.id)}">
+            <div class="tTop">
+              <div class="tTitle">${escapeHtml(title)}</div>
+              <div class="tBadges">${projectChip}${deadlineChip}</div>
+            </div>
+
+            <div class="tMeta">
+              ${chip("⏱ " + spentLabel)}
+              ${t.updatedAt ? chip("🕒 " + upd) : ""}
+            </div>
+
+            <div class="tLine">
+              <div>${showAssignee ? `👤 ${escapeHtml(assignee||"-")}` : `👤 ${escapeHtml(t.assigneeName||findUserName(t.assigneeId)||"-")}`}</div>
+              <div>${timerHtml}</div>
+            </div>
+
+            ${reasonHtml}
+          </div>
+        `;
+      }).join("");
+
+      // card events (drag & click)
+      col.querySelectorAll(".tCard").forEach(card=>{
+        const id = card.getAttribute("data-id");
+
+        card.addEventListener("dragstart", (e)=>{
+          suppressClickId = id;
+          draggingTaskId = id;
+          card.classList.add("dragging");
+          e.dataTransfer.setData("text/plain", id);
+          e.dataTransfer.effectAllowed = "move";
+        });
+        card.addEventListener("dragend", ()=>{
+          card.classList.remove("dragging");
+          draggingTaskId=null;
+          setTimeout(()=>{ suppressClickId=null; }, 50);
+        });
+
+        card.addEventListener("click", ()=>{
+          if(suppressClickId === id) return; // prevent click after drag
+          markActivity();
+          openTaskModal(id);
+        });
+      });
+    });
+
+    // drop zones
+    board.querySelectorAll(".colBody").forEach(zone=>{
+      zone.addEventListener("dragover", (e)=>{ e.preventDefault(); zone.classList.add("dropHint"); });
+      zone.addEventListener("dragleave", ()=>zone.classList.remove("dropHint"));
+
+      zone.addEventListener("drop", async (e)=>{
+        e.preventDefault();
+        zone.classList.remove("dropHint");
+
+        const taskId = e.dataTransfer.getData("text/plain") || draggingTaskId;
+        if(!taskId) return;
+
+        const colEl = zone.closest(".col");
+        const toStatus = colEl.getAttribute("data-tstatus");
+        const t = TASKS.find(x=>x.id===taskId);
+        if(!t) return;
+
+        // rules:
+        // - to JARAYONDA only from BOSHLANMAGAN/PAUZA
+        // - to PAUZA allowed from OTMENA/BAJARILDI (and also from JARAYONDA if you want)
+        // - to OTMENA needs reason -> open modal reason
+        if (toStatus === "JARAYONDA" && !["BOSHLANMAGAN","PAUZA"].includes(t.status)) return;
+
+        if (toStatus === "OTMENA") {
+          // ask reason in modal flow
+          openCancelReasonFlow(taskId);
+          return;
+        }
+
+        // optimistic update
+        const oldStatus = t.status;
+        t.status = toStatus;
+        if(toStatus !== "JARAYONDA") t.startedAt = "";
+        drawTasksBoard();
+        startTaskTimers();
+
+        await withLoading("Saqlash…","Vazifa status yangilanmoqda", async ()=>{
+          const res = await api("task_update_status", { payload: encodeURIComponent(JSON.stringify({id:taskId, status:toStatus})) });
+          if(!res?.ok){
+            // rollback reload
+            await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+          } else {
+            // replace updated task (and server might have paused another running task)
+            const upd = res.task;
+            const i = TASKS.findIndex(x=>x.id===upd.id);
+            if(i>=0) TASKS[i]=upd;
+            // reload tasks to reflect "other task dropped from Jarayonda"
+            await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+          }
+        });
+
+        drawTasksBoard();
+        startTaskTimers();
+      });
+    });
+  }
+
+  function openCancelReasonFlow(taskId){
+    const t = TASKS.find(x=>x.id===taskId);
+    if(!t) return;
+
+    openModal("Vazifani bekor qilish", `
+      <div class="muted">Sabab yozmasangiz, bekor qilinmaydi.</div>
+      <div class="grid1" style="margin-top:10px;">
+        <div class="f">
+          <label>Sabab</label>
+          <textarea id="cancelReason" placeholder="Sabab..."></textarea>
+        </div>
+      </div>
+      <div class="muted" id="cmsg" style="margin-top:10px;min-height:18px"></div>
+      <div class="modalActions">
+        <button class="btn" id="cNo">Bekor</button>
+        <button class="btn primary" id="cYes">OTMENA</button>
+      </div>
+    `);
+
+    document.getElementById("cNo").onclick = ()=>{ markActivity(); closeModal(); };
+    document.getElementById("cYes").onclick = async ()=>{
+      markActivity();
+      const reason = document.getElementById("cancelReason").value.trim();
+      const msg = document.getElementById("cmsg");
+      msg.textContent = "";
+      if(!reason){ msg.textContent = "Sabab shart"; return; }
+
+      closeModal();
+
+      await withLoading("Saqlash…","Bekor qilinmoqda", async ()=>{
+        const res = await api("task_update_status", { payload: encodeURIComponent(JSON.stringify({id:taskId, status:"OTMENA", reason})) });
+        if(!res?.ok){
+          await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+          return;
+        }
+        await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+      });
+
+      drawTasksBoard();
+      startTaskTimers();
+    };
+  }
+
+  function openTaskModal(taskId){
+    const t = TASKS.find(x=>x.id===taskId);
+    if(!t) return;
+
+    const title = computedTaskTitle(t);
+    const prTitle = t.projectId ? (t.projectTitle || findProjectTitle(t.projectId) || "") : "";
+    const assignee = t.assigneeName || findUserName(t.assigneeId) || "";
+
+    const canReturn = (isAdmin() || isPM()) && (t.status === "BAJARILDI" || t.status === "OTMENA");
+    const showAssignee = (isAdmin() || isPM());
+
+    openModal(title, `
+      <div class="grid">
+        <div class="f"><label>Proyekt</label><input value="${escapeHtml(prTitle || "Bez proyekt")}" disabled></div>
+        <div class="f"><label>Status</label><input value="${escapeHtml(t.status)}" disabled></div>
+      </div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Deadline</label><input value="${escapeHtml(t.deadline ? fmtDate(t.deadline) : "")}" disabled></div>
+        <div class="f"><label>Potrachennoe</label><input value="${escapeHtml(fmtHM(t.spentMin||0))}" disabled></div>
+      </div>
+
+      <div class="grid" style="margin-top:10px;">
+        <div class="f"><label>Poslednee izm</label><input value="${escapeHtml(t.updatedAt ? fmtDate(t.updatedAt) : "")}" disabled></div>
+        <div class="f"><label>Otvetstvenniy</label><input value="${escapeHtml(showAssignee ? assignee : (assignee || "-"))}" disabled></div>
+      </div>
+
+      <div class="grid1" style="margin-top:10px;">
+        <div class="f"><label>Opisanie</label><textarea disabled>${escapeHtml(t.description||"")}</textarea></div>
+      </div>
+
+      ${t.status==="OTMENA" && t.cancelReason ? `
+        <div class="grid1" style="margin-top:10px;">
+          <div class="f"><label>Sabab (Otmena)</label><textarea disabled>${escapeHtml(t.cancelReason)}</textarea></div>
+        </div>
+      ` : ""}
+
+      <div class="modalActions">
+        <button class="btn" id="tClose">Yopish</button>
+        <button class="btn" id="tStart">Start</button>
+        <button class="btn" id="tCancel">Otmena</button>
+        <button class="btn primary" id="tDone">Bajarildi</button>
+        ${canReturn ? `<button class="btn" id="tReturn">Vazifani qaytarish (Pauza)</button>` : ``}
+      </div>
+    `);
+
+    document.getElementById("tClose").onclick = ()=>{ markActivity(); closeModal(); };
+    document.getElementById("tCancel").onclick = ()=>{ markActivity(); closeModal(); openCancelReasonFlow(taskId); };
+
+    document.getElementById("tStart").onclick = async ()=>{
+      markActivity();
+      closeModal();
+
+      await withLoading("Start…","Jarayonga o‘tkazilmoqda", async ()=>{
+        const res = await api("task_update_status", { payload: encodeURIComponent(JSON.stringify({id:taskId, status:"JARAYONDA"})) });
+        if(!res?.ok){
+          await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+        } else {
+          // reload because server may pause another task
+          await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+        }
+      });
+
+      drawTasksBoard();
+      startTaskTimers();
+    };
+
+    document.getElementById("tDone").onclick = async ()=>{
+      markActivity();
+      closeModal();
+
+      await withLoading("Saqlash…","Bajarildi qilinmoqda", async ()=>{
+        const res = await api("task_update_status", { payload: encodeURIComponent(JSON.stringify({id:taskId, status:"BAJARILDI"})) });
+        if(!res?.ok) await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+        else await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+      });
+
+      drawTasksBoard();
+      startTaskTimers();
+    };
+
+    const ret = document.getElementById("tReturn");
+    if(ret){
+      ret.onclick = async ()=>{
+        markActivity();
+        closeModal();
+
+        await withLoading("Qaytarish…","Pauzaga o‘tkazilmoqda", async ()=>{
+          const res = await api("task_update_status", { payload: encodeURIComponent(JSON.stringify({id:taskId, status:"PAUZA"})) });
+          if(!res?.ok) await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+          else await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
+        });
+
+        drawTasksBoard();
+        startTaskTimers();
+      };
+    }
+  }
+
+  function startTaskTimers(){
+    // update running timers every second
+    if(TASKS_TIMER_TICK) clearInterval(TASKS_TIMER_TICK);
+    TASKS_TIMER_TICK = setInterval(()=>{
+      document.querySelectorAll("[data-timer]").forEach(el=>{
+        const id = el.getAttribute("data-timer");
+        const t = TASKS.find(x=>x.id===id);
+        if(!t || t.status!=="JARAYONDA") { el.textContent = ""; return; }
+        const start = t.startedAt ? new Date(t.startedAt).getTime() : Date.now();
+        const elapsedMin = Math.max(0, Math.floor((Date.now()-start)/60000));
+        const total = (Number(t.spentMin)||0) + elapsedMin;
+        el.textContent = "+ " + fmtHM(total);
+      });
+    }, 1000);
+  }
+
+  function startHeartbeat(){
+    if(TASKS_HEARTBEAT) clearInterval(TASKS_HEARTBEAT);
+    // persist time every 45s for self running task
+    TASKS_HEARTBEAT = setInterval(async ()=>{
+      const running = TASKS.find(t=>t.status==="JARAYONDA" && String(t.assigneeId)===String(USER.id));
+      if(!running) return;
+      try{
+        await api("task_heartbeat", { payload: encodeURIComponent(JSON.stringify({id:running.id})) });
+        // we don’t force reload each time; it’s ok.
+      }catch(e){}
+    }, 45000);
+  }
+
+  function clearTimers(){
+    if(TASKS_TIMER_TICK){ clearInterval(TASKS_TIMER_TICK); TASKS_TIMER_TICK=null; }
+    if(TASKS_HEARTBEAT){ clearInterval(TASKS_HEARTBEAT); TASKS_HEARTBEAT=null; }
   }
 
   /************ BOOT ************/
   (async function boot(){
     startIdle();
-    await touch(); // refresh token on load
+    await touch();
+    render();
   })();
-
-  function safeParse(s){ try{ return JSON.parse(s); }catch(e){ return null; } }
 </script>
 </body>
 </html>
