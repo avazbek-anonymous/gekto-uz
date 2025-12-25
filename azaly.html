@@ -245,7 +245,7 @@
       thead th{position:static}
       table{min-width:1200px}
     }
-  
+
     /* ===== Column manager & pager ===== */
     .hiddenColsBar{
       display:flex;flex-wrap:wrap;gap:8px;
@@ -337,8 +337,7 @@
       transform:scale(1);
     }
     .thHideBtn:hover{background:rgba(241,98,98,.14);border-color:rgba(241,98,98,.28)}
-
-</style>
+  </style>
 </head>
 
 <body>
@@ -376,7 +375,7 @@
         <label>Izoh (Kod / Artikul nomi)</label>
         <input id="qText" placeholder="qidiruv..."/>
       </div>
-      
+
       <div class="field">
         <label>Kategoriya</label>
         <select id="fCategory">
@@ -401,13 +400,13 @@
       </div>
 
       <!-- ===== Columns (show/hide) ===== -->
-      <div class="field">
+      <div class="field" id="colsSection">
         <label>Ustunlar (ko‘rsatish / yashirish)</label>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
           <button id="btnColsAll" class="btn small" type="button">Barchasini ko‘rsat</button>
         </div>
         <div class="muted" style="margin-top:8px">
-          Ustun nomini o‘chirib yashirasiz. Jadval sarlavhasidagi <b>×</b> tugmasi bilan ham yashirish mumkin.
+          Ustun checkboxini o‘chirib — yashirasiz. Jadval sarlavhasidagi <b>×</b> tugmasi bilan ham yashirish mumkin.
         </div>
       </div>
 
@@ -420,8 +419,7 @@
 
       <div id="colsList" class="colsList"></div>
 
-
-      <div class="muted">* Меню скрыто — наведи мышь на левый край.</div>
+      <div class="muted">* Menyu yashirin — chap chetga olib boring.</div>
     </div>
   </aside>
 
@@ -435,10 +433,11 @@
 
     <div class="hdrRight">
       <span id="userPill" class="pill">👤 -</span>
-      <button id="btnReload" class="btn">Yangilash</button>
-      <button id="btnLogout" class="btn danger">Chiqish</button>
+      <button id="btnCols" class="btn" type="button">Ustunlar</button>
+      <button id="btnReload" class="btn" type="button">Yangilash</button>
+      <button id="btnLogout" class="btn danger" type="button">Chiqish</button>
       <span id="status" class="pill"><span class="muted">Yuklanmoqda...</span></span>
-      <button id="burger" class="burger" title="Filters">☰</button>
+      <button id="burger" class="burger" title="Filters" type="button">☰</button>
     </div>
   </header>
 
@@ -457,6 +456,7 @@
           </tbody>
         </table>
       </div>
+
       <div class="pager" id="pager"></div>
     </section>
   </main>
@@ -466,7 +466,6 @@
     const ENDPOINT = "https://script.google.com/macros/s/AKfycbxrHIGjRjAv15oNbT2L8cUnqAP-Tf6AprWRLmv1pu9YxpC6IhbkwMt1rRHuJwRqXW_g-g/exec";
     const API_SECRET = "Azaly2025";
 
-    const HOME_URL  = "/azaly.html";
     const LOGIN_URL = "/azalylogin.html";
 
     const TOKEN_KEY = "azaly_token";
@@ -478,52 +477,6 @@
 
     const PAGE_SIZE = 100;
     const COLS_KEY = "azaly_hiddenCols";
-
-    /************ STATE ************/
-    let TOKEN = localStorage.getItem(TOKEN_KEY) || "";
-    let USER = safeParse(localStorage.getItem(USER_KEY)) || null;
-
-    let GROUPS = [];
-    let HEADERS = [];
-    let ROWS = [];
-    let INDEX = {};
-    let OPTIONS = { suppliers:[], categories:[], seasons:[] };
-
-    let lastTouchSentAt = 0;
-
-    let FILTERED = [];
-    let CURRENT_PAGE = 1;
-    let COL_HIDDEN = new Set();
-
-    /************ DOM ************/
-    const userPill = document.getElementById("userPill");
-    const statusEl = document.getElementById("status");
-    const metaEl = document.getElementById("meta");
-
-    const btnReload = document.getElementById("btnReload");
-    const btnLogout = document.getElementById("btnLogout");
-
-    const thead = document.getElementById("thead");
-    const tbody = document.getElementById("tbody");
-
-    const filtersDock = document.getElementById("filtersDock");
-    const edgeHotspot = document.getElementById("edgeHotspot");
-    const mOverlay = document.getElementById("mOverlay");
-    const burger = document.getElementById("burger");
-
-    const fSupplier = document.getElementById("fSupplier");
-    const fSold = document.getElementById("fSold");
-    const qText = document.getElementById("qText");
-    const fCategory = document.getElementById("fCategory");
-    const fSeason = document.getElementById("fSeason");
-    const fStock = document.getElementById("fStock");
-    const btnReset = document.getElementById("btnReset");
-
-    const pager = document.getElementById("pager");
-    const colsList = document.getElementById("colsList");
-    const hiddenColsBar = document.getElementById("hiddenColsBar");
-    const colSearch = document.getElementById("colSearch");
-    const btnColsAll = document.getElementById("btnColsAll");
 
     /************ helpers ************/
     function safeParse(s){ try{return JSON.parse(s);}catch(e){return null;} }
@@ -548,6 +501,56 @@
     function normStr(v){ return String(v ?? "").trim(); }
     function normLower(v){ return normStr(v).toLowerCase(); }
 
+    /************ STATE ************/
+    let TOKEN = localStorage.getItem(TOKEN_KEY) || "";
+    let USER = safeParse(localStorage.getItem(USER_KEY)) || null;
+
+    let GROUPS = [];
+    let HEADERS = [];
+    let ROWS = [];
+    let INDEX = {};
+    let OPTIONS = { suppliers:[], categories:[], seasons:[] };
+
+    let lastTouchSentAt = 0;
+
+    let FILTERED = [];
+    let CURRENT_PAGE = 1;
+    let COL_HIDDEN = new Set();
+
+    /************ DOM ************/
+    const userPill = document.getElementById("userPill");
+    const statusEl = document.getElementById("status");
+    const metaEl = document.getElementById("meta");
+
+    const btnCols = document.getElementById("btnCols");
+    const btnReload = document.getElementById("btnReload");
+    const btnLogout = document.getElementById("btnLogout");
+
+    const thead = document.getElementById("thead");
+    const tbody = document.getElementById("tbody");
+
+    const filtersDock = document.getElementById("filtersDock");
+    const edgeHotspot = document.getElementById("edgeHotspot");
+    const mOverlay = document.getElementById("mOverlay");
+    const burger = document.getElementById("burger");
+
+    const fSupplier = document.getElementById("fSupplier");
+    const fSold = document.getElementById("fSold");
+    const qText = document.getElementById("qText");
+    const fCategory = document.getElementById("fCategory");
+    const fSeason = document.getElementById("fSeason");
+    const fStock = document.getElementById("fStock");
+    const btnReset = document.getElementById("btnReset");
+
+    const pager = document.getElementById("pager");
+    const colsList = document.getElementById("colsList");
+    const hiddenColsBar = document.getElementById("hiddenColsBar");
+    const colSearch = document.getElementById("colSearch");
+    const btnColsAll = document.getElementById("btnColsAll");
+    const colsSection = document.getElementById("colsSection");
+
+    /************ auth gate ************/
+    if(!TOKEN) location.replace(LOGIN_URL);
 
     /************ columns (show/hide) ************/
     function loadHiddenCols(){
@@ -575,10 +578,9 @@
     }
     function ensureAtLeastOneCol(){
       const vis = getVisibleCols();
-      if(vis.length > 0) return true;
+      if(vis.length > 0) return;
       COL_HIDDEN.clear();
       saveHiddenCols();
-      return true;
     }
     function buildColsUI(){
       if(!colsList || !hiddenColsBar) return;
@@ -605,10 +607,11 @@
       }
       colsList.innerHTML = html || `<div class="muted">Topilmadi</div>`;
     }
-    function rebuildAfterColsChange(){
+    function rebuildAfterColsChange(keepScroll=true){
+      ensureAtLeastOneCol();
       buildThead();
-      renderPage(CURRENT_PAGE, true);
       buildColsUI();
+      renderPage(CURRENT_PAGE, keepScroll);
     }
 
     /************ pagination ************/
@@ -651,7 +654,7 @@
       pager.innerHTML = `
         <div class="pagerInfo">${start+1}–${end} / ${total} • Sahifa ${CURRENT_PAGE}/${totalPages}</div>
         <div class="pagerBtns">
-          <button class="pageBtn" type="button" data-page="prev" ${CURRENT_PAGE<=1 ? "disabled" : ""}>‹ Oldingi</button>
+          <button class="pageBtn" type="button" data-page="prev" ${CURRENT_PAGE<=1 ? "disabled" : ""}>‹ Oldingi 100 ta</button>
           ${items.map(it => it === "..."
             ? `<span class="pageDots">…</span>`
             : `<button class="pageBtn ${it===CURRENT_PAGE ? "active" : ""}" type="button" data-page="${it}">${it}</button>`
@@ -660,6 +663,7 @@
         </div>
       `;
     }
+
     function renderPage(page, keepScroll=false){
       const total = (FILTERED || []).length;
       const totalPages = getTotalPages();
@@ -687,6 +691,7 @@
       }
     }
 
+    /************ session ************/
     function clearSession(){
       localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(USER_KEY);
@@ -697,9 +702,6 @@
       clearSession();
       location.replace(LOGIN_URL);
     }
-
-    /************ auth gate ************/
-    if(!TOKEN) location.replace(LOGIN_URL);
 
     /************ JSONP ************/
     function loadJSONP(url){
@@ -773,6 +775,16 @@
       closeDock();
     });
 
+    btnCols.addEventListener("click", ()=>{
+      openDock();
+      if(window.matchMedia("(max-width: 980px)").matches){
+        mOverlay.style.display="block";
+      }
+      // scroll & focus
+      colsSection?.scrollIntoView({behavior:"smooth", block:"start"});
+      setTimeout(()=>colSearch?.focus(), 250);
+    });
+
     /************ Build header (groups row1 + columns row2) ************/
     function buildThead(){
       const vis = getVisibleCols();
@@ -798,23 +810,14 @@
 
       const colsHtml = `
         <tr class="cols">
-          ${vis.map(i=>`<th data-col-idx="${i}"><div class="thWrap"><span class="thTxt">${escapeHtml(HEADERS[i])}</span><button class="thHideBtn" type="button" data-hide-col="${i}" title="Yashirish">×</button></div></th>`).join("")}
-        </tr>
-      `;
-
-      thead.innerHTML = grpHtml + colsHtml;
-    }
-
-
-      const grpHtml = `
-        <tr class="grp">
-          ${cells.map(c=>`<th colspan="${c.colspan}">${escapeHtml(c.label)}</th>`).join("")}
-        </tr>
-      `;
-
-      const colsHtml = `
-        <tr class="cols">
-          ${HEADERS.map(h=>`<th>${escapeHtml(h)}</th>`).join("")}
+          ${vis.map(i=>`
+            <th data-col-idx="${i}">
+              <div class="thWrap">
+                <span class="thTxt">${escapeHtml(HEADERS[i] || "")}</span>
+                <button class="thHideBtn" type="button" data-hide-col="${i}" title="Yashirish">×</button>
+              </div>
+            </th>
+          `).join("")}
         </tr>
       `;
 
@@ -835,7 +838,6 @@
       const i = idx(name);
       return i==null ? "" : row[i];
     }
-
     function isSoldRow(row){
       const v = cell(row, "Сотилган");
       const s = normLower(v);
@@ -845,16 +847,12 @@
       if(s.includes("ha")) return true;
       return false;
     }
-
     function inStockRow(row){
-      // берем "Нечта колганлиги" как главный критерий
       const q = toNum(cell(row, "Нечта колганлиги"));
       if(q > 0) return true;
-      // fallback по сумме, если вдруг количество пусто
       const s = toNum(cell(row, "Колган суммаси")) || toNum(cell(row, "USD колганлиги"));
       return s > 0;
     }
-
     function matchQuery(row, q){
       if(!q) return true;
       const code = normLower(cell(row, "Коди"));
@@ -873,7 +871,6 @@
       const out = [];
       for(const r of ROWS){
         if(sup !== "all" && normStr(cell(r,"Поставщик")) !== sup) continue;
-
         if(cat !== "all" && normStr(cell(r,"Категория")) !== cat) continue;
         if(sez !== "all" && normStr(cell(r,"Сезон")) !== sez) continue;
 
@@ -885,7 +882,6 @@
         if(st === "no" && stockYes) continue;
 
         if(!matchQuery(r, q)) continue;
-
         out.push(r);
       }
 
@@ -894,15 +890,10 @@
       renderPage(1);
     }
 
-      renderBody(out);
-      metaEl.textContent = `Ko‘rsatildi: ${out.length.toLocaleString("ru-RU")} / ${ROWS.length.toLocaleString("ru-RU")}`;
-    }
-
     /************ Render body (chunked) ************/
     function makeImgUrl(u){
       const s = normStr(u);
       if(!s) return "";
-      // если это Google Drive share link — пробуем превратить в direct
       const m = s.match(/\/d\/([a-zA-Z0-9_-]+)/) || s.match(/id=([a-zA-Z0-9_-]+)/);
       if(m && m[1]) return "https://drive.google.com/uc?export=view&id=" + m[1];
       return s;
@@ -953,38 +944,6 @@
       requestAnimationFrame(step);
     }
 
-      tbody.innerHTML = "";
-      const COL_IMG = idx("Товар расми");
-
-      let i=0;
-      const chunk = 250;
-
-      function step(){
-        const end = Math.min(i+chunk, list.length);
-        let html = "";
-        for(; i<end; i++){
-          const row = list[i];
-          html += "<tr>";
-          for(let c=0;c<HEADERS.length;c++){
-            const v = row[c];
-            if(COL_IMG!=null && c===COL_IMG){
-              const url = makeImgUrl(v);
-              html += `<td class="imgCell">${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener"><img loading="lazy" src="${escapeHtml(url)}" alt="img"></a>` : "-"}</td>`;
-            } else {
-              const txt = (v==null || v==="") ? "-" : String(v);
-              const cls = (typeof v==="number") ? "mono" : "";
-              html += `<td class="${cls}" title="${escapeHtml(txt)}">${escapeHtml(txt)}</td>`;
-            }
-          }
-          html += "</tr>";
-        }
-        tbody.insertAdjacentHTML("beforeend", html);
-        if(i < list.length) requestAnimationFrame(step);
-      }
-
-      requestAnimationFrame(step);
-    }
-
     /************ UI events ************/
     function resetFilters(){
       fSupplier.value="all";
@@ -997,9 +956,15 @@
     }
 
     [fSupplier,fSold,qText,fCategory,fSeason,fStock].forEach(el=>{
-      el.addEventListener(el.tagName==="INPUT" ? "input" : "change", ()=>{ markActivity(); applyFilters(); });
+      el.addEventListener(el.tagName==="INPUT" ? "input" : "change", ()=>{
+        markActivity();
+        applyFilters();
+      });
     });
-    btnReset.addEventListener("click", ()=>{ markActivity(); resetFilters(); });
+    btnReset.addEventListener("click", ()=>{
+      markActivity();
+      resetFilters();
+    });
 
     btnReload.addEventListener("click", async ()=>{
       markActivity();
@@ -1020,6 +985,75 @@
     btnLogout.addEventListener("click", async ()=>{
       try{ await apiLogout(); }catch(e){}
       lockToLogin();
+    });
+
+    // column hide from header (×)
+    thead.addEventListener("click", (e)=>{
+      const btn = e.target.closest("[data-hide-col]");
+      if(!btn) return;
+      const colIdx = Number(btn.dataset.hideCol);
+      if(!Number.isFinite(colIdx)) return;
+
+      const name = String(HEADERS[colIdx] || "");
+      if(!name) return;
+
+      COL_HIDDEN.add(name);
+      saveHiddenCols();
+      rebuildAfterColsChange(true);
+    });
+
+    // chips: show hidden column back
+    hiddenColsBar.addEventListener("click", (e)=>{
+      const b = e.target.closest("[data-colname]");
+      if(!b) return;
+      const name = String(b.dataset.colname || "");
+      if(!name) return;
+
+      COL_HIDDEN.delete(name);
+      saveHiddenCols();
+      rebuildAfterColsChange(true);
+    });
+
+    // checkbox list: show/hide
+    colsList.addEventListener("change", (e)=>{
+      const cb = e.target;
+      if(!(cb instanceof HTMLInputElement)) return;
+      if(!cb.matches('input[type="checkbox"][data-col-idx]')) return;
+
+      const i = Number(cb.dataset.colIdx);
+      const name = String(HEADERS[i] || "");
+      if(!name) return;
+
+      if(cb.checked){
+        COL_HIDDEN.delete(name);
+      }else{
+        COL_HIDDEN.add(name);
+      }
+      saveHiddenCols();
+      rebuildAfterColsChange(true);
+    });
+
+    colSearch.addEventListener("input", ()=>buildColsUI());
+
+    btnColsAll.addEventListener("click", ()=>{
+      COL_HIDDEN.clear();
+      saveHiddenCols();
+      rebuildAfterColsChange(true);
+    });
+
+    // pager clicks
+    pager.addEventListener("click", (e)=>{
+      const b = e.target.closest("[data-page]");
+      if(!b) return;
+
+      const totalPages = getTotalPages();
+      const val = b.dataset.page;
+
+      if(val === "prev") return renderPage(CURRENT_PAGE - 1);
+      if(val === "next") return renderPage(CURRENT_PAGE + 1);
+
+      const p = Number(val);
+      if(Number.isFinite(p)) return renderPage(Math.min(Math.max(1,p), totalPages));
     });
 
     function setData(res){
