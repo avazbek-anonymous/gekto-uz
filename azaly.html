@@ -228,6 +228,72 @@
     }
     .empty{padding:16px 12px;color:var(--muted);font-size:13px}
 
+    /* ===== Column manager & pager ===== */
+    .hiddenColsBar{
+      display:flex;flex-wrap:wrap;gap:8px;
+      margin:6px 0 10px;
+    }
+    .chipBtn{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.85);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;font-weight:800;
+      cursor:pointer;
+      max-width:100%;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .chipBtn:hover{background:rgba(255,255,255,.10)}
+    .colsList{
+      display:flex;flex-direction:column;gap:8px;
+      max-height:260px;overflow:auto;
+      padding-right:2px;
+      scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent;
+    }
+    .colsList::-webkit-scrollbar{width:10px}
+    .colsList::-webkit-scrollbar-thumb{
+      background:rgba(255,255,255,.12);border-radius:999px;border:2px solid transparent;background-clip:content-box
+    }
+    .colsList:hover::-webkit-scrollbar-thumb{background:rgba(255,255,255,.30);background-clip:content-box}
+    .colItem{
+      display:flex;align-items:center;gap:10px;
+      padding:9px 10px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      cursor:pointer;
+      user-select:none;
+    }
+    .colItem:hover{background:rgba(255,255,255,.05)}
+    .colItem input{width:18px;height:18px;cursor:pointer}
+    .colItem span{font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .btn.small{padding:7px 10px;font-size:12px;border-radius:10px}
+    .pager{
+      padding:10px 12px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;flex-wrap:wrap;
+      background:rgba(255,255,255,.02);
+    }
+    .pagerInfo{color:var(--muted);font-size:12px;white-space:nowrap}
+    .pagerBtns{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+    .pageBtn{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.88);
+      padding:7px 10px;border-radius:10px;
+      font-size:12px;font-weight:900;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .pageBtn:hover{background:rgba(255,255,255,.10)}
+    .pageBtn:disabled{opacity:.55;cursor:not-allowed}
+    .pageBtn.active{
+      border-color:rgba(16,185,129,.35);
+      background:rgba(16,185,129,.14);
+      color:rgba(16,185,129,.95);
+    }
+    .pageDots{color:var(--muted);padding:0 4px;font-weight:900}
+
     /* Mobile */
     .burger{display:none;width:42px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:rgba(255,255,255,.92);cursor:pointer}
     .mOverlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:80;display:none}
@@ -307,6 +373,26 @@
         </select>
       </div>
 
+      <!-- ===== Columns (show/hide) ===== -->
+      <div class="field">
+        <label>Ustunlar (ko‘rsatish / yashirish)</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+          <button id="btnColsAll" class="btn small" type="button">Barchasini ko‘rsat</button>
+        </div>
+        <div class="muted" style="margin-top:8px">
+          Belgini o‘chirib ustunni yashirasiz. Yashirilgan ustunlar pastda chip bo‘lib chiqadi — bosib qayta ko‘rsatasiz.
+        </div>
+      </div>
+
+      <div id="hiddenColsBar" class="hiddenColsBar"></div>
+
+      <div class="field">
+        <label>Ustun qidirish</label>
+        <input id="colSearch" placeholder="ustun nomi..."/>
+      </div>
+
+      <div id="colsList" class="colsList"></div>
+
       <div class="muted">* Меню скрыто — наведи мышь на левый край.</div>
     </div>
   </aside>
@@ -343,6 +429,7 @@
           </tbody>
         </table>
       </div>
+      <div class="pager" id="pager"></div>
     </section>
   </main>
 
@@ -361,6 +448,9 @@
     const IDLE_MS = 3 * 60 * 1000;
     const TOUCH_DEBOUNCE_MS = 25000;
 
+    const PAGE_SIZE = 100;
+    const COLS_KEY = "azaly_hiddenCols";
+
     /************ STATE ************/
     let TOKEN = localStorage.getItem(TOKEN_KEY) || "";
     let USER = safeParse(localStorage.getItem(USER_KEY)) || null;
@@ -372,6 +462,10 @@
     let OPTIONS = { suppliers:[], categories:[], seasons:[] };
 
     let lastTouchSentAt = 0;
+
+    let FILTERED = [];
+    let CURRENT_PAGE = 1;
+    let COL_HIDDEN = new Set();
 
     /************ DOM ************/
     const userPill = document.getElementById("userPill");
@@ -397,6 +491,12 @@
     const fStock = document.getElementById("fStock");
     const btnReset = document.getElementById("btnReset");
 
+    const pager = document.getElementById("pager");
+    const colsList = document.getElementById("colsList");
+    const hiddenColsBar = document.getElementById("hiddenColsBar");
+    const colSearch = document.getElementById("colSearch");
+    const btnColsAll = document.getElementById("btnColsAll");
+
     /************ helpers ************/
     function safeParse(s){ try{return JSON.parse(s);}catch(e){return null;} }
     function escapeHtml(s){
@@ -419,6 +519,70 @@
     }
     function normStr(v){ return String(v ?? "").trim(); }
     function normLower(v){ return normStr(v).toLowerCase(); }
+
+    /************ columns (show/hide) ************/
+    function loadHiddenCols(){
+      const arr = safeParse(localStorage.getItem(COLS_KEY)) || [];
+      COL_HIDDEN = new Set((arr||[]).filter(x=>typeof x==="string"));
+    }
+    function saveHiddenCols(){
+      localStorage.setItem(COLS_KEY, JSON.stringify([...COL_HIDDEN]));
+    }
+    function syncHiddenColsToHeaders(){
+      const set = new Set((HEADERS||[]).map(h=>String(h||"")));
+      COL_HIDDEN = new Set([...COL_HIDDEN].filter(n=>set.has(n)));
+      saveHiddenCols();
+    }
+    function isHiddenCol(i){
+      const name = String((HEADERS||[])[i] || "");
+      return COL_HIDDEN.has(name);
+    }
+    function getVisibleCols(){
+      const out=[];
+      for(let i=0;i<(HEADERS||[]).length;i++){
+        if(!isHiddenCol(i)) out.push(i);
+      }
+      return out;
+    }
+    function ensureAtLeastOneCol(){
+      const vis = getVisibleCols();
+      if(vis.length>0) return true;
+      COL_HIDDEN.clear();
+      saveHiddenCols();
+      setStatus("err","Kamida 1 ta ustun ko‘rinib tursin");
+      return false;
+    }
+    function buildColsUI(){
+      if(!colsList || !hiddenColsBar) return;
+
+      const q = normLower(colSearch?.value || "");
+      const hidden = [];
+      for(let i=0;i<HEADERS.length;i++){
+        if(isHiddenCol(i)) hidden.push(String(HEADERS[i]||""));
+      }
+
+      hiddenColsBar.innerHTML = hidden.length
+        ? hidden.map(n=>`<button class="chipBtn" type="button" data-colname="${escapeHtml(n)}" title="Ko‘rsatish">${escapeHtml(n)}</button>`).join("")
+        : `<span class="muted">Yashirilgan ustun yo‘q</span>`;
+
+      let html = "";
+      for(let i=0;i<HEADERS.length;i++){
+        const name = String(HEADERS[i]||"");
+        if(q && !normLower(name).includes(q)) continue;
+        const checked = !COL_HIDDEN.has(name);
+        html += `<label class="colItem" title="${escapeHtml(name)}">
+          <input type="checkbox" data-col-idx="${i}" ${checked?"checked":""}>
+          <span>${escapeHtml(name || ("Ustun " + (i+1)))}</span>
+        </label>`;
+      }
+      colsList.innerHTML = html || `<div class="muted">Topilmadi</div>`;
+    }
+
+    function rebuildAfterColsChange(){
+      buildThead();
+      renderPage(CURRENT_PAGE, true);
+      buildColsUI();
+    }
 
     function clearSession(){
       localStorage.removeItem(TOKEN_KEY);
@@ -508,16 +672,19 @@
 
     /************ Build header (groups row1 + columns row2) ************/
     function buildThead(){
-      // row 1: groups (merge same consecutive)
+      const vis = getVisibleCols();
       const grp = GROUPS.length ? GROUPS : HEADERS.map(()=> "");
+
+      // row 1: groups (merge same consecutive for visible columns)
       const cells = [];
-      let i=0;
-      while(i<HEADERS.length){
+      let k=0;
+      while(k < vis.length){
+        const i = vis[k];
         const label = String(grp[i] || "");
-        let j=i+1;
-        while(j<HEADERS.length && String(grp[j]||"") === label) j++;
-        cells.push({label, colspan: j-i});
-        i=j;
+        let k2 = k + 1;
+        while(k2 < vis.length && String(grp[vis[k2]] || "") === label) k2++;
+        cells.push({label, colspan: k2 - k});
+        k = k2;
       }
 
       const grpHtml = `
@@ -528,7 +695,7 @@
 
       const colsHtml = `
         <tr class="cols">
-          ${HEADERS.map(h=>`<th>${escapeHtml(h)}</th>`).join("")}
+          ${vis.map(i=>`<th>${escapeHtml(HEADERS[i])}</th>`).join("")}
         </tr>
       `;
 
@@ -603,8 +770,86 @@
         out.push(r);
       }
 
-      renderBody(out);
-      metaEl.textContent = `Ko‘rsatildi: ${out.length.toLocaleString("ru-RU")} / ${ROWS.length.toLocaleString("ru-RU")}`;
+      FILTERED = out;
+      CURRENT_PAGE = 1;
+      renderPage(1);
+    }
+
+    function getTotalPages(){
+      const total = (FILTERED||[]).length;
+      return Math.max(1, Math.ceil(total / PAGE_SIZE));
+    }
+
+    function getPageItems(cur, totalPages){
+      const items = [];
+      if(totalPages <= 9){
+        for(let i=1;i<=totalPages;i++) items.push(i);
+        return items;
+      }
+      items.push(1);
+      let left = Math.max(2, cur - 2);
+      let right = Math.min(totalPages - 1, cur + 2);
+
+      if(left > 2) items.push("...");
+      for(let p=left; p<=right; p++) items.push(p);
+      if(right < totalPages - 1) items.push("...");
+      items.push(totalPages);
+      return items;
+    }
+
+    function renderPager(){
+      if(!pager) return;
+
+      const total = (FILTERED||[]).length;
+      const totalPages = getTotalPages();
+
+      if(total === 0){
+        pager.innerHTML = `<div class="pagerInfo">Ma’lumot yo‘q</div>`;
+        return;
+      }
+
+      const start = (CURRENT_PAGE - 1) * PAGE_SIZE;
+      const end = Math.min(start + PAGE_SIZE, total);
+
+      const items = getPageItems(CURRENT_PAGE, totalPages);
+
+      pager.innerHTML = `
+        <div class="pagerInfo">${start+1}–${end} / ${total} • Sahifa ${CURRENT_PAGE}/${totalPages}</div>
+        <div class="pagerBtns">
+          <button class="pageBtn" type="button" data-page="prev" ${CURRENT_PAGE<=1 ? "disabled" : ""}>‹ Oldingi</button>
+          ${items.map(it => it==="..."
+            ? `<span class="pageDots">…</span>`
+            : `<button class="pageBtn ${it===CURRENT_PAGE ? "active" : ""}" type="button" data-page="${it}">${it}</button>`
+          ).join("")}
+          <button class="pageBtn" type="button" data-page="next" ${CURRENT_PAGE>=totalPages ? "disabled" : ""}>Keyingi 100 ta ›</button>
+        </div>
+      `;
+    }
+
+    function renderPage(page, keepScroll=false){
+      const total = (FILTERED||[]).length;
+      const totalPages = getTotalPages();
+
+      const p = Math.min(Math.max(1, Number(page)||1), totalPages);
+      CURRENT_PAGE = p;
+
+      const start = (p - 1) * PAGE_SIZE;
+      const end = Math.min(start + PAGE_SIZE, total);
+
+      const slice = (FILTERED||[]).slice(start, end);
+      renderBody(slice);
+
+      const shown = total ? `${(start+1).toLocaleString("ru-RU")}–${end.toLocaleString("ru-RU")}` : "0";
+      metaEl.textContent = total
+        ? `Ko‘rsatildi: ${shown} / ${total.toLocaleString("ru-RU")} • Jami: ${ROWS.length.toLocaleString("ru-RU")}`
+        : `Ko‘rsatildi: 0 / 0 • Jami: ${ROWS.length.toLocaleString("ru-RU")}`;
+
+      renderPager();
+
+      if(!keepScroll){
+        const sc = document.getElementById("tableScroll");
+        if(sc) sc.scrollTo({top:0, behavior:"smooth"});
+      }
     }
 
     /************ Render body (chunked) ************/
@@ -618,8 +863,14 @@
     }
 
     function renderBody(list){
+      const vis = getVisibleCols();
+      if(!vis || vis.length===0){
+        tbody.innerHTML = `<tr><td class="empty" colspan="1">Ustunlar yashirilgan</td></tr>`;
+        return;
+      }
+
       if(!list || list.length===0){
-        tbody.innerHTML = `<tr><td class="empty" colspan="${Math.max(HEADERS.length,1)}">Ma’lumot yo‘q</td></tr>`;
+        tbody.innerHTML = `<tr><td class="empty" colspan="${vis.length}">Ma’lumot yo‘q</td></tr>`;
         return;
       }
 
@@ -627,7 +878,7 @@
       const COL_IMG = idx("Товар расми");
 
       let i=0;
-      const chunk = 250;
+      const chunk = 120;
 
       function step(){
         const end = Math.min(i+chunk, list.length);
@@ -635,7 +886,7 @@
         for(; i<end; i++){
           const row = list[i];
           html += "<tr>";
-          for(let c=0;c<HEADERS.length;c++){
+          for(const c of vis){
             const v = row[c];
             if(COL_IMG!=null && c===COL_IMG){
               const url = makeImgUrl(v);
@@ -670,6 +921,67 @@
       el.addEventListener(el.tagName==="INPUT" ? "input" : "change", ()=>{ markActivity(); applyFilters(); });
     });
     btnReset.addEventListener("click", ()=>{ markActivity(); resetFilters(); });
+
+    /************ pager events ************/
+    if(pager){
+      pager.addEventListener("click", (e)=>{
+        const b = e.target.closest("[data-page]");
+        if(!b) return;
+        const p = b.getAttribute("data-page");
+        markActivity();
+        if(p === "prev") return renderPage(CURRENT_PAGE - 1);
+        if(p === "next") return renderPage(CURRENT_PAGE + 1);
+        const n = Number(p);
+        if(isFinite(n)) return renderPage(n);
+      });
+    }
+
+    /************ columns events ************/
+    if(btnColsAll){
+      btnColsAll.addEventListener("click", ()=>{
+        markActivity();
+        COL_HIDDEN.clear();
+        saveHiddenCols();
+        rebuildAfterColsChange();
+      });
+    }
+    if(colSearch){
+      colSearch.addEventListener("input", ()=>{
+        markActivity();
+        buildColsUI();
+      });
+    }
+    if(colsList){
+      colsList.addEventListener("change", (e)=>{
+        const cb = e.target.closest('input[type="checkbox"][data-col-idx]');
+        if(!cb) return;
+        markActivity();
+        const i = Number(cb.getAttribute("data-col-idx"));
+        const name = String(HEADERS[i] || "");
+        if(cb.checked){
+          COL_HIDDEN.delete(name);
+        }else{
+          COL_HIDDEN.add(name);
+        }
+        saveHiddenCols();
+        if(!ensureAtLeastOneCol()){
+          buildColsUI();
+          return;
+        }
+        rebuildAfterColsChange();
+      });
+    }
+    if(hiddenColsBar){
+      hiddenColsBar.addEventListener("click", (e)=>{
+        const b = e.target.closest("button[data-colname]");
+        if(!b) return;
+        markActivity();
+        const name = b.getAttribute("data-colname") || "";
+        COL_HIDDEN.delete(name);
+        saveHiddenCols();
+        rebuildAfterColsChange();
+      });
+    }
 
     btnReload.addEventListener("click", async ()=>{
       markActivity();
@@ -708,6 +1020,11 @@
       fillSelect(fSupplier, OPTIONS.suppliers);
       fillSelect(fCategory, OPTIONS.categories);
       fillSelect(fSeason, OPTIONS.seasons);
+
+      loadHiddenCols();
+      syncHiddenColsToHeaders();
+      ensureAtLeastOneCol();
+      buildColsUI();
 
       buildThead();
       applyFilters();
