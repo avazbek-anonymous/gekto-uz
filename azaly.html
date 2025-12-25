@@ -221,14 +221,31 @@
     tbody tr:hover td{background:rgba(255,255,255,.03)}
     .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
     .imgCell img{
-      width:80px;height:80px;object-fit:cover;border-radius:12px;
+      width:44px;height:44px;object-fit:cover;border-radius:12px;
       border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.04);
       display:block;
     }
     .empty{padding:16px 12px;color:var(--muted);font-size:13px}
 
-
+    /* Mobile */
+    .burger{display:none;width:42px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:rgba(255,255,255,.92);cursor:pointer}
+    .mOverlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:80;display:none}
+    @media (max-width: 980px){
+      body{overflow:auto}
+      .app{height:auto;overflow:visible;flex-direction:column}
+      .tableCard{min-height:60vh}
+      .edgeHotspot{display:none}
+      .filtersDock{
+        transform:translateX(-110%);
+        width:min(320px,85vw);
+      }
+      body.filtersOpen .filtersDock{transform:translateX(0)}
+      .burger{display:inline-flex;align-items:center;justify-content:center}
+      thead th{position:static}
+      table{min-width:1200px}
+    }
+  
     /* ===== Column manager & pager ===== */
     .hiddenColsBar{
       display:flex;flex-wrap:wrap;gap:8px;
@@ -267,7 +284,9 @@
     .colItem:hover{background:rgba(255,255,255,.05)}
     .colItem input{width:18px;height:18px;cursor:pointer}
     .colItem span{font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
     .btn.small{padding:7px 10px;font-size:12px;border-radius:10px}
+
     .pager{
       padding:10px 12px;
       border-top:1px solid rgba(255,255,255,.08);
@@ -295,24 +314,31 @@
     }
     .pageDots{color:var(--muted);padding:0 4px;font-weight:900}
 
-    /* Mobile */
-    .burger{display:none;width:42px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:rgba(255,255,255,.92);cursor:pointer}
-    .mOverlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:80;display:none}
-    @media (max-width: 980px){
-      body{overflow:auto}
-      .app{height:auto;overflow:visible;flex-direction:column}
-      .tableCard{min-height:60vh}
-      .edgeHotspot{display:none}
-      .filtersDock{
-        transform:translateX(-110%);
-        width:min(320px,85vw);
-      }
-      body.filtersOpen .filtersDock{transform:translateX(0)}
-      .burger{display:inline-flex;align-items:center;justify-content:center}
-      thead th{position:static}
-      table{min-width:1200px}
+    /* hide button in table headers */
+    .thWrap{
+      display:flex;align-items:center;justify-content:space-between;gap:8px;
+      width:100%;
     }
-  </style>
+    .thTxt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .thHideBtn{
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.85);
+      width:22px;height:22px;border-radius:8px;
+      display:grid;place-items:center;
+      cursor:pointer;
+      opacity:0;
+      transform:scale(.95);
+      transition:opacity .12s ease, transform .12s ease, background .12s ease;
+      flex:0 0 22px;
+    }
+    thead th:hover .thHideBtn{
+      opacity:1;
+      transform:scale(1);
+    }
+    .thHideBtn:hover{background:rgba(241,98,98,.14);border-color:rgba(241,98,98,.28)}
+
+</style>
 </head>
 
 <body>
@@ -381,7 +407,7 @@
           <button id="btnColsAll" class="btn small" type="button">Barchasini ko‘rsat</button>
         </div>
         <div class="muted" style="margin-top:8px">
-          Belgini o‘chirib ustunni yashirasiz. Yashirilgan ustunlar pastda chip bo‘lib chiqadi — bosib qayta ko‘rsatasiz.
+          Ustun nomini o‘chirib yashirasiz. Jadval sarlavhasidagi <b>×</b> tugmasi bilan ham yashirish mumkin.
         </div>
       </div>
 
@@ -522,10 +548,11 @@
     function normStr(v){ return String(v ?? "").trim(); }
     function normLower(v){ return normStr(v).toLowerCase(); }
 
+
     /************ columns (show/hide) ************/
     function loadHiddenCols(){
       const arr = safeParse(localStorage.getItem(COLS_KEY)) || [];
-      COL_HIDDEN = new Set((arr||[]).filter(x=>typeof x==="string"));
+      COL_HIDDEN = new Set((arr||[]).filter(x=>typeof x === "string"));
     }
     function saveHiddenCols(){
       localStorage.setItem(COLS_KEY, JSON.stringify([...COL_HIDDEN]));
@@ -540,7 +567,7 @@
       return COL_HIDDEN.has(name);
     }
     function getVisibleCols(){
-      const out=[];
+      const out = [];
       for(let i=0;i<(HEADERS||[]).length;i++){
         if(!isHiddenCol(i)) out.push(i);
       }
@@ -548,11 +575,10 @@
     }
     function ensureAtLeastOneCol(){
       const vis = getVisibleCols();
-      if(vis.length>0) return true;
+      if(vis.length > 0) return true;
       COL_HIDDEN.clear();
       saveHiddenCols();
-      setStatus("err","Kamida 1 ta ustun ko‘rinib tursin");
-      return false;
+      return true;
     }
     function buildColsUI(){
       if(!colsList || !hiddenColsBar) return;
@@ -573,17 +599,92 @@
         if(q && !normLower(name).includes(q)) continue;
         const checked = !COL_HIDDEN.has(name);
         html += `<label class="colItem" title="${escapeHtml(name)}">
-          <input type="checkbox" data-col-idx="${i}" ${checked?"checked":""}>
+          <input type="checkbox" data-col-idx="${i}" ${checked ? "checked" : ""}>
           <span>${escapeHtml(name || ("Ustun " + (i+1)))}</span>
         </label>`;
       }
       colsList.innerHTML = html || `<div class="muted">Topilmadi</div>`;
     }
-
     function rebuildAfterColsChange(){
       buildThead();
       renderPage(CURRENT_PAGE, true);
       buildColsUI();
+    }
+
+    /************ pagination ************/
+    function getTotalPages(){
+      const total = (FILTERED || []).length;
+      return Math.max(1, Math.ceil(total / PAGE_SIZE));
+    }
+    function getPageItems(cur, totalPages){
+      const items = [];
+      if(totalPages <= 9){
+        for(let i=1;i<=totalPages;i++) items.push(i);
+        return items;
+      }
+      items.push(1);
+      let left = Math.max(2, cur - 2);
+      let right = Math.min(totalPages - 1, cur + 2);
+
+      if(left > 2) items.push("...");
+      for(let p=left; p<=right; p++) items.push(p);
+      if(right < totalPages - 1) items.push("...");
+      items.push(totalPages);
+      return items;
+    }
+    function renderPager(){
+      if(!pager) return;
+
+      const total = (FILTERED || []).length;
+      const totalPages = getTotalPages();
+
+      if(total === 0){
+        pager.innerHTML = `<div class="pagerInfo">Ma’lumot yo‘q</div>`;
+        return;
+      }
+
+      const start = (CURRENT_PAGE - 1) * PAGE_SIZE;
+      const end = Math.min(start + PAGE_SIZE, total);
+
+      const items = getPageItems(CURRENT_PAGE, totalPages);
+
+      pager.innerHTML = `
+        <div class="pagerInfo">${start+1}–${end} / ${total} • Sahifa ${CURRENT_PAGE}/${totalPages}</div>
+        <div class="pagerBtns">
+          <button class="pageBtn" type="button" data-page="prev" ${CURRENT_PAGE<=1 ? "disabled" : ""}>‹ Oldingi</button>
+          ${items.map(it => it === "..."
+            ? `<span class="pageDots">…</span>`
+            : `<button class="pageBtn ${it===CURRENT_PAGE ? "active" : ""}" type="button" data-page="${it}">${it}</button>`
+          ).join("")}
+          <button class="pageBtn" type="button" data-page="next" ${CURRENT_PAGE>=totalPages ? "disabled" : ""}>Keyingi 100 ta ›</button>
+        </div>
+      `;
+    }
+    function renderPage(page, keepScroll=false){
+      const total = (FILTERED || []).length;
+      const totalPages = getTotalPages();
+
+      const p = Math.min(Math.max(1, Number(page)||1), totalPages);
+      CURRENT_PAGE = p;
+
+      const start = (p - 1) * PAGE_SIZE;
+      const end = Math.min(start + PAGE_SIZE, total);
+
+      const slice = (FILTERED || []).slice(start, end);
+      renderBody(slice);
+
+      if(total){
+        metaEl.textContent = `Ko‘rsatildi: ${start+1}–${end} / ${total.toLocaleString("ru-RU")} • Jami: ${ROWS.length.toLocaleString("ru-RU")}`;
+      }else{
+        metaEl.textContent = `Ko‘rsatildi: 0 / 0 • Jami: ${ROWS.length.toLocaleString("ru-RU")}`;
+      }
+
+      renderPager();
+
+      if(!keepScroll){
+        const sc = document.getElementById("tableScroll");
+        if(sc) sc.scrollTo({top:0, behavior:"smooth"});
+      }
     }
 
     function clearSession(){
@@ -697,7 +798,23 @@
 
       const colsHtml = `
         <tr class="cols">
-          ${vis.map(i=>`<th>${escapeHtml(HEADERS[i])}</th>`).join("")}
+          ${vis.map(i=>`<th data-col-idx="${i}"><div class="thWrap"><span class="thTxt">${escapeHtml(HEADERS[i])}</span><button class="thHideBtn" type="button" data-hide-col="${i}" title="Yashirish">×</button></div></th>`).join("")}
+        </tr>
+      `;
+
+      thead.innerHTML = grpHtml + colsHtml;
+    }
+
+
+      const grpHtml = `
+        <tr class="grp">
+          ${cells.map(c=>`<th colspan="${c.colspan}">${escapeHtml(c.label)}</th>`).join("")}
+        </tr>
+      `;
+
+      const colsHtml = `
+        <tr class="cols">
+          ${HEADERS.map(h=>`<th>${escapeHtml(h)}</th>`).join("")}
         </tr>
       `;
 
@@ -777,81 +894,8 @@
       renderPage(1);
     }
 
-    function getTotalPages(){
-      const total = (FILTERED||[]).length;
-      return Math.max(1, Math.ceil(total / PAGE_SIZE));
-    }
-
-    function getPageItems(cur, totalPages){
-      const items = [];
-      if(totalPages <= 9){
-        for(let i=1;i<=totalPages;i++) items.push(i);
-        return items;
-      }
-      items.push(1);
-      let left = Math.max(2, cur - 2);
-      let right = Math.min(totalPages - 1, cur + 2);
-
-      if(left > 2) items.push("...");
-      for(let p=left; p<=right; p++) items.push(p);
-      if(right < totalPages - 1) items.push("...");
-      items.push(totalPages);
-      return items;
-    }
-
-    function renderPager(){
-      if(!pager) return;
-
-      const total = (FILTERED||[]).length;
-      const totalPages = getTotalPages();
-
-      if(total === 0){
-        pager.innerHTML = `<div class="pagerInfo">Ma’lumot yo‘q</div>`;
-        return;
-      }
-
-      const start = (CURRENT_PAGE - 1) * PAGE_SIZE;
-      const end = Math.min(start + PAGE_SIZE, total);
-
-      const items = getPageItems(CURRENT_PAGE, totalPages);
-
-      pager.innerHTML = `
-        <div class="pagerInfo">${start+1}–${end} / ${total} • Sahifa ${CURRENT_PAGE}/${totalPages}</div>
-        <div class="pagerBtns">
-          <button class="pageBtn" type="button" data-page="prev" ${CURRENT_PAGE<=1 ? "disabled" : ""}>‹ Oldingi</button>
-          ${items.map(it => it==="..."
-            ? `<span class="pageDots">…</span>`
-            : `<button class="pageBtn ${it===CURRENT_PAGE ? "active" : ""}" type="button" data-page="${it}">${it}</button>`
-          ).join("")}
-          <button class="pageBtn" type="button" data-page="next" ${CURRENT_PAGE>=totalPages ? "disabled" : ""}>Keyingi 100 ta ›</button>
-        </div>
-      `;
-    }
-
-    function renderPage(page, keepScroll=false){
-      const total = (FILTERED||[]).length;
-      const totalPages = getTotalPages();
-
-      const p = Math.min(Math.max(1, Number(page)||1), totalPages);
-      CURRENT_PAGE = p;
-
-      const start = (p - 1) * PAGE_SIZE;
-      const end = Math.min(start + PAGE_SIZE, total);
-
-      const slice = (FILTERED||[]).slice(start, end);
-      renderBody(slice);
-
-      const shown = total ? `${(start+1).toLocaleString("ru-RU")}–${end.toLocaleString("ru-RU")}` : "0";
-      metaEl.textContent = total
-        ? `Ko‘rsatildi: ${shown} / ${total.toLocaleString("ru-RU")} • Jami: ${ROWS.length.toLocaleString("ru-RU")}`
-        : `Ko‘rsatildi: 0 / 0 • Jami: ${ROWS.length.toLocaleString("ru-RU")}`;
-
-      renderPager();
-
-      if(!keepScroll){
-        const sc = document.getElementById("tableScroll");
-        if(sc) sc.scrollTo({top:0, behavior:"smooth"});
-      }
+      renderBody(out);
+      metaEl.textContent = `Ko‘rsatildi: ${out.length.toLocaleString("ru-RU")} / ${ROWS.length.toLocaleString("ru-RU")}`;
     }
 
     /************ Render body (chunked) ************/
@@ -866,7 +910,8 @@
 
     function renderBody(list){
       const vis = getVisibleCols();
-      if(!vis || vis.length===0){
+
+      if(!vis || vis.length === 0){
         tbody.innerHTML = `<tr><td class="empty" colspan="1">Ustunlar yashirilgan</td></tr>`;
         return;
       }
@@ -880,7 +925,7 @@
       const COL_IMG = idx("Товар расми");
 
       let i=0;
-      const chunk = 120;
+      const chunk = 180;
 
       function step(){
         const end = Math.min(i+chunk, list.length);
@@ -889,6 +934,38 @@
           const row = list[i];
           html += "<tr>";
           for(const c of vis){
+            const v = row[c];
+            if(COL_IMG!=null && c===COL_IMG){
+              const url = makeImgUrl(v);
+              html += `<td class="imgCell">${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener"><img loading="lazy" src="${escapeHtml(url)}" alt="img"></a>` : "-"}</td>`;
+            } else {
+              const txt = (v==null || v==="") ? "-" : String(v);
+              const cls = (typeof v==="number") ? "mono" : "";
+              html += `<td class="${cls}" title="${escapeHtml(txt)}">${escapeHtml(txt)}</td>`;
+            }
+          }
+          html += "</tr>";
+        }
+        tbody.insertAdjacentHTML("beforeend", html);
+        if(i < list.length) requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    }
+
+      tbody.innerHTML = "";
+      const COL_IMG = idx("Товар расми");
+
+      let i=0;
+      const chunk = 250;
+
+      function step(){
+        const end = Math.min(i+chunk, list.length);
+        let html = "";
+        for(; i<end; i++){
+          const row = list[i];
+          html += "<tr>";
+          for(let c=0;c<HEADERS.length;c++){
             const v = row[c];
             if(COL_IMG!=null && c===COL_IMG){
               const url = makeImgUrl(v);
@@ -923,68 +1000,6 @@
       el.addEventListener(el.tagName==="INPUT" ? "input" : "change", ()=>{ markActivity(); applyFilters(); });
     });
     btnReset.addEventListener("click", ()=>{ markActivity(); resetFilters(); });
-
-    /************ pager events ************/
-    if(pager){
-      pager.addEventListener("click", (e)=>{
-        const b = e.target.closest("[data-page]");
-        if(!b) return;
-        const p = b.getAttribute("data-page");
-        markActivity();
-        if(p === "prev") return renderPage(CURRENT_PAGE - 1);
-        if(p === "next") return renderPage(CURRENT_PAGE + 1);
-        const n = Number(p);
-        if(isFinite(n)) return renderPage(n);
-      });
-    }
-
-    /************ columns events ************/
-    if(btnColsAll){
-      btnColsAll.addEventListener("click", ()=>{
-        markActivity();
-        COL_HIDDEN.clear();
-        saveHiddenCols();
-        rebuildAfterColsChange();
-      });
-    }
-    if(colSearch){
-      colSearch.addEventListener("input", ()=>{
-        markActivity();
-        buildColsUI();
-      });
-    }
-    if(colsList){
-      colsList.addEventListener("change", (e)=>{
-        const cb = e.target.closest('input[type="checkbox"][data-col-idx]');
-        if(!cb) return;
-        markActivity();
-        const i = Number(cb.getAttribute("data-col-idx"));
-        const name = String(HEADERS[i] || "");
-        if(cb.checked){
-          COL_HIDDEN.delete(name);
-        }else{
-          COL_HIDDEN.add(name);
-        }
-        saveHiddenCols();
-        if(!ensureAtLeastOneCol()){
-          buildColsUI();
-          return;
-        }
-        rebuildAfterColsChange();
-      });
-    }
-    if(hiddenColsBar){
-      hiddenColsBar.addEventListener("click", (e)=>{
-        const b = e.target.closest("button[data-colname]");
-        if(!b) return;
-        markActivity();
-        const name = b.getAttribute("data-colname") || "";
-        COL_HIDDEN.delete(name);
-        saveHiddenCols();
-        rebuildAfterColsChange();
-      });
-    }
-
 
     btnReload.addEventListener("click", async ()=>{
       markActivity();
