@@ -228,6 +228,7 @@
     }
     .empty{padding:16px 12px;color:var(--muted);font-size:13px}
 
+
     /* ===== Column manager & pager ===== */
     .hiddenColsBar{
       display:flex;flex-wrap:wrap;gap:8px;
@@ -392,6 +393,7 @@
       </div>
 
       <div id="colsList" class="colsList"></div>
+
 
       <div class="muted">* Меню скрыто — наведи мышь на левый край.</div>
     </div>
@@ -982,6 +984,7 @@
         rebuildAfterColsChange();
       });
     }
+
 
     btnReload.addEventListener("click", async ()=>{
       markActivity();
