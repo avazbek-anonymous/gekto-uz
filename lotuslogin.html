@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lotus Login</title>
+  <style>
+    :root{--bg:#0b1220;--card:#111a2e;--text:#e9eefc;--muted:#a9b4d0;--accent:#48d1a5;--danger:#ff5a6b;--line:rgba(255,255,255,.08);--shadow:0 12px 30px rgba(0,0,0,.35);--radius:18px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:radial-gradient(1000px 700px at 20% 10%, rgba(72,209,165,.18), transparent 60%),radial-gradient(900px 700px at 90% 30%, rgba(120,140,255,.16), transparent 55%),var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}
+    .wrap{width:min(420px,100%)}
+    .brand{display:flex;align-items:center;gap:10px;margin-bottom:14px;opacity:.95}
+    .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px rgba(72,209,165,.7)}
+    .brand h1{font-size:18px;margin:0;font-weight:800}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+    label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
+    input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.18);color:var(--text);outline:none;font-size:14px}
+    input:focus{border-color:rgba(72,209,165,.55);box-shadow:0 0 0 4px rgba(72,209,165,.12)}
+    button{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(72,209,165,.55);background:rgba(72,209,165,.14);color:var(--text);font-weight:800;cursor:pointer}
+    button[disabled]{opacity:.55;cursor:not-allowed}
+    .msg{margin-top:12px;font-size:13px;color:var(--muted);min-height:18px}
+    .err{color:var(--danger)}
+    .spin{display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:var(--text);animation:spin .9s linear infinite;vertical-align:-2px;margin-right:8px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    iframe{display:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand"><div class="dot"></div><h1>LOTUS • Login</h1></div>
+    <div class="card">
+      <p class="sub">Сессия действует до 23:59:59 (Ташкент).</p>
+
+      <label>Логин</label>
+      <input id="login" autocomplete="username" placeholder="Login" />
+
+      <label>Пароль</label>
+      <input id="password" type="password" autocomplete="current-password" placeholder="Parol" />
+
+      <button id="btn" onclick="onLogin()">Войти</button>
+
+      <div id="msg" class="msg"></div>
+    </div>
+  </div>
+
+  <!-- Hidden Bridge iframe -->
+  <iframe id="bridge"></iframe>
+
+<script>
+  // ====== ВСТАВЬ СЮДА СВОЙ Apps Script Web App URL (/exec) + ?page=bridge ======
+  const BRIDGE_URL = "https://script.google.com/macros/s/AKfycbwAhWboyZuVAE9RtcRMye39XKygcQBWRrXKjiWRd681cayTk_HEYeiDYV0iGy1oJ60VGA/exec?page=bridge";
+  // ============================================================================
+  const STORAGE_KEY = "lotus_token";
+
+  const Bridge = (() => {
+    let iframe = null;
+    let ready = false;
+    const pending = new Map();
+    const bridgeOrigin = new URL(BRIDGE_URL).origin;
+
+    function init(){
+      iframe = document.getElementById("bridge");
+      iframe.src = BRIDGE_URL;
+
+      window.addEventListener("message", (event) => {
+        if (event.origin !== bridgeOrigin) return;
+        const msg = event.data || {};
+        if (msg.type === "lotus-bridge-ready") ready = true;
+
+        if (msg.type === "lotus-bridge-response" && msg.id){
+          const p = pending.get(msg.id);
+          if (!p) return;
+          pending.delete(msg.id);
+          msg.ok ? p.resolve(msg.result) : p.reject(new Error(msg.error || "BRIDGE_ERROR"));
+        }
+      });
+    }
+
+    function call(action, payload){
+      if (!iframe) init();
+      const id = String(Date.now()) + "-" + Math.floor(Math.random()*1e9);
+
+      return new Promise((resolve, reject) => {
+        pending.set(id, { resolve, reject });
+        iframe.contentWindow.postMessage(
+          { type:"lotus-bridge-request", id, action, payload: payload || {} },
+          bridgeOrigin
+        );
+        setTimeout(() => {
+          if (!pending.has(id)) return;
+          pending.delete(id);
+          reject(new Error("TIMEOUT"));
+        }, 25000);
+      });
+    }
+
+    return { call, init };
+  })();
+
+  Bridge.init();
+
+  function showMsg(s, isErr){
+    const el = document.getElementById("msg");
+    el.textContent = s || "";
+    el.className = "msg" + (isErr ? " err" : "");
+  }
+  function setBusy(b, text){
+    const btn = document.getElementById("btn");
+    btn.disabled = b;
+    btn.innerHTML = b ? `<span class="spin"></span>${text||"Входим..."}` : "Войти";
+  }
+
+  async function boot(){
+    const token = localStorage.getItem(STORAGE_KEY) || "";
+    if (!token) return;
+    try{
+      const r = await Bridge.call("auth.check", { token });
+      if (r && r.ok) window.location.replace("/lotus.html");
+    }catch(e){}
+  }
+  boot();
+
+  async function onLogin(){
+    const login = document.getElementById("login").value.trim();
+    const password = document.getElementById("password").value.trim();
+    if (!login || !password){
+      showMsg("Заполни логин и пароль.", true);
+      return;
+    }
+    showMsg("");
+    setBusy(true, "Входим...");
+
+    try{
+      const r = await Bridge.call("auth.login", { login, password });
+      if (!r || !r.ok){
+        showMsg("Неверный логин или пароль.", true);
+        setBusy(false);
+        return;
+      }
+      localStorage.setItem(STORAGE_KEY, r.token);
+      window.location.replace("/lotus.html");
+    }catch(e){
+      showMsg("Ошибка соединения (bridge).", true);
+      setBusy(false);
+    }
+  }
+
+  document.addEventListener("keydown", (e)=>{
+    if (e.key === "Enter") onLogin();
+  });
+</script>
+</body>
+</html>
