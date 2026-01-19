@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Lotus</title>
   <style>
     :root{--bg:#0b1220;--card:#0f1930;--text:#e9eefc;--muted:#a9b4d0;--accent:#48d1a5;--danger:#ff5a6b;--warn:#ffd05a;--line:rgba(255,255,255,.08);--shadow:0 12px 30px rgba(0,0,0,.35);--radius:18px}
@@ -62,7 +62,6 @@
     .payBox{margin-top:12px;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:12px;background:rgba(0,0,0,.12)}
     .payTitle{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
     .sumLine{margin-top:10px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
-    iframe{display:none}
   </style>
 </head>
 <body>
@@ -80,7 +79,7 @@
     <div class="actions">
       <div class="control"><label>Услуга</label><select id="fService"></select></div>
       <div class="control"><label>Мастер</label><select id="fMaster"></select></div>
-      <div class="control"><label>Дата</label><input id="fDate" type="date" /></div>
+      <div class="control"><label>Дата</label><input id="fDate" type="date"/></div>
       <button class="btn" id="btnCreate" onclick="openModal()"><span>＋</span> Создать</button>
       <button class="btn btnGhost" id="btnLogout" onclick="logout()">Выйти</button>
     </div>
@@ -118,31 +117,31 @@
     </div>
     <div class="mBody">
       <div class="grid">
-        <div class="field"><label>Sana (дата и время)</label><input id="mSana" type="datetime-local" /></div>
+        <div class="field"><label>Sana (дата и время)</label><input id="mSana" type="datetime-local"/></div>
         <div class="field"><label>Xizmat (Massage kodi)</label><select id="mService"></select></div>
         <div class="field"><label>Master (Texnik kodi)</label><select id="mMaster"></select></div>
-        <div class="field"><label>Narx (Daromad)</label><input id="mNarx" type="text" readonly /><div class="hint">Подтягивается из Info.</div></div>
-        <div class="field"><label>Skidka % (Foiz)</label><input id="mFoiz" type="number" min="0" max="100" step="0.01" value="0" /></div>
+        <div class="field"><label>Narx (Daromad)</label><input id="mNarx" type="text" readonly/><div class="hint">Подтягивается из Info.</div></div>
+        <div class="field"><label>Skidka % (Foiz)</label><input id="mFoiz" type="number" min="0" max="100" step="0.01" value="0"/></div>
         <div class="field">
           <label>Sertifikat</label>
           <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
-            <label class="pill" style="cursor:pointer;"><input type="radio" name="certMode" value="sum" checked /> сумма</label>
-            <label class="pill" style="cursor:pointer;"><input type="radio" name="certMode" value="pct" /> %</label>
+            <label class="pill" style="cursor:pointer;"><input type="radio" name="certMode" value="sum" checked/> сумма</label>
+            <label class="pill" style="cursor:pointer;"><input type="radio" name="certMode" value="pct"/> %</label>
           </div>
-          <input id="mCertVal" type="number" min="0" step="0.01" value="0" />
+          <input id="mCertVal" type="number" min="0" step="0.01" value="0"/>
         </div>
-        <div class="field"><label>Summa (итог)</label><input id="mSumma" type="text" /><div class="hint" id="autoHint"></div></div>
+        <div class="field"><label>Summa (итог)</label><input id="mSumma" type="text"/><div class="hint" id="autoHint"></div></div>
         <div class="field" style="grid-column:1/-1;"><label>Izoh</label><textarea id="mIzoh" placeholder="Комментарий..."></textarea></div>
       </div>
 
       <div class="payBox">
         <div class="payTitle"><b>Оплата</b><span class="muted mono" id="payCheckLine"></span></div>
         <div class="grid">
-          <div class="field"><label>Click</label><input id="pClick" type="text" inputmode="numeric" placeholder="0" /></div>
-          <div class="field"><label>Payme</label><input id="pPayme" type="text" inputmode="numeric" placeholder="0" /></div>
-          <div class="field"><label>Карта 8037</label><input id="pCard" type="text" inputmode="numeric" placeholder="0" /></div>
-          <div class="field"><label>Наличные</label><input id="pCash" type="text" inputmode="numeric" placeholder="0" /><div class="hint">### ### ### (в базу без пробелов)</div></div>
-          <div class="field" style="grid-column:1/-1;"><label>Uzcard/Humo Term.</label><input id="pUz" type="text" inputmode="numeric" placeholder="0" /></div>
+          <div class="field"><label>Click</label><input id="pClick" type="text" inputmode="numeric" placeholder="0"/></div>
+          <div class="field"><label>Payme</label><input id="pPayme" type="text" inputmode="numeric" placeholder="0"/></div>
+          <div class="field"><label>Карта 8037</label><input id="pCard" type="text" inputmode="numeric" placeholder="0"/></div>
+          <div class="field"><label>Наличные</label><input id="pCash" type="text" inputmode="numeric" placeholder="0"/><div class="hint">### ### ### (в базу без пробелов)</div></div>
+          <div class="field" style="grid-column:1/-1;"><label>Uzcard/Humo Term.</label><input id="pUz" type="text" inputmode="numeric" placeholder="0"/></div>
         </div>
         <div class="sumLine"><span class="muted">Итого оплаты</span><b class="mono" id="payTotal">0</b></div>
       </div>
@@ -157,57 +156,42 @@
   </div>
 </div>
 
-<iframe id="bridge"></iframe>
-
 <script>
-  // ====== ВСТАВЬ СЮДА СВОЙ Apps Script Web App URL (/exec) + ?page=bridge ======
-  const BRIDGE_URL = "https://script.google.com/macros/s/AKfycbwAhWboyZuVAE9RtcRMye39XKygcQBWRrXKjiWRd681cayTk_HEYeiDYV0iGy1oJ60VGA/exec?page=bridge";
-  // ============================================================================
+  // === ВСТАВЬ СЮДА Web App URL ===
+  const API_URL = "https://script.google.com/macros/s/AKfycbwAhWboyZuVAE9RtcRMye39XKygcQBWRrXKjiWRd681cayTk_HEYeiDYV0iGy1oJ60VGA/exec";
+  // ===============================
+  const SECRET = "mySecret123";
   const STORAGE_KEY = "lotus_token";
 
-  const Bridge = (() => {
-    let iframe = null;
-    const pending = new Map();
-    const bridgeOrigin = new URL(BRIDGE_URL).origin;
+  function jsonp(action, params){
+    params = params || {};
+    return new Promise((resolve, reject) => {
+      const cbName = "__lotus_cb_" + Date.now() + "_" + Math.floor(Math.random()*1e9);
+      window[cbName] = (data) => { cleanup(); resolve(data); };
 
-    function init(){
-      iframe = document.getElementById("bridge");
-      iframe.src = BRIDGE_URL;
+      function cleanup(){
+        try { delete window[cbName]; } catch(e){ window[cbName]=undefined; }
+        if (script && script.parentNode) script.parentNode.removeChild(script);
+        clearTimeout(timer);
+      }
 
-      window.addEventListener("message", (event) => {
-        if (event.origin !== bridgeOrigin) return;
-        const msg = event.data || {};
-        if (msg.type === "lotus-bridge-response" && msg.id){
-          const p = pending.get(msg.id);
-          if (!p) return;
-          pending.delete(msg.id);
-          msg.ok ? p.resolve(msg.result) : p.reject(new Error(msg.error || "BRIDGE_ERROR"));
-        }
+      const u = new URL(API_URL);
+      u.searchParams.set("callback", cbName);
+      u.searchParams.set("secret", SECRET);
+      u.searchParams.set("action", action);
+      Object.keys(params).forEach(k => {
+        if (params[k] == null) return;
+        u.searchParams.set(k, String(params[k]));
       });
-    }
 
-    function call(action, payload){
-      if (!iframe) init();
-      const id = String(Date.now()) + "-" + Math.floor(Math.random()*1e9);
+      const script = document.createElement("script");
+      script.src = u.toString();
+      script.onerror = () => { cleanup(); reject(new Error("JSONP_ERROR")); };
+      document.head.appendChild(script);
 
-      return new Promise((resolve, reject) => {
-        pending.set(id, { resolve, reject });
-        iframe.contentWindow.postMessage(
-          { type:"lotus-bridge-request", id, action, payload: payload || {} },
-          bridgeOrigin
-        );
-        setTimeout(() => {
-          if (!pending.has(id)) return;
-          pending.delete(id);
-          reject(new Error("TIMEOUT"));
-        }, 25000);
-      });
-    }
-
-    return { call, init };
-  })();
-
-  Bridge.init();
+      const timer = setTimeout(() => { cleanup(); reject(new Error("TIMEOUT")); }, 25000);
+    });
+  }
 
   let STATE = { token:"", user:null, services:[], masters:[], priceByService:{}, rows:[], loading:false, modalBusy:false, autoSum:0 };
 
@@ -283,6 +267,7 @@
     const tb = document.getElementById("tbody");
     const ml = document.getElementById("mobileList");
     tb.innerHTML = ""; ml.innerHTML = "";
+
     if (!rows || rows.length===0){
       const empty = document.createElement("div");
       empty.style.padding="14px";
@@ -290,6 +275,7 @@
       ml.appendChild(empty);
       return;
     }
+
     for (const r of rows){
       const tr = document.createElement("tr");
       tr.innerHTML = `
@@ -333,11 +319,9 @@
 
   async function boot(){
     STATE.token = localStorage.getItem(STORAGE_KEY) || "";
-    if (!STATE.token){
-      window.location.replace("/lotuslogin.html");
-      return;
-    }
-    const chk = await Bridge.call("auth.check",{token:STATE.token}).catch(()=>null);
+    if (!STATE.token){ window.location.replace("/lotuslogin.html"); return; }
+
+    const chk = await jsonp("check", { token: STATE.token }).catch(()=>null);
     if (!chk || !chk.ok){
       localStorage.removeItem(STORAGE_KEY);
       window.location.replace("/lotuslogin.html");
@@ -355,7 +339,7 @@
 
   async function loadMeta(){
     disableTop(true); setListLoading(true);
-    const r = await Bridge.call("meta.getOptions",{token:STATE.token}).catch(()=>null);
+    const r = await jsonp("meta", { token: STATE.token }).catch(()=>null);
     if (!r || !r.ok){ alert("Не удалось загрузить справочники (Info)."); disableTop(false); setListLoading(false); return; }
 
     STATE.services = r.services || [];
@@ -375,8 +359,8 @@
     STATE.loading = true;
     disableTop(true); setListLoading(true);
 
-    const filters = getFilters();
-    const r = await Bridge.call("data.list",{token:STATE.token, filters}).catch(()=>null);
+    const f = getFilters();
+    const r = await jsonp("list", { token: STATE.token, service: f.service, master: f.master, date: f.date }).catch(()=>null);
     if (r && r.ok) { STATE.rows = r.rows || []; renderList(STATE.rows); }
     else alert("Не удалось загрузить список.");
 
@@ -386,7 +370,7 @@
   function logout(){
     const token = STATE.token;
     localStorage.removeItem(STORAGE_KEY);
-    Bridge.call("auth.logout",{token}).catch(()=>{});
+    jsonp("logout", { token }).catch(()=>{});
     window.location.replace("/lotuslogin.html");
   }
 
@@ -396,13 +380,20 @@
     if (STATE.loading) return;
     document.getElementById("overlay").classList.add("show");
     document.getElementById("formError").textContent="";
+
     document.getElementById("mIzoh").value="";
     document.getElementById("mFoiz").value="0";
     document.getElementById("mCertVal").value="0";
+
     document.getElementById("mSana").value=nowTashkentDatetimeLocal();
     if (STATE.services.length) document.getElementById("mService").value=STATE.services[0].code;
     if (STATE.masters.length) document.getElementById("mMaster").value=STATE.masters[0];
+
     hookModalEvents_();
+    // очистим Summa, чтобы пересчиталась авто
+    document.getElementById("mSumma").value="";
+    ["pClick","pPayme","pCard","pCash","pUz"].forEach(id=>document.getElementById(id).value="");
+
     recomputeModal();
     recomputePayTotal();
   }
@@ -416,6 +407,7 @@
     document.querySelectorAll('input[name="certMode"]').forEach(r=>r.addEventListener("change",recomputeModal));
     document.getElementById("mCertVal").addEventListener("input",recomputeModal);
     document.getElementById("mSumma").addEventListener("input",recomputePayTotal);
+
     ["pClick","pPayme","pCard","pUz"].forEach(id=>document.getElementById(id).addEventListener("input",recomputePayTotal));
     const cash=document.getElementById("pCash");
     cash.addEventListener("input",()=>{ cash.value=fmtCashSpaces(cash.value); recomputePayTotal(); });
@@ -468,9 +460,11 @@
     const ok=document.getElementById("btnOk");
     const cancel=document.getElementById("btnCancel");
     ok.disabled=b; cancel.disabled=b;
+
     const ids=["mSana","mService","mMaster","mFoiz","mCertVal","mSumma","mIzoh","pClick","pPayme","pCard","pCash","pUz"];
     ids.forEach(id=>{ const el=document.getElementById(id); if(el) el.disabled=b; });
     document.querySelectorAll('input[name="certMode"]').forEach(r=>r.disabled=b);
+
     ok.innerHTML=b?`<span class="spin"></span>${text||"Отправка..."}`:"OK";
   }
 
@@ -487,34 +481,37 @@
     const summa=numFromUi(document.getElementById("mSumma").value);
     const izoh=document.getElementById("mIzoh").value.trim();
 
-    const pay={
-      click:numFromUi(document.getElementById("pClick").value),
-      payme:numFromUi(document.getElementById("pPayme").value),
-      card8037:numFromUi(document.getElementById("pCard").value),
-      cash:numFromUi(String(document.getElementById("pCash").value).replace(/\s+/g,"")),
-      uzterm:numFromUi(document.getElementById("pUz").value),
-    };
+    const payClick=numFromUi(document.getElementById("pClick").value);
+    const payPayme=numFromUi(document.getElementById("pPayme").value);
+    const payCard8037=numFromUi(document.getElementById("pCard").value);
+    const payCash=numFromUi(String(document.getElementById("pCash").value).replace(/\s+/g,""));
+    const payUzterm=numFromUi(document.getElementById("pUz").value);
 
     if (!sana) return formErr("Поле Sana обязательно.");
     if (!service) return formErr("Выбери Xizmat.");
     if (!master) return formErr("Выбери Master.");
     if (foiz<0 || foiz>100) return formErr("Skidka% должна быть 0–100.");
 
-    const payTotal=Math.round((pay.click+pay.payme+pay.card8037+pay.cash+pay.uzterm)*100)/100;
+    const payTotal=Math.round((payClick+payPayme+payCard8037+payCash+payUzterm)*100)/100;
     if (Math.abs(payTotal-summa)>0.01) return formErr(`Оплата (${fmtMoney(payTotal)}) должна быть равна Summa (${fmtMoney(summa)}).`);
 
     setModalBusy(true,"Отправка...");
     disableTop(true);
 
-    const filters=getFilters();
-    const r = await Bridge.call("data.create",{
-      token:STATE.token,
-      filters,
-      payload:{ sana, service, master, foiz, cert_mode:certMode, cert_value:certVal, summa, pay, izoh }
+    const f = getFilters();
+    const r = await jsonp("create", {
+      token: STATE.token,
+      // поля
+      sana, service, master, foiz, certMode, certVal, summa, izoh,
+      payClick, payPayme, payCard8037, payCash, payUzterm,
+      // чтобы сервер вернул список уже с текущими фильтрами
+      f_service: f.service,
+      f_master:  f.master,
+      f_date:    f.date
     }).catch(()=>null);
 
     if (!r || !r.ok){
-      if (r && r.error==="PAY_SUM_MISMATCH") formErr(`Оплата не равна Summa.`);
+      if (r && r.error==="PAY_SUM_MISMATCH") formErr("Оплата не равна Summa (проверь суммы).");
       else formErr("Ошибка сохранения.");
       setModalBusy(false); disableTop(false);
       return;
