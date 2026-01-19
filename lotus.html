@@ -5,65 +5,192 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Lotus</title>
   <style>
-    :root{--bg:#0b1220;--card:#0f1930;--text:#e9eefc;--muted:#a9b4d0;--accent:#48d1a5;--danger:#ff5a6b;--warn:#ffd05a;--line:rgba(255,255,255,.08);--shadow:0 12px 30px rgba(0,0,0,.35);--radius:18px}
+    :root{
+      --bg:#0b1220;--card:#0f1930;--text:#e9eefc;--muted:#a9b4d0;
+      --accent:#48d1a5;--danger:#ff5a6b;--warn:#ffd05a;
+      --line:rgba(255,255,255,.08);--shadow:0 12px 30px rgba(0,0,0,.35);--radius:18px
+    }
     *{box-sizing:border-box}
-    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:radial-gradient(1000px 700px at 20% 10%, rgba(72,209,165,.18), transparent 60%),radial-gradient(900px 700px at 90% 30%, rgba(120,140,255,.16), transparent 55%),var(--bg);color:var(--text);min-height:100vh}
-    .top{position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);background:rgba(11,18,32,.75);border-bottom:1px solid var(--line)}
-    .topIn{max-width:1200px;margin:0 auto;padding:12px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-    .brand{display:flex;align-items:center;gap:10px;min-width:220px}
+    html,body{max-width:100%;overflow-x:hidden}
+    body{
+      margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:radial-gradient(1000px 700px at 20% 10%, rgba(72,209,165,.18), transparent 60%),
+                 radial-gradient(900px 700px at 90% 30%, rgba(120,140,255,.16), transparent 55%),
+                 var(--bg);
+      color:var(--text);min-height:100vh;
+    }
+
+    .top{
+      position:sticky;top:0;z-index:10;
+      backdrop-filter:blur(10px);
+      background:rgba(11,18,32,.75);
+      border-bottom:1px solid var(--line);
+    }
+    .topIn{
+      max-width:1200px;margin:0 auto;
+      padding:12px 14px;
+      display:flex;flex-wrap:wrap;gap:10px;
+      align-items:center;justify-content:space-between;
+    }
+
+    .brand{display:flex;align-items:center;gap:10px;min-width:220px;max-width:100%}
     .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px rgba(72,209,165,.7)}
     .brandTitle{display:flex;flex-direction:column;line-height:1.1}
     .brandTitle b{font-size:14px}
-    .brandTitle span{font-size:12px;color:var(--muted)}
-    .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;flex:1;justify-content:flex-end}
-    .control{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:14px;padding:8px 10px}
-    .control label{font-size:12px;color:var(--muted)}
-    select,input[type="date"]{background:transparent;border:none;outline:none;color:var(--text);font-size:13px;min-width:140px}
+    .brandTitle span{font-size:12px;color:var(--muted);word-break:break-word}
+
+    .actions{
+      display:flex;flex-wrap:wrap;gap:10px;
+      align-items:center;flex:1;
+      justify-content:flex-end;max-width:100%;
+    }
+    .control{
+      display:flex;align-items:center;gap:8px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:14px;padding:8px 10px;
+      max-width:100%;
+    }
+    .control label{font-size:12px;color:var(--muted);white-space:nowrap}
+    select,input[type="date"]{
+      background:transparent;border:none;outline:none;color:var(--text);
+      font-size:13px;min-width:140px;max-width:100%;
+    }
+    select{appearance:none}
     select option{background:#0b1220;color:var(--text)}
-    .btn{border-radius:14px;padding:10px 12px;border:1px solid rgba(72,209,165,.55);background:rgba(72,209,165,.14);color:var(--text);font-weight:900;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+
+    .btn{
+      border-radius:14px;padding:10px 12px;
+      border:1px solid rgba(72,209,165,.55);
+      background:rgba(72,209,165,.14);
+      color:var(--text);font-weight:900;
+      cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+      max-width:100%;
+    }
     .btn[disabled]{opacity:.55;cursor:not-allowed}
     .btnGhost{border:1px solid var(--line);background:rgba(255,255,255,.04);font-weight:800}
     .spin{display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:var(--text);animation:spin .9s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
+
     .container{max-width:1200px;margin:0 auto;padding:14px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow);overflow:hidden;max-width:100%;
+    }
+
     table{width:100%;border-collapse:collapse}
     th,td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
-    th{font-size:12px;color:var(--muted);text-align:left;position:sticky;top:68px;background:rgba(11,18,32,.65);backdrop-filter:blur(8px)}
+    th{
+      font-size:12px;color:var(--muted);text-align:left;
+      position:sticky;top:68px;
+      background:rgba(11,18,32,.65);backdrop-filter:blur(8px)
+    }
     td{font-size:13px}
     .muted{color:var(--muted)}
     .mono{font-variant-numeric:tabular-nums}
-    .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);font-size:12px}
+    .pill{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      font-size:12px;max-width:100%;
+    }
     .right{text-align:right}
-    .row2{display:flex;gap:8px;flex-wrap:wrap}
+    .row2{display:flex;gap:8px;flex-wrap:wrap;max-width:100%}
+
     .mobileList{display:none}
     .mItem{padding:12px;border-bottom:1px solid rgba(255,255,255,.06)}
     .mTop{display:flex;justify-content:space-between;gap:10px}
-    .mTitle{font-weight:900}
+    .mTitle{font-weight:900;word-break:break-word}
     .mSub{color:var(--muted);font-size:12px;margin-top:4px}
-    .mPay{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
-    @media (max-width:860px){th{top:116px}.brand{min-width:auto}select,input[type="date"]{min-width:120px}}
-    @media (max-width:720px){table{display:none}.mobileList{display:block}.control{width:100%;justify-content:space-between}.actions{justify-content:stretch}.btn{width:100%;justify-content:center}}
+    .mPay{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;max-width:100%}
+
+    @media (max-width:860px){
+      th{top:118px}
+      .brand{min-width:auto}
+      select,input[type="date"]{min-width:120px}
+    }
+
+    /* MOBILE FIX: никаких выездов вправо */
+    @media (max-width:720px){
+      .topIn{flex-direction:column;align-items:stretch;justify-content:flex-start}
+      .brand{width:100%}
+      .actions{width:100%;justify-content:stretch}
+      .control{width:100%;justify-content:space-between}
+      .control label{min-width:60px}
+      .control select,.control input[type="date"]{min-width:0;width:100%;text-align:right}
+      .btn{width:100%;justify-content:center}
+      table{display:none}
+      .mobileList{display:block}
+    }
+
     .overlay{position:fixed;inset:0;display:none;background:rgba(0,0,0,.55);z-index:50;padding:14px}
     .overlay.show{display:flex;align-items:flex-end;justify-content:center}
-    .modal{width:min(720px,100%);
-    background: linear-gradient(180deg, rgb(0 0 0), rgb(0 0 0));
-    border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
+    @media (max-width:720px){ .overlay{padding:0} }
+
+    .modal{
+      width:min(720px,100%);
+      background: linear-gradient(180deg, rgb(0 0 0), rgb(0 0 0));
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      max-height:92vh;
+      display:flex;flex-direction:column;
+      max-width:100%;
+    }
     .mHead{padding:14px 14px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06)}
     .x{width:36px;height:36px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer}
     .mBody{padding:14px;overflow:auto}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:720px){.modal{border-radius:22px 22px 0 0;width:100%}.grid{grid-template-columns:1fr}}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:100%}
+    @media (max-width:720px){
+      .modal{border-radius:22px 22px 0 0;width:100%}
+      .grid{grid-template-columns:1fr}
+    }
+
     .field label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
-    .field input,.field select,.field textarea{width:100%;padding:11px 12px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.18);color:var(--text);outline:none;font-size:14px}
+    .field input,.field select,.field textarea{
+      width:100%;
+      padding:11px 12px;
+      border-radius:14px;border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      color:var(--text);outline:none;font-size:14px;
+      max-width:100%;
+    }
     textarea{min-height:76px;resize:vertical}
     .hint{font-size:11px;color:var(--muted);margin-top:6px}
     .danger{color:var(--danger)}
     .mFoot{padding:12px 14px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:10px}
     .mFoot .btn{flex:1}
+
     .payBox{margin-top:12px;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:12px;background:rgba(0,0,0,.12)}
-    .payTitle{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .sumLine{margin-top:10px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+    .payTitle{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
+    .sumLine{margin-top:10px;display:flex;justify-content:space-between;align-items:center;font-size:13px;gap:10px}
+
+    /* Красивые “чекбоксы” (на деле radio-сегменты) */
+    .seg{display:flex;gap:10px}
+    .seg input{position:absolute;opacity:0;pointer-events:none}
+    .seg label{
+      flex:1;
+      text-align:center;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+      transition:transform .06s ease, background .15s ease, border-color .15s ease;
+    }
+    .seg label:active{transform:scale(.99)}
+    .seg input:checked + label{
+      border-color:rgba(72,209,165,.55);
+      background:rgba(72,209,165,.14);
+      color:var(--text);
+      box-shadow:0 0 0 4px rgba(72,209,165,.08) inset;
+    }
   </style>
 </head>
 <body>
@@ -97,7 +224,7 @@
     <table>
       <thead>
         <tr>
-          <th style="width:165px;">Sana</th>
+          <th style="width:140px;">Sana</th>
           <th>Услуга / Мастер</th>
           <th class="right" style="width:120px;">Summa</th>
           <th style="width:260px;">Оплата</th>
@@ -119,33 +246,69 @@
     </div>
     <div class="mBody">
       <div class="grid">
-        <div class="field"><label>Sana (дата и время)</label><input id="mSana" type="datetime-local"/></div>
+        <!-- 7) Sana без времени -->
+        <div class="field"><label>Sana (только дата)</label><input id="mSana" type="date"/></div>
+
         <div class="field"><label>Xizmat (Massage kodi)</label><select id="mService"></select></div>
         <div class="field"><label>Master (Texnik kodi)</label><select id="mMaster"></select></div>
-        <div class="field"><label>Narx (Daromad)</label><input id="mNarx" type="text" readonly/><div class="hint">Подтягивается из Info.</div></div>
-        <div class="field"><label>Skidka % (Foiz)</label><input id="mFoiz" type="number" min="0" max="100" step="0.01" value="0"/></div>
+
+        <div class="field">
+          <label>Narx (Daromad)</label>
+          <input id="mNarx" type="text" readonly/>
+          <div class="hint">Подтягивается из Info.</div>
+        </div>
+
+        <div class="field">
+          <label>Skidka % (Foiz)</label>
+          <input id="mFoiz" type="number" min="0" max="100" step="0.01" value="0"/>
+        </div>
+
         <div class="field">
           <label>Sertifikat</label>
-          <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
-            <label class="pill" style="cursor:pointer;"><input type="radio" name="certMode" value="sum" checked/> сумма</label>
-            <label class="pill" style="cursor:pointer;"><input type="radio" name="certMode" value="pct"/> %</label>
+          <!-- 4) красивее -->
+          <div class="seg" style="margin-bottom:8px">
+            <input id="certSum" type="radio" name="certMode" value="sum" checked>
+            <label for="certSum">summa</label>
+            <input id="certPct" type="radio" name="certMode" value="pct">
+            <label for="certPct">%</label>
           </div>
           <input id="mCertVal" type="number" min="0" step="0.01" value="0"/>
         </div>
-        <div class="field"><label>Summa (итог)</label><input id="mSumma" type="text"/><div class="hint" id="autoHint"></div></div>
-        <div class="field" style="grid-column:1/-1;"><label>Izoh</label><textarea id="mIzoh" placeholder="Комментарий..."></textarea></div>
+
+        <div class="field">
+          <label>Summa (итог)</label>
+          <input id="mSumma" type="text"/>
+          <div class="hint" id="autoHint"></div>
+        </div>
+
+        <div class="field" style="grid-column:1/-1;">
+          <label>Izoh</label>
+          <textarea id="mIzoh" placeholder="Комментарий..."></textarea>
+        </div>
       </div>
 
       <div class="payBox">
-        <div class="payTitle"><b>Оплата</b><span class="muted mono" id="payCheckLine"></span></div>
+        <div class="payTitle">
+          <b>Оплата</b>
+          <span class="muted mono" id="payCheckLine"></span>
+        </div>
+
         <div class="grid">
           <div class="field"><label>Click</label><input id="pClick" type="text" inputmode="numeric" placeholder="0"/></div>
           <div class="field"><label>Payme</label><input id="pPayme" type="text" inputmode="numeric" placeholder="0"/></div>
           <div class="field"><label>Карта 8037</label><input id="pCard" type="text" inputmode="numeric" placeholder="0"/></div>
-          <div class="field"><label>Наличные</label><input id="pCash" type="text" inputmode="numeric" placeholder="0"/><div class="hint">### ### ### (в базу без пробелов)</div></div>
+          <div class="field">
+            <label>Наличные</label>
+            <input id="pCash" type="text" inputmode="numeric" placeholder="0"/>
+            <div class="hint">### ### ### (в базу без пробелов)</div>
+          </div>
           <div class="field" style="grid-column:1/-1;"><label>Uzcard/Humo Term.</label><input id="pUz" type="text" inputmode="numeric" placeholder="0"/></div>
         </div>
-        <div class="sumLine"><span class="muted">Итого оплаты</span><b class="mono" id="payTotal">0</b></div>
+
+        <div class="sumLine">
+          <span class="muted">Итого оплаты</span>
+          <b class="mono" id="payTotal">0</b>
+        </div>
       </div>
 
       <div class="hint danger" id="formError" style="margin-top:10px;"></div>
@@ -195,7 +358,11 @@
     });
   }
 
-  let STATE = { token:"", user:null, services:[], masters:[], priceByService:{}, rows:[], loading:false, modalBusy:false, autoSum:0 };
+  let STATE = {
+    token:"", user:null, services:[], masters:[], priceByService:{},
+    rows:[], loading:false, modalBusy:false,
+    autoSum:0, sumManual:false
+  };
 
   function setUserLine(text){ document.getElementById("userLine").textContent = text; }
   function setListLoading(on){ document.getElementById("listLoading").style.display = on ? "block" : "none"; }
@@ -205,11 +372,6 @@
 
   function todayTashkentYMD(){
     return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Tashkent",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
-  }
-  function nowTashkentDatetimeLocal(){
-    const parts = new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Tashkent",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());
-    const g = (t)=> parts.find(p=>p.type===t)?.value || "";
-    return `${g("year")}-${g("month")}-${g("day")}T${g("hour")}:${g("minute")}`;
   }
 
   function numFromUi(v){
@@ -232,6 +394,11 @@
   }
   function escapeHtml(s){
     return String(s||"").replace(/[&<>"']/g, (m)=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[m]));
+  }
+  function onlyDate(s){
+    s = String(s||"");
+    // "2026-01-19" or "2026-01-19T00:00:00"
+    return s.length >= 10 ? s.slice(0,10) : s;
   }
 
   function getFilters(){
@@ -260,7 +427,11 @@
     pay = pay || {};
     const parts = [];
     const add = (k, v)=>{ const n = numFromUi(v); if (n>0) parts.push(`<span class="pill mono">${k}: <b>${fmtMoney(n)}</b></span>`); };
-    add("Click", pay.click); add("Payme", pay.payme); add("8037", pay.card8037); add("Cash", pay.cash); add("Term", pay.uzterm);
+    add("Click", pay.click);
+    add("Payme", pay.payme);
+    add("8037", pay.card8037);
+    add("Cash", pay.cash);
+    add("Term", pay.uzterm);
     if (parts.length===0) return `<span class="muted">${small ? "Оплата: 0" : "Нет оплат"}</span>`;
     return parts.join(" ");
   }
@@ -279,10 +450,14 @@
     }
 
     for (const r of rows){
+      const foiz = numFromUi(r.foiz);
+      const certPct = numFromUi(r.cert?.pct || 0);
+      const skidkaTotal = Math.round((foiz + certPct)*100)/100;
+
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td class="mono">
-          <div><b>${(r.sana||"").replace("T"," ").slice(0,16)}</b></div>
+          <div><b>${escapeHtml(onlyDate(r.sana||""))}</b></div>
           <div class="muted" style="font-size:12px;margin-top:4px;">внесено: ${(r.kiritilgan||"").replace("T"," ").slice(0,16)}</div>
         </td>
         <td>
@@ -292,7 +467,7 @@
           </div>
           <div class="muted" style="font-size:12px;margin-top:6px;">
             Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b>
-            • Skidka%: <b class="mono" style="color:var(--text)">${numFromUi(r.foiz)}</b>
+            • Skidka: <b class="mono" style="color:var(--text)">${foiz}</b> + <b class="mono" style="color:var(--text)">${certPct}</b> = <b class="mono" style="color:var(--text)">${skidkaTotal}%</b>
             • Sert: <b class="mono" style="color:var(--text)">${fmtMoney((r.cert?.sum||0))}</b>
           </div>
         </td>
@@ -306,14 +481,17 @@
       item.className="mItem";
       item.innerHTML = `
         <div class="mTop">
-          <div>
+          <div style="min-width:0">
             <div class="mTitle">${escapeHtml(r.service||"")} • ${escapeHtml(r.master||"")}</div>
-            <div class="mSub mono">${(r.sana||"").replace("T"," ").slice(0,16)} • Summa: <b>${fmtMoney(r.summa)}</b></div>
-            <div class="mSub">Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b> • Skidka%: <b class="mono" style="color:var(--text)">${numFromUi(r.foiz)}</b></div>
+            <div class="mSub mono">${escapeHtml(onlyDate(r.sana||""))} • Summa: <b>${fmtMoney(r.summa)}</b></div>
+            <div class="mSub">
+              Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b>
+              • Skidka: <b class="mono" style="color:var(--text)">${foiz}</b> + <b class="mono" style="color:var(--text)">${certPct}</b> = <b class="mono" style="color:var(--text)">${skidkaTotal}%</b>
+            </div>
           </div>
         </div>
         <div class="mPay">${payPills(r.pay,true)}</div>
-        ${r.izoh ? `<div class="mSub" style="margin-top:10px;">${escapeHtml(r.izoh)}</div>` : ``}
+        ${r.izoh ? `<div class="mSub" style="margin-top:10px;word-break:break-word">${escapeHtml(r.izoh)}</div>` : ``}
       `;
       ml.appendChild(item);
     }
@@ -383,39 +561,60 @@
     document.getElementById("overlay").classList.add("show");
     document.getElementById("formError").textContent="";
 
+    STATE.sumManual = false;
+
     document.getElementById("mIzoh").value="";
     document.getElementById("mFoiz").value="0";
     document.getElementById("mCertVal").value="0";
 
-    document.getElementById("mSana").value=nowTashkentDatetimeLocal();
+    // 7) только дата
+    document.getElementById("mSana").value = todayTashkentYMD();
+
     if (STATE.services.length) document.getElementById("mService").value=STATE.services[0].code;
-    if (STATE.masters.length) document.getElementById("mMaster").value=STATE.masters[0];
+    if (STATE.masters.length)  document.getElementById("mMaster").value=STATE.masters[0];
 
     hookModalEvents_();
-    // очистим Summa, чтобы пересчиталась авто
+
+    // очищаем суммы оплат
     document.getElementById("mSumma").value="";
     ["pClick","pPayme","pCard","pCash","pUz"].forEach(id=>document.getElementById(id).value="");
 
-    recomputeModal();
+    recomputeModal(true);
     recomputePayTotal();
   }
-  function closeModal(){ if (STATE.modalBusy) return; document.getElementById("overlay").classList.remove("show"); }
+  function closeModal(){
+    if (STATE.modalBusy) return;
+    document.getElementById("overlay").classList.remove("show");
+  }
 
   let MODAL_HOOKED=false;
   function hookModalEvents_(){
-    if (MODAL_HOOKED) return; MODAL_HOOKED=true;
-    document.getElementById("mService").addEventListener("change",recomputeModal);
-    document.getElementById("mFoiz").addEventListener("input",recomputeModal);
-    document.querySelectorAll('input[name="certMode"]').forEach(r=>r.addEventListener("change",recomputeModal));
-    document.getElementById("mCertVal").addEventListener("input",recomputeModal);
-    document.getElementById("mSumma").addEventListener("input",recomputePayTotal);
+    if (MODAL_HOOKED) return;
+    MODAL_HOOKED=true;
+
+    // 5) авто-обновление суммы: если пользователь не правил вручную
+    document.getElementById("mService").addEventListener("change",()=>{
+      STATE.sumManual=false; // при смене услуги всегда авто
+      recomputeModal(true);
+    });
+
+    document.getElementById("mFoiz").addEventListener("input",()=>recomputeModal(false));
+    document.getElementById("mCertVal").addEventListener("input",()=>recomputeModal(false));
+    document.querySelectorAll('input[name="certMode"]').forEach(r=>r.addEventListener("change",()=>recomputeModal(false)));
+
+    // ручная правка итоговой суммы
+    document.getElementById("mSumma").addEventListener("input",()=>{
+      const v = document.getElementById("mSumma").value.trim();
+      STATE.sumManual = v !== ""; // если стерли — обратно авто
+      recomputePayTotal();
+    });
 
     ["pClick","pPayme","pCard","pUz"].forEach(id=>document.getElementById(id).addEventListener("input",recomputePayTotal));
     const cash=document.getElementById("pCash");
     cash.addEventListener("input",()=>{ cash.value=fmtCashSpaces(cash.value); recomputePayTotal(); });
   }
 
-  function recomputeModal(){
+  function recomputeModal(forceAuto){
     const service=document.getElementById("mService").value||"";
     const narx=Number(STATE.priceByService[service]||0);
     document.getElementById("mNarx").value=fmtMoney(narx);
@@ -433,10 +632,25 @@
     STATE.autoSum=auto;
 
     const sumEl=document.getElementById("mSumma");
-    if (!sumEl.value.trim()) sumEl.value=fmtMoney(auto);
 
-    document.getElementById("autoHint").innerHTML=`Auto: <b class="mono" style="color:var(--text)">${fmtMoney(auto)}</b>`;
+    // 5) каждый раз обновляется, если не вручную (или если forceAuto=true)
+    if (forceAuto || !STATE.sumManual){
+      sumEl.value = fmtMoney(auto);
+      STATE.sumManual = false;
+    }
+
+    document.getElementById("autoHint").innerHTML =
+      `Auto: <b class="mono" style="color:var(--text)">${fmtMoney(auto)}</b>`;
+
     recomputePayTotal();
+  }
+
+  // 1) разница оплат — текст “XXX sumga kam/ko'p”
+  function diffText(sum, total){
+    const diff = Math.round((sum - total)*100)/100;
+    if (Math.abs(diff) <= 0.01) return { ok:true, text:"OK" };
+    if (diff > 0) return { ok:false, text:`${fmtMoney(diff)} sumga kam` };
+    return { ok:false, text:`${fmtMoney(-diff)} sumga ko'p` };
   }
 
   function recomputePayTotal(){
@@ -451,8 +665,9 @@
     document.getElementById("payTotal").textContent=fmtMoney(total);
 
     const line=document.getElementById("payCheckLine");
-    if (Math.abs(total-sum)<=0.01){ line.textContent="OK"; line.style.color="var(--accent)"; }
-    else { line.textContent="Должно быть равно Summa"; line.style.color="var(--warn)"; }
+    const d = diffText(sum, total);
+    line.textContent = d.text;
+    line.style.color = d.ok ? "var(--accent)" : "var(--warn)";
   }
 
   function formErr(s){ document.getElementById("formError").textContent=s||""; }
@@ -474,7 +689,9 @@
     if (STATE.modalBusy) return;
     formErr("");
 
+    // 7) дата без времени
     const sana=document.getElementById("mSana").value.trim();
+
     const service=document.getElementById("mService").value.trim();
     const master=document.getElementById("mMaster").value.trim();
     const foiz=numFromUi(document.getElementById("mFoiz").value);
@@ -491,11 +708,12 @@
 
     if (!sana) return formErr("Поле Sana обязательно.");
     if (!service) return formErr("Выбери Xizmat.");
-    if (!master) return formErr("Выбери Master.");
+    if (!master)  return formErr("Выбери Master.");
     if (foiz<0 || foiz>100) return formErr("Skidka% должна быть 0–100.");
 
     const payTotal=Math.round((payClick+payPayme+payCard8037+payCash+payUzterm)*100)/100;
-    if (Math.abs(payTotal-summa)>0.01) return formErr(`Оплата (${fmtMoney(payTotal)}) должна быть равна Summa (${fmtMoney(summa)}).`);
+    const d = diffText(summa, payTotal);
+    if (!d.ok) return formErr(d.text);
 
     setModalBusy(true,"Отправка...");
     disableTop(true);
@@ -503,26 +721,31 @@
     const f = getFilters();
     const r = await jsonp("create", {
       token: STATE.token,
-      // поля
       sana, service, master, foiz, certMode, certVal, summa, izoh,
       payClick, payPayme, payCard8037, payCash, payUzterm,
-      // чтобы сервер вернул список уже с текущими фильтрами
       f_service: f.service,
       f_master:  f.master,
       f_date:    f.date
     }).catch(()=>null);
 
     if (!r || !r.ok){
-      if (r && r.error==="PAY_SUM_MISMATCH") formErr("Оплата не равна Summa (проверь суммы).");
-      else formErr("Ошибка сохранения.");
+      if (r && r.error==="PAY_SUM_MISMATCH"){
+        const dd = diffText(numFromUi(r.summa||summa), numFromUi(r.payTotal||payTotal));
+        formErr(dd.ok ? "OK" : dd.text);
+      } else {
+        formErr("Ошибка сохранения.");
+      }
       setModalBusy(false); disableTop(false);
       return;
     }
 
     STATE.rows=r.rows||[];
     renderList(STATE.rows);
+
+    // 2) закрыть модалку сразу (сначала снять busy!)
+    setModalBusy(false);
+    disableTop(false);
     closeModal();
-    setModalBusy(false); disableTop(false);
   }
 
   boot();
