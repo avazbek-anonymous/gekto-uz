@@ -79,14 +79,6 @@
       box-shadow:var(--shadow);overflow:hidden;max-width:100%;
     }
 
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
-    th{
-      font-size:12px;color:var(--muted);text-align:left;
-      position:sticky;
-      background:rgba(11,18,32,.65);backdrop-filter:blur(8px)
-    }
-    td{font-size:13px}
     .muted{color:var(--muted)}
     .mono{font-variant-numeric:tabular-nums}
     .pill{
@@ -96,20 +88,74 @@
       background:rgba(255,255,255,.04);
       font-size:12px;max-width:100%;
     }
-    .right{text-align:right}
     .row2{display:flex;gap:8px;flex-wrap:wrap;max-width:100%}
+    .right{text-align:right}
+    .clamp2{
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
 
-    .mobileList{display:none}
-    .mItem{padding:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+    /* === NEW: DESKTOP LIST LIKE YOUR SCREEN (card rows) === */
+    .dHead{
+      display:grid;
+      grid-template-columns: 150px minmax(220px, 1.4fr) 120px minmax(220px, 1fr) minmax(180px, 1fr);
+      gap:12px;
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      position:sticky;
+      top:68px;
+      z-index:2;
+      background:rgba(11,18,32,.65);
+      backdrop-filter:blur(10px);
+    }
+    .dHead div{
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:.2px;
+    }
+
+    .dList{padding:12px 14px; display:flex; flex-direction:column; gap:10px}
+    .dRow{
+      display:grid;
+      grid-template-columns: 150px minmax(220px, 1.4fr) 120px minmax(220px, 1fr) minmax(180px, 1fr);
+      gap:12px;
+      align-items:center;
+      padding:12px 12px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
+      box-shadow:0 10px 22px rgba(0,0,0,.18);
+      max-width:100%;
+    }
+    .dCell{min-width:0}
+    .dTitle{font-weight:900; line-height:1.2; word-break:break-word}
+    .dSub{margin-top:6px; font-size:12px; color:var(--muted); line-height:1.35}
+    .dMoney{font-weight:900; font-size:15px}
+    .dPay{display:flex; gap:8px; flex-wrap:wrap}
+    .dDate b{font-weight:900}
+
+    /* mobile list */
+    .mobileList{display:none; padding:12px 14px}
+    .mItem{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
+      box-shadow:0 10px 22px rgba(0,0,0,.18);
+      padding:12px;
+      margin-bottom:10px;
+      max-width:100%;
+    }
     .mTop{display:flex;justify-content:space-between;gap:10px}
     .mTitle{font-weight:900;word-break:break-word}
-    .mSub{color:var(--muted);font-size:12px;margin-top:4px}
-    .mPay{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;max-width:100%}
+    .mSub{color:var(--muted);font-size:12px;margin-top:6px;line-height:1.35}
+    .mPay{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;max-width:100%}
 
     @media (max-width:860px){
-      th{top:118px}
       .brand{min-width:auto}
       select,input[type="date"]{min-width:120px}
+      .dHead{top:118px}
     }
 
     /* MOBILE FIX: никаких выездов вправо */
@@ -121,7 +167,9 @@
       .control label{min-width:60px}
       .control select,.control input[type="date"]{min-width:0;width:100%;text-align:right}
       .btn{width:100%;justify-content:center}
-      table{display:none}
+
+      /* hide desktop list, show mobile cards */
+      .dHead,.dList{display:none}
       .mobileList{display:block}
     }
 
@@ -221,19 +269,19 @@
       <span class="spin"></span> <span class="muted">Загрузка списка...</span>
     </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th style="width:140px;">Sana</th>
-          <th>Услуга / Мастер</th>
-          <th class="right" style="width:120px;">Summa</th>
-          <th style="width:260px;">Оплата</th>
-          <th style="width:220px;">Комментарий</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
+    <!-- desktop header like your screen -->
+    <div class="dHead">
+      <div>Sana</div>
+      <div>Usluga / Master</div>
+      <div class="right">Summa</div>
+      <div>To'lov</div>
+      <div>Izoh</div>
+    </div>
 
+    <!-- desktop cards list -->
+    <div class="dList" id="desktopList"></div>
+
+    <!-- mobile cards list -->
     <div class="mobileList" id="mobileList"></div>
   </div>
 </div>
@@ -246,7 +294,6 @@
     </div>
     <div class="mBody">
       <div class="grid">
-        <!-- 7) Sana без времени -->
         <div class="field"><label>Sana (только дата)</label><input id="mSana" type="date"/></div>
 
         <div class="field"><label>Xizmat (Massage kodi)</label><select id="mService"></select></div>
@@ -265,7 +312,6 @@
 
         <div class="field">
           <label>Sertifikat</label>
-          <!-- 4) красивее -->
           <div class="seg" style="margin-bottom:8px">
             <input id="certSum" type="radio" name="certMode" value="sum" checked>
             <label for="certSum">summa</label>
@@ -397,7 +443,6 @@
   }
   function onlyDate(s){
     s = String(s||"");
-    // "2026-01-19" or "2026-01-19T00:00:00"
     return s.length >= 10 ? s.slice(0,10) : s;
   }
 
@@ -436,16 +481,23 @@
     return parts.join(" ");
   }
 
+  /* === UPDATED LIST RENDER (desktop + mobile like your screenshot) === */
   function renderList(rows){
-    const tb = document.getElementById("tbody");
+    const dl = document.getElementById("desktopList");
     const ml = document.getElementById("mobileList");
-    tb.innerHTML = ""; ml.innerHTML = "";
+    dl.innerHTML = "";
+    ml.innerHTML = "";
 
     if (!rows || rows.length===0){
-      const empty = document.createElement("div");
-      empty.style.padding="14px";
-      empty.innerHTML = `<span class="muted">Нет данных по фильтрам.</span>`;
-      ml.appendChild(empty);
+      const emptyD = document.createElement("div");
+      emptyD.className = "dRow";
+      emptyD.innerHTML = `<div class="dCell" style="grid-column:1/-1"><span class="muted">Нет данных по фильтрам.</span></div>`;
+      dl.appendChild(emptyD);
+
+      const emptyM = document.createElement("div");
+      emptyM.className = "mItem";
+      emptyM.innerHTML = `<span class="muted">Нет данных по фильтрам.</span>`;
+      ml.appendChild(emptyM);
       return;
     }
 
@@ -454,39 +506,58 @@
       const certPct = numFromUi(r.cert?.pct || 0);
       const skidkaTotal = Math.round((foiz + certPct)*100)/100;
 
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td class="mono">
-          <div><b>${escapeHtml(onlyDate(r.sana||""))}</b></div>
-          <div class="muted" style="font-size:12px;margin-top:4px;">внесено: ${(r.kiritilgan||"").replace("T"," ").slice(0,16)}</div>
-        </td>
-        <td>
-          <div class="row2">
-            <span class="pill"><b>${escapeHtml(r.service||"")}</b></span>
-            <span class="pill">${escapeHtml(r.master||"")}</span>
+      // DESKTOP ROW (card-style grid)
+      const d = document.createElement("div");
+      d.className = "dRow";
+      d.innerHTML = `
+        <div class="dCell dDate">
+          <div class="mono"><b>${escapeHtml(onlyDate(r.sana||""))}</b></div>
+          <div class="dSub">kiritilgan: <span class="mono">${(r.kiritilgan||"").replace("T"," ").slice(0,16)}</span></div>
+        </div>
+
+        <div class="dCell">
+          <div class="dTitle">${escapeHtml(r.service||"")}</div>
+          <div class="dSub">
+            Master: <b class="mono" style="color:var(--text)">${escapeHtml(r.master||"")}</b>
+            • Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b>
           </div>
-          <div class="muted" style="font-size:12px;margin-top:6px;">
-            Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b>
-            • Skidka: <b class="mono" style="color:var(--text)">${foiz}</b> + <b class="mono" style="color:var(--text)">${certPct}</b> = <b class="mono" style="color:var(--text)">${skidkaTotal}%</b>
+          <div class="dSub">
+            Skidka: <b class="mono" style="color:var(--text)">${foiz}</b> + <b class="mono" style="color:var(--text)">${certPct}</b> = <b class="mono" style="color:var(--text)">${skidkaTotal}%</b>
             • Sert: <b class="mono" style="color:var(--text)">${fmtMoney((r.cert?.sum||0))}</b>
           </div>
-        </td>
-        <td class="right mono"><b>${fmtMoney(r.summa)}</b></td>
-        <td>${payPills(r.pay)}</td>
-        <td><span class="muted">${escapeHtml(r.izoh||"")}</span></td>
-      `;
-      tb.appendChild(tr);
+        </div>
 
+        <div class="dCell right">
+          <div class="dMoney mono">${fmtMoney(r.summa)}</div>
+        </div>
+
+        <div class="dCell">
+          <div class="dPay">${payPills(r.pay)}</div>
+        </div>
+
+        <div class="dCell">
+          <div class="clamp2 muted">${r.izoh ? escapeHtml(r.izoh) : ""}</div>
+        </div>
+      `;
+      dl.appendChild(d);
+
+      // MOBILE CARD
       const item = document.createElement("div");
       item.className="mItem";
       item.innerHTML = `
         <div class="mTop">
           <div style="min-width:0">
-            <div class="mTitle">${escapeHtml(r.service||"")} • ${escapeHtml(r.master||"")}</div>
-            <div class="mSub mono">${escapeHtml(onlyDate(r.sana||""))} • Summa: <b>${fmtMoney(r.summa)}</b></div>
+            <div class="mTitle">${escapeHtml(r.service||"")}</div>
             <div class="mSub">
-              Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b>
-              • Skidka: <b class="mono" style="color:var(--text)">${foiz}</b> + <b class="mono" style="color:var(--text)">${certPct}</b> = <b class="mono" style="color:var(--text)">${skidkaTotal}%</b>
+              Master: <b class="mono" style="color:var(--text)">${escapeHtml(r.master||"")}</b>
+              • Sana: <b class="mono" style="color:var(--text)">${escapeHtml(onlyDate(r.sana||""))}</b>
+            </div>
+            <div class="mSub">
+              Summa: <b class="mono" style="color:var(--text)">${fmtMoney(r.summa)}</b>
+              • Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b>
+            </div>
+            <div class="mSub">
+              Skidka: <b class="mono" style="color:var(--text)">${foiz}</b> + <b class="mono" style="color:var(--text)">${certPct}</b> = <b class="mono" style="color:var(--text)">${skidkaTotal}%</b>
             </div>
           </div>
         </div>
@@ -567,7 +638,6 @@
     document.getElementById("mFoiz").value="0";
     document.getElementById("mCertVal").value="0";
 
-    // 7) только дата
     document.getElementById("mSana").value = todayTashkentYMD();
 
     if (STATE.services.length) document.getElementById("mService").value=STATE.services[0].code;
@@ -575,7 +645,6 @@
 
     hookModalEvents_();
 
-    // очищаем суммы оплат
     document.getElementById("mSumma").value="";
     ["pClick","pPayme","pCard","pCash","pUz"].forEach(id=>document.getElementById(id).value="");
 
@@ -592,9 +661,8 @@
     if (MODAL_HOOKED) return;
     MODAL_HOOKED=true;
 
-    // 5) авто-обновление суммы: если пользователь не правил вручную
     document.getElementById("mService").addEventListener("change",()=>{
-      STATE.sumManual=false; // при смене услуги всегда авто
+      STATE.sumManual=false;
       recomputeModal(true);
     });
 
@@ -602,10 +670,9 @@
     document.getElementById("mCertVal").addEventListener("input",()=>recomputeModal(false));
     document.querySelectorAll('input[name="certMode"]').forEach(r=>r.addEventListener("change",()=>recomputeModal(false)));
 
-    // ручная правка итоговой суммы
     document.getElementById("mSumma").addEventListener("input",()=>{
       const v = document.getElementById("mSumma").value.trim();
-      STATE.sumManual = v !== ""; // если стерли — обратно авто
+      STATE.sumManual = v !== "";
       recomputePayTotal();
     });
 
@@ -632,8 +699,6 @@
     STATE.autoSum=auto;
 
     const sumEl=document.getElementById("mSumma");
-
-    // 5) каждый раз обновляется, если не вручную (или если forceAuto=true)
     if (forceAuto || !STATE.sumManual){
       sumEl.value = fmtMoney(auto);
       STATE.sumManual = false;
@@ -645,7 +710,6 @@
     recomputePayTotal();
   }
 
-  // 1) разница оплат — текст “XXX sumga kam/ko'p”
   function diffText(sum, total){
     const diff = Math.round((sum - total)*100)/100;
     if (Math.abs(diff) <= 0.01) return { ok:true, text:"OK" };
@@ -689,7 +753,6 @@
     if (STATE.modalBusy) return;
     formErr("");
 
-    // 7) дата без времени
     const sana=document.getElementById("mSana").value.trim();
 
     const service=document.getElementById("mService").value.trim();
@@ -742,7 +805,6 @@
     STATE.rows=r.rows||[];
     renderList(STATE.rows);
 
-    // 2) закрыть модалку сразу (сначала снять busy!)
     setModalBusy(false);
     disableTop(false);
     closeModal();
