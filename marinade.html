@@ -232,6 +232,46 @@
       background: rgba(7,11,20,.30);
     }
 
+    /* --- FIX: modal fits on mobile (scroll inside, sticky header/footer) --- */
+.modalBack{
+  align-items: flex-start;      /* вместо center */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal{
+  max-height: calc(100vh - 24px);
+  display: flex;
+  flex-direction: column;
+}
+
+.modalBody{
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modalHead{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.modalFoot{
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+}
+
+/* на очень маленьких экранах чуть уменьшим отступы */
+@media (max-width: 420px){
+  .modalBack{ padding: 10px; }
+  .modalBody{ padding: 10px; }
+  .modalFoot{ padding: 10px; }
+  .tbtn{ padding: 8px 10px; }  /* чтобы "Prixod/Vozvrat" влезали */
+}
+
+
     .toast{
       position:fixed; left:50%; transform:translateX(-50%);
       bottom:18px; z-index:80;
@@ -294,8 +334,11 @@
     <div class="card">
       <div class="filters">
         <div>
-          <label>Qaysi kun uchun</label>
-          <input id="fDate" type="date"/>
+          <label>Qaysi kun uchun (с - по)</label>
+            <div style="display:flex; gap:10px">
+                <input id="fDateFrom" type="date" style="flex:1"/>
+                <input id="fDateTo" type="date" style="flex:1"/>
+            </div>
         </div>
         <div>
           <label>Tovar</label>
@@ -507,17 +550,46 @@
       const mi = String(d.getMinutes()).padStart(2,"0");
       return `${dd}.${mm}.${yy} ${hh}:${mi}`;
     }
-    function fmtDateOnly(v){
-      if(!v) return "";
-      // if already yyyy-mm-dd
-      if(/^\d{4}-\d{2}-\d{2}$/.test(String(v))) return v;
-      const d = new Date(v);
-      if(isNaN(d.getTime())) return String(v);
-      const dd = String(d.getDate()).padStart(2,"0");
-      const mm = String(d.getMonth()+1).padStart(2,"0");
-      const yy = d.getFullYear();
-      return `${yy}-${mm}-${dd}`;
-    }
+    
+    function toISODate(v){
+  if(!v) return "";
+  const s = String(v).trim();
+
+  // yyyy-mm-dd
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+
+  // dd.mm.yyyy  -> yyyy-mm-dd
+  const m = s.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+  if(m) return `${m[3]}-${m[2]}-${m[1]}`;
+
+  // fallback
+  const d = new Date(s);
+  if(isNaN(d.getTime())) return "";
+  const yy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return `${yy}-${mm}-${dd}`;
+}
+
+function toDDMMYYYY(v){
+  if(!v) return "";
+  const s = String(v).trim();
+
+  // already dd.mm.yyyy
+  if(/^\d{2}\.\d{2}\.\d{4}$/.test(s)) return s;
+
+  // yyyy-mm-dd -> dd.mm.yyyy
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(m) return `${m[3]}.${m[2]}.${m[1]}`;
+
+  const d = new Date(s);
+  if(isNaN(d.getTime())) return s;
+  const dd = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const yy = d.getFullYear();
+  return `${dd}.${mm}.${yy}`;
+}
+
 
     // State
     const state = {
@@ -531,21 +603,25 @@
     };
 
     function applyFilters(){
-      const fDate = document.getElementById("fDate").value;
+      const from = document.getElementById("fDateFrom").value; // yyyy-mm-dd
+      const to   = document.getElementById("fDateTo").value;   // yyyy-mm-dd
       const fTovar = document.getElementById("fTovar").value;
       const fKontr = document.getElementById("fKontr").value;
       const fJarayon = document.getElementById("fJarayon").value;
       const fUser = document.getElementById("fUser").value;
 
       state.filtered = state.rows.filter(r=>{
-        const d = fmtDateOnly(r.qaysiKun);
-        if(fDate && d !== fDate) return false;
-        if(fTovar && String(r.tovar||"") !== fTovar) return false;
-        if(fKontr && String(r.kontragent||"") !== fKontr) return false;
-        if(fJarayon && String(r.jarayon||"") !== fJarayon) return false;
-        if(fUser && String(r.foydalanuvchi||"") !== fUser) return false;
-        return true;
-      });
+    const d = toISODate(r.qaysiKun); // нормализуем из таблицы
+
+    if(from && d && d < from) return false;
+    if(to   && d && d > to) return false;
+
+    if(fTovar && String(r.tovar||"") !== fTovar) return false;
+    if(fKontr && String(r.kontragent||"") !== fKontr) return false;
+    if(fJarayon && String(r.jarayon||"") !== fJarayon) return false;
+    if(fUser && String(r.foydalanuvchi||"") !== fUser) return false;
+    return true;
+  });
 
       renderList();
     }
@@ -924,7 +1000,21 @@
       }finally{
         showOverlay(false);
       }
+      
     }
+
+    function setDateFilterTodayIfEmpty(){
+  const todayIso = toISODate(new Date());
+  const fFrom = document.getElementById("fDateFrom");
+  const fTo   = document.getElementById("fDateTo");
+
+  // чтобы не сбивать выбор пользователя при refresh
+  if(!fFrom.value && !fTo.value){
+    fFrom.value = todayIso;
+    fTo.value = todayIso;
+  }
+}
+
 
     async function validateSessionOrGo(){
       const token = localStorage.getItem(LS.token);
@@ -1013,15 +1103,18 @@
 
     document.getElementById("btnOk").addEventListener("click", submitModal);
 
-    ["fDate","fTovar","fKontr","fJarayon","fUser"].forEach(id=>{
-      document.getElementById(id).addEventListener("change", applyFilters);
-    });
+    ["fDateFrom","fDateTo","fTovar","fKontr","fJarayon","fUser"].forEach(id=>{
+  document.getElementById(id).addEventListener("change", applyFilters);
+});
+
 
     // Init
     (async ()=>{
       installActivityWatcher();
       await validateSessionOrGo();
       await reloadAll();
+      setDateFilterTodayIfEmpty();
+      applyFilters();
     })();
   </script>
 </body>
