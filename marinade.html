@@ -590,6 +590,11 @@ function toDDMMYYYY(v){
   return `${dd}.${mm}.${yy}`;
 }
 
+// ✅ вот эта функция нужна, потому что renderList() её вызывает
+function fmtDateOnly(v){
+  return toDDMMYYYY(v);
+}
+
 
     // State
     const state = {
