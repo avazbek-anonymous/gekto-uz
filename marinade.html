@@ -1,11 +1,1029 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEST</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Marinade — Snabjeniya</title>
+  <style>
+    :root{
+      --bg:#0b1220; --panel:#0f1b33; --panel2: rgba(15,27,51,.78);
+      --text:#e9eefc; --muted:#9fb0d0;
+      --line:rgba(255,255,255,.08);
+      --accent:#6ea8ff;
+      --ok:#35d07f; --bad:#ff5c7a;
+      --shadow: 0 18px 70px rgba(0,0,0,.55);
+      --r:18px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      background: radial-gradient(1100px 600px at 20% 10%, rgba(110,168,255,.22), transparent 55%),
+                  radial-gradient(900px 500px at 90% 30%, rgba(53,208,127,.16), transparent 55%),
+                  linear-gradient(180deg, #070b14, var(--bg));
+      overflow-x:hidden;
+    }
+    .container{width:min(1200px,100%); margin:0 auto; padding:16px}
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:5;
+      padding:12px 0;
+      backdrop-filter: blur(10px);
+    }
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{
+      width:40px;height:40px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(110,168,255,.95), rgba(53,208,127,.85));
+      box-shadow:0 10px 30px rgba(110,168,255,.18);
+      flex:0 0 auto;
+    }
+    .brand h1{margin:0; font-size:18px; font-weight:900; letter-spacing:.2px}
+    .brand .sub{margin-top:2px; font-size:12px; color:var(--muted)}
+    .actions{display:flex; gap:10px; align-items:center}
+    .pill{
+      display:flex; align-items:center; gap:8px;
+      border:1px solid var(--line);
+      background: rgba(7,11,20,.35);
+      padding:9px 12px;
+      border-radius:999px;
+      font-size:13px;
+      color:var(--text);
+      max-width:52vw;
+    }
+    .pill span{color:var(--muted)}
+    .btn{
+      cursor:pointer;
+      border:1px solid rgba(110,168,255,.35);
+      background: rgba(110,168,255,.12);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:800;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(110,168,255,.95), rgba(110,168,255,.65));
+      color:#041025;
+    }
+    .btn.danger{
+      border-color: rgba(255,92,122,.35);
+      background: rgba(255,92,122,.10);
+    }
+
+    .card{
+      background: var(--panel2);
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding:14px;
+    }
+
+    .filters{
+      display:grid;
+      grid-template-columns: 1.2fr 1.2fr 1.2fr 1fr 1fr auto;
+      gap:10px;
+      align-items:end;
+    }
+    label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
+    select,input{
+      width:100%;
+      padding:11px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(7,11,20,.45);
+      color:var(--text);
+      outline:none;
+      appearance:none;
+    }
+    input:focus, select:focus{border-color:rgba(110,168,255,.55); box-shadow:0 0 0 4px rgba(110,168,255,.12)}
+    .filters .btn{height:42px}
+
+    .listWrap{margin-top:12px}
+    .listHeader{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px}
+    .count{font-size:13px; color:var(--muted)}
+    .table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius: 16px;
+      border:1px solid var(--line);
+    }
+    .table thead th{
+      font-size:12px;
+      color:var(--muted);
+      text-align:left;
+      padding:10px 10px;
+      background: rgba(7,11,20,.55);
+      border-bottom:1px solid var(--line);
+      position:sticky; top:70px; z-index:2;
+      backdrop-filter: blur(10px);
+      white-space:nowrap;
+    }
+    .table tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      font-size:13px;
+      vertical-align:top;
+      word-break:break-word;
+    }
+    .table tbody tr:last-child td{border-bottom:none}
+    .tag{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      white-space:nowrap;
+    }
+    .tag.ok{border-color:rgba(53,208,127,.35); background:rgba(53,208,127,.10); color:#bff3d5}
+    .tag.bad{border-color:rgba(255,92,122,.35); background:rgba(255,92,122,.10); color:#ffd5dd}
+
+    .row-ok{background: rgba(53,208,127,.04)}
+    .row-bad{background: rgba(255,92,122,.045)}
+
+    .num{font-variant-numeric: tabular-nums}
+    .neg{color:#ffd5dd}
+    .pos{color:#bff3d5}
+
+    /* Mobile: cards instead of table (no horizontal scrolling) */
+    .cards{display:none; gap:10px}
+    .itemCard{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      background: rgba(7,11,20,.35);
+    }
+    .itemTop{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
+    .itemTitle{font-weight:900; font-size:14px}
+    .itemMeta{margin-top:10px; display:grid; gap:8px}
+    .kv{display:flex; justify-content:space-between; gap:12px; font-size:13px}
+    .kv span{color:var(--muted)}
+
+    /* Modal */
+    .modalBack{
+      position:fixed; inset:0; z-index:50;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:18px;
+    }
+    .modal{
+      width:min(720px, 100%);
+      border-radius:22px;
+      border:1px solid var(--line);
+      background: rgba(15,27,51,.86);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:14px 14px 10px;
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      background: rgba(7,11,20,.30);
+    }
+    .modalHead h2{margin:0; font-size:15px; font-weight:900}
+    .modalBody{padding:14px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .grid .full{grid-column:1/-1}
+    .readonly{
+      opacity:.9;
+      background: rgba(7,11,20,.30);
+    }
+    .toggle{
+      display:flex; gap:8px; align-items:center;
+      padding:6px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background: rgba(7,11,20,.25);
+    }
+    .tbtn{
+      flex:1; cursor:pointer;
+      border-radius:999px;
+      padding:10px 12px;
+      border:1px solid transparent;
+      font-weight:900;
+      background: transparent;
+      color:var(--muted);
+    }
+    .tbtn.active.ok{
+      background: rgba(53,208,127,.14);
+      border-color: rgba(53,208,127,.35);
+      color:#bff3d5;
+    }
+    .tbtn.active.bad{
+      background: rgba(255,92,122,.14);
+      border-color: rgba(255,92,122,.35);
+      color:#ffd5dd;
+    }
+
+    .modalFoot{
+      display:flex; justify-content:flex-end; gap:10px;
+      padding:12px 14px;
+      border-top:1px solid rgba(255,255,255,.07);
+      background: rgba(7,11,20,.30);
+    }
+
+    .toast{
+      position:fixed; left:50%; transform:translateX(-50%);
+      bottom:18px; z-index:80;
+      background: rgba(7,11,20,.78);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 14px;
+      color:var(--text);
+      font-size:13px;
+      display:none;
+      backdrop-filter: blur(10px);
+    }
+
+    .overlay{
+      position:fixed; inset:0; z-index:90;
+      background: rgba(0,0,0,.35);
+      display:none;
+      align-items:center; justify-content:center;
+    }
+    .loader{
+      width:18px;height:18px;border-radius:999px;
+      border:2px solid rgba(255,255,255,.35);
+      border-top-color:rgba(110,168,255,.95);
+      animation:spin .8s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    @media (max-width: 980px){
+      .filters{grid-template-columns: 1fr 1fr; }
+      .filters .btn{grid-column: 1/-1;}
+    }
+    @media (max-width: 860px){
+      .tableWrap{display:none}
+      .cards{display:grid}
+      .topbar{position:static}
+      .table thead th{top:0}
+    }
+    @media (max-width: 520px){
+      .actions{gap:8px}
+      .pill{max-width:60vw}
+      .grid{grid-template-columns: 1fr}
+    }
+  </style>
 </head>
 <body>
-    HELLO WORLD
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <h1>Snabjeniya — Sklad Kirim</h1>
+          <div class="sub">Prixod (зелёный) / Vozvrat (красный)</div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="pill"><span>Пользователь:</span> <b id="userName">—</b></div>
+        <button class="btn danger" id="btnLogout">Выйти</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="filters">
+        <div>
+          <label>Qaysi kun uchun</label>
+          <input id="fDate" type="date"/>
+        </div>
+        <div>
+          <label>Tovar</label>
+          <select id="fTovar"><option value="">Все</option></select>
+        </div>
+        <div>
+          <label>Kontragent</label>
+          <select id="fKontr"><option value="">Все</option></select>
+        </div>
+        <div>
+          <label>Jarayon nomi</label>
+          <select id="fJarayon">
+            <option value="">Все</option>
+            <option value="Prixod">Prixod</option>
+            <option value="Vozvrat">Vozvrat</option>
+          </select>
+        </div>
+        <div>
+          <label>Foydalanuvchi</label>
+          <select id="fUser"><option value="">Все</option></select>
+        </div>
+        <button class="btn primary" id="btnCreate">+ Создать</button>
+      </div>
+    </div>
+
+    <div class="listWrap">
+      <div class="listHeader">
+        <div class="count" id="count">—</div>
+        <div style="display:flex; gap:10px">
+          <button class="btn" id="btnRefresh">Обновить</button>
+        </div>
+      </div>
+
+      <div class="tableWrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Jarayon</th>
+              <th>Kiritilgan sana</th>
+              <th>Qaysi kun</th>
+              <th>№ Prihod</th>
+              <th>№ Vozvrat</th>
+              <th>Tovar</th>
+              <th>O'lchov</th>
+              <th>Miqdori</th>
+              <th>Narxi</th>
+              <th>Jami</th>
+              <th>Kontragent</th>
+              <th>Qayerga</th>
+              <th>Foydalanuvchi</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="cards" id="cards"></div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modalBack" id="modalBack">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modalHead">
+        <div style="display:flex; align-items:center; gap:10px">
+          <h2>Создать операцию</h2>
+          <div class="toggle" title="Jarayon nomi">
+            <button class="tbtn ok active" id="tPrixod">Prixod</button>
+            <button class="tbtn bad" id="tVozvrat">Vozvrat</button>
+          </div>
+        </div>
+        <button class="btn" id="btnClose">Закрыть</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="grid">
+          <div id="blockInvoiceVozvrat" style="display:none">
+            <label>№ накладной возврата</label>
+            <input id="mInvVozvrat" class="readonly" readonly />
+          </div>
+
+          <div id="blockInvoicePrihod">
+            <label id="lblInvPrihod">№ накладной прихода</label>
+            <input id="mInvPrihod" class="readonly" readonly />
+          </div>
+
+          <div class="full" id="blockPrihodPick" style="display:none">
+            <label>Выберите № накладной прихода (для возврата)</label>
+            <select id="mPickPrihod"></select>
+          </div>
+
+          <div>
+            <label>Qaysi kun uchun</label>
+            <input id="mQaysiKun" type="date"/>
+          </div>
+
+          <div>
+            <label>Tovar</label>
+            <select id="mTovar"></select>
+          </div>
+
+          <div>
+            <label>O'lchov birligi</label>
+            <input id="mUnit" class="readonly" readonly/>
+          </div>
+
+          <div>
+            <label>Miqdori</label>
+            <input id="mMiqdor" inputmode="decimal" placeholder="Напр: 2 или 2.5"/>
+            <div style="margin-top:6px; font-size:12px; color:var(--muted)" id="mLimitHint"></div>
+          </div>
+
+          <div>
+            <label>Narxi</label>
+            <input id="mNarx" inputmode="numeric" placeholder="Напр: 150 000"/>
+          </div>
+
+          <div>
+            <label>Jami summa</label>
+            <input id="mJami" class="readonly" readonly/>
+          </div>
+
+          <div>
+            <label>Kontragent</label>
+            <select id="mKontr"></select>
+          </div>
+
+          <div class="full">
+            <label>Qayerga Prixod yoki vozvrat qilgani</label>
+            <select id="mQayerga"></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modalFoot">
+        <button class="btn" id="btnCancel">Отмена</button>
+        <button class="btn primary" id="btnOk">ОК</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="overlay" id="overlay"><div class="loader"></div></div>
+
+  <script>
+    // TODO: вставь URL своего Apps Script Web App
+    const API_URL = "https://script.google.com/macros/s/AKfycbwM3NP9EzCUKFnqKDVbPJKAZ7qoKEsyOoMCClSppAsTTD5q2zczskL8lX9xSbayoocRSA/exec";
+
+    const LS = {
+      token: "marinade_token",
+      user: "marinade_user",
+      last: "marinade_lastActivity"
+    };
+
+    const INACTIVITY_MS = 2 * 60 * 60 * 1000; // 2h
+
+    function now(){ return Date.now(); }
+    function setLast(){ localStorage.setItem(LS.last, String(now())); }
+    function getLast(){ return Number(localStorage.getItem(LS.last) || "0"); }
+
+    function clearSession(){
+      localStorage.removeItem(LS.token);
+      localStorage.removeItem(LS.user);
+      localStorage.removeItem(LS.last);
+    }
+    function redirectLogin(){
+      location.href = "./marinadelogin.html";
+    }
+
+    async function api(action, data){
+      const token = localStorage.getItem(LS.token) || "";
+      const body = new URLSearchParams({ action, token, ...data });
+      const res = await fetch(API_URL, { method:"POST", body });
+      const json = await res.json();
+      if(!json.ok) throw new Error(json.error || "Ошибка");
+      setLast(); // any API call counts as activity
+      return json;
+    }
+
+    function showOverlay(v){ document.getElementById("overlay").style.display = v ? "flex" : "none"; }
+    function toast(msg){
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(()=>t.style.display="none", 2600);
+    }
+
+    function fmtMoney(n){
+      if(n === "" || n === null || n === undefined) return "";
+      const x = Number(n);
+      if(!Number.isFinite(x)) return "";
+      const sign = x < 0 ? "-" : "";
+      const abs = Math.abs(x);
+      const int = Math.round(abs).toString();
+      return sign + int.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+    function parseMoney(s){
+      return Number(String(s||"").replace(/\s+/g,"").replace(",", "."));
+    }
+    function fmtDateTime(iso){
+      if(!iso) return "";
+      const d = new Date(iso);
+      if(isNaN(d.getTime())) return String(iso);
+      const dd = String(d.getDate()).padStart(2,"0");
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const yy = d.getFullYear();
+      const hh = String(d.getHours()).padStart(2,"0");
+      const mi = String(d.getMinutes()).padStart(2,"0");
+      return `${dd}.${mm}.${yy} ${hh}:${mi}`;
+    }
+    function fmtDateOnly(v){
+      if(!v) return "";
+      // if already yyyy-mm-dd
+      if(/^\d{4}-\d{2}-\d{2}$/.test(String(v))) return v;
+      const d = new Date(v);
+      if(isNaN(d.getTime())) return String(v);
+      const dd = String(d.getDate()).padStart(2,"0");
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const yy = d.getFullYear();
+      return `${yy}-${mm}-${dd}`;
+    }
+
+    // State
+    const state = {
+      info: { tovar:[], tovarUnitMap:{}, kontragent:[], qayerga:[] },
+      numbers: { nextPrihod:1, nextVozvrat:1, prihodInvoices:[] },
+      rows: [],
+      filtered: [],
+      jarayon: "Prixod", // modal current
+      vozvratCtx: { items:[], kontragent:"", qayerga:"" },
+      vozvratLimit: null
+    };
+
+    function applyFilters(){
+      const fDate = document.getElementById("fDate").value;
+      const fTovar = document.getElementById("fTovar").value;
+      const fKontr = document.getElementById("fKontr").value;
+      const fJarayon = document.getElementById("fJarayon").value;
+      const fUser = document.getElementById("fUser").value;
+
+      state.filtered = state.rows.filter(r=>{
+        const d = fmtDateOnly(r.qaysiKun);
+        if(fDate && d !== fDate) return false;
+        if(fTovar && String(r.tovar||"") !== fTovar) return false;
+        if(fKontr && String(r.kontragent||"") !== fKontr) return false;
+        if(fJarayon && String(r.jarayon||"") !== fJarayon) return false;
+        if(fUser && String(r.foydalanuvchi||"") !== fUser) return false;
+        return true;
+      });
+
+      renderList();
+    }
+
+    function rowClass(j){ return j==="Vozvrat" ? "row-bad" : "row-ok"; }
+
+    function renderList(){
+      const tbody = document.getElementById("tbody");
+      const cards = document.getElementById("cards");
+      tbody.innerHTML = "";
+      cards.innerHTML = "";
+
+      const rows = state.filtered.slice().sort((a,b)=>{
+        const ta = new Date(a.kiritilganSana||0).getTime() || 0;
+        const tb = new Date(b.kiritilganSana||0).getTime() || 0;
+        return tb - ta;
+      });
+
+      document.getElementById("count").textContent = `Показано: ${rows.length} / Всего: ${state.rows.length}`;
+
+      for(const r of rows){
+        const tag = r.jarayon === "Vozvrat"
+          ? `<span class="tag bad">Vozvrat</span>`
+          : `<span class="tag ok">Prixod</span>`;
+
+        const miq = Number(r.miqdor);
+        const miqCls = miq < 0 ? "neg" : "pos";
+        const jami = Number(r.jami);
+        const jamiCls = jami < 0 ? "neg" : "pos";
+
+        const tr = document.createElement("tr");
+        tr.className = rowClass(r.jarayon);
+        tr.innerHTML = `
+          <td>${tag}</td>
+          <td class="num">${fmtDateTime(r.kiritilganSana)}</td>
+          <td class="num">${fmtDateOnly(r.qaysiKun)}</td>
+          <td class="num">${r.nakladPrihod || ""}</td>
+          <td class="num">${r.nakladVozvrat || ""}</td>
+          <td>${r.tovar || ""}</td>
+          <td>${r.olchov || ""}</td>
+          <td class="num ${miqCls}">${(r.miqdor ?? "")}</td>
+          <td class="num">${fmtMoney(r.narx)}</td>
+          <td class="num ${jamiCls}">${fmtMoney(r.jami)}</td>
+          <td>${r.kontragent || ""}</td>
+          <td>${r.qayerga || ""}</td>
+          <td>${r.foydalanuvchi || ""}</td>
+        `;
+        tbody.appendChild(tr);
+
+        // mobile card
+        const card = document.createElement("div");
+        card.className = "itemCard " + (r.jarayon==="Vozvrat" ? "" : "");
+        card.innerHTML = `
+          <div class="itemTop">
+            <div>
+              <div class="itemTitle">${r.tovar || "—"}</div>
+              <div style="margin-top:6px">${tag} <span style="color:var(--muted); font-size:12px">№Prihod: <b>${r.nakladPrihod||"—"}</b> ${r.nakladVozvrat ? `| №Vozvrat: <b>${r.nakladVozvrat}</b>`:""}</span></div>
+            </div>
+            <div style="text-align:right; font-size:12px; color:var(--muted)">
+              <div>${fmtDateTime(r.kiritilganSana)}</div>
+              <div>Qaysi: <b style="color:var(--text)">${fmtDateOnly(r.qaysiKun)}</b></div>
+            </div>
+          </div>
+          <div class="itemMeta">
+            <div class="kv"><span>Miqdori</span><b class="num ${miqCls}">${r.miqdor ?? ""}</b></div>
+            <div class="kv"><span>Narxi</span><b class="num">${fmtMoney(r.narx)}</b></div>
+            <div class="kv"><span>Jami</span><b class="num ${jamiCls}">${fmtMoney(r.jami)}</b></div>
+            <div class="kv"><span>Kontragent</span><b>${r.kontragent || "—"}</b></div>
+            <div class="kv"><span>Qayerga</span><b>${r.qayerga || "—"}</b></div>
+            <div class="kv"><span>Foydalanuvchi</span><b>${r.foydalanuvchi || "—"}</b></div>
+          </div>
+        `;
+        cards.appendChild(card);
+      }
+    }
+
+    function fillSelect(sel, items, placeholder="Выберите..."){
+      sel.innerHTML = "";
+      const opt0 = document.createElement("option");
+      opt0.value = "";
+      opt0.textContent = placeholder;
+      sel.appendChild(opt0);
+      for(const it of items){
+        const o = document.createElement("option");
+        o.value = it;
+        o.textContent = it;
+        sel.appendChild(o);
+      }
+    }
+
+    function buildFilters(){
+      // unique users & kontragents from data
+      const users = Array.from(new Set(state.rows.map(r=>String(r.foydalanuvchi||"").trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
+      const kontr = state.info.kontragent.slice();
+
+      // filters
+      fillSelect(document.getElementById("fTovar"), state.info.tovar, "Все");
+      fillSelect(document.getElementById("fKontr"), kontr, "Все");
+      fillSelect(document.getElementById("fUser"), users, "Все");
+      // jarayon already static
+    }
+
+    function openModal(){
+      document.getElementById("modalBack").style.display = "flex";
+      resetModal();
+      syncModalMode();
+    }
+    function closeModal(){
+      document.getElementById("modalBack").style.display = "none";
+    }
+
+    function resetModal(){
+      // defaults
+      state.jarayon = "Prixod";
+      state.vozvratCtx = { items:[], kontragent:"", qayerga:"" };
+      state.vozvratLimit = null;
+
+      // set today date
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const dd = String(d.getDate()).padStart(2,"0");
+      document.getElementById("mQaysiKun").value = `${yyyy}-${mm}-${dd}`;
+
+      document.getElementById("mMiqdor").value = "";
+      document.getElementById("mNarx").value = "";
+      document.getElementById("mJami").value = "";
+      document.getElementById("mLimitHint").textContent = "";
+
+      // fill selects for Prixod
+      fillSelect(document.getElementById("mTovar"), state.info.tovar, "Выберите товар...");
+      fillSelect(document.getElementById("mKontr"), state.info.kontragent, "Выберите контрагента...");
+      fillSelect(document.getElementById("mQayerga"), state.info.qayerga, "Выберите куда...");
+
+      // numbers
+      document.getElementById("mInvPrihod").value = String(state.numbers.nextPrihod || 1);
+      document.getElementById("mInvVozvrat").value = String(state.numbers.nextVozvrat || 1);
+
+      // pick prihod list
+      const pick = document.getElementById("mPickPrihod");
+      pick.innerHTML = "";
+      for(const inv of state.numbers.prihodInvoices){
+        const o = document.createElement("option");
+        o.value = String(inv);
+        o.textContent = String(inv);
+        pick.appendChild(o);
+      }
+      if(state.numbers.prihodInvoices.length){
+        pick.value = String(state.numbers.prihodInvoices[state.numbers.prihodInvoices.length-1]);
+      }
+    }
+
+    function syncModalMode(){
+      const isV = state.jarayon === "Vozvrat";
+      document.getElementById("tPrixod").classList.toggle("active", !isV);
+      document.getElementById("tVozvrat").classList.toggle("active", isV);
+
+      document.getElementById("tPrixod").classList.toggle("ok", true);
+      document.getElementById("tVozvrat").classList.toggle("bad", true);
+
+      document.getElementById("blockInvoiceVozvrat").style.display = isV ? "block" : "none";
+      document.getElementById("blockPrihodPick").style.display = isV ? "block" : "none";
+
+      // invoice field
+      document.getElementById("blockInvoicePrihod").style.display = isV ? "none" : "block";
+      document.getElementById("lblInvPrihod").textContent = "№ накладной прихода";
+
+      if(isV){
+        // load context for selected invoice
+        loadVozvratContext();
+      }else{
+        // standard prihod fields are editable selects
+        document.getElementById("mKontr").disabled = false;
+        document.getElementById("mQayerga").disabled = false;
+        document.getElementById("mNarx").disabled = false;
+        document.getElementById("mTovar").disabled = false;
+
+        // clear unit
+        document.getElementById("mUnit").value = "";
+      }
+      recalcJami();
+    }
+
+    async function loadVozvratContext(){
+      const inv = document.getElementById("mPickPrihod").value;
+      if(!inv){
+        toast("Нет накладных прихода для возврата");
+        return;
+      }
+      showOverlay(true);
+      try{
+        const ctx = await api("getPrihodContext", { invoice: inv });
+        state.vozvratCtx = ctx;
+        // set invoice numbers
+        document.getElementById("mInvPrihod").value = String(inv);
+        document.getElementById("mInvVozvrat").value = String(state.numbers.nextVozvrat || 1);
+
+        // fill tovar select from ctx.items
+        const mT = document.getElementById("mTovar");
+        mT.innerHTML = "";
+        for(const it of (ctx.items || [])){
+          const o = document.createElement("option");
+          o.value = it.tovar;
+          o.textContent = `${it.tovar} (доступно: ${it.remaining})`;
+          o.dataset.remaining = String(it.remaining);
+          o.dataset.narx = String(it.narx || 0);
+          mT.appendChild(o);
+        }
+        if(!ctx.items || !ctx.items.length){
+          toast("По этой накладной нет доступных остатков для возврата");
+          document.getElementById("mLimitHint").textContent = "";
+          document.getElementById("mUnit").value = "";
+          document.getElementById("mNarx").value = "";
+          document.getElementById("mKontr").value = "";
+          document.getElementById("mQayerga").value = "";
+          document.getElementById("mMiqdor").value = "";
+          recalcJami();
+          return;
+        }
+
+        // lock auto fields
+        document.getElementById("mKontr").disabled = true;
+        document.getElementById("mQayerga").disabled = true;
+        document.getElementById("mNarx").disabled = true;
+
+        // auto set kontragent & qayerga
+        setSelectValueOrAdd(document.getElementById("mKontr"), ctx.kontragent || "");
+        setSelectValueOrAdd(document.getElementById("mQayerga"), ctx.qayerga || "");
+
+        // trigger tovar change
+        onModalTovarChange();
+      }catch(e){
+        toast(e.message || "Ошибка");
+      }finally{
+        showOverlay(false);
+      }
+    }
+
+    function setSelectValueOrAdd(sel, value){
+      const v = String(value || "");
+      if(!v){ sel.value = ""; return; }
+      // if not exists, add
+      const exists = Array.from(sel.options).some(o=>o.value===v);
+      if(!exists){
+        const o = document.createElement("option");
+        o.value = v; o.textContent = v;
+        sel.appendChild(o);
+      }
+      sel.value = v;
+    }
+
+    function onModalTovarChange(){
+      const tv = document.getElementById("mTovar").value;
+      const unit = state.info.tovarUnitMap[tv] || "";
+      document.getElementById("mUnit").value = unit;
+
+      if(state.jarayon === "Vozvrat"){
+        const opt = document.querySelector("#mTovar option:checked");
+        const remaining = opt ? Number(opt.dataset.remaining || "0") : 0;
+        const narx = opt ? Number(opt.dataset.narx || "0") : 0;
+        state.vozvratLimit = remaining;
+        document.getElementById("mLimitHint").textContent = remaining ? `Максимум для возврата: ${remaining}` : "";
+        document.getElementById("mNarx").value = fmtMoney(narx);
+        // reset miqdor
+        document.getElementById("mMiqdor").value = "";
+      }
+      recalcJami();
+    }
+
+    function recalcJami(){
+      const miq = Number(String(document.getElementById("mMiqdor").value||"").replace(",", "."));
+      const narx = parseMoney(document.getElementById("mNarx").value);
+      if(!Number.isFinite(miq) || !Number.isFinite(narx)){
+        document.getElementById("mJami").value = "";
+        return;
+      }
+      // for display in modal: always positive calculation; server will negate for Vozvrat
+      const jami = miq * narx;
+      document.getElementById("mJami").value = fmtMoney(jami);
+    }
+
+    function formatMoneyTyping(el){
+      const raw = el.value;
+      const num = parseMoney(raw);
+      if(!Number.isFinite(num)) return;
+      el.value = fmtMoney(num);
+    }
+
+    function modalSetJarayon(j){
+      state.jarayon = j;
+      syncModalMode();
+    }
+
+    async function submitModal(){
+      const qaysiKun = document.getElementById("mQaysiKun").value;
+      const tovar = document.getElementById("mTovar").value;
+      const olchov = document.getElementById("mUnit").value;
+      let miqdor = Number(String(document.getElementById("mMiqdor").value||"").replace(",", "."));
+      const narx = parseMoney(document.getElementById("mNarx").value);
+
+      if(!qaysiKun){ toast("Выберите дату (Qaysi kun uchun)"); return; }
+      if(!tovar){ toast("Выберите товар"); return; }
+      if(!Number.isFinite(miqdor) || miqdor<=0){ toast("Введите Miqdori"); return; }
+      if(!Number.isFinite(narx) || narx<0){ toast("Введите Narxi"); return; }
+
+      // Vozvrat limitation
+      if(state.jarayon === "Vozvrat"){
+        const max = Number(state.vozvratLimit || 0);
+        if(max && miqdor > max + 1e-9){
+          toast("Нельзя вернуть больше чем доступно по приходу");
+          return;
+        }
+      }
+
+      const payload = {
+        jarayon: state.jarayon,
+        qaysiKun,
+        tovar,
+        olchov,
+        miqdor,
+        narx,
+        kontragent: document.getElementById("mKontr").value,
+        qayerga: document.getElementById("mQayerga").value,
+      };
+
+      if(state.jarayon === "Prixod"){
+        payload.nakladPrihod = document.getElementById("mInvPrihod").value;
+      } else {
+        payload.nakladPrihod = document.getElementById("mInvPrihod").value; // set when ctx loaded
+        payload.nakladVozvrat = document.getElementById("mInvVozvrat").value;
+      }
+
+      showOverlay(true);
+      try{
+        await api("createRecord", payload);
+        toast("Успешно сохранено ✅");
+        closeModal();
+        await reloadAll(); // refresh list & numbers
+      }catch(e){
+        toast(e.message || "Ошибка сохранения");
+      }finally{
+        showOverlay(false);
+      }
+    }
+
+    async function reloadAll(){
+      showOverlay(true);
+      try{
+        const [info, nums, rec] = await Promise.all([
+          api("getInfo", {}),
+          api("getNumbers", {}),
+          api("getRecords", {}),
+        ]);
+        state.info = {
+          tovar: info.tovar || [],
+          tovarUnitMap: info.tovarUnitMap || {},
+          kontragent: info.kontragent || [],
+          qayerga: info.qayerga || []
+        };
+        state.numbers = {
+          nextPrihod: nums.nextPrihod || 1,
+          nextVozvrat: nums.nextVozvrat || 1,
+          prihodInvoices: nums.prihodInvoices || []
+        };
+        state.rows = rec.rows || [];
+
+        buildFilters();
+        applyFilters();
+      }catch(e){
+        toast(e.message || "Ошибка загрузки");
+        // if session expired
+        if((e.message||"").toLowerCase().includes("session")){
+          clearSession();
+          redirectLogin();
+        }
+      }finally{
+        showOverlay(false);
+      }
+    }
+
+    async function validateSessionOrGo(){
+      const token = localStorage.getItem(LS.token);
+      if(!token) redirectLogin();
+
+      const last = getLast();
+      if(!last || (now()-last) > INACTIVITY_MS){
+        clearSession();
+        redirectLogin();
+        return;
+      }
+
+      // update user name from storage
+      try{
+        const u = JSON.parse(localStorage.getItem(LS.user) || "{}");
+        document.getElementById("userName").textContent = u.ism || u.login || "—";
+      }catch(_){}
+
+      try{
+        await api("validate", {});
+      }catch(_){
+        clearSession();
+        redirectLogin();
+      }
+    }
+
+    function installActivityWatcher(){
+      const touch = ()=> setLast();
+      ["mousemove","keydown","touchstart","scroll","click"].forEach(ev=>{
+        window.addEventListener(ev, touch, { passive:true });
+      });
+
+      setInterval(()=>{
+        const last = getLast();
+        if(last && (now()-last) > INACTIVITY_MS){
+          toast("Сессия завершена (нет активности 2 часа)");
+          clearSession();
+          setTimeout(()=>redirectLogin(), 500);
+        }
+      }, 30*1000);
+    }
+
+    // Events
+    document.getElementById("btnLogout").addEventListener("click", ()=>{
+      clearSession();
+      redirectLogin();
+    });
+
+    document.getElementById("btnCreate").addEventListener("click", openModal);
+    document.getElementById("btnRefresh").addEventListener("click", reloadAll);
+
+    document.getElementById("btnClose").addEventListener("click", closeModal);
+    document.getElementById("btnCancel").addEventListener("click", closeModal);
+    document.getElementById("modalBack").addEventListener("click", (e)=>{
+      if(e.target.id==="modalBack") closeModal();
+    });
+
+    document.getElementById("tPrixod").addEventListener("click", ()=>modalSetJarayon("Prixod"));
+    document.getElementById("tVozvrat").addEventListener("click", ()=>modalSetJarayon("Vozvrat"));
+
+    document.getElementById("mTovar").addEventListener("change", onModalTovarChange);
+    document.getElementById("mPickPrihod").addEventListener("change", loadVozvratContext);
+
+    document.getElementById("mMiqdor").addEventListener("input", ()=>{
+      // clamp for vozvrat
+      if(state.jarayon === "Vozvrat" && state.vozvratLimit){
+        let miq = Number(String(document.getElementById("mMiqdor").value||"").replace(",", "."));
+        if(Number.isFinite(miq) && miq > state.vozvratLimit){
+          document.getElementById("mMiqdor").value = String(state.vozvratLimit);
+        }
+      }
+      recalcJami();
+    });
+
+    document.getElementById("mNarx").addEventListener("input", ()=>{
+      // live formatting
+      const el = document.getElementById("mNarx");
+      // do soft formatting (avoid cursor jump too much)
+      const before = el.value;
+      formatMoneyTyping(el);
+      if(before !== el.value) {
+        // (best-effort cursor)
+      }
+      recalcJami();
+    });
+
+    document.getElementById("btnOk").addEventListener("click", submitModal);
+
+    ["fDate","fTovar","fKontr","fJarayon","fUser"].forEach(id=>{
+      document.getElementById(id).addEventListener("change", applyFilters);
+    });
+
+    // Init
+    (async ()=>{
+      installActivityWatcher();
+      await validateSessionOrGo();
+      await reloadAll();
+    })();
+  </script>
 </body>
 </html>

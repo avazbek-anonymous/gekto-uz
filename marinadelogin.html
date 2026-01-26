@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Marinade — Login</title>
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f1b33; --text:#e9eefc; --muted:#9fb0d0;
+      --line:rgba(255,255,255,.08); --accent:#6ea8ff; --bad:#ff5c7a; --ok:#35d07f;
+      --shadow: 0 18px 70px rgba(0,0,0,.55);
+      --r:18px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; color:var(--text);
+      background: radial-gradient(1100px 600px at 20% 10%, rgba(110,168,255,.25), transparent 55%),
+                  radial-gradient(900px 500px at 90% 30%, rgba(53,208,127,.18), transparent 55%),
+                  linear-gradient(180deg, #070b14, var(--bg));
+      display:flex; align-items:center; justify-content:center; padding:20px;
+      overflow-x:hidden;
+    }
+    .wrap{width:min(440px,100%)}
+    .brand{display:flex; align-items:center; gap:10px; margin-bottom:14px}
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(110,168,255,.95), rgba(53,208,127,.85));
+      box-shadow:0 10px 30px rgba(110,168,255,.18);
+    }
+    .title{font-size:20px;font-weight:800;letter-spacing:.2px}
+    .sub{font-size:13px;color:var(--muted);margin-top:2px}
+    .card{
+      background: rgba(15,27,51,.78);
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding:18px;
+    }
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(7,11,20,.45);
+      color:var(--text);
+      outline:none;
+    }
+    input:focus{border-color:rgba(110,168,255,.55); box-shadow:0 0 0 4px rgba(110,168,255,.12)}
+    .row{display:flex;gap:10px; align-items:center; margin-top:14px}
+    button{
+      width:100%; cursor:pointer;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(110,168,255,.35);
+      background: linear-gradient(135deg, rgba(110,168,255,.95), rgba(110,168,255,.65));
+      color:#041025; font-weight:800;
+    }
+    button:disabled{opacity:.65; cursor:not-allowed}
+    .err{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,92,122,.25);
+      background: rgba(255,92,122,.08);
+      color:#ffd5dd;
+      font-size:13px;
+      display:none;
+    }
+    .mini{margin-top:12px;font-size:12px;color:var(--muted);text-align:center}
+    .spinner{
+      width:16px;height:16px;border-radius:999px;
+      border:2px solid rgba(255,255,255,.35);
+      border-top-color:rgba(4,16,37,.95);
+      display:inline-block;
+      animation:spin .8s linear infinite;
+      vertical-align:-3px;
+      margin-right:8px;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <div class="title">Marinade</div>
+        <div class="sub">Вход в систему складских операций</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Логин</label>
+      <input id="login" autocomplete="username" placeholder="Введите логин"/>
+
+      <label>Пароль</label>
+      <input id="parol" type="password" autocomplete="current-password" placeholder="Введите пароль"/>
+
+      <div class="row">
+        <button id="btn">Войти</button>
+      </div>
+
+      <div id="err" class="err"></div>
+      <div class="mini">Сессия автоматически завершится через 2 часа без активности.</div>
+    </div>
+  </div>
+
+  <script>
+    // TODO: вставь URL своего Apps Script Web App
+    const API_URL = "https://script.google.com/macros/s/AKfycbwM3NP9EzCUKFnqKDVbPJKAZ7qoKEsyOoMCClSppAsTTD5q2zczskL8lX9xSbayoocRSA/exec";
+
+    const LS = {
+      token: "marinade_token",
+      user: "marinade_user",
+      last: "marinade_lastActivity"
+    };
+
+    function now(){ return Date.now(); }
+    function setLast(){ localStorage.setItem(LS.last, String(now())); }
+    function getLast(){ return Number(localStorage.getItem(LS.last) || "0"); }
+
+    function clearSession(){
+      localStorage.removeItem(LS.token);
+      localStorage.removeItem(LS.user);
+      localStorage.removeItem(LS.last);
+    }
+
+    async function api(action, data){
+      const body = new URLSearchParams({ action, ...data });
+      const res = await fetch(API_URL, { method:"POST", body });
+      const json = await res.json();
+      if(!json.ok) throw new Error(json.error || "Ошибка");
+      return json;
+    }
+
+    async function validateExisting(){
+      const token = localStorage.getItem(LS.token);
+      if(!token) return false;
+
+      // simple inactivity check (2h)
+      const last = getLast();
+      if(!last || (now() - last) > 2*60*60*1000){
+        clearSession();
+        return false;
+      }
+
+      try{
+        await api("validate", { token });
+        return true;
+      }catch(e){
+        clearSession();
+        return false;
+      }
+    }
+
+    const errBox = document.getElementById("err");
+    const btn = document.getElementById("btn");
+    function showErr(msg){
+      errBox.style.display = "block";
+      errBox.textContent = msg;
+    }
+    function hideErr(){ errBox.style.display="none"; errBox.textContent=""; }
+
+    async function login(){
+      hideErr();
+      const login = document.getElementById("login").value.trim();
+      const parol = document.getElementById("parol").value;
+      if(!login || !parol){ showErr("Введите логин и пароль"); return; }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span>Входим...`;
+
+      try{
+        const r = await api("login", { login, parol });
+        localStorage.setItem(LS.token, r.token);
+        localStorage.setItem(LS.user, JSON.stringify(r.user || {}));
+        setLast();
+        location.href = "./marinade.html";
+      }catch(e){
+        showErr(e.message || "Ошибка входа");
+      }finally{
+        btn.disabled = false;
+        btn.textContent = "Войти";
+      }
+    }
+
+    document.getElementById("btn").addEventListener("click", login);
+    document.addEventListener("keydown", (e)=>{ if(e.key==="Enter") login(); });
+
+    // if already logged in -> go to main
+    (async ()=>{
+      if(await validateExisting()){
+        location.href = "./marinade.html";
+      }
+    })();
+  </script>
+</body>
+</html>
