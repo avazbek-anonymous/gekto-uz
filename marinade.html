@@ -233,44 +233,76 @@
     }
 
     /* --- FIX: modal fits on mobile (scroll inside, sticky header/footer) --- */
-.modalBack{
-  align-items: flex-start;      /* вместо center */
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
+    .modalBack{
+      align-items: flex-start;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .modal{
+      max-height: calc(100vh - 24px);
+      display: flex;
+      flex-direction: column;
+    }
+    .modalBody{
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .modalHead{
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .modalFoot{
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+    @media (max-width: 420px){
+      .modalBack{ padding: 10px; }
+      .modalBody{ padding: 10px; }
+      .modalFoot{ padding: 10px; }
+      .tbtn{ padding: 8px 10px; }
+    }
 
-.modal{
-  max-height: calc(100vh - 24px);
-  display: flex;
-  flex-direction: column;
-}
-
-.modalBody{
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.modalHead{
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-.modalFoot{
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
-  padding-bottom: calc(12px + env(safe-area-inset-bottom));
-}
-
-/* на очень маленьких экранах чуть уменьшим отступы */
-@media (max-width: 420px){
-  .modalBack{ padding: 10px; }
-  .modalBody{ padding: 10px; }
-  .modalFoot{ padding: 10px; }
-  .tbtn{ padding: 8px 10px; }  /* чтобы "Prixod/Vozvrat" влезали */
-}
-
+    /* Line-items table (inside modal) */
+    .lineTableWrap{
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background: rgba(7,11,20,.25);
+      max-height: 50vh;
+    }
+    .lineTable{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+    }
+    .lineTable th, .lineTable td{
+      padding:8px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      vertical-align:top;
+    }
+    .lineTable thead th{
+      position:sticky;
+      top:0;
+      z-index:1;
+      background: rgba(7,11,20,.55);
+      backdrop-filter: blur(10px);
+      color: var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .lineTable tbody tr:last-child td{border-bottom:none}
+    .lineRow select, .lineRow input{
+      padding:10px 10px;
+      border-radius:12px;
+    }
+    .lineDel{ padding:10px 10px; border-radius:12px; }
+    @media (max-width: 520px){
+      .lineTableWrap{ max-height: 56vh; }
+      .grid{grid-template-columns: 1fr}
+    }
 
     .toast{
       position:fixed; left:50%; transform:translateX(-50%);
@@ -312,7 +344,6 @@
     @media (max-width: 520px){
       .actions{gap:8px}
       .pill{max-width:60vw}
-      .grid{grid-template-columns: 1fr}
     }
   </style>
 </head>
@@ -335,10 +366,10 @@
       <div class="filters">
         <div>
           <label>Qaysi kun uchun (с - по)</label>
-            <div style="display:flex; gap:10px">
-                <input id="fDateFrom" type="date" style="flex:1"/>
-                <input id="fDateTo" type="date" style="flex:1"/>
-            </div>
+          <div style="display:flex; gap:10px">
+            <input id="fDateFrom" type="date" style="flex:1"/>
+            <input id="fDateTo" type="date" style="flex:1"/>
+          </div>
         </div>
         <div>
           <label>Tovar</label>
@@ -436,41 +467,49 @@
           </div>
 
           <div>
-            <label>Tovar</label>
-            <select id="mTovar"></select>
-          </div>
-
-          <div>
-            <label>O'lchov birligi</label>
-            <input id="mUnit" class="readonly" readonly/>
-          </div>
-
-          <div>
-            <label>Miqdori</label>
-            <input id="mMiqdor" inputmode="decimal" placeholder="Напр: 2 или 2.5"/>
-            <div style="margin-top:6px; font-size:12px; color:var(--muted)" id="mLimitHint"></div>
-          </div>
-
-          <div>
-            <label>Narxi</label>
-            <input id="mNarx" inputmode="numeric" placeholder="Напр: 150 000"/>
-          </div>
-
-          <div>
-            <label>Jami summa</label>
-            <input id="mJami" class="readonly" readonly/>
-          </div>
-
-          <div>
             <label>Kontragent</label>
             <select id="mKontr"></select>
           </div>
 
-          <div class="full">
-            <label>Qayerga Prixod yoki vozvrat qilgani</label>
-            <select id="mQayerga"></select>
+          <div class="full" id="lineItemsBlock">
+            <label>Tovarlar ro'yxati</label>
+
+            <div class="lineTableWrap">
+              <table class="lineTable">
+                <thead>
+                  <tr>
+                    <th style="min-width:220px">Tovar</th>
+                    <th style="min-width:120px">O'lchov</th>
+                    <th style="min-width:120px">Miqdori</th>
+                    <th style="min-width:140px">Narxi</th>
+                    <th style="min-width:140px">Jami</th>
+                    <th style="min-width:220px">Qayerga</th>
+                    <th style="width:40px"></th>
+                  </tr>
+                </thead>
+                <tbody id="linesTbody"></tbody>
+              </table>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; gap:10px; margin-top:10px; align-items:center">
+              <div style="font-size:12px; color:var(--muted)" id="linesHint"></div>
+              <button class="btn" id="btnAddLine" type="button">+ Товар</button>
+            </div>
           </div>
         </div>
+
+        <template id="lineTemplate">
+          <tr class="lineRow">
+            <td><select class="lineTovar"></select></td>
+            <td><input class="lineUnit readonly" readonly /></td>
+            <td><input class="lineMiqdor" inputmode="decimal" placeholder="0" /></td>
+            <td><input class="lineNarx" inputmode="numeric" placeholder="0" /></td>
+            <td><input class="lineJami readonly" readonly /></td>
+            <td><select class="lineQayerga"></select></td>
+            <td><button class="btn danger lineDel" type="button">×</button></td>
+          </tr>
+        </template>
+
       </div>
 
       <div class="modalFoot">
@@ -550,51 +589,45 @@
       const mi = String(d.getMinutes()).padStart(2,"0");
       return `${dd}.${mm}.${yy} ${hh}:${mi}`;
     }
-    
+
     function toISODate(v){
-  if(!v) return "";
-  const s = String(v).trim();
+      if(!v) return "";
+      const s = String(v).trim();
+      if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+      const m = s.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+      if(m) return `${m[3]}-${m[2]}-${m[1]}`;
+      const d = new Date(s);
+      if(isNaN(d.getTime())) return "";
+      const yy = d.getFullYear();
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const dd = String(d.getDate()).padStart(2,"0");
+      return `${yy}-${mm}-${dd}`;
+    }
 
-  // yyyy-mm-dd
-  if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    function toDDMMYYYY(v){
+      if(!v) return "";
+      const s = String(v).trim();
+      if(/^\d{2}\.\d{2}\.\d{4}$/.test(s)) return s;
+      const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if(m) return `${m[3]}.${m[2]}.${m[1]}`;
+      const d = new Date(s);
+      if(isNaN(d.getTime())) return s;
+      const dd = String(d.getDate()).padStart(2,"0");
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const yy = d.getFullYear();
+      return `${dd}.${mm}.${yy}`;
+    }
 
-  // dd.mm.yyyy  -> yyyy-mm-dd
-  const m = s.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
-  if(m) return `${m[3]}-${m[2]}-${m[1]}`;
+    function fmtDateOnly(v){
+      return toDDMMYYYY(v);
+    }
 
-  // fallback
-  const d = new Date(s);
-  if(isNaN(d.getTime())) return "";
-  const yy = d.getFullYear();
-  const mm = String(d.getMonth()+1).padStart(2,"0");
-  const dd = String(d.getDate()).padStart(2,"0");
-  return `${yy}-${mm}-${dd}`;
-}
-
-function toDDMMYYYY(v){
-  if(!v) return "";
-  const s = String(v).trim();
-
-  // already dd.mm.yyyy
-  if(/^\d{2}\.\d{2}\.\d{4}$/.test(s)) return s;
-
-  // yyyy-mm-dd -> dd.mm.yyyy
-  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if(m) return `${m[3]}.${m[2]}.${m[1]}`;
-
-  const d = new Date(s);
-  if(isNaN(d.getTime())) return s;
-  const dd = String(d.getDate()).padStart(2,"0");
-  const mm = String(d.getMonth()+1).padStart(2,"0");
-  const yy = d.getFullYear();
-  return `${dd}.${mm}.${yy}`;
-}
-
-// ✅ вот эта функция нужна, потому что renderList() её вызывает
-function fmtDateOnly(v){
-  return toDDMMYYYY(v);
-}
-
+    function formatMoneyTyping(el){
+      const raw = el.value;
+      const num = parseMoney(raw);
+      if(!Number.isFinite(num)) return;
+      el.value = fmtMoney(num);
+    }
 
     // State
     const state = {
@@ -604,7 +637,7 @@ function fmtDateOnly(v){
       filtered: [],
       jarayon: "Prixod", // modal current
       vozvratCtx: { items:[], kontragent:"", qayerga:"" },
-      vozvratLimit: null
+      lineSeq: 0
     };
 
     function applyFilters(){
@@ -616,17 +649,16 @@ function fmtDateOnly(v){
       const fUser = document.getElementById("fUser").value;
 
       state.filtered = state.rows.filter(r=>{
-    const d = toISODate(r.qaysiKun); // нормализуем из таблицы
+        const d = toISODate(r.qaysiKun);
+        if(from && d && d < from) return false;
+        if(to   && d && d > to) return false;
 
-    if(from && d && d < from) return false;
-    if(to   && d && d > to) return false;
-
-    if(fTovar && String(r.tovar||"") !== fTovar) return false;
-    if(fKontr && String(r.kontragent||"") !== fKontr) return false;
-    if(fJarayon && String(r.jarayon||"") !== fJarayon) return false;
-    if(fUser && String(r.foydalanuvchi||"") !== fUser) return false;
-    return true;
-  });
+        if(fTovar && String(r.tovar||"") !== fTovar) return false;
+        if(fKontr && String(r.kontragent||"") !== fKontr) return false;
+        if(fJarayon && String(r.jarayon||"") !== fJarayon) return false;
+        if(fUser && String(r.foydalanuvchi||"") !== fUser) return false;
+        return true;
+      });
 
       renderList();
     }
@@ -717,16 +749,25 @@ function fmtDateOnly(v){
       }
     }
 
+    function setSelectValueOrAdd(sel, value){
+      const v = String(value || "");
+      if(!v){ sel.value = ""; return; }
+      const exists = Array.from(sel.options).some(o=>o.value===v);
+      if(!exists){
+        const o = document.createElement("option");
+        o.value = v; o.textContent = v;
+        sel.appendChild(o);
+      }
+      sel.value = v;
+    }
+
     function buildFilters(){
-      // unique users & kontragents from data
       const users = Array.from(new Set(state.rows.map(r=>String(r.foydalanuvchi||"").trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
       const kontr = state.info.kontragent.slice();
 
-      // filters
       fillSelect(document.getElementById("fTovar"), state.info.tovar, "Все");
       fillSelect(document.getElementById("fKontr"), kontr, "Все");
       fillSelect(document.getElementById("fUser"), users, "Все");
-      // jarayon already static
     }
 
     function openModal(){
@@ -738,11 +779,168 @@ function fmtDateOnly(v){
       document.getElementById("modalBack").style.display = "none";
     }
 
+    function resetLines(){
+      document.getElementById("linesTbody").innerHTML = "";
+      state.lineSeq = 0;
+      document.getElementById("linesHint").textContent = "";
+    }
+
+    function fillLineTovarOptions(sel){
+      sel.innerHTML = "";
+      const o0 = document.createElement("option");
+      o0.value = "";
+      o0.textContent = "Выберите...";
+      sel.appendChild(o0);
+
+      if(state.jarayon === "Vozvrat"){
+        for(const it of (state.vozvratCtx.items || [])){
+          const o = document.createElement("option");
+          o.value = it.tovar;
+          o.textContent = `${it.tovar} (доступно: ${it.remaining})`;
+          o.dataset.remaining = String(it.remaining);
+          o.dataset.narx = String(it.narx || 0);
+          sel.appendChild(o);
+        }
+      } else {
+        for(const tv of (state.info.tovar || [])){
+          const o = document.createElement("option");
+          o.value = tv;
+          o.textContent = tv;
+          sel.appendChild(o);
+        }
+      }
+    }
+
+    function fillLineQayergaOptions(sel){
+      fillSelect(sel, state.info.qayerga || [], "Выберите куда...");
+    }
+
+    function getReturnMax(tovar){
+      const it = (state.vozvratCtx.items || []).find(x => x.tovar === tovar);
+      return Number(it?.remaining || 0);
+    }
+
+    function getUsedReturn(tovar, excludeLineId){
+      let sum = 0;
+      document.querySelectorAll("#linesTbody tr.lineRow").forEach(tr=>{
+        if(tr.dataset.lineId === excludeLineId) return;
+        const tv = tr.querySelector(".lineTovar").value;
+        if(tv !== tovar) return;
+        const miq = Number(String(tr.querySelector(".lineMiqdor").value||"").replace(",", "."));
+        if(Number.isFinite(miq) && miq > 0) sum += miq;
+      });
+      return sum;
+    }
+
+    function recalcLine(tr){
+      const miq = Number(String(tr.querySelector(".lineMiqdor").value||"").replace(",", "."));
+      const narx = parseMoney(tr.querySelector(".lineNarx").value);
+      if(!Number.isFinite(miq) || !Number.isFinite(narx)){
+        tr.querySelector(".lineJami").value = "";
+        return;
+      }
+      tr.querySelector(".lineJami").value = fmtMoney(miq * narx);
+    }
+
+    function clampReturnLine(tr){
+      if(state.jarayon !== "Vozvrat") return;
+      const tv = tr.querySelector(".lineTovar").value;
+      if(!tv) return;
+
+      const max = getReturnMax(tv);
+      const usedOther = getUsedReturn(tv, tr.dataset.lineId);
+      const allowed = Math.max(0, max - usedOther);
+
+      let miq = Number(String(tr.querySelector(".lineMiqdor").value||"").replace(",", "."));
+      if(Number.isFinite(miq) && miq > allowed + 1e-9){
+        tr.querySelector(".lineMiqdor").value = String(allowed);
+      }
+
+      tr.querySelector(".lineMiqdor").title = `Макс для этого товара сейчас: ${allowed} (из ${max})`;
+      document.getElementById("linesHint").textContent = `Vozvrat: лимит считается суммарно по одинаковым товарам`;
+    }
+
+    function onLineTovarChange(tr){
+      const tv = tr.querySelector(".lineTovar").value;
+      tr.querySelector(".lineUnit").value = state.info.tovarUnitMap[tv] || "";
+
+      if(state.jarayon === "Vozvrat"){
+        const opt = tr.querySelector(".lineTovar option:checked");
+        const narx = opt ? Number(opt.dataset.narx || "0") : 0;
+        tr.querySelector(".lineNarx").value = fmtMoney(narx);
+        tr.querySelector(".lineNarx").disabled = true;
+
+        setSelectValueOrAdd(tr.querySelector(".lineQayerga"), state.vozvratCtx.qayerga || "");
+        tr.querySelector(".lineQayerga").disabled = true;
+
+        tr.querySelector(".lineMiqdor").value = "";
+      } else {
+        tr.querySelector(".lineNarx").disabled = false;
+        tr.querySelector(".lineQayerga").disabled = false;
+      }
+
+      clampReturnLine(tr);
+      recalcLine(tr);
+    }
+
+    function addLine(){
+      const tpl = document.getElementById("lineTemplate");
+      const tr = tpl.content.firstElementChild.cloneNode(true);
+      tr.dataset.lineId = String(++state.lineSeq);
+
+      const selT = tr.querySelector(".lineTovar");
+      const selQ = tr.querySelector(".lineQayerga");
+
+      fillLineTovarOptions(selT);
+      fillLineQayergaOptions(selQ);
+
+      // listeners
+      selT.addEventListener("change", ()=> onLineTovarChange(tr));
+
+      tr.querySelector(".lineMiqdor").addEventListener("input", ()=>{
+        clampReturnLine(tr);
+        recalcLine(tr);
+      });
+
+      tr.querySelector(".lineNarx").addEventListener("input", ()=>{
+        const el = tr.querySelector(".lineNarx");
+        const before = el.value;
+        formatMoneyTyping(el);
+        if(before !== el.value){
+          // best-effort
+        }
+        recalcLine(tr);
+      });
+
+      tr.querySelector(".lineDel").addEventListener("click", ()=>{
+        tr.remove();
+      });
+
+      document.getElementById("linesTbody").appendChild(tr);
+      onLineTovarChange(tr);
+      return tr;
+    }
+
+    function collectLines(){
+      const out = [];
+      document.querySelectorAll("#linesTbody tr.lineRow").forEach(tr=>{
+        const tovar = String(tr.querySelector(".lineTovar").value || "").trim();
+        const olchov = String(tr.querySelector(".lineUnit").value || "").trim();
+        const miqdor = Number(String(tr.querySelector(".lineMiqdor").value||"").replace(",", "."));
+        const narx = parseMoney(tr.querySelector(".lineNarx").value);
+        const qayerga = String(tr.querySelector(".lineQayerga").value || "").trim();
+
+        // пропускаем полностью пустые строки
+        if(!tovar && !Number.isFinite(miqdor) && !Number.isFinite(narx) && !qayerga) return;
+
+        out.push({ tovar, olchov, miqdor, narx, qayerga, lineId: tr.dataset.lineId });
+      });
+      return out;
+    }
+
     function resetModal(){
-      // defaults
       state.jarayon = "Prixod";
       state.vozvratCtx = { items:[], kontragent:"", qayerga:"" };
-      state.vozvratLimit = null;
 
       // set today date
       const d = new Date();
@@ -751,15 +949,7 @@ function fmtDateOnly(v){
       const dd = String(d.getDate()).padStart(2,"0");
       document.getElementById("mQaysiKun").value = `${yyyy}-${mm}-${dd}`;
 
-      document.getElementById("mMiqdor").value = "";
-      document.getElementById("mNarx").value = "";
-      document.getElementById("mJami").value = "";
-      document.getElementById("mLimitHint").textContent = "";
-
-      // fill selects for Prixod
-      fillSelect(document.getElementById("mTovar"), state.info.tovar, "Выберите товар...");
       fillSelect(document.getElementById("mKontr"), state.info.kontragent, "Выберите контрагента...");
-      fillSelect(document.getElementById("mQayerga"), state.info.qayerga, "Выберите куда...");
 
       // numbers
       document.getElementById("mInvPrihod").value = String(state.numbers.nextPrihod || 1);
@@ -768,6 +958,11 @@ function fmtDateOnly(v){
       // pick prihod list
       const pick = document.getElementById("mPickPrihod");
       pick.innerHTML = "";
+      const p0 = document.createElement("option");
+      p0.value = "";
+      p0.textContent = "Выберите накладную...";
+      pick.appendChild(p0);
+
       for(const inv of state.numbers.prihodInvoices){
         const o = document.createElement("option");
         o.value = String(inv);
@@ -777,6 +972,9 @@ function fmtDateOnly(v){
       if(state.numbers.prihodInvoices.length){
         pick.value = String(state.numbers.prihodInvoices[state.numbers.prihodInvoices.length-1]);
       }
+
+      resetLines();
+      addLine();
     }
 
     function syncModalMode(){
@@ -789,130 +987,59 @@ function fmtDateOnly(v){
 
       document.getElementById("blockInvoiceVozvrat").style.display = isV ? "block" : "none";
       document.getElementById("blockPrihodPick").style.display = isV ? "block" : "none";
-
-      // invoice field
       document.getElementById("blockInvoicePrihod").style.display = isV ? "none" : "block";
       document.getElementById("lblInvPrihod").textContent = "№ накладной прихода";
 
       if(isV){
-        // load context for selected invoice
         loadVozvratContext();
       }else{
-        // standard prihod fields are editable selects
         document.getElementById("mKontr").disabled = false;
-        document.getElementById("mQayerga").disabled = false;
-        document.getElementById("mNarx").disabled = false;
-        document.getElementById("mTovar").disabled = false;
-
-        // clear unit
-        document.getElementById("mUnit").value = "";
+        resetLines();
+        addLine();
+        document.getElementById("linesHint").textContent = "";
       }
-      recalcJami();
     }
 
     async function loadVozvratContext(){
-      const inv = document.getElementById("mPickPrihod").value;
+      const pickEl = document.getElementById("mPickPrihod");
+      let inv = pickEl.value;
+      if(!inv && pickEl.options.length > 1){
+        pickEl.value = pickEl.options[pickEl.options.length - 1].value;
+        inv = pickEl.value;
+      }
       if(!inv){
         toast("Нет накладных прихода для возврата");
+        resetLines();
+        addLine();
         return;
       }
+
       showOverlay(true);
       try{
         const ctx = await api("getPrihodContext", { invoice: inv });
         state.vozvratCtx = ctx;
-        // set invoice numbers
+
         document.getElementById("mInvPrihod").value = String(inv);
         document.getElementById("mInvVozvrat").value = String(state.numbers.nextVozvrat || 1);
 
-        // fill tovar select from ctx.items
-        const mT = document.getElementById("mTovar");
-        mT.innerHTML = "";
-        for(const it of (ctx.items || [])){
-          const o = document.createElement("option");
-          o.value = it.tovar;
-          o.textContent = `${it.tovar} (доступно: ${it.remaining})`;
-          o.dataset.remaining = String(it.remaining);
-          o.dataset.narx = String(it.narx || 0);
-          mT.appendChild(o);
-        }
+        // lock kontragent in Vozvrat and set from ctx
+        document.getElementById("mKontr").disabled = true;
+        setSelectValueOrAdd(document.getElementById("mKontr"), ctx.kontragent || "");
+
         if(!ctx.items || !ctx.items.length){
           toast("По этой накладной нет доступных остатков для возврата");
-          document.getElementById("mLimitHint").textContent = "";
-          document.getElementById("mUnit").value = "";
-          document.getElementById("mNarx").value = "";
-          document.getElementById("mKontr").value = "";
-          document.getElementById("mQayerga").value = "";
-          document.getElementById("mMiqdor").value = "";
-          recalcJami();
+          resetLines();
+          addLine();
           return;
         }
 
-        // lock auto fields
-        document.getElementById("mKontr").disabled = true;
-        document.getElementById("mQayerga").disabled = true;
-        document.getElementById("mNarx").disabled = true;
-
-        // auto set kontragent & qayerga
-        setSelectValueOrAdd(document.getElementById("mKontr"), ctx.kontragent || "");
-        setSelectValueOrAdd(document.getElementById("mQayerga"), ctx.qayerga || "");
-
-        // trigger tovar change
-        onModalTovarChange();
+        resetLines();
+        addLine();
       }catch(e){
         toast(e.message || "Ошибка");
       }finally{
         showOverlay(false);
       }
-    }
-
-    function setSelectValueOrAdd(sel, value){
-      const v = String(value || "");
-      if(!v){ sel.value = ""; return; }
-      // if not exists, add
-      const exists = Array.from(sel.options).some(o=>o.value===v);
-      if(!exists){
-        const o = document.createElement("option");
-        o.value = v; o.textContent = v;
-        sel.appendChild(o);
-      }
-      sel.value = v;
-    }
-
-    function onModalTovarChange(){
-      const tv = document.getElementById("mTovar").value;
-      const unit = state.info.tovarUnitMap[tv] || "";
-      document.getElementById("mUnit").value = unit;
-
-      if(state.jarayon === "Vozvrat"){
-        const opt = document.querySelector("#mTovar option:checked");
-        const remaining = opt ? Number(opt.dataset.remaining || "0") : 0;
-        const narx = opt ? Number(opt.dataset.narx || "0") : 0;
-        state.vozvratLimit = remaining;
-        document.getElementById("mLimitHint").textContent = remaining ? `Максимум для возврата: ${remaining}` : "";
-        document.getElementById("mNarx").value = fmtMoney(narx);
-        // reset miqdor
-        document.getElementById("mMiqdor").value = "";
-      }
-      recalcJami();
-    }
-
-    function recalcJami(){
-      const miq = Number(String(document.getElementById("mMiqdor").value||"").replace(",", "."));
-      const narx = parseMoney(document.getElementById("mNarx").value);
-      if(!Number.isFinite(miq) || !Number.isFinite(narx)){
-        document.getElementById("mJami").value = "";
-        return;
-      }
-      // for display in modal: always positive calculation; server will negate for Vozvrat
-      const jami = miq * narx;
-      document.getElementById("mJami").value = fmtMoney(jami);
-    }
-
-    function formatMoneyTyping(el){
-      const raw = el.value;
-      const num = parseMoney(raw);
-      if(!Number.isFinite(num)) return;
-      el.value = fmtMoney(num);
     }
 
     function modalSetJarayon(j){
@@ -922,49 +1049,65 @@ function fmtDateOnly(v){
 
     async function submitModal(){
       const qaysiKun = document.getElementById("mQaysiKun").value;
-      const tovar = document.getElementById("mTovar").value;
-      const olchov = document.getElementById("mUnit").value;
-      let miqdor = Number(String(document.getElementById("mMiqdor").value||"").replace(",", "."));
-      const narx = parseMoney(document.getElementById("mNarx").value);
+      const kontragent = document.getElementById("mKontr").value;
 
       if(!qaysiKun){ toast("Выберите дату (Qaysi kun uchun)"); return; }
-      if(!tovar){ toast("Выберите товар"); return; }
-      if(!Number.isFinite(miqdor) || miqdor<=0){ toast("Введите Miqdori"); return; }
-      if(!Number.isFinite(narx) || narx<0){ toast("Введите Narxi"); return; }
+      if(!kontragent){ toast("Выберите контрагента"); return; }
 
-      // Vozvrat limitation
+      const lines = collectLines();
+      if(!lines.length){ toast("Добавьте хотя бы один товар"); return; }
+
+      // validate lines
+      for(let i=0;i<lines.length;i++){
+        const l = lines[i];
+        if(!l.tovar){ toast(`Строка ${i+1}: выберите товар`); return; }
+        if(!Number.isFinite(l.miqdor) || l.miqdor<=0){ toast(`Строка ${i+1}: введите Miqdori`); return; }
+        if(!Number.isFinite(l.narx) || l.narx<0){ toast(`Строка ${i+1}: введите Narxi`); return; }
+        if(!l.qayerga){ toast(`Строка ${i+1}: выберите Qayerga`); return; }
+      }
+
+      // Vozvrat: aggregate limitation (без частичного сохранения)
       if(state.jarayon === "Vozvrat"){
-        const max = Number(state.vozvratLimit || 0);
-        if(max && miqdor > max + 1e-9){
-          toast("Нельзя вернуть больше чем доступно по приходу");
-          return;
+        const sumBy = {};
+        for(const l of lines){
+          sumBy[l.tovar] = (sumBy[l.tovar] || 0) + l.miqdor;
+        }
+        for(const tv of Object.keys(sumBy)){
+          const max = getReturnMax(tv);
+          if(sumBy[tv] > max + 1e-9){
+            toast(`Нельзя вернуть больше чем доступно. ${tv}: хотите ${sumBy[tv]}, доступно ${max}`);
+            return;
+          }
         }
       }
 
-      const payload = {
-        jarayon: state.jarayon,
-        qaysiKun,
-        tovar,
-        olchov,
-        miqdor,
-        narx,
-        kontragent: document.getElementById("mKontr").value,
-        qayerga: document.getElementById("mQayerga").value,
-      };
-
-      if(state.jarayon === "Prixod"){
-        payload.nakladPrihod = document.getElementById("mInvPrihod").value;
-      } else {
-        payload.nakladPrihod = document.getElementById("mInvPrihod").value; // set when ctx loaded
-        payload.nakladVozvrat = document.getElementById("mInvVozvrat").value;
-      }
+      const nakladPrihod = document.getElementById("mInvPrihod").value;
+      const nakladVozvrat = document.getElementById("mInvVozvrat").value;
 
       showOverlay(true);
       try{
-        await api("createRecord", payload);
-        toast("Успешно сохранено ✅");
+        // Сохраняем по строкам (backend уже умеет по 1 записи)
+        for(const l of lines){
+          const payload = {
+            jarayon: state.jarayon,
+            qaysiKun,
+            tovar: l.tovar,
+            olchov: l.olchov,
+            miqdor: l.miqdor,
+            narx: l.narx,
+            kontragent,
+            qayerga: l.qayerga,
+            nakladPrihod
+          };
+          if(state.jarayon === "Vozvrat"){
+            payload.nakladVozvrat = nakladVozvrat;
+          }
+          await api("createRecord", payload);
+        }
+
+        toast(`Успешно сохранено ✅ (${lines.length} строк)`);
         closeModal();
-        await reloadAll(); // refresh list & numbers
+        await reloadAll();
       }catch(e){
         toast(e.message || "Ошибка сохранения");
       }finally{
@@ -997,7 +1140,6 @@ function fmtDateOnly(v){
         applyFilters();
       }catch(e){
         toast(e.message || "Ошибка загрузки");
-        // if session expired
         if((e.message||"").toLowerCase().includes("session")){
           clearSession();
           redirectLogin();
@@ -1005,21 +1147,17 @@ function fmtDateOnly(v){
       }finally{
         showOverlay(false);
       }
-      
     }
 
     function setDateFilterTodayIfEmpty(){
-  const todayIso = toISODate(new Date());
-  const fFrom = document.getElementById("fDateFrom");
-  const fTo   = document.getElementById("fDateTo");
-
-  // чтобы не сбивать выбор пользователя при refresh
-  if(!fFrom.value && !fTo.value){
-    fFrom.value = todayIso;
-    fTo.value = todayIso;
-  }
-}
-
+      const todayIso = toISODate(new Date());
+      const fFrom = document.getElementById("fDateFrom");
+      const fTo   = document.getElementById("fDateTo");
+      if(!fFrom.value && !fTo.value){
+        fFrom.value = todayIso;
+        fTo.value = todayIso;
+      }
+    }
 
     async function validateSessionOrGo(){
       const token = localStorage.getItem(LS.token);
@@ -1032,7 +1170,6 @@ function fmtDateOnly(v){
         return;
       }
 
-      // update user name from storage
       try{
         const u = JSON.parse(localStorage.getItem(LS.user) || "{}");
         document.getElementById("userName").textContent = u.ism || u.login || "—";
@@ -1080,38 +1217,16 @@ function fmtDateOnly(v){
     document.getElementById("tPrixod").addEventListener("click", ()=>modalSetJarayon("Prixod"));
     document.getElementById("tVozvrat").addEventListener("click", ()=>modalSetJarayon("Vozvrat"));
 
-    document.getElementById("mTovar").addEventListener("change", onModalTovarChange);
     document.getElementById("mPickPrihod").addEventListener("change", loadVozvratContext);
-
-    document.getElementById("mMiqdor").addEventListener("input", ()=>{
-      // clamp for vozvrat
-      if(state.jarayon === "Vozvrat" && state.vozvratLimit){
-        let miq = Number(String(document.getElementById("mMiqdor").value||"").replace(",", "."));
-        if(Number.isFinite(miq) && miq > state.vozvratLimit){
-          document.getElementById("mMiqdor").value = String(state.vozvratLimit);
-        }
-      }
-      recalcJami();
-    });
-
-    document.getElementById("mNarx").addEventListener("input", ()=>{
-      // live formatting
-      const el = document.getElementById("mNarx");
-      // do soft formatting (avoid cursor jump too much)
-      const before = el.value;
-      formatMoneyTyping(el);
-      if(before !== el.value) {
-        // (best-effort cursor)
-      }
-      recalcJami();
-    });
-
     document.getElementById("btnOk").addEventListener("click", submitModal);
 
-    ["fDateFrom","fDateTo","fTovar","fKontr","fJarayon","fUser"].forEach(id=>{
-  document.getElementById(id).addEventListener("change", applyFilters);
-});
+    document.getElementById("btnAddLine").addEventListener("click", ()=>{
+      addLine();
+    });
 
+    ["fDateFrom","fDateTo","fTovar","fKontr","fJarayon","fUser"].forEach(id=>{
+      document.getElementById(id).addEventListener("change", applyFilters);
+    });
 
     // Init
     (async ()=>{
