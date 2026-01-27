@@ -575,6 +575,14 @@
       const int = Math.round(abs).toString();
       return sign + int.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
+    function fmtQty(v, digits = 1){
+      const n = Number(v);
+      if(!Number.isFinite(n)) return "";
+      const s = n.toFixed(digits);
+      const trimmed = s.replace(/\.0+$/, "").replace(/(\.\d*[1-9])0+$/, "$1");
+      return trimmed.replace(".", ",");
+    }
+    
     function parseMoney(s){
       return Number(String(s||"").replace(/\s+/g,"").replace(",", "."));
     }
@@ -699,7 +707,7 @@
           <td class="num">${r.nakladVozvrat || ""}</td>
           <td>${r.tovar || ""}</td>
           <td>${r.olchov || ""}</td>
-          <td class="num ${miqCls}">${(r.miqdor ?? "")}</td>
+          <td class="num ${miqCls}">${fmtQty(r.miqdor)}</td>
           <td class="num">${fmtMoney(r.narx)}</td>
           <td class="num ${jamiCls}">${fmtMoney(r.jami)}</td>
           <td>${r.kontragent || ""}</td>
@@ -723,7 +731,7 @@
             </div>
           </div>
           <div class="itemMeta">
-            <div class="kv"><span>Miqdori</span><b class="num ${miqCls}">${r.miqdor ?? ""}</b></div>
+            <div class="kv"><span>Miqdori</span><b class="num ${miqCls}">${fmtQty(r.miqdor)}</b></div>
             <div class="kv"><span>Narxi</span><b class="num">${fmtMoney(r.narx)}</b></div>
             <div class="kv"><span>Jami</span><b class="num ${jamiCls}">${fmtMoney(r.jami)}</b></div>
             <div class="kv"><span>Kontragent</span><b>${r.kontragent || "—"}</b></div>
