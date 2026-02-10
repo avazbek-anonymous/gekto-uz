@@ -781,9 +781,13 @@
     disableTop(true);
 
     const f = getFilters();
+    const certPct = (certMode === "pct") ? certVal : 0;
+    const certSum = (certMode === "sum") ? certVal : "";
+    const certValSend = (certMode === "sum") ? certVal : "";
+
     const r = await jsonp("create", {
       token: STATE.token,
-      sana, service, master, foiz, certMode, certVal, summa, izoh,
+      sana, service, master, foiz, certMode, certVal: certValSend, certPct, certSum, summa, izoh,
       payClick, payPayme, payCard8037, payCash, payUzterm,
       f_service: f.service,
       f_master:  f.master,
