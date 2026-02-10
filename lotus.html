@@ -781,9 +781,9 @@
     disableTop(true);
 
     const f = getFilters();
-    const certPct = (certMode === "pct") ? certVal : 0;
+    const certPct = (certMode === "pct") ? certVal : "";
     const certSum = (certMode === "sum") ? certVal : "";
-    const certValSend = (certMode === "sum") ? certVal : "";
+    const certValSend = certVal;
 
     const r = await jsonp("create", {
       token: STATE.token,
