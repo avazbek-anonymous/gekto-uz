@@ -6,15 +6,273 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Avazbek Kurbanmuradov">
   <meta name="theme-color" content="#003a2f">
-  <meta name="description" content="Oson Moliya - biznes uchun amaliy moliyaviy kurs va tizimlashuv dasturi">
+  <meta name="description" content="Oson Moliya - biznes egalari va rahbarlar uchun amaliy moliyaviy kurs.">
   <link rel="icon" href="assets/img/favicon.ico" sizes="any">
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/ionicons.min.css">
   <link rel="stylesheet" href="assets/css/animsition.min.css">
   <link rel="stylesheet" href="assets/css/animate.css">
   <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .moliya-page {
+      background: radial-gradient(1100px 700px at 88% 12%, rgba(34,211,238,.16), transparent 60%), linear-gradient(180deg, #04122d 0%, #020d21 45%, #031128 100%);
+      color: #eef6ff;
+    }
+    .moliya-hero {
+      padding: 130px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .moliya-hero:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(2,10,24,.9) 0%, rgba(2,10,24,.7) 45%, rgba(2,10,24,.2) 100%);
+      pointer-events: none;
+    }
+    .moliya-hero .container { position: relative; z-index: 2; }
+    .moliya-badges { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 26px; }
+    .moliya-badge {
+      border: 1px solid #00d4ff;
+      border-radius: 14px;
+      padding: 12px 18px;
+      color: #d9f7ff;
+      background: rgba(0, 16, 36, .45);
+      font-weight: 700;
+      letter-spacing: .6px;
+    }
+    .moliya-alert {
+      display: inline-block;
+      background: #ff2f2f;
+      color: #fff;
+      font-weight: 700;
+      padding: 8px 14px;
+      margin: 12px 0 18px;
+    }
+    .moliya-title {
+      font-size: 58px;
+      line-height: 1.07;
+      margin: 0 0 22px;
+      color: #f5fbff;
+    }
+    .moliya-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(90deg, #12e6ff, #2bd4ff);
+      color: #04122d;
+      font-weight: 800;
+      padding: 16px 34px;
+      border-radius: 999px;
+      box-shadow: 0 0 30px rgba(45,212,255,.35);
+      margin: 10px 0 20px;
+    }
+    .moliya-hero-person {
+      width: 100%;
+      max-width: 500px;
+      display: block;
+      margin: 0 auto;
+    }
+    .moliya-person-card {
+      position: absolute;
+      right: 15px;
+      bottom: 8px;
+      background: rgba(6, 18, 44, .76);
+      border: 1px solid rgba(176, 227, 255, .35);
+      border-radius: 22px;
+      padding: 18px 24px;
+      min-width: 310px;
+    }
+    .moliya-person-card .name { font-size: 40px; font-weight: 800; line-height: 1.1; color: #fff; }
+    .moliya-person-card .sub { color: #c0d9f4; }
+
+    .moliya-section { padding: 80px 0; }
+    .moliya-section-title {
+      font-size: 58px;
+      line-height: 1.05;
+      margin: 0 0 36px;
+      color: #f3f8ff;
+      text-transform: uppercase;
+    }
+
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 26px;
+    }
+    .benefit-card {
+      border: 1px solid #00d4ff;
+      border-radius: 18px;
+      background: rgba(0, 14, 35, .62);
+      padding: 26px;
+      min-height: 280px;
+    }
+    .benefit-card img { width: 52px; height: 52px; object-fit: contain; margin-bottom: 14px; }
+    .benefit-card h3 { font-size: 34px; line-height: 1.16; margin: 0 0 10px; color: #fff; }
+    .benefit-card p { color: #c7def0; margin: 0; }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 18px 24px;
+    }
+    .module-item {
+      border-radius: 16px;
+      background: #36c8f0;
+      color: #061127;
+      overflow: hidden;
+    }
+    .module-btn {
+      width: 100%;
+      border: 0;
+      background: none;
+      text-align: left;
+      padding: 20px 70px 20px 24px;
+      font-weight: 800;
+      font-size: 30px;
+      position: relative;
+    }
+    .module-btn .plus {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #001835;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      line-height: 1;
+      font-weight: 300;
+    }
+    .module-content {
+      display: none;
+      padding: 0 24px 22px;
+      font-size: 30px;
+      line-height: 1.45;
+      color: #082041;
+    }
+    .module-item.open .module-content { display: block; }
+    .module-item.open .module-btn .plus { font-size: 48px; transform: translateY(-50%) rotate(45deg); }
+
+    .speaker-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .speaker-photo {
+      border-radius: 22px;
+      overflow: hidden;
+      background: #121826;
+      position: relative;
+      min-height: 540px;
+    }
+    .speaker-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .speaker-caption {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      background: #fff;
+      border-radius: 16px;
+      color: #07152d;
+      padding: 18px 20px;
+    }
+    .speaker-caption .name { font-size: 40px; font-weight: 800; line-height: 1.1; }
+    .speaker-stats {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      grid-auto-rows: minmax(150px, auto);
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 16px;
+      color: #07152d;
+      padding: 20px 22px;
+    }
+    .stat-card.big { grid-column: 1 / -1; }
+    .stat-card .v { font-size: 56px; font-weight: 800; margin: 6px 0 2px; }
+    .stat-logo {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: #fff;
+      border-radius: 16px;
+      color: #07152d;
+      padding: 16px 20px;
+    }
+    .stat-logo img { width: 82px; height: 82px; object-fit: contain; }
+
+    .brand-strip {
+      background: #eef0f2;
+      border-radius: 16px;
+      padding: 28px;
+      color: #0a1733;
+    }
+    .brand-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0,1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .brand-item {
+      background: #fff;
+      border-radius: 10px;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      letter-spacing: .3px;
+      padding: 8px;
+      text-align: center;
+      color: #1a2b50;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 18px;
+    }
+    .review-card {
+      background: rgba(255,255,255,.04);
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(154,198,240,.22);
+    }
+    .review-card img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .review-card .meta { padding: 12px; font-size: 24px; color: #dcecff; }
+
+    .moliya-form-wrap {
+      margin-top: 22px;
+      background: #fff;
+      color: #07152d;
+      border-radius: 18px;
+      padding: 24px;
+    }
+    #leadMsg { margin-top: 10px; font-weight: 600; }
+
+    @media (max-width: 1199px) {
+      .moliya-title, .moliya-section-title { font-size: 46px; }
+      .benefit-card h3, .module-btn { font-size: 28px; }
+    }
+    @media (max-width: 991px) {
+      .moliya-hero { padding-top: 110px; }
+      .moliya-title, .moliya-section-title { font-size: 38px; }
+      .moliya-person-card { position: static; margin-top: 14px; min-width: 0; }
+      .benefit-grid, .module-grid, .speaker-wrap, .reviews-grid, .brand-grid { grid-template-columns: 1fr; }
+      .speaker-stats { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-<body class="animsition">
+<body class="animsition moliya-page">
 <header class="main-header">
   <div class="container">
     <div class="logo">
@@ -52,118 +310,172 @@
   </div>
 </header>
 
-<div class="site-hero_2">
-  <div class="page-title">
-    <div class="big-title montserrat-text">Oson Moliya</div>
-    <div class="small-title montserrat-text">Amaliy kurs + biznesda darhol qo'llash</div>
-  </div>
-</div>
-
-<section>
+<section class="moliya-hero" id="top">
   <div class="container">
     <div class="row">
-      <div class="section-title">
-        <span>Kurs haqida</span>
-        <p class="montserrat-text uppercase">Murakkab moliyani sodda va amaliy formatda o'rgatamiz</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6 wow fadeInUp">
-        <p style="margin-bottom:20px;">
-          Oson Moliya dasturi tadbirkorlar va moliyachilar uchun tuzilgan.
-          Maqsad - raqamlar orqali boshqarishni yo'lga qo'yish: pul oqimi, foyda, xarajat, qarzdorlik va reja-fakt nazorati.
-        </p>
-        <ul class="list">
-          <li>Biznesingiz faoliyatiga mos yondashuv</li>
-          <li>Har bir mavzu bo'yicha amaliy shablonlar</li>
-          <li>Google Sheets / Excel asosida ishchi tizim</li>
-          <li>Kurs davomida real keyslar bilan ishlash</li>
-          <li>Natija: qarorlar tezlashadi va xatolar kamayadi</li>
-        </ul>
-      </div>
-      <div class="col-md-6 wow fadeInUp" data-wow-delay=".1s">
-        <img src="assets/img/course-3d.png" alt="Oson moliya kursi" style="width:100%;max-width:520px;display:block;margin:0 auto;">
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="pricing_plans">
-  <div class="container">
-    <div class="row">
-      <div class="section-title">
-        <span>Dastur modullari</span>
-        <p class="montserrat-text uppercase">Kurs tarkibi biznes egasi uchun kerakli eng muhim bloklardan tuzilgan</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4 col-sm-6 col-xs-12 wow fadeInUp">
-        <div class="pricing_plan">
-          <div class="plan_title montserrat-text">1-modul</div>
-          <ul class="list">
-            <li>Pul oqimi (Cash Flow) tushunchasi</li>
-            <li>Kassa intizomi va to'lov kalendari</li>
-            <li>Qarzlar (debitor/kreditor) nazorati</li>
-            <li>Kunlik nazorat formatlari</li>
-          </ul>
+      <div class="col-md-7">
+        <div class="moliya-badges">
+          <div class="moliya-badge"><i class="icon ion-ios-location-outline"></i> OFFLAYN TOSHKENT</div>
+          <div class="moliya-badge"><i class="icon ion-ios-flag-outline"></i> START: 6-DEKABR</div>
         </div>
+        <p style="font-size:36px;margin:0;">Biznes egalari va rahbarlar uchun 1 oylik kurs</p>
+        <div class="moliya-alert">Endi “PUL QANI?” degan savol bo'lmaydi!</div>
+        <h1 class="moliya-title montserrat-text">Foyda, balans, pul oqimi, muzlagan pullar - hammasini aniq ko'rasiz.</h1>
+        <a href="#contact" class="moliya-cta">Ro'yxatdan o'ting <i class="icon ion-ios-arrow-forward"></i></a>
+        <p style="font-size:32px;color:#c4dbf1;"><i class="icon ion-social-usd"></i> Oylik aylanmasi 50mln dan yuqori bo'lganlar uchun</p>
       </div>
-      <div class="col-md-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay=".1s">
-        <div class="pricing_plan">
-          <div class="plan_title montserrat-text">2-modul</div>
-          <ul class="list">
-            <li>P&amp;L: foyda va zarar tahlili</li>
-            <li>Marja va rentabellikni hisoblash</li>
-            <li>Xarajatlarni boshqarish</li>
-            <li>Reja-fakt solishtirish</li>
-          </ul>
-        </div>
-      </div>
-      <div class="col-md-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay=".2s">
-        <div class="pricing_plan">
-          <div class="plan_title montserrat-text">3-modul</div>
-          <ul class="list">
-            <li>Moliyaviy modelga kirish</li>
-            <li>O'sish senariylari</li>
-            <li>Qarorlar uchun dashboard</li>
-            <li>Biznesingizga mos amaliy reja</li>
-          </ul>
+      <div class="col-md-5" style="position:relative;">
+        <img class="moliya-hero-person" src="assets/img/hero-person.png" alt="Dastur muallifi">
+        <div class="moliya-person-card">
+          <div class="name montserrat-text">Davranov Fazliddin</div>
+          <div class="sub">Dastur muallifi va spiker</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="contact" class="green-section wow fadeInUp" style="padding:50px 0">
+<section class="moliya-section" id="benefits">
   <div class="container">
-    <div class="col-md-6 col-sm-12">
-      <div class="row">
-        <span class="white-text montserrat-text uppercase" style="font-size:30px;display:block;margin-top:12%;">Ro'yxatdan o'ting, siz bilan bog'lanamiz</span>
-      </div>
+    <h2 class="moliya-section-title montserrat-text">Kursdan oladigan foydalaringiz</h2>
+    <div class="benefit-grid">
+      <article class="benefit-card">
+        <img src="assets/img/chart.png" alt="Foyda">
+        <h3 class="montserrat-text uppercase">Raqamlar orqali biznesingizni nazorat qilishni o'rganasiz.</h3>
+        <p>Endi faqat “his-tuyg'ular” bilan boshqarish emas, balki aniq tahlil va hisoblarga asoslangan qarorlar qabul qilasiz.</p>
+      </article>
+      <article class="benefit-card">
+        <img src="assets/img/benefit-doc.png" alt="Daromad">
+        <h3 class="montserrat-text uppercase">Daromad, foyda va aktivlar tushunchalarini to'g'ri ajratishni o'rganasiz.</h3>
+        <p>Biznesingizda qancha pul qoldirish va qancha pul olish kerakligini aniq bilib olasiz.</p>
+      </article>
+      <article class="benefit-card">
+        <img src="assets/img/key.png" alt="Muammolar">
+        <h3 class="montserrat-text uppercase">Ko'plab tadbirkorlar qiladigan muammolarni bartaraf etasiz.</h3>
+        <p>Shaxsiy va biznes moliyasini to'g'ri ajratish orqali biznesingizning sog'lom rivojlanishiga erishasiz.</p>
+      </article>
+      <article class="benefit-card">
+        <img src="assets/img/briefcase.png" alt="Kapital">
+        <h3 class="montserrat-text uppercase">Aylanma kapitalni boshqarish orqali biznesingizni o'sishini tezlashtirasiz.</h3>
+        <p>Pullaringiz omborda, jihozlarda yoki mijozlarda “muzlab” qolmaganiga ishonch hosil qilasiz.</p>
+      </article>
+      <article class="benefit-card">
+        <img src="assets/img/premium.png" alt="Barqarorlik">
+        <h3 class="montserrat-text uppercase">Moliyaviy barqarorlik yaratish</h3>
+        <p>Moliyaviy barqarorlikka erishish uchun daromad, foyda va xarajatlar bo'yicha aniq reja tuzishni o'rganasiz.</p>
+      </article>
+      <article class="benefit-card">
+        <img src="assets/img/fin-system.svg" alt="Tizim">
+        <h3 class="montserrat-text uppercase">Moliyaviy tizim</h3>
+        <p>Biznesingiz uchun to'g'ri moliyaviy tizim yaratish va mutaxassislarni tanlash bo'yicha strategiyani bilib olasiz.</p>
+      </article>
     </div>
-    <div class="col-md-6 col-sm-12">
-      <div class="row">
-        <div class="white-section" style="padding:20px">
-          <span class="montserrat-text uppercase" style="font-size:24px">Ariza qoldirish</span>
-          <p>Kursga yozilish uchun ma'lumotlaringizni kiriting</p>
-          <form id="leadFormMoliya">
-            <div class="input_1">
-              <input id="activity" type="text" autocomplete="organization-title" />
-              <span>Biznesingiz faoliyat turini kiriting</span>
-            </div>
-            <div class="input_1">
-              <input id="name" type="text" autocomplete="name" />
-              <span>Ismingiz</span>
-            </div>
-            <div class="input_1">
-              <input id="phone" type="text" inputmode="numeric" autocomplete="tel" maxlength="13" />
-              <span>Telefon raqamingiz</span>
-            </div>
-            <button type="submit" class="btn green" style="margin-top:20px"><span>Ro'yxatdan o'tish</span></button>
-            <div id="leadMsg" style="margin-top:10px"></div>
-          </form>
+  </div>
+</section>
+
+<section class="moliya-section" id="modules">
+  <div class="container">
+    <h2 class="moliya-section-title montserrat-text">“OSON MOLIYA” KURSI MODULLARI</h2>
+    <div class="module-grid" id="moduleGrid">
+      <div class="module-item open">
+        <button class="module-btn" type="button">1-MODUL: BIZNESNI RAQAMLARDA BOSHQARISHNING ODDIYLIGI!<span class="plus">+</span></button>
+        <div class="module-content">
+          <ul>
+            <li>Biznesga moliya nimaga kerak? (real keyslarda)</li>
+            <li>Moliya yo'qligi sabab trend xatolar</li>
+            <li>Moliyani qanday nazoratda ushlash</li>
+            <li>Haqiqiy foyda va hisobotlar talqini</li>
+            <li>Kompaniyada qanday hisobotlar yuritilishi shart</li>
+          </ul>
         </div>
       </div>
+      <div class="module-item"><button class="module-btn" type="button">2-MODUL: FOYDANI HISOBLASH: BIZNESDAGI HAMMA PUL SIZNIKI EMAS!<span class="plus">+</span></button><div class="module-content"><ul><li>Foyda turlari</li><li>Oqimlar va qoplash nuqtasi</li><li>Noto'g'ri foyda illyuziyasi</li></ul></div></div>
+      <div class="module-item"><button class="module-btn" type="button">3-MODUL: SHAXSIY PULINGIZ VA BIZNESINGIZNI AJRATING!<span class="plus">+</span></button><div class="module-content"><ul><li>Shaxsiy/byudjet limiti</li><li>Egasi uchun to'lov siyosati</li></ul></div></div>
+      <div class="module-item"><button class="module-btn" type="button">4-MODUL: BIZNESDAGI FOYDA QAYERGA YASHIRINGAN?<span class="plus">+</span></button><div class="module-content"><ul><li>Yashirin xarajatlar</li><li>Marja tahlili</li></ul></div></div>
+      <div class="module-item"><button class="module-btn" type="button">5-MODUL: BIZNESDAGI MUZLAGAN PULLARNI ERITISH<span class="plus">+</span></button><div class="module-content"><ul><li>Debitor/kreditor balans</li><li>Zaxira optimizatsiyasi</li></ul></div></div>
+      <div class="module-item"><button class="module-btn" type="button">6-MODUL: KO'RSATKICHLAR SIRLARI: MOLIYAVIY TAHLIL ORQALI OLDINGA QADAM TASHLANG!<span class="plus">+</span></button><div class="module-content"><ul><li>KPI to'plami</li><li>Dashboard talqini</li></ul></div></div>
+      <div class="module-item"><button class="module-btn" type="button">7-MODUL: MAQSADLAR ORZUDAN REAL REJAGA: MOLIYAVIY MAQSADLARINGIZNI BELGILANG!<span class="plus">+</span></button><div class="module-content"><ul><li>12 oylik moliyaviy yo'l xaritasi</li><li>Reja-fakt nazorati</li></ul></div></div>
+      <div class="module-item"><button class="module-btn" type="button">8-MODUL: KICHIK BYUDJET - KATTA NATIJA: MOLIYA BO'LIMINI TASHKIL QILISH!<span class="plus">+</span></button><div class="module-content"><ul><li>Jamoa rollari</li><li>Moliya bo'limi reglamenti</li></ul></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="moliya-section" id="speaker">
+  <div class="container">
+    <h2 class="moliya-section-title montserrat-text">Dastur muallifi va spiker</h2>
+    <div class="speaker-wrap">
+      <div class="speaker-photo">
+        <img src="assets/img/author.png" alt="Davranov Fazliddin">
+        <div class="speaker-caption">
+          <div class="name">Davranov Fazliddin</div>
+          <div>Jamshidovich</div>
+        </div>
+      </div>
+      <div class="speaker-stats">
+        <div class="stat-card">
+          <div>Moliyaviy konsultant</div>
+          <div class="v">3mln$ +</div>
+          <div>Men bilan ishlagan kompaniyalar oylik aylanmasi</div>
+        </div>
+        <div class="stat-card">
+          <div>Biznes ko'rsatkichlari tahlilchisi</div>
+          <div class="v">3.000+</div>
+          <div>Mijozlarimizning xodimlari soni</div>
+        </div>
+        <div class="stat-card big">
+          <div>Bizneslarni unikal modellashtirish bo'yicha expert</div>
+          <div class="v">90+</div>
+          <div>4 yillik tajribamiz mobaynida 90dan ortiq kompaniyalar bilan ishladik</div>
+        </div>
+        <div class="stat-logo">
+          <img src="assets/img/logo.png" alt="Gekto">
+          <div style="font-size:40px;">Tadbirkor - Gektoconsulting asoschisi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="moliya-section" id="brands">
+  <div class="container">
+    <div class="brand-strip">
+      <h3 style="margin:0;font-size:60px;" class="montserrat-text">Biz bilan ishlagan brendlar</h3>
+      <div class="brand-grid">
+        <div class="brand-item">AHMAD TEA</div><div class="brand-item">PCG</div><div class="brand-item">MILLIARD</div><div class="brand-item">SMARTLIFE</div><div class="brand-item">REVENTT</div>
+        <div class="brand-item">TECHNOSHOP</div><div class="brand-item">TASHKENT METAL</div><div class="brand-item">MEDALLION</div><div class="brand-item">MEGA POLIMER</div><div class="brand-item">BPS</div>
+        <div class="brand-item">UYGA BOZOR</div><div class="brand-item">ANORZOR</div><div class="brand-item">NOVZA</div><div class="brand-item">iLevel</div><div class="brand-item">INSAAT</div>
+        <div class="brand-item">ERIZON</div><div class="brand-item">GRAND ROAD TASHKENT</div><div class="brand-item">STATUS</div><div class="brand-item">YUKSALISH</div><div class="brand-item">DISCOVER INVEST</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="moliya-section" id="reviews" style="padding-top:20px;">
+  <div class="container">
+    <h2 class="moliya-section-title montserrat-text">Ishtirokchilar fikri</h2>
+    <div class="reviews-grid">
+      <div class="review-card"><img src="assets/img/Asror.jpg" alt="Fikr 1"><div class="meta">Asror - “Kursdan keyin raqamlar aniq ko'rina boshladi”</div></div>
+      <div class="review-card"><img src="assets/img/Muhammadali.jpg" alt="Fikr 2"><div class="meta">Muhammadali - “Foyda va oqimni ajratishni o'rgandim”</div></div>
+      <div class="review-card"><img src="assets/img/Ibrohim.jpg" alt="Fikr 3"><div class="meta">Ibrohim - “Reja-fakt nazorati ishlay boshladi”</div></div>
+      <div class="review-card"><img src="assets/img/first-page.jpg" alt="Fikr 4"><div class="meta">Ishtirokchi - “Qarorlar tezlashdi, xatolar kamaydi”</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="moliya-section" style="padding-top:30px;">
+  <div class="container">
+    <h2 class="moliya-section-title montserrat-text">Ro'yxatdan o'tish</h2>
+    <div class="moliya-form-wrap">
+      <p style="font-size:30px;margin-top:0;">Kursga yozilish uchun ma'lumotlaringizni kiriting</p>
+      <form id="leadFormMoliya">
+        <div class="row">
+          <div class="col-md-4"><div class="input_1"><input id="activity" type="text" autocomplete="organization-title"><span>Biznesingiz faoliyat turini kiriting</span></div></div>
+          <div class="col-md-4"><div class="input_1"><input id="name" type="text" autocomplete="name"><span>Ismingiz</span></div></div>
+          <div class="col-md-4"><div class="input_1"><input id="phone" type="text" inputmode="numeric" autocomplete="tel" maxlength="13"><span>Telefon raqamingiz</span></div></div>
+        </div>
+        <button type="submit" class="btn green" style="margin-top:20px"><span>Ro'yxatdan o'tish</span></button>
+        <div id="leadMsg"></div>
+      </form>
     </div>
   </div>
 </section>
@@ -200,65 +512,73 @@
 <script src="assets/js/wow.min.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
-const ENDPOINT = "https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec";
-const SECRET = "mySecret123";
-const form = document.getElementById("leadFormMoliya");
-const activityEl = document.getElementById("activity");
-const phoneEl = document.getElementById("phone");
-const nameEl = document.getElementById("name");
-const msgEl = document.getElementById("leadMsg");
+(function () {
+  var ENDPOINT = "https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec";
+  var SECRET = "mySecret123";
+  var form = document.getElementById("leadFormMoliya");
+  var activityEl = document.getElementById("activity");
+  var phoneEl = document.getElementById("phone");
+  var nameEl = document.getElementById("name");
+  var msgEl = document.getElementById("leadMsg");
 
-function normalizePhone(v){
-  let d = String(v || "").replace(/\D/g, "");
-  if (d.startsWith("998")) d = d.slice(3);
-  d = d.slice(0,9);
-  if (d.length < 9) return "";
-  return "+998" + d;
-}
-
-phoneEl.addEventListener("focus", () => { if (!phoneEl.value) phoneEl.value = "+998"; });
-phoneEl.addEventListener("input", () => {
-  let d = phoneEl.value.replace(/\D/g, "");
-  if (d.startsWith("998")) d = d.slice(3);
-  phoneEl.value = "+998" + d.slice(0,9);
-});
-phoneEl.addEventListener("blur", () => { if (phoneEl.value === "+998") phoneEl.value = ""; });
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const payload = {
-    name: ((nameEl.value || "").trim() + (activityEl.value ? ` | Faoliyat: ${activityEl.value.trim()}` : "")).trim(),
-    phone: normalizePhone(phoneEl.value),
-    page: location.href,
-    secret: SECRET
-  };
-
-  if (!payload.phone) {
-    msgEl.style.color = "#b91c1c";
-    msgEl.textContent = "Telefon raqamini to'liq kiriting.";
-    return;
+  function normalizePhone(v) {
+    var d = String(v || "").replace(/\D/g, "");
+    if (d.indexOf("998") === 0) d = d.slice(3);
+    d = d.slice(0, 9);
+    if (d.length < 9) return "";
+    return "+998" + d;
   }
 
-  msgEl.style.color = "#0f172a";
-  msgEl.textContent = "Yuborilmoqda...";
+  phoneEl.addEventListener("focus", function () { if (!phoneEl.value) phoneEl.value = "+998"; });
+  phoneEl.addEventListener("input", function () {
+    var d = phoneEl.value.replace(/\D/g, "");
+    if (d.indexOf("998") === 0) d = d.slice(3);
+    phoneEl.value = "+998" + d.slice(0, 9);
+  });
+  phoneEl.addEventListener("blur", function () { if (phoneEl.value === "+998") phoneEl.value = ""; });
 
-  try {
-    await fetch(ENDPOINT, {
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var payload = {
+      name: ((nameEl.value || "").trim() + (activityEl.value ? " | Faoliyat: " + activityEl.value.trim() : "")).trim(),
+      phone: normalizePhone(phoneEl.value),
+      page: location.href,
+      secret: SECRET
+    };
+
+    if (!payload.phone) {
+      msgEl.style.color = "#b91c1c";
+      msgEl.textContent = "Telefon raqamini to'liq kiriting.";
+      return;
+    }
+
+    msgEl.style.color = "#1f2937";
+    msgEl.textContent = "Yuborilmoqda...";
+
+    fetch(ENDPOINT, {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
+    }).then(function () {
+      form.reset();
+      msgEl.style.color = "#166534";
+      msgEl.textContent = "Ma'lumot yuborildi. Tez orada bog'lanamiz.";
+    }).catch(function () {
+      msgEl.style.color = "#b91c1c";
+      msgEl.textContent = "Xatolik. Qayta urinib ko'ring.";
     });
-    form.reset();
-    msgEl.style.color = "#166534";
-    msgEl.textContent = "Ma'lumot yuborildi. Tez orada bog'lanamiz.";
-  } catch (_) {
-    msgEl.style.color = "#b91c1c";
-    msgEl.textContent = "Xatolik. Qayta urinib ko'ring.";
-  }
-});
+  });
 
-$(window).on('load', function () { new WOW().init(); });
+  var moduleBtns = document.querySelectorAll('.module-btn');
+  for (var i = 0; i < moduleBtns.length; i++) {
+    moduleBtns[i].addEventListener('click', function () {
+      this.parentNode.classList.toggle('open');
+    });
+  }
+
+  $(window).on('load', function () { new WOW().init(); });
+})();
 </script>
 </body>
 </html>
