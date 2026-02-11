@@ -126,18 +126,20 @@
       margin-bottom: 22px;
     }
 
-    .review-card img {
+    .review-frame {
+      position: relative;
       width: 100%;
-      height: 260px;
-      object-fit: cover;
-      display: block;
+      padding-top: 177.78%;
+      background: #000;
     }
 
-    .review-card .cap {
-      padding: 12px;
-      color: #60727f;
-      font-size: 14px;
-      line-height: 1.45;
+    .review-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
     }
 
     @media (max-width: 991px) {
@@ -366,10 +368,34 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-3 col-sm-6 wow fadeInUp"><div class="review-card"><img src="assets/img/Asror.jpg" alt="Asror"><div class="cap">Asror: kursdan keyin moliyaviy nazorat ancha yaxshilandi.</div></div></div>
-        <div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-delay=".1s"><div class="review-card"><img src="assets/img/Muhammadali.jpg" alt="Muhammadali"><div class="cap">Muhammadali: foyda va pul oqimini ajratish aniq bo'ldi.</div></div></div>
-        <div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-delay=".2s"><div class="review-card"><img src="assets/img/Ibrohim.jpg" alt="Ibrohim"><div class="cap">Ibrohim: reja-fakt bo'yicha nazorat yo'lga tushdi.</div></div></div>
-        <div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-delay=".3s"><div class="review-card"><img src="assets/img/first-page.jpg" alt="Fikr"><div class="cap">Ishtirokchi: qarorlar tezlashdi, xatolar kamaydi.</div></div></div>
+        <div class="col-md-3 col-sm-6 wow fadeInUp">
+          <div class="review-card">
+            <div class="review-frame">
+              <iframe src="https://www.youtube.com/embed/ZdzLrrMVDSo" title="Ishtirokchi fikri 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-delay=".1s">
+          <div class="review-card">
+            <div class="review-frame">
+              <iframe src="https://www.youtube.com/embed/FNkw4lUd3rQ" title="Ishtirokchi fikri 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-delay=".2s">
+          <div class="review-card">
+            <div class="review-frame">
+              <iframe src="https://www.youtube.com/embed/s-jeaJxLZzI" title="Ishtirokchi fikri 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 wow fadeInUp" data-wow-delay=".3s">
+          <div class="review-card">
+            <div class="review-frame">
+              <iframe src="https://www.youtube.com/embed/16h-53XbbaM" title="Ishtirokchi fikri 4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
