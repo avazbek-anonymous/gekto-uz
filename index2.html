@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
-  <title>Gekto — aqilli moliya</title>
+  <title>Gekto вЂ” aqilli moliya</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Avazbek Kurbanmuradov">
   <meta name="theme-color" content="#003a2f">
-  <meta name="description" content="Gekto — moliya va boshqaruv yechimlari">
+  <meta name="description" content="Gekto вЂ” moliya va boshqaruv yechimlari">
 
   <link rel="icon" href="assets/img/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
@@ -25,7 +25,7 @@
 
 <body class="animsition">
 
-  <!-- HEADER (скопируй свой 1-в-1) -->
+  <!-- HEADER (СЃРєРѕРїРёСЂСѓР№ СЃРІРѕР№ 1-РІ-1) -->
   <header class="main-header">
     <div class="container">
       <div class="logo">
@@ -47,7 +47,7 @@
             </li>
             <li><a href="">Kurslarimiz</a>
               <ul class="second-level">
-                <li><a href="blog-1.html" class="animsition-link">Maxsus moliya</a></li>
+                <li><a href="moliya.html" class="animsition-link">Maxsus moliya</a></li>
                 <li><a href="single-post.html" class="animsition-link">Oson moliya</a></li>
               </ul>
             </li>
@@ -65,23 +65,23 @@
     </div>
   </header>
 
-  <!-- СЮДА ГРУЗИМ СТРАНИЦЫ -->
+  <!-- РЎР®Р”Рђ Р“Р РЈР—РРњ РЎРўР РђРќРР¦Р« -->
   <div id="page-wrapper"></div>
 
-  <!-- FOOTER (скопируй свой 1-в-1) -->
+  <!-- FOOTER (СЃРєРѕРїРёСЂСѓР№ СЃРІРѕР№ 1-РІ-1) -->
   <footer class="main-footer wow fadeInUp">
     <div class="container">
       <div class="col-md-8 col-sm-12">
         <div class="row">
           <nav class="footer-nav">
-            <p style="font-weight: bold;">“Murakkab moliyani sodda tilda tushuntiramiz”</p>
+            <p style="font-weight: bold;">вЂњMurakkab moliyani sodda tilda tushuntiramizвЂќ</p>
             <p style="text-align: center;font-weight: bold;padding-right: 22rem;">Fazliddin Davronov</p>
             <ul>
               <li><a href="index.html" class="animsition-link link">Home</a></li>
               <li><a href="about.html" class="animsition-link link">about us</a></li>
               <li><a href="services.html" class="animsition-link link">services</a></li>
               <li><a href="portfolio-1.html" class="animsition-link link">portfolio</a></li>
-              <li><a href="blog-1.html" class="animsition-link link">blog</a></li>
+              <li><a href="moliya.html" class="animsition-link link">blog</a></li>
               <li><a href="contact.html" class="animsition-link link">contact us</a></li>
             </ul>
           </nav>
@@ -176,10 +176,10 @@
           const html = await res.text();
           const doc = new DOMParser().parseFromString(html, 'text/html');
 
-          // поддержка и "partial" (main.html без html/body), и "full page"
+          // РїРѕРґРґРµСЂР¶РєР° Рё "partial" (main.html Р±РµР· html/body), Рё "full page"
           const pageContent = doc.querySelector('#page-content') || doc.body || doc;
 
-          // если вдруг в файле остались header/footer — вырезаем
+          // РµСЃР»Рё РІРґСЂСѓРі РІ С„Р°Р№Р»Рµ РѕСЃС‚Р°Р»РёСЃСЊ header/footer вЂ” РІС‹СЂРµР·Р°РµРј
           pageContent.querySelectorAll('header.main-header, footer.main-footer, script').forEach(n => n.remove());
 
           wrapper.innerHTML = pageContent.innerHTML;
@@ -192,7 +192,7 @@
         }
       }
 
-      // клики по ссылкам -> грузим внутрь, header/footer остаются
+      // РєР»РёРєРё РїРѕ СЃСЃС‹Р»РєР°Рј -> РіСЂСѓР·РёРј РІРЅСѓС‚СЂСЊ, header/footer РѕСЃС‚Р°СЋС‚СЃСЏ
       document.addEventListener('click', function (e) {
         const a = e.target.closest('a');
         if (!a) return;
@@ -201,13 +201,13 @@
         if (!href) return;
         if (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
         if (href.startsWith('#')) return;
-        if (!href.endsWith('.html')) return; // только страницы
+        if (!href.endsWith('.html')) return; // С‚РѕР»СЊРєРѕ СЃС‚СЂР°РЅРёС†С‹
 
-        // новые вкладки — пусть работают обычно
+        // РЅРѕРІС‹Рµ РІРєР»Р°РґРєРё вЂ” РїСѓСЃС‚СЊ СЂР°Р±РѕС‚Р°СЋС‚ РѕР±С‹С‡РЅРѕ
         if (a.target === '_blank' || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
 
         e.preventDefault();
-        // чтобы при обновлении страницы не открывался "голый" main.html — используем hash
+        // С‡С‚РѕР±С‹ РїСЂРё РѕР±РЅРѕРІР»РµРЅРёРё СЃС‚СЂР°РЅРёС†С‹ РЅРµ РѕС‚РєСЂС‹РІР°Р»СЃСЏ "РіРѕР»С‹Р№" main.html вЂ” РёСЃРїРѕР»СЊР·СѓРµРј hash
         location.hash = '#/' + href.replace(/\.html$/i, '');
       });
 
@@ -218,10 +218,11 @@
 
       window.addEventListener('hashchange', () => loadPage(hashToFile()));
 
-      // старт
+      // СЃС‚Р°СЂС‚
       loadPage(hashToFile());
     })();
   </script>
 
 </body>
 </html>
+
