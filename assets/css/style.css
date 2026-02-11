@@ -1011,6 +1011,7 @@ footer.main-footer nav.footer-nav ul li a{
 }
 .pricing_plans .row > [class*="col-"]{
   display: flex;
+  flex-direction: column;
 }
 .pricing_plans .pricing_plan{
   width: 100%;
