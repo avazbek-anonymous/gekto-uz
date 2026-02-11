@@ -293,6 +293,35 @@
       font-size: 18px;
       font-weight: 700;
     }
+    .fc-cta-wrap {
+      text-align: center;
+      padding-top: 8px;
+    }
+    .fc-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 260px;
+      height: 56px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #18d2ea 0%, #3de4f5 100%);
+      border: 1px solid rgba(16, 126, 143, .35);
+      color: #003f37;
+      font-family: "Montserrat", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      text-decoration: none;
+      transition: transform .22s ease, box-shadow .22s ease;
+      box-shadow: 0 10px 24px rgba(22, 175, 199, .25);
+    }
+    .fc-cta-btn:hover,
+    .fc-cta-btn:focus {
+      text-decoration: none;
+      color: #003f37;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(22, 175, 199, .32);
+    }
 
     .fc-price-box {
       border: 1px solid #d5dfe4;
@@ -389,6 +418,7 @@
       .fc-price-tiers { grid-template-columns: 1fr; }
       .fc-tier-price { font-size: 28px; }
       .fc-table th, .fc-table td { font-size: 16px; }
+      .fc-cta-btn { min-width: 220px; height: 50px; font-size: 14px; }
       .fc-bonus { grid-template-columns: 1fr; }
       .fc-bonus-icon { margin: 0 auto; }
       .fc-bonus .txt { font-size: 22px; text-align: center; }
@@ -517,6 +547,9 @@
           <p class="txt">Hozirgi kunda ishlaydigan moliya instrumentlari.</p>
         </div>
       </div>
+      <div class="fc-cta-wrap wow fadeInUp" data-wow-delay=".12s">
+        <a class="fc-cta-btn" href="#contact">Ro'yxatdan o'tish</a>
+      </div>
     </div>
   </section>
 
@@ -568,65 +601,6 @@
               <li>Ishlab chiqarish biznesi balansini yopish</li>
             </ul>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="fc-wrap fc-section">
-    <div class="container">
-      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">BONUS</div></div>
-      <div class="fc-bonus wow fadeInUp" data-wow-delay=".1s">
-        <div class="fc-bonus-icon"><i class="icon ion-pricetag"></i></div>
-        <div class="txt"><small>Qo'shimcha imkoniyat</small>Maxsus moliya onlayn darsligi
-          <div class="fc-bonus-price">qiymati: 2 mln so'm</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="fc-wrap fc-section">
-    <div class="container">
-      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Tariflar va narxlar</div></div>
-      <div class="fc-price-box wow fadeInUp" data-wow-delay=".1s">
-        <div class="fc-price-tiers">
-          <div class="fc-tier-card">
-            <div class="fc-tier-label">Oflayn kurs narxi</div>
-            <div class="fc-tier-price">10.000.000<span class="fc-tier-currency">so'm</span></div>
-          </div>
-          <div class="fc-tier-card">
-            <div class="fc-tier-label">Onlayn kurs narxi</div>
-            <div class="fc-tier-price">2.000.000<span class="fc-tier-currency">so'm</span></div>
-          </div>
-        </div>
-        <div class="fc-table-wrap">
-          <table class="fc-table">
-            <thead>
-              <tr>
-                <th>Chegirmalar</th>
-                <th>1 kishi uchun</th>
-                <th>2+ kishi narxi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>15 kun+ oldin</td>
-                <td>9.000.000</td>
-                <td>8.000.000</td>
-              </tr>
-              <tr>
-                <td>7 kun oldin</td>
-                <td>9.500.000</td>
-                <td>8.500.000</td>
-              </tr>
-              <tr>
-                <td>7 kundan kam</td>
-                <td>10.000.000</td>
-                <td>9.000.000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p style="text-align:right;color:#777;margin-top:16px">*Narxlar boshqaruv tomonidan o'zgartirilishi mumkin</p>
       </div>
     </div>
   </section>
@@ -780,4 +754,3 @@
   </script>
 </body>
 </html>
-
