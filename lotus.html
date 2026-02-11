@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8"/>
@@ -157,7 +157,7 @@
       .dHead{top:118px}
     }
 
-    /* MOBILE FIX: никаких выездов вправо */
+    /* MOBILE FIX: РЅРёРєР°РєРёС… РІС‹РµР·РґРѕРІ РІРїСЂР°РІРѕ */
     @media (max-width:720px){
       .topIn{flex-direction:column;align-items:stretch;justify-content:flex-start}
       .brand{width:100%}
@@ -215,7 +215,7 @@
     .payTitle{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
     .sumLine{margin-top:10px;display:flex;justify-content:space-between;align-items:center;font-size:13px;gap:10px}
 
-    /* Красивые “чекбоксы” (на деле radio-сегменты) */
+    /* РљСЂР°СЃРёРІС‹Рµ вЂњС‡РµРєР±РѕРєСЃС‹вЂќ (РЅР° РґРµР»Рµ radio-СЃРµРіРјРµРЅС‚С‹) */
     .seg{display:flex;gap:10px}
     .seg input{position:absolute;opacity:0;pointer-events:none}
     .seg label{
@@ -247,17 +247,17 @@
     <div class="brand">
       <div class="dot"></div>
       <div class="brandTitle">
-        <b>LOTUS • Usluga baza</b>
-        <span id="userLine">Загрузка...</span>
+        <b>LOTUS вЂў Usluga baza</b>
+        <span id="userLine">Р—Р°РіСЂСѓР·РєР°...</span>
       </div>
     </div>
 
     <div class="actions">
-      <div class="control"><label>Услуга</label><select id="fService"></select></div>
-      <div class="control"><label>Мастер</label><select id="fMaster"></select></div>
-      <div class="control"><label>Дата</label><input id="fDate" type="date"/></div>
-      <button class="btn" id="btnCreate" onclick="openModal()"><span>＋</span> Создать</button>
-      <button class="btn btnGhost" id="btnLogout" onclick="logout()">Выйти</button>
+      <div class="control"><label>РЈСЃР»СѓРіР°</label><select id="fService"></select></div>
+      <div class="control"><label>РњР°СЃС‚РµСЂ</label><select id="fMaster"></select></div>
+      <div class="control"><label>Р”Р°С‚Р°</label><input id="fDate" type="date"/></div>
+      <button class="btn" id="btnCreate" onclick="openModal()"><span>пј‹</span> РЎРѕР·РґР°С‚СЊ</button>
+      <button class="btn btnGhost" id="btnLogout" onclick="logout()">Р’С‹Р№С‚Рё</button>
     </div>
   </div>
 </div>
@@ -265,7 +265,7 @@
 <div class="container">
   <div class="card">
     <div id="listLoading" style="padding:14px; display:none;">
-      <span class="spin"></span> <span class="muted">Загрузка списка...</span>
+      <span class="spin"></span> <span class="muted">Р—Р°РіСЂСѓР·РєР° СЃРїРёСЃРєР°...</span>
     </div>
 
     <!-- desktop header like your screen -->
@@ -288,12 +288,12 @@
 <div class="overlay" id="overlay" onclick="overlayClose(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="mHead">
-      <b>Создать запись</b>
-      <button class="x" onclick="closeModal()">✕</button>
+      <b>РЎРѕР·РґР°С‚СЊ Р·Р°РїРёСЃСЊ</b>
+      <button class="x" onclick="closeModal()">вњ•</button>
     </div>
     <div class="mBody">
       <div class="grid">
-        <div class="field"><label>Sana (только дата)</label><input id="mSana" type="date"/></div>
+        <div class="field"><label>Sana (С‚РѕР»СЊРєРѕ РґР°С‚Р°)</label><input id="mSana" type="date"/></div>
 
         <div class="field"><label>Xizmat (Massage kodi)</label><select id="mService"></select></div>
         <div class="field"><label>Master (Texnik kodi)</label><select id="mMaster"></select></div>
@@ -301,7 +301,7 @@
         <div class="field">
           <label>Narx (Daromad)</label>
           <input id="mNarx" type="text" readonly/>
-          <div class="hint">Подтягивается из Info.</div>
+          <div class="hint">РџРѕРґС‚СЏРіРёРІР°РµС‚СЃСЏ РёР· Info.</div>
         </div>
 
         <div class="field">
@@ -321,37 +321,37 @@
         </div>
 
         <div class="field">
-          <label>Summa (итог)</label>
+          <label>Summa (РёС‚РѕРі)</label>
           <input id="mSumma" type="text"/>
           <div class="hint" id="autoHint"></div>
         </div>
 
         <div class="field" style="grid-column:1/-1;">
           <label>Izoh</label>
-          <textarea id="mIzoh" placeholder="Комментарий..."></textarea>
+          <textarea id="mIzoh" placeholder="РљРѕРјРјРµРЅС‚Р°СЂРёР№..."></textarea>
         </div>
       </div>
 
       <div class="payBox">
         <div class="payTitle">
-          <b>Оплата</b>
+          <b>РћРїР»Р°С‚Р°</b>
           <span class="muted mono" id="payCheckLine"></span>
         </div>
 
         <div class="grid">
           <div class="field"><label>Click</label><input id="pClick" type="text" inputmode="numeric" placeholder="0"/></div>
           <div class="field"><label>Payme</label><input id="pPayme" type="text" inputmode="numeric" placeholder="0"/></div>
-          <div class="field"><label>Карта 8037</label><input id="pCard" type="text" inputmode="numeric" placeholder="0"/></div>
+          <div class="field"><label>РљР°СЂС‚Р° 8037</label><input id="pCard" type="text" inputmode="numeric" placeholder="0"/></div>
           <div class="field">
-            <label>Наличные</label>
+            <label>РќР°Р»РёС‡РЅС‹Рµ</label>
             <input id="pCash" type="text" inputmode="numeric" placeholder="0"/>
-            <div class="hint">### ### ### (в базу без пробелов)</div>
+            <div class="hint">### ### ### (РІ Р±Р°Р·Сѓ Р±РµР· РїСЂРѕР±РµР»РѕРІ)</div>
           </div>
           <div class="field" style="grid-column:1/-1;"><label>Uzcard/Humo Term.</label><input id="pUz" type="text" inputmode="numeric" placeholder="0"/></div>
         </div>
 
         <div class="sumLine">
-          <span class="muted">Итого оплаты</span>
+          <span class="muted">РС‚РѕРіРѕ РѕРїР»Р°С‚С‹</span>
           <b class="mono" id="payTotal">0</b>
         </div>
       </div>
@@ -360,14 +360,14 @@
     </div>
 
     <div class="mFoot">
-      <button class="btn btnGhost" id="btnCancel" onclick="closeModal()">Закрыть</button>
+      <button class="btn btnGhost" id="btnCancel" onclick="closeModal()">Р—Р°РєСЂС‹С‚СЊ</button>
       <button class="btn" id="btnOk" onclick="submitCreate()">OK</button>
     </div>
   </div>
 </div>
 
 <script>
-  // === ВСТАВЬ СЮДА Web App URL ===
+  // === Р’РЎРўРђР’Р¬ РЎР®Р”Рђ Web App URL ===
   const API_URL = "https://script.google.com/macros/s/AKfycbwAhWboyZuVAE9RtcRMye39XKygcQBWRrXKjiWRd681cayTk_HEYeiDYV0iGy1oJ60VGA/exec";
   // ===============================
   const SECRET = "mySecret123";
@@ -476,7 +476,7 @@
     add("8037", pay.card8037);
     add("Cash", pay.cash);
     add("Term", pay.uzterm);
-    if (parts.length===0) return `<span class="muted">${small ? "Оплата: 0" : "Нет оплат"}</span>`;
+    if (parts.length===0) return `<span class="muted">${small ? "РћРїР»Р°С‚Р°: 0" : "РќРµС‚ РѕРїР»Р°С‚"}</span>`;
     return parts.join(" ");
   }
 
@@ -490,12 +490,12 @@
     if (!rows || rows.length===0){
       const emptyD = document.createElement("div");
       emptyD.className = "dRow";
-      emptyD.innerHTML = `<div class="dCell" style="grid-column:1/-1"><span class="muted">Нет данных по фильтрам.</span></div>`;
+      emptyD.innerHTML = `<div class="dCell" style="grid-column:1/-1"><span class="muted">РќРµС‚ РґР°РЅРЅС‹С… РїРѕ С„РёР»СЊС‚СЂР°Рј.</span></div>`;
       dl.appendChild(emptyD);
 
       const emptyM = document.createElement("div");
       emptyM.className = "mItem";
-      emptyM.innerHTML = `<span class="muted">Нет данных по фильтрам.</span>`;
+      emptyM.innerHTML = `<span class="muted">РќРµС‚ РґР°РЅРЅС‹С… РїРѕ С„РёР»СЊС‚СЂР°Рј.</span>`;
       ml.appendChild(emptyM);
       return;
     }
@@ -518,11 +518,11 @@
           <div class="dTitle">${escapeHtml(r.service||"")}</div>
           <div class="dSub">
             Master: <b class="mono" style="color:var(--text)">${escapeHtml(r.master||"")}</b>
-            • Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b>
+            вЂў Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b>
           </div>
           <div class="dSub">
             Skidka: <b class="mono" style="color:var(--text)">${foiz}</b> + <b class="mono" style="color:var(--text)">${certPct}</b> = <b class="mono" style="color:var(--text)">${skidkaTotal}%</b>
-            • Sert: <b class="mono" style="color:var(--text)">${fmtMoney((r.cert?.sum||0))}</b>
+            вЂў Sert: <b class="mono" style="color:var(--text)">${fmtMoney((r.cert?.sum||0))}</b>
           </div>
         </div>
 
@@ -549,11 +549,11 @@
             <div class="mTitle">${escapeHtml(r.service||"")}</div>
             <div class="mSub">
               Master: <b class="mono" style="color:var(--text)">${escapeHtml(r.master||"")}</b>
-              • Sana: <b class="mono" style="color:var(--text)">${escapeHtml(onlyDate(r.sana||""))}</b>
+              вЂў Sana: <b class="mono" style="color:var(--text)">${escapeHtml(onlyDate(r.sana||""))}</b>
             </div>
             <div class="mSub">
               Summa: <b class="mono" style="color:var(--text)">${fmtMoney(r.summa)}</b>
-              • Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b>
+              вЂў Narx: <b class="mono" style="color:var(--text)">${fmtMoney(r.narx)}</b>
             </div>
             <div class="mSub">
               Skidka: <b class="mono" style="color:var(--text)">${foiz}</b> + <b class="mono" style="color:var(--text)">${certPct}</b> = <b class="mono" style="color:var(--text)">${skidkaTotal}%</b>
@@ -578,7 +578,7 @@
       return;
     }
     STATE.user = chk.user;
-    setUserLine(`${STATE.user.name || STATE.user.login} • сессия до конца дня`);
+    setUserLine(`${STATE.user.name || STATE.user.login} вЂў СЃРµСЃСЃРёСЏ РґРѕ РєРѕРЅС†Р° РґРЅСЏ`);
 
     document.getElementById("fDate").value = todayTashkentYMD();
     ["fService","fMaster","fDate"].forEach(id=>document.getElementById(id).addEventListener("change", refreshList));
@@ -590,14 +590,14 @@
   async function loadMeta(){
     disableTop(true); setListLoading(true);
     const r = await jsonp("meta", { token: STATE.token }).catch(()=>null);
-    if (!r || !r.ok){ alert("Не удалось загрузить справочники (Info)."); disableTop(false); setListLoading(false); return; }
+    if (!r || !r.ok){ alert("РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ СЃРїСЂР°РІРѕС‡РЅРёРєРё (Info)."); disableTop(false); setListLoading(false); return; }
 
     STATE.services = r.services || [];
     STATE.masters = r.masters || [];
     STATE.priceByService = r.priceByService || {};
 
-    fillSelect(document.getElementById("fService"), STATE.services, "Все услуги");
-    fillSelect(document.getElementById("fMaster"), STATE.masters.map(x=>x), "Все мастера");
+    fillSelect(document.getElementById("fService"), STATE.services, "Р’СЃРµ СѓСЃР»СѓРіРё");
+    fillSelect(document.getElementById("fMaster"), STATE.masters.map(x=>x), "Р’СЃРµ РјР°СЃС‚РµСЂР°");
     fillSelect(document.getElementById("mService"), STATE.services, null);
     fillSelect(document.getElementById("mMaster"), STATE.masters.map(x=>x), null);
 
@@ -612,7 +612,7 @@
     const f = getFilters();
     const r = await jsonp("list", { token: STATE.token, service: f.service, master: f.master, date: f.date }).catch(()=>null);
     if (r && r.ok) { STATE.rows = r.rows || []; renderList(STATE.rows); }
-    else alert("Не удалось загрузить список.");
+    else alert("РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ СЃРїРёСЃРѕРє.");
 
     setListLoading(false); disableTop(false); STATE.loading = false;
   }
@@ -745,7 +745,7 @@
     ids.forEach(id=>{ const el=document.getElementById(id); if(el) el.disabled=b; });
     document.querySelectorAll('input[name="certMode"]').forEach(r=>r.disabled=b);
 
-    ok.innerHTML=b?`<span class="spin"></span>${text||"Отправка..."}`:"OK";
+    ok.innerHTML=b?`<span class="spin"></span>${text||"РћС‚РїСЂР°РІРєР°..."}`:"OK";
   }
 
   async function submitCreate(){
@@ -768,16 +768,16 @@
     const payCash=numFromUi(String(document.getElementById("pCash").value).replace(/\s+/g,""));
     const payUzterm=numFromUi(document.getElementById("pUz").value);
 
-    if (!sana) return formErr("Поле Sana обязательно.");
-    if (!service) return formErr("Выбери Xizmat.");
-    if (!master)  return formErr("Выбери Master.");
-    if (foiz<0 || foiz>100) return formErr("Skidka% должна быть 0–100.");
+    if (!sana) return formErr("РџРѕР»Рµ Sana РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ.");
+    if (!service) return formErr("Р’С‹Р±РµСЂРё Xizmat.");
+    if (!master)  return formErr("Р’С‹Р±РµСЂРё Master.");
+    if (foiz<0 || foiz>100) return formErr("Skidka% РґРѕР»Р¶РЅР° Р±С‹С‚СЊ 0вЂ“100.");
 
     const payTotal=Math.round((payClick+payPayme+payCard8037+payCash+payUzterm)*100)/100;
     const d = diffText(summa, payTotal);
     if (!d.ok) return formErr(d.text);
 
-    setModalBusy(true,"Отправка...");
+    setModalBusy(true,"РћС‚РїСЂР°РІРєР°...");
     disableTop(true);
 
     const f = getFilters();
@@ -799,7 +799,7 @@
         const dd = diffText(numFromUi(r.summa||summa), numFromUi(r.payTotal||payTotal));
         formErr(dd.ok ? "OK" : dd.text);
       } else {
-        formErr("Ошибка сохранения.");
+        formErr("РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ.");
       }
       setModalBusy(false); disableTop(false);
       return;
@@ -817,3 +817,4 @@
 </script>
 </body>
 </html>
+

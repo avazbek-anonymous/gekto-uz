@@ -1,10 +1,10 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>BPS.system — Kassa</title>
+    <title>BPS.system вЂ” Kassa</title>
 
     <style>
         :root {
@@ -15,7 +15,7 @@
             --muted: rgba(255, 255, 255, .65);
             --ok: #10b981;
             --bad: #f16262;
-            /* мягкий красный */
+            /* РјСЏРіРєРёР№ РєСЂР°СЃРЅС‹Р№ */
             --shadow: 0 10px 30px rgba(0, 0, 0, .25);
             --r: 16px;
             --gap: 12px;
@@ -164,7 +164,7 @@
             transform: rotate(180deg);
         }
 
-        /* дети: отступ виден только когда sidebar раскрыт */
+        /* РґРµС‚Рё: РѕС‚СЃС‚СѓРї РІРёРґРµРЅ С‚РѕР»СЊРєРѕ РєРѕРіРґР° sidebar СЂР°СЃРєСЂС‹С‚ */
         .sidebar:hover .navChild {
             padding-left: 28px;
         }
@@ -674,7 +674,7 @@
             font-size: 13px;
         }
 
-        /* Mobile меню */
+        /* Mobile РјРµРЅСЋ */
         .burger {
             display: none;
             width: 42px;
@@ -790,8 +790,8 @@
         }
 
         /* =======================
-   MOBILE FIX v2 (только мобилка)
-   ПК НЕ трогаем — всё только внутри media
+   MOBILE FIX v2 (С‚РѕР»СЊРєРѕ РјРѕР±РёР»РєР°)
+   РџРљ РќР• С‚СЂРѕРіР°РµРј вЂ” РІСЃС‘ С‚РѕР»СЊРєРѕ РІРЅСѓС‚СЂРё media
    ======================= */
         @media (max-width: 980px) {
 
@@ -807,7 +807,7 @@
                 -webkit-text-size-adjust: 100%;
             }
 
-            /* ВАЖНО: убираем 100vh-ловушку iOS */
+            /* Р’РђР–РќРћ: СѓР±РёСЂР°РµРј 100vh-Р»РѕРІСѓС€РєСѓ iOS */
             .appShell {
                 height: auto !important;
                 min-height: 100vh;
@@ -829,7 +829,7 @@
                 justify-content: center;
             }
 
-            /* Хедер + контент одной ширины */
+            /* РҐРµРґРµСЂ + РєРѕРЅС‚РµРЅС‚ РѕРґРЅРѕР№ С€РёСЂРёРЅС‹ */
             .topHeader,
             .content {
                 width: 100%;
@@ -838,7 +838,7 @@
                 padding-right: calc(12px + env(safe-area-inset-right));
             }
 
-            /* Хедер: аккуратно, без наложений */
+            /* РҐРµРґРµСЂ: Р°РєРєСѓСЂР°С‚РЅРѕ, Р±РµР· РЅР°Р»РѕР¶РµРЅРёР№ */
             .topHeader {
                 position: relative;
                 top: 0;
@@ -866,7 +866,7 @@
                 justify-content: stretch;
             }
 
-            /* user и status — на всю ширину */
+            /* user Рё status вЂ” РЅР° РІСЃСЋ С€РёСЂРёРЅСѓ */
             #userPill {
                 grid-column: 1 / -1;
                 justify-content: center;
@@ -877,13 +877,13 @@
                 justify-content: center;
             }
 
-            /* кнопки в две колонки */
+            /* РєРЅРѕРїРєРё РІ РґРІРµ РєРѕР»РѕРЅРєРё */
             #btnReload,
             #btnLogout {
                 width: 100%;
             }
 
-            /* бургер справа */
+            /* Р±СѓСЂРіРµСЂ СЃРїСЂР°РІР° */
             #burger {
                 justify-self: end;
                 width: 46px;
@@ -896,7 +896,7 @@
                 gap: 10px;
             }
 
-            /* Верхняя зона: строго одна колонка */
+            /* Р’РµСЂС…РЅСЏСЏ Р·РѕРЅР°: СЃС‚СЂРѕРіРѕ РѕРґРЅР° РєРѕР»РѕРЅРєР° */
             .topArea {
                 height: auto;
                 min-height: 0;
@@ -914,12 +914,12 @@
                 min-height: auto;
             }
 
-            /* Внутренние sticky заголовки таблиц на iOS дают "призраки" -> отключаем */
+            /* Р’РЅСѓС‚СЂРµРЅРЅРёРµ sticky Р·Р°РіРѕР»РѕРІРєРё С‚Р°Р±Р»РёС† РЅР° iOS РґР°СЋС‚ "РїСЂРёР·СЂР°РєРё" -> РѕС‚РєР»СЋС‡Р°РµРј */
             .catTable thead th {
                 position: static !important;
             }
 
-            /* Фильтры: в 1 колонку, дата — в 2 колонки */
+            /* Р¤РёР»СЊС‚СЂС‹: РІ 1 РєРѕР»РѕРЅРєСѓ, РґР°С‚Р° вЂ” РІ 2 РєРѕР»РѕРЅРєРё */
             .filtersGrid {
                 grid-template-columns: 1fr;
             }
@@ -928,7 +928,7 @@
                 grid-column: 1 / -1;
             }
 
-            /* поле "Дата от/до" делаем сеткой, убираем "—" */
+            /* РїРѕР»Рµ "Р”Р°С‚Р° РѕС‚/РґРѕ" РґРµР»Р°РµРј СЃРµС‚РєРѕР№, СѓР±РёСЂР°РµРј "вЂ”" */
             .filtersCard .field.full {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -967,12 +967,12 @@
                 font-size: 16px;
             }
 
-            /* Категория totals — 2 в ряд */
+            /* РљР°С‚РµРіРѕСЂРёСЏ totals вЂ” 2 РІ СЂСЏРґ */
             .catTotals {
                 grid-template-columns: 1fr 1fr;
             }
 
-            /* Нижняя часть: показываем карточки, скрываем таблицу */
+            /* РќРёР¶РЅСЏСЏ С‡Р°СЃС‚СЊ: РїРѕРєР°Р·С‹РІР°РµРј РєР°СЂС‚РѕС‡РєРё, СЃРєСЂС‹РІР°РµРј С‚Р°Р±Р»РёС†Сѓ */
             .bottomArea {
                 height: auto;
                 min-height: 0;
@@ -989,13 +989,13 @@
                 gap: 10px;
             }
 
-            /* === Операции (карточки): убираем нули и "/" только CSS === */
+            /* === РћРїРµСЂР°С†РёРё (РєР°СЂС‚РѕС‡РєРё): СѓР±РёСЂР°РµРј РЅСѓР»Рё Рё "/" С‚РѕР»СЊРєРѕ CSS === */
             .opAmts {
                 grid-template-columns: 1fr;
-                /* чтобы читабельно */
+                /* С‡С‚РѕР±С‹ С‡РёС‚Р°Р±РµР»СЊРЅРѕ */
             }
 
-            /* убираем текстовые разделители (&nbsp;/&nbsp;) через font-size:0 */
+            /* СѓР±РёСЂР°РµРј С‚РµРєСЃС‚РѕРІС‹Рµ СЂР°Р·РґРµР»РёС‚РµР»Рё (&nbsp;/&nbsp;) С‡РµСЂРµР· font-size:0 */
             .opAmts .val {
                 font-size: 0;
                 display: flex;
@@ -1008,18 +1008,18 @@
                 margin: 0;
             }
 
-            /* скрываем нули (у нулей у тебя нет class amtIn/amtOut) */
+            /* СЃРєСЂС‹РІР°РµРј РЅСѓР»Рё (Сѓ РЅСѓР»РµР№ Сѓ С‚РµР±СЏ РЅРµС‚ class amtIn/amtOut) */
             .opAmts .val span:not(.amtIn):not(.amtOut) {
                 display: none;
             }
 
-            /* чтобы + и - не слипались */
+            /* С‡С‚РѕР±С‹ + Рё - РЅРµ СЃР»РёРїР°Р»РёСЃСЊ */
             .opAmts .val span.amtIn,
             .opAmts .val span.amtOut {
                 margin-right: 8px;
             }
 
-            /* если браузер поддерживает :has — скрываем валютный блок, если там вообще нет сумм */
+            /* РµСЃР»Рё Р±СЂР°СѓР·РµСЂ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ :has вЂ” СЃРєСЂС‹РІР°РµРј РІР°Р»СЋС‚РЅС‹Р№ Р±Р»РѕРє, РµСЃР»Рё С‚Р°Рј РІРѕРѕР±С‰Рµ РЅРµС‚ СЃСѓРјРј */
             @supports(selector(:has(*))) {
                 .opAmts .box:not(:has(.amtIn)):not(:has(.amtOut)) {
                     display: none;
@@ -1183,7 +1183,7 @@
             border-color: rgba(16, 185, 129, .35);
         }
 
-        /* Mobile: делаем календарь как “bottom sheet” */
+        /* Mobile: РґРµР»Р°РµРј РєР°Р»РµРЅРґР°СЂСЊ РєР°Рє вЂњbottom sheetвЂќ */
         @media (max-width: 980px) {
             .datePicker {
                 align-items: flex-end;
@@ -1234,11 +1234,11 @@
                 </div>
 
                 <div class="hdrRight">
-                    <span id="userPill" class="pill">👤 -</span>
+                    <span id="userPill" class="pill">рџ‘¤ -</span>
                     <button id="btnReload" class="btn">Yangilash</button>
                     <button id="btnLogout" class="btn danger">Chiqish</button>
                     <span id="status" class="pill"><span class="muted">Yuklanmoqda...</span></span>
-                    <button id="burger" class="burger" title="Menu">☰</button>
+                    <button id="burger" class="burger" title="Menu">в°</button>
                 </div>
             </header>
 
@@ -1248,7 +1248,7 @@
                     <!-- balances -->
                     <div class="card balancesCard">
                         <div class="cardTitleRow">
-                            <div class="cardTitle">Qoldiq (hamma sana bo‘yicha)</div>
+                            <div class="cardTitle">Qoldiq (hamma sana boвЂyicha)</div>
                             <span id="updatedAt" class="muted"></span>
                         </div>
                         <div id="balances" class="balList"></div>
@@ -1267,10 +1267,10 @@
 
                                 <button type="button" id="dateRangeBtn" class="dateRangeBtn">
                                     <span id="dateRangeText">Bugun</span>
-                                    <span class="dateRangeIco">📅</span>
+                                    <span class="dateRangeIco">рџ“…</span>
                                 </button>
 
-                                <!-- оставляем эти id для твоего текущего JS фильтра -->
+                                <!-- РѕСЃС‚Р°РІР»СЏРµРј СЌС‚Рё id РґР»СЏ С‚РІРѕРµРіРѕ С‚РµРєСѓС‰РµРіРѕ JS С„РёР»СЊС‚СЂР° -->
                                 <input id="dateFrom" type="hidden" />
                                 <input id="dateTo" type="hidden" />
                             </div>
@@ -1280,11 +1280,11 @@
                                 <div class="dpCard" role="dialog" aria-modal="true">
                                     <div class="dpHead">
                                         <button type="button" class="dpNav" id="dpPrev"
-                                            aria-label="Prev month">‹</button>
-                                        <div class="dpTitle" id="dpTitle">—</div>
+                                            aria-label="Prev month">вЂ№</button>
+                                        <div class="dpTitle" id="dpTitle">вЂ”</div>
                                         <button type="button" class="dpNav" id="dpNext"
-                                            aria-label="Next month">›</button>
-                                        <button type="button" class="dpClose" id="dpClose" aria-label="Close">✕</button>
+                                            aria-label="Next month">вЂє</button>
+                                        <button type="button" class="dpClose" id="dpClose" aria-label="Close">вњ•</button>
                                     </div>
 
                                     <div class="dpWeek">
@@ -1301,7 +1301,7 @@
                             </div>
 
 
-                            <!-- общий текстовый поиск -->
+                            <!-- РѕР±С‰РёР№ С‚РµРєСЃС‚РѕРІС‹Р№ РїРѕРёСЃРє -->
                             <div class="field full">
                                 <label>Qidiruv (matn)</label>
                                 <input id="qText" placeholder="Koshelok / Kategoriya / Subkategoriya / Izoh..." />
@@ -1309,38 +1309,38 @@
 
                             <!-- Wallet typed -->
                             <div class="field">
-                                <label>По кошелькам</label>
-                                <input id="fWallet" class="combo" list="walletList" placeholder="Все" />
+                                <label>РџРѕ РєРѕС€РµР»СЊРєР°Рј</label>
+                                <input id="fWallet" class="combo" list="walletList" placeholder="Р’СЃРµ" />
                                 <datalist id="walletList"></datalist>
                             </div>
 
                             <!-- Category typed -->
                             <div class="field">
-                                <label>По категориям</label>
-                                <input id="fCat" class="combo" list="catList" placeholder="Все" />
+                                <label>РџРѕ РєР°С‚РµРіРѕСЂРёСЏРј</label>
+                                <input id="fCat" class="combo" list="catList" placeholder="Р’СЃРµ" />
                                 <datalist id="catList"></datalist>
                             </div>
 
                             <!-- Sub typed -->
                             <div class="field">
-                                <label>По суб категориям</label>
-                                <input id="fSub" class="combo" list="subList" placeholder="Все" />
+                                <label>РџРѕ СЃСѓР± РєР°С‚РµРіРѕСЂРёСЏРј</label>
+                                <input id="fSub" class="combo" list="subList" placeholder="Р’СЃРµ" />
                                 <datalist id="subList"></datalist>
                             </div>
 
                             <div class="field">
-                                <label>Типы (Расход/Приход)</label>
+                                <label>РўРёРїС‹ (Р Р°СЃС…РѕРґ/РџСЂРёС…РѕРґ)</label>
                                 <select id="fType">
-                                    <option value="all">Все</option>
-                                    <option value="in">Приход</option>
-                                    <option value="out">Расход</option>
+                                    <option value="all">Р’СЃРµ</option>
+                                    <option value="in">РџСЂРёС…РѕРґ</option>
+                                    <option value="out">Р Р°СЃС…РѕРґ</option>
                                 </select>
                             </div>
 
                             <div class="field">
-                                <label>Валюта</label>
+                                <label>Р’Р°Р»СЋС‚Р°</label>
                                 <select id="fCur">
-                                    <option value="all">Все</option>
+                                    <option value="all">Р’СЃРµ</option>
                                     <option value="uzs">UZS</option>
                                     <option value="usd">USD</option>
                                     <option value="both">UZS+USD</option>
@@ -1352,8 +1352,8 @@
                     <!-- category summary -->
                     <div class="card catCard">
                         <div class="cardTitleRow">
-                            <div class="cardTitle">Kategoriya bo‘yicha</div>
-                            <span class="muted">filtr bo‘yicha</span>
+                            <div class="cardTitle">Kategoriya boвЂyicha</div>
+                            <span class="muted">filtr boвЂyicha</span>
                         </div>
 
                         <div class="catTotals">
@@ -1432,13 +1432,13 @@
         /************ CONFIG ************/
         const ENDPOINT =
             "https://script.google.com/macros/s/AKfycbyZD2z3CcNpQhGFh-e_Qfmhu91B7imqNKQ0dr2Gm4_V2KzTlvNEJMpRYnjOAfu_CCwiQg/exec";
-        const API_SECRET = "bpsSecret123"; // если включил в Apps Script — пропиши
+        const API_SECRET = "bpsSecret123"; // РµСЃР»Рё РІРєР»СЋС‡РёР» РІ Apps Script вЂ” РїСЂРѕРїРёС€Рё
 
-        const LOGIN_URL = "/bpslogin"; // или "/bpslogin.html"
-        const KASSA_URL = "/bpskassa"; // текущая страница
+        const LOGIN_URL = "/bpslogin"; // РёР»Рё "/bpslogin.html"
+        const KASSA_URL = "/bpskassa"; // С‚РµРєСѓС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р°
 
-        const IDLE_MS = 3 * 60 * 1000; // 3 минуты
-        const TOUCH_DEBOUNCE_MS = 25000; // touch не чаще чем раз в ~25 сек
+        const IDLE_MS = 3 * 60 * 1000; // 3 РјРёРЅСѓС‚С‹
+        const TOUCH_DEBOUNCE_MS = 25000; // touch РЅРµ С‡Р°С‰Рµ С‡РµРј СЂР°Р· РІ ~25 СЃРµРє
 
         /************ NAV ************/
         const NAV_ITEMS = [{
@@ -1518,7 +1518,7 @@
           <div class="navItem navGroupHead ${isActiveGroup ? "active" : ""}">
             <span class="navIcon">${item.icon || ""}</span>
             <span class="navText">${escapeHtml(item.label)}</span>
-            <span class="navChevron">▾</span>
+            <span class="navChevron">в–ѕ</span>
           </div>
 
           <div class="navGroupBody">
@@ -1533,7 +1533,7 @@
       `;
                 }
 
-                // обычная ссылка
+                // РѕР±С‹С‡РЅР°СЏ СЃСЃС‹Р»РєР°
                 return `
       <a class="navItem ${item.key===activeKey ? "active":""}" href="${item.href}">
         <span class="navIcon">${item.icon}</span>
@@ -1557,7 +1557,7 @@
                 return `<a class="${item.key===activeKey ? "active":""}" href="${item.href}">${escapeHtml(item.label)}</a>`;
             }).join("");
 
-            // (по желанию) сворачивание/разворачивание по клику
+            // (РїРѕ Р¶РµР»Р°РЅРёСЋ) СЃРІРѕСЂР°С‡РёРІР°РЅРёРµ/СЂР°Р·РІРѕСЂР°С‡РёРІР°РЅРёРµ РїРѕ РєР»РёРєСѓ
             document.querySelectorAll(".navGroupHead").forEach(h => {
                 h.onclick = () => h.parentElement.classList.toggle("open");
             });
@@ -1793,7 +1793,7 @@
                 USER = res.user;
                 localStorage.setItem("bps_user", JSON.stringify(USER));
             }
-            userPill.textContent = `👤 ${USER?.ism || USER?.login || "-"}`;
+            userPill.textContent = `рџ‘¤ ${USER?.ism || USER?.login || "-"}`;
 
             renderOptions();
             renderBalances();
@@ -1823,7 +1823,7 @@
 
         function renderBalances() {
             if (!BALANCES || BALANCES.length === 0) {
-                balancesBox.innerHTML = `<div class="muted">Qoldiq yo‘q</div>`;
+                balancesBox.innerHTML = `<div class="muted">Qoldiq yoвЂq</div>`;
                 return;
             }
             balancesBox.innerHTML = BALANCES.map(b => `
@@ -1858,7 +1858,7 @@
 
         function normFilterVal(v) {
             v = String(v || "").trim();
-            if (!v || v.toLowerCase() === "все" || v.toLowerCase() === "all") return "all";
+            if (!v || v.toLowerCase() === "РІСЃРµ" || v.toLowerCase() === "all") return "all";
             return v;
         }
 
@@ -1998,7 +1998,7 @@
               <div>${escapeHtml(r.koshelok || "-")}</div>
             </div>
             <div class="opMid">
-              <div>${escapeHtml(r.kategoriya || "-")} • ${escapeHtml(r.subkategoriya || "-")}</div>
+              <div>${escapeHtml(r.kategoriya || "-")} вЂў ${escapeHtml(r.subkategoriya || "-")}</div>
               <div class="mono">${fmt(r.kurs)}</div>
             </div>
             <div class="opNote" title="${escapeHtml(r.izoh || "")}">${escapeHtml(r.izoh || "-")}</div>
@@ -2103,11 +2103,11 @@
         }
 
         function resetFilters() {
-            // ДАТА: всегда сегодня + обновить календарь/лейбл
+            // Р”РђРўРђ: РІСЃРµРіРґР° СЃРµРіРѕРґРЅСЏ + РѕР±РЅРѕРІРёС‚СЊ РєР°Р»РµРЅРґР°СЂСЊ/Р»РµР№Р±Р»
             if (window.__dpSetToday) {
                 window.__dpSetToday();
             } else {
-                // fallback (если вдруг календарный блок ещё не загрузился)
+                // fallback (РµСЃР»Рё РІРґСЂСѓРі РєР°Р»РµРЅРґР°СЂРЅС‹Р№ Р±Р»РѕРє РµС‰С‘ РЅРµ Р·Р°РіСЂСѓР·РёР»СЃСЏ)
                 const t = todayISO();
                 dateFrom.value = t;
                 dateTo.value = t;
@@ -2119,7 +2119,7 @@
                 }));
             }
 
-            // остальные фильтры
+            // РѕСЃС‚Р°Р»СЊРЅС‹Рµ С„РёР»СЊС‚СЂС‹
             qText.value = "";
             fWallet.value = "";
             fCat.value = "";
@@ -2129,7 +2129,7 @@
 
             renderSubOptions("");
 
-            // применяем
+            // РїСЂРёРјРµРЅСЏРµРј
             applyFilters();
         }
 
@@ -2224,7 +2224,7 @@
                 "Oktabr", "Noyabr", "Dekabr"
             ];
 
-            let view = new Date(); // текущий месяц в календаре
+            let view = new Date(); // С‚РµРєСѓС‰РёР№ РјРµСЃСЏС† РІ РєР°Р»РµРЅРґР°СЂРµ
             view.setDate(1);
 
             let start = ""; // YYYY-MM-DD
@@ -2250,11 +2250,11 @@
             }
 
             function openDP() {
-                // синхронизируем из инпутов
+                // СЃРёРЅС…СЂРѕРЅРёР·РёСЂСѓРµРј РёР· РёРЅРїСѓС‚РѕРІ
                 start = fromEl.value || "";
                 end = toEl.value || "";
 
-                // если пусто — покажем текущий месяц
+                // РµСЃР»Рё РїСѓСЃС‚Рѕ вЂ” РїРѕРєР°Р¶РµРј С‚РµРєСѓС‰РёР№ РјРµСЃСЏС†
                 if (start) {
                     const d = parseISO(start);
                     view = new Date(d.getFullYear(), d.getMonth(), 1);
@@ -2277,10 +2277,10 @@
                 fromEl.value = start || "";
                 toEl.value = end || start || "";
 
-                // обновить подпись
+                // РѕР±РЅРѕРІРёС‚СЊ РїРѕРґРїРёСЃСЊ
                 syncLabel();
 
-                // триггерим твой существующий обработчик
+                // С‚СЂРёРіРіРµСЂРёРј С‚РІРѕР№ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РѕР±СЂР°Р±РѕС‚С‡РёРє
                 fromEl.dispatchEvent(new Event("change", {
                     bubbles: true
                 }));
@@ -2300,7 +2300,7 @@
                     textEl.textContent = fmtUZ(a);
                     return;
                 }
-                textEl.textContent = `${fmtUZ(a)} — ${fmtUZ(b)}`;
+                textEl.textContent = `${fmtUZ(a)} вЂ” ${fmtUZ(b)}`;
             }
 
             function daysInMonth(y, m) {
@@ -2326,7 +2326,7 @@
                 const lead = weekdayMon0(first);
                 const dim = daysInMonth(y, m);
 
-                // предыдущий месяц для "пустых" ячеек
+                // РїСЂРµРґС‹РґСѓС‰РёР№ РјРµСЃСЏС† РґР»СЏ "РїСѓСЃС‚С‹С…" СЏС‡РµРµРє
                 const prevDim = daysInMonth(y, m - 1);
 
                 const cells = [];
@@ -2369,7 +2369,7 @@
             }
 
             function handlePick(dayISO) {
-                // 1-й клик -> start
+                // 1-Р№ РєР»РёРє -> start
                 if (!start || (start && end)) {
                     start = dayISO;
                     end = "";
@@ -2377,7 +2377,7 @@
                     return;
                 }
 
-                // 2-й клик -> end
+                // 2-Р№ РєР»РёРє -> end
                 end = dayISO;
                 if (end < start) {
                     const t = start;
@@ -2393,7 +2393,7 @@
             btn.addEventListener("click", openDP);
 
             dp.addEventListener("click", (e) => {
-                // клик по фону — закрыть
+                // РєР»РёРє РїРѕ С„РѕРЅСѓ вЂ” Р·Р°РєСЂС‹С‚СЊ
                 if (e.target === dp) closeDP();
             });
 
@@ -2436,15 +2436,15 @@
                 closeDP();
             });
 
-            // при первом запуске — если уже есть значения (например, ты ставишь today в boot)
-            // обновим текст на кнопке
+            // РїСЂРё РїРµСЂРІРѕРј Р·Р°РїСѓСЃРєРµ вЂ” РµСЃР»Рё СѓР¶Рµ РµСЃС‚СЊ Р·РЅР°С‡РµРЅРёСЏ (РЅР°РїСЂРёРјРµСЂ, С‚С‹ СЃС‚Р°РІРёС€СЊ today РІ boot)
+            // РѕР±РЅРѕРІРёРј С‚РµРєСЃС‚ РЅР° РєРЅРѕРїРєРµ
             setTimeout(syncLabel, 0);
 
-            // чтобы при ручном изменении hidden inputs (если где-то меняешь) текст тоже обновлялся
+            // С‡С‚РѕР±С‹ РїСЂРё СЂСѓС‡РЅРѕРј РёР·РјРµРЅРµРЅРёРё hidden inputs (РµСЃР»Рё РіРґРµ-С‚Рѕ РјРµРЅСЏРµС€СЊ) С‚РµРєСЃС‚ С‚РѕР¶Рµ РѕР±РЅРѕРІР»СЏР»СЃСЏ
             fromEl.addEventListener("change", syncLabel);
             toEl.addEventListener("change", syncLabel);
 
-            // ===== API для внешнего reset + дефолт сегодня =====
+            // ===== API РґР»СЏ РІРЅРµС€РЅРµРіРѕ reset + РґРµС„РѕР»С‚ СЃРµРіРѕРґРЅСЏ =====
             function setRange_(a, b) {
                 start = a || "";
                 end = b || a || "";
@@ -2454,7 +2454,7 @@
 
                 syncLabel();
 
-                // чтобы твои фильтры/рендер сразу отработали
+                // С‡С‚РѕР±С‹ С‚РІРѕРё С„РёР»СЊС‚СЂС‹/СЂРµРЅРґРµСЂ СЃСЂР°Р·Сѓ РѕС‚СЂР°Р±РѕС‚Р°Р»Рё
                 fromEl.dispatchEvent(new Event("change", {
                     bubbles: true
                 }));
@@ -2462,25 +2462,25 @@
                     bubbles: true
                 }));
 
-                // если календарь открыт — перерисуем выделения
+                // РµСЃР»Рё РєР°Р»РµРЅРґР°СЂСЊ РѕС‚РєСЂС‹С‚ вЂ” РїРµСЂРµСЂРёСЃСѓРµРј РІС‹РґРµР»РµРЅРёСЏ
                 render();
             }
 
-            // отдаём наружу, чтобы resetFilters мог вызвать
+            // РѕС‚РґР°С‘Рј РЅР°СЂСѓР¶Сѓ, С‡С‚РѕР±С‹ resetFilters РјРѕРі РІС‹Р·РІР°С‚СЊ
             window.__dpSetToday = function () {
                 const t = iso(new Date());
-                // чтобы открывалось на текущем месяце
+                // С‡С‚РѕР±С‹ РѕС‚РєСЂС‹РІР°Р»РѕСЃСЊ РЅР° С‚РµРєСѓС‰РµРј РјРµСЃСЏС†Рµ
                 const d = parseISO(t);
                 view = new Date(d.getFullYear(), d.getMonth(), 1);
 
                 setRange_(t, t);
             };
 
-            // дефолт при входе: всегда сегодня, если даты ещё не установлены
+            // РґРµС„РѕР»С‚ РїСЂРё РІС…РѕРґРµ: РІСЃРµРіРґР° СЃРµРіРѕРґРЅСЏ, РµСЃР»Рё РґР°С‚С‹ РµС‰С‘ РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅС‹
             if (!fromEl.value && !toEl.value) {
                 window.__dpSetToday();
             } else {
-                // если уже есть значения (например, после refresh) — просто обновим текст
+                // РµСЃР»Рё СѓР¶Рµ РµСЃС‚СЊ Р·РЅР°С‡РµРЅРёСЏ (РЅР°РїСЂРёРјРµСЂ, РїРѕСЃР»Рµ refresh) вЂ” РїСЂРѕСЃС‚Рѕ РѕР±РЅРѕРІРёРј С‚РµРєСЃС‚
                 syncLabel();
             }
 

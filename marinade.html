@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Marinade — Snabjeniya</title>
+  <title>Marinade вЂ” Snabjeniya</title>
   <style>
     :root{
       --bg:#0b1220; --panel:#0f1b33; --panel2: rgba(15,27,51,.78);
@@ -357,15 +357,15 @@
         </div>
       </div>
       <div class="actions">
-        <div class="pill"><span>Пользователь:</span> <b id="userName">—</b></div>
-        <button class="btn danger" id="btnLogout">Выйти</button>
+        <div class="pill"><span>РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ:</span> <b id="userName">вЂ”</b></div>
+        <button class="btn danger" id="btnLogout">Р’С‹Р№С‚Рё</button>
       </div>
     </div>
 
     <div class="card">
       <div class="filters">
         <div>
-          <label>Qaysi kun uchun (с - по)</label>
+          <label>Qaysi kun uchun (СЃ - РїРѕ)</label>
           <div style="display:flex; gap:10px">
             <input id="fDateFrom" type="date" style="flex:1"/>
             <input id="fDateTo" type="date" style="flex:1"/>
@@ -373,33 +373,33 @@
         </div>
         <div>
           <label>Tovar</label>
-          <select id="fTovar"><option value="">Все</option></select>
+          <select id="fTovar"><option value="">Р’СЃРµ</option></select>
         </div>
         <div>
           <label>Kontragent</label>
-          <select id="fKontr"><option value="">Все</option></select>
+          <select id="fKontr"><option value="">Р’СЃРµ</option></select>
         </div>
         <div>
           <label>Jarayon nomi</label>
           <select id="fJarayon">
-            <option value="">Все</option>
+            <option value="">Р’СЃРµ</option>
             <option value="Prixod">Prixod</option>
             <option value="Vozvrat">Vozvrat</option>
           </select>
         </div>
         <div>
           <label>Foydalanuvchi</label>
-          <select id="fUser"><option value="">Все</option></select>
+          <select id="fUser"><option value="">Р’СЃРµ</option></select>
         </div>
-        <button class="btn primary" id="btnCreate">+ Создать</button>
+        <button class="btn primary" id="btnCreate">+ РЎРѕР·РґР°С‚СЊ</button>
       </div>
     </div>
 
     <div class="listWrap">
       <div class="listHeader">
-        <div class="count" id="count">—</div>
+        <div class="count" id="count">вЂ”</div>
         <div style="display:flex; gap:10px">
-          <button class="btn" id="btnRefresh">Обновить</button>
+          <button class="btn" id="btnRefresh">РћР±РЅРѕРІРёС‚СЊ</button>
         </div>
       </div>
 
@@ -410,8 +410,8 @@
               <th>Jarayon</th>
               <th>Kiritilgan sana</th>
               <th>Qaysi kun</th>
-              <th>№ Prihod</th>
-              <th>№ Vozvrat</th>
+              <th>в„– Prihod</th>
+              <th>в„– Vozvrat</th>
               <th>Tovar</th>
               <th>O'lchov</th>
               <th>Miqdori</th>
@@ -435,29 +435,29 @@
     <div class="modal" role="dialog" aria-modal="true">
       <div class="modalHead">
         <div style="display:flex; align-items:center; gap:10px">
-          <h2>Создать операцию</h2>
+          <h2>РЎРѕР·РґР°С‚СЊ РѕРїРµСЂР°С†РёСЋ</h2>
           <div class="toggle" title="Jarayon nomi">
             <button class="tbtn ok active" id="tPrixod">Prixod</button>
             <button class="tbtn bad" id="tVozvrat">Vozvrat</button>
           </div>
         </div>
-        <button class="btn" id="btnClose">Закрыть</button>
+        <button class="btn" id="btnClose">Р—Р°РєСЂС‹С‚СЊ</button>
       </div>
 
       <div class="modalBody">
         <div class="grid">
           <div id="blockInvoiceVozvrat" style="display:none">
-            <label>№ накладной возврата</label>
+            <label>в„– РЅР°РєР»Р°РґРЅРѕР№ РІРѕР·РІСЂР°С‚Р°</label>
             <input id="mInvVozvrat" class="readonly" readonly />
           </div>
 
           <div id="blockInvoicePrihod">
-            <label id="lblInvPrihod">№ накладной прихода</label>
+            <label id="lblInvPrihod">в„– РЅР°РєР»Р°РґРЅРѕР№ РїСЂРёС…РѕРґР°</label>
             <input id="mInvPrihod" class="readonly" readonly />
           </div>
 
           <div class="full" id="blockPrihodPick" style="display:none">
-            <label>Выберите № накладной прихода (для возврата)</label>
+            <label>Р’С‹Р±РµСЂРёС‚Рµ в„– РЅР°РєР»Р°РґРЅРѕР№ РїСЂРёС…РѕРґР° (РґР»СЏ РІРѕР·РІСЂР°С‚Р°)</label>
             <select id="mPickPrihod"></select>
           </div>
 
@@ -493,7 +493,7 @@
 
             <div style="display:flex; justify-content:space-between; gap:10px; margin-top:10px; align-items:center">
               <div style="font-size:12px; color:var(--muted)" id="linesHint"></div>
-              <button class="btn" id="btnAddLine" type="button">+ Товар</button>
+              <button class="btn" id="btnAddLine" type="button">+ РўРѕРІР°СЂ</button>
             </div>
           </div>
         </div>
@@ -506,15 +506,15 @@
             <td><input class="lineNarx" inputmode="numeric" placeholder="0" /></td>
             <td><input class="lineJami readonly" readonly /></td>
             <td><select class="lineQayerga"></select></td>
-            <td><button class="btn danger lineDel" type="button">×</button></td>
+            <td><button class="btn danger lineDel" type="button">Г—</button></td>
           </tr>
         </template>
 
       </div>
 
       <div class="modalFoot">
-        <button class="btn" id="btnCancel">Отмена</button>
-        <button class="btn primary" id="btnOk">ОК</button>
+        <button class="btn" id="btnCancel">РћС‚РјРµРЅР°</button>
+        <button class="btn primary" id="btnOk">РћРљ</button>
       </div>
     </div>
   </div>
@@ -523,7 +523,7 @@
   <div class="overlay" id="overlay"><div class="loader"></div></div>
 
   <script>
-    // TODO: вставь URL своего Apps Script Web App
+    // TODO: РІСЃС‚Р°РІСЊ URL СЃРІРѕРµРіРѕ Apps Script Web App
     const API_URL = "https://script.google.com/macros/s/AKfycbwM3NP9EzCUKFnqKDVbPJKAZ7qoKEsyOoMCClSppAsTTD5q2zczskL8lX9xSbayoocRSA/exec";
 
     const LS = {
@@ -552,7 +552,7 @@
       const body = new URLSearchParams({ action, token, ...data });
       const res = await fetch(API_URL, { method:"POST", body });
       const json = await res.json();
-      if(!json.ok) throw new Error(json.error || "Ошибка");
+      if(!json.ok) throw new Error(json.error || "РћС€РёР±РєР°");
       setLast(); // any API call counts as activity
       return json;
     }
@@ -685,7 +685,7 @@
         return tb - ta;
       });
 
-      document.getElementById("count").textContent = `Показано: ${rows.length} / Всего: ${state.rows.length}`;
+      document.getElementById("count").textContent = `РџРѕРєР°Р·Р°РЅРѕ: ${rows.length} / Р’СЃРµРіРѕ: ${state.rows.length}`;
 
       for(const r of rows){
         const tag = r.jarayon === "Vozvrat"
@@ -722,8 +722,8 @@
         card.innerHTML = `
           <div class="itemTop">
             <div>
-              <div class="itemTitle">${r.tovar || "—"}</div>
-              <div style="margin-top:6px">${tag} <span style="color:var(--muted); font-size:12px">№Prihod: <b>${r.nakladPrihod||"—"}</b> ${r.nakladVozvrat ? `| №Vozvrat: <b>${r.nakladVozvrat}</b>`:""}</span></div>
+              <div class="itemTitle">${r.tovar || "вЂ”"}</div>
+              <div style="margin-top:6px">${tag} <span style="color:var(--muted); font-size:12px">в„–Prihod: <b>${r.nakladPrihod||"вЂ”"}</b> ${r.nakladVozvrat ? `| в„–Vozvrat: <b>${r.nakladVozvrat}</b>`:""}</span></div>
             </div>
             <div style="text-align:right; font-size:12px; color:var(--muted)">
               <div>${fmtDateTime(r.kiritilganSana)}</div>
@@ -734,16 +734,16 @@
             <div class="kv"><span>Miqdori</span><b class="num ${miqCls}">${fmtQty(r.miqdor)}</b></div>
             <div class="kv"><span>Narxi</span><b class="num">${fmtMoney(r.narx)}</b></div>
             <div class="kv"><span>Jami</span><b class="num ${jamiCls}">${fmtMoney(r.jami)}</b></div>
-            <div class="kv"><span>Kontragent</span><b>${r.kontragent || "—"}</b></div>
-            <div class="kv"><span>Qayerga</span><b>${r.qayerga || "—"}</b></div>
-            <div class="kv"><span>Foydalanuvchi</span><b>${r.foydalanuvchi || "—"}</b></div>
+            <div class="kv"><span>Kontragent</span><b>${r.kontragent || "вЂ”"}</b></div>
+            <div class="kv"><span>Qayerga</span><b>${r.qayerga || "вЂ”"}</b></div>
+            <div class="kv"><span>Foydalanuvchi</span><b>${r.foydalanuvchi || "вЂ”"}</b></div>
           </div>
         `;
         cards.appendChild(card);
       }
     }
 
-    function fillSelect(sel, items, placeholder="Выберите..."){
+    function fillSelect(sel, items, placeholder="Р’С‹Р±РµСЂРёС‚Рµ..."){
       sel.innerHTML = "";
       const opt0 = document.createElement("option");
       opt0.value = "";
@@ -773,9 +773,9 @@
       const users = Array.from(new Set(state.rows.map(r=>String(r.foydalanuvchi||"").trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b));
       const kontr = state.info.kontragent.slice();
 
-      fillSelect(document.getElementById("fTovar"), state.info.tovar, "Все");
-      fillSelect(document.getElementById("fKontr"), kontr, "Все");
-      fillSelect(document.getElementById("fUser"), users, "Все");
+      fillSelect(document.getElementById("fTovar"), state.info.tovar, "Р’СЃРµ");
+      fillSelect(document.getElementById("fKontr"), kontr, "Р’СЃРµ");
+      fillSelect(document.getElementById("fUser"), users, "Р’СЃРµ");
     }
 
     function openModal(){
@@ -797,14 +797,14 @@
       sel.innerHTML = "";
       const o0 = document.createElement("option");
       o0.value = "";
-      o0.textContent = "Выберите...";
+      o0.textContent = "Р’С‹Р±РµСЂРёС‚Рµ...";
       sel.appendChild(o0);
 
       if(state.jarayon === "Vozvrat"){
         for(const it of (state.vozvratCtx.items || [])){
           const o = document.createElement("option");
           o.value = it.tovar;
-          o.textContent = `${it.tovar} (доступно: ${it.remaining})`;
+          o.textContent = `${it.tovar} (РґРѕСЃС‚СѓРїРЅРѕ: ${it.remaining})`;
           o.dataset.remaining = String(it.remaining);
           o.dataset.narx = String(it.narx || 0);
           sel.appendChild(o);
@@ -820,7 +820,7 @@
     }
 
     function fillLineQayergaOptions(sel){
-      fillSelect(sel, state.info.qayerga || [], "Выберите куда...");
+      fillSelect(sel, state.info.qayerga || [], "Р’С‹Р±РµСЂРёС‚Рµ РєСѓРґР°...");
     }
 
     function getReturnMax(tovar){
@@ -864,8 +864,8 @@
         tr.querySelector(".lineMiqdor").value = String(allowed);
       }
 
-      tr.querySelector(".lineMiqdor").title = `Макс для этого товара сейчас: ${allowed} (из ${max})`;
-      document.getElementById("linesHint").textContent = `Vozvrat: лимит считается суммарно по одинаковым товарам`;
+      tr.querySelector(".lineMiqdor").title = `РњР°РєСЃ РґР»СЏ СЌС‚РѕРіРѕ С‚РѕРІР°СЂР° СЃРµР№С‡Р°СЃ: ${allowed} (РёР· ${max})`;
+      document.getElementById("linesHint").textContent = `Vozvrat: Р»РёРјРёС‚ СЃС‡РёС‚Р°РµС‚СЃСЏ СЃСѓРјРјР°СЂРЅРѕ РїРѕ РѕРґРёРЅР°РєРѕРІС‹Рј С‚РѕРІР°СЂР°Рј`;
     }
 
     function onLineTovarChange(tr){
@@ -938,7 +938,7 @@
         const narx = parseMoney(tr.querySelector(".lineNarx").value);
         const qayerga = String(tr.querySelector(".lineQayerga").value || "").trim();
 
-        // пропускаем полностью пустые строки
+        // РїСЂРѕРїСѓСЃРєР°РµРј РїРѕР»РЅРѕСЃС‚СЊСЋ РїСѓСЃС‚С‹Рµ СЃС‚СЂРѕРєРё
         if(!tovar && !Number.isFinite(miqdor) && !Number.isFinite(narx) && !qayerga) return;
 
         out.push({ tovar, olchov, miqdor, narx, qayerga, lineId: tr.dataset.lineId });
@@ -957,7 +957,7 @@
       const dd = String(d.getDate()).padStart(2,"0");
       document.getElementById("mQaysiKun").value = `${yyyy}-${mm}-${dd}`;
 
-      fillSelect(document.getElementById("mKontr"), state.info.kontragent, "Выберите контрагента...");
+      fillSelect(document.getElementById("mKontr"), state.info.kontragent, "Р’С‹Р±РµСЂРёС‚Рµ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°...");
 
       // numbers
       document.getElementById("mInvPrihod").value = String(state.numbers.nextPrihod || 1);
@@ -968,7 +968,7 @@
       pick.innerHTML = "";
       const p0 = document.createElement("option");
       p0.value = "";
-      p0.textContent = "Выберите накладную...";
+      p0.textContent = "Р’С‹Р±РµСЂРёС‚Рµ РЅР°РєР»Р°РґРЅСѓСЋ...";
       pick.appendChild(p0);
 
       for(const inv of state.numbers.prihodInvoices){
@@ -996,7 +996,7 @@
       document.getElementById("blockInvoiceVozvrat").style.display = isV ? "block" : "none";
       document.getElementById("blockPrihodPick").style.display = isV ? "block" : "none";
       document.getElementById("blockInvoicePrihod").style.display = isV ? "none" : "block";
-      document.getElementById("lblInvPrihod").textContent = "№ накладной прихода";
+      document.getElementById("lblInvPrihod").textContent = "в„– РЅР°РєР»Р°РґРЅРѕР№ РїСЂРёС…РѕРґР°";
 
       if(isV){
         loadVozvratContext();
@@ -1016,7 +1016,7 @@
         inv = pickEl.value;
       }
       if(!inv){
-        toast("Нет накладных прихода для возврата");
+        toast("РќРµС‚ РЅР°РєР»Р°РґРЅС‹С… РїСЂРёС…РѕРґР° РґР»СЏ РІРѕР·РІСЂР°С‚Р°");
         resetLines();
         addLine();
         return;
@@ -1035,7 +1035,7 @@
         setSelectValueOrAdd(document.getElementById("mKontr"), ctx.kontragent || "");
 
         if(!ctx.items || !ctx.items.length){
-          toast("По этой накладной нет доступных остатков для возврата");
+          toast("РџРѕ СЌС‚РѕР№ РЅР°РєР»Р°РґРЅРѕР№ РЅРµС‚ РґРѕСЃС‚СѓРїРЅС‹С… РѕСЃС‚Р°С‚РєРѕРІ РґР»СЏ РІРѕР·РІСЂР°С‚Р°");
           resetLines();
           addLine();
           return;
@@ -1044,7 +1044,7 @@
         resetLines();
         addLine();
       }catch(e){
-        toast(e.message || "Ошибка");
+        toast(e.message || "РћС€РёР±РєР°");
       }finally{
         showOverlay(false);
       }
@@ -1059,22 +1059,22 @@
       const qaysiKun = document.getElementById("mQaysiKun").value;
       const kontragent = document.getElementById("mKontr").value;
 
-      if(!qaysiKun){ toast("Выберите дату (Qaysi kun uchun)"); return; }
-      if(!kontragent){ toast("Выберите контрагента"); return; }
+      if(!qaysiKun){ toast("Р’С‹Р±РµСЂРёС‚Рµ РґР°С‚Сѓ (Qaysi kun uchun)"); return; }
+      if(!kontragent){ toast("Р’С‹Р±РµСЂРёС‚Рµ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°"); return; }
 
       const lines = collectLines();
-      if(!lines.length){ toast("Добавьте хотя бы один товар"); return; }
+      if(!lines.length){ toast("Р”РѕР±Р°РІСЊС‚Рµ С…РѕС‚СЏ Р±С‹ РѕРґРёРЅ С‚РѕРІР°СЂ"); return; }
 
       // validate lines
       for(let i=0;i<lines.length;i++){
         const l = lines[i];
-        if(!l.tovar){ toast(`Строка ${i+1}: выберите товар`); return; }
-        if(!Number.isFinite(l.miqdor) || l.miqdor<=0){ toast(`Строка ${i+1}: введите Miqdori`); return; }
-        if(!Number.isFinite(l.narx) || l.narx<0){ toast(`Строка ${i+1}: введите Narxi`); return; }
-        if(!l.qayerga){ toast(`Строка ${i+1}: выберите Qayerga`); return; }
+        if(!l.tovar){ toast(`РЎС‚СЂРѕРєР° ${i+1}: РІС‹Р±РµСЂРёС‚Рµ С‚РѕРІР°СЂ`); return; }
+        if(!Number.isFinite(l.miqdor) || l.miqdor<=0){ toast(`РЎС‚СЂРѕРєР° ${i+1}: РІРІРµРґРёС‚Рµ Miqdori`); return; }
+        if(!Number.isFinite(l.narx) || l.narx<0){ toast(`РЎС‚СЂРѕРєР° ${i+1}: РІРІРµРґРёС‚Рµ Narxi`); return; }
+        if(!l.qayerga){ toast(`РЎС‚СЂРѕРєР° ${i+1}: РІС‹Р±РµСЂРёС‚Рµ Qayerga`); return; }
       }
 
-      // Vozvrat: aggregate limitation (без частичного сохранения)
+      // Vozvrat: aggregate limitation (Р±РµР· С‡Р°СЃС‚РёС‡РЅРѕРіРѕ СЃРѕС…СЂР°РЅРµРЅРёСЏ)
       if(state.jarayon === "Vozvrat"){
         const sumBy = {};
         for(const l of lines){
@@ -1083,7 +1083,7 @@
         for(const tv of Object.keys(sumBy)){
           const max = getReturnMax(tv);
           if(sumBy[tv] > max + 1e-9){
-            toast(`Нельзя вернуть больше чем доступно. ${tv}: хотите ${sumBy[tv]}, доступно ${max}`);
+            toast(`РќРµР»СЊР·СЏ РІРµСЂРЅСѓС‚СЊ Р±РѕР»СЊС€Рµ С‡РµРј РґРѕСЃС‚СѓРїРЅРѕ. ${tv}: С…РѕС‚РёС‚Рµ ${sumBy[tv]}, РґРѕСЃС‚СѓРїРЅРѕ ${max}`);
             return;
           }
         }
@@ -1094,7 +1094,7 @@
 
       showOverlay(true);
       try{
-        // Сохраняем по строкам (backend уже умеет по 1 записи)
+        // РЎРѕС…СЂР°РЅСЏРµРј РїРѕ СЃС‚СЂРѕРєР°Рј (backend СѓР¶Рµ СѓРјРµРµС‚ РїРѕ 1 Р·Р°РїРёСЃРё)
         for(const l of lines){
           const payload = {
             jarayon: state.jarayon,
@@ -1113,11 +1113,11 @@
           await api("createRecord", payload);
         }
 
-        toast(`Успешно сохранено ✅ (${lines.length} строк)`);
+        toast(`РЈСЃРїРµС€РЅРѕ СЃРѕС…СЂР°РЅРµРЅРѕ вњ… (${lines.length} СЃС‚СЂРѕРє)`);
         closeModal();
         await reloadAll();
       }catch(e){
-        toast(e.message || "Ошибка сохранения");
+        toast(e.message || "РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ");
       }finally{
         showOverlay(false);
       }
@@ -1147,7 +1147,7 @@
         buildFilters();
         applyFilters();
       }catch(e){
-        toast(e.message || "Ошибка загрузки");
+        toast(e.message || "РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё");
         if((e.message||"").toLowerCase().includes("session")){
           clearSession();
           redirectLogin();
@@ -1180,7 +1180,7 @@
 
       try{
         const u = JSON.parse(localStorage.getItem(LS.user) || "{}");
-        document.getElementById("userName").textContent = u.ism || u.login || "—";
+        document.getElementById("userName").textContent = u.ism || u.login || "вЂ”";
       }catch(_){}
 
       try{
@@ -1200,7 +1200,7 @@
       setInterval(()=>{
         const last = getLast();
         if(last && (now()-last) > INACTIVITY_MS){
-          toast("Сессия завершена (нет активности 2 часа)");
+          toast("РЎРµСЃСЃРёСЏ Р·Р°РІРµСЂС€РµРЅР° (РЅРµС‚ Р°РєС‚РёРІРЅРѕСЃС‚Рё 2 С‡Р°СЃР°)");
           clearSession();
           setTimeout(()=>redirectLogin(), 500);
         }
@@ -1247,3 +1247,4 @@
   </script>
 </body>
 </html>
+

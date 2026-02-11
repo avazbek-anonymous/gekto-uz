@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>BPS.system — Dashboard</title>
+  <title>BPS.system вЂ” Dashboard</title>
 
   <style>
     :root{
@@ -486,7 +486,7 @@
         linear-gradient(90deg, rgba(241,98,98,.95), rgba(241,98,98,.55));
     }
 
-    /* constant “liquid movement” texture */
+    /* constant вЂњliquid movementвЂќ texture */
     .liqLiquid::after{
       content:"";
       position:absolute; inset:-10px -40px;
@@ -513,7 +513,7 @@
       100%{transform:translateX(60px)}
     }
 
-    /* “boost” animation on filter updates */
+    /* вЂњboostвЂќ animation on filter updates */
     .liquidBoost .liqLiquid::after{ animation-duration: 1.0s; opacity:.62; }
     .liquidBoost .liqLiquid{ filter:saturate(1.15) contrast(1.05); }
 
@@ -672,11 +672,11 @@
         </div>
 
         <div class="hdrRight">
-          <span id="userPill" class="pill">👤 -</span>
+          <span id="userPill" class="pill">рџ‘¤ -</span>
           <button id="btnReload" class="btn">Yangilash</button>
           <button id="btnLogout" class="btn danger">Chiqish</button>
           <span id="status" class="pill"><span class="muted">Yuklanmoqda...</span></span>
-          <button id="burger" class="burger" title="Menu">☰</button>
+          <button id="burger" class="burger" title="Menu">в°</button>
         </div>
       </header>
 
@@ -688,7 +688,7 @@
           <!-- Left: balances -->
           <div class="card balancesCard">
             <div class="cardTitleRow">
-              <div class="cardTitle">Qoldiq (hamma sana bo‘yicha)</div>
+              <div class="cardTitle">Qoldiq (hamma sana boвЂyicha)</div>
               <span id="updatedAt" class="muted"></span>
             </div>
             <div id="balances" class="balList"></div>
@@ -697,13 +697,13 @@
           <!-- Right: date + totals + category summary -->
           <div class="card rightDashCard">
             <div class="rightTopBar">
-              <div class="cardTitle">Kategoriya bo‘yicha</div>
+              <div class="cardTitle">Kategoriya boвЂyicha</div>
 
               <button id="btnClear" class="btn" type="button">Reset</button>
 
               <button type="button" id="dateRangeBtn" class="dateRangeBtn">
                 <span id="dateRangeText">Bugun</span>
-                <span class="dateRangeIco">📅</span>
+                <span class="dateRangeIco">рџ“…</span>
               </button>
 
               <input id="dateFrom" type="hidden"/>
@@ -752,10 +752,10 @@
         <div id="datePicker" class="datePicker" aria-hidden="true">
           <div class="dpCard" role="dialog" aria-modal="true">
             <div class="dpHead">
-              <button type="button" class="dpNav" id="dpPrev" aria-label="Prev month">‹</button>
-              <div class="dpTitle" id="dpTitle">—</div>
-              <button type="button" class="dpNav" id="dpNext" aria-label="Next month">›</button>
-              <button type="button" class="dpClose" id="dpClose" aria-label="Close">✕</button>
+              <button type="button" class="dpNav" id="dpPrev" aria-label="Prev month">вЂ№</button>
+              <div class="dpTitle" id="dpTitle">вЂ”</div>
+              <button type="button" class="dpNav" id="dpNext" aria-label="Next month">вЂє</button>
+              <button type="button" class="dpClose" id="dpClose" aria-label="Close">вњ•</button>
             </div>
 
             <div class="dpWeek">
@@ -774,8 +774,8 @@
         <!-- NEW PIE DASH -->
         <div class="card pieCard">
           <div class="cardTitleRow">
-            <div class="cardTitle">Pie chart (USD) — kategoriya ulushi</div>
-            <span class="muted">Hover: kategoriya + summa • Filtr o‘zgarsa: animatsiya</span>
+            <div class="cardTitle">Pie chart (USD) вЂ” kategoriya ulushi</div>
+            <span class="muted">Hover: kategoriya + summa вЂў Filtr oвЂzgarsa: animatsiya</span>
           </div>
 
           <div class="pieGrid">
@@ -787,7 +787,7 @@
               <div class="pieCanvasWrap">
                 <canvas id="pieIn" class="pieCanvas"></canvas>
               </div>
-              <div class="pieHint">* Top 10 ko‘rsatiladi, qolganlari “Boshqa”ga yig‘iladi</div>
+              <div class="pieHint">* Top 10 koвЂrsatiladi, qolganlari вЂњBoshqaвЂќga yigвЂiladi</div>
             </div>
 
             <div class="pieBox">
@@ -798,7 +798,7 @@
               <div class="pieCanvasWrap">
                 <canvas id="pieOut" class="pieCanvas"></canvas>
               </div>
-              <div class="pieHint">* 0/Manfiy ko‘rsatilmaydi</div>
+              <div class="pieHint">* 0/Manfiy koвЂrsatilmaydi</div>
             </div>
           </div>
         </div>
@@ -806,8 +806,8 @@
         <!-- BLOCK 2 -->
         <div id="liquidCard" class="card liquidCard">
           <div class="cardTitleRow">
-            <div class="cardTitle">Kategoriyalar (USD) — “suyuqlik” chart</div>
-            <span class="muted">0/Manfiy ko‘rsatilmaydi • ulush bo‘yicha to‘lish</span>
+            <div class="cardTitle">Kategoriyalar (USD) вЂ” вЂњsuyuqlikвЂќ chart</div>
+            <span class="muted">0/Manfiy koвЂrsatilmaydi вЂў ulush boвЂyicha toвЂlish</span>
           </div>
 
           <div class="liquidGrid">
@@ -815,7 +815,7 @@
             <div class="liqCol">
               <div class="liqHead">
                 <div class="liqTitle in">Daromad (Kirim USD)</div>
-                <button id="sortIn" class="sortBtn" type="button">Kirim USD ↓</button>
+                <button id="sortIn" class="sortBtn" type="button">Kirim USD в†“</button>
               </div>
               <div id="incomeList" class="liqList"></div>
             </div>
@@ -824,7 +824,7 @@
             <div class="liqCol">
               <div class="liqHead">
                 <div class="liqTitle out">Xarajat (Chiqim USD)</div>
-                <button id="sortOut" class="sortBtn" type="button">Chiqim USD ↓</button>
+                <button id="sortOut" class="sortBtn" type="button">Chiqim USD в†“</button>
               </div>
               <div id="expenseList" class="liqList"></div>
             </div>
@@ -842,7 +842,7 @@
     const API_SECRET = "bpsSecret123";
 
     const HOME_URL = "/bps.html";
-    const LOGIN_URL = "/bpslogin"; // или "/bpslogin.html"
+    const LOGIN_URL = "/bpslogin"; // РёР»Рё "/bpslogin.html"
     const IDLE_MS = 3 * 60 * 1000;
     const TOUCH_DEBOUNCE_MS = 25000;
 
@@ -886,7 +886,7 @@
               <div class="navItem navGroupHead ${isActiveGroup?"active":""}">
                 <span class="navIcon">${item.icon||""}</span>
                 <span class="navText">${escapeHtml(item.label)}</span>
-                <span class="navChevron">▾</span>
+                <span class="navChevron">в–ѕ</span>
               </div>
               <div class="navGroupBody">
                 ${(item.children||[]).map(ch=>`
@@ -1120,7 +1120,7 @@
         USER = res.user;
         localStorage.setItem("bps_user", JSON.stringify(USER));
       }
-      userPill.textContent = `👤 ${USER?.ism || USER?.login || "-"}`;
+      userPill.textContent = `рџ‘¤ ${USER?.ism || USER?.login || "-"}`;
 
       renderBalances();
 
@@ -1133,7 +1133,7 @@
 
     function renderBalances(){
       if(!BALANCES || BALANCES.length===0){
-        balancesBox.innerHTML = `<div class="muted">Qoldiq yo‘q</div>`;
+        balancesBox.innerHTML = `<div class="muted">Qoldiq yoвЂq</div>`;
         return;
       }
       balancesBox.innerHTML = BALANCES.map(b=>`
@@ -1166,7 +1166,7 @@
 
     function renderCategorySummary(list){
       if(!list || list.length===0){
-        catBody.innerHTML = `<tr><td colspan="5" class="empty">Operatsiyalar yo‘q</td></tr>`;
+        catBody.innerHTML = `<tr><td colspan="5" class="empty">Operatsiyalar yoвЂq</td></tr>`;
         return;
       }
       const map = new Map();
@@ -1194,7 +1194,7 @@
     }
 
     /*
-      Net USD per category (по твоей формуле, построчно по курсу):
+      Net USD per category (РїРѕ С‚РІРѕРµР№ С„РѕСЂРјСѓР»Рµ, РїРѕСЃС‚СЂРѕС‡РЅРѕ РїРѕ РєСѓСЂСЃСѓ):
       netUsd += (kirimUzs - chiqimUzs)/kurs + (kirimUsd - chiqimUsd)
 
       KirimUSD(cat) = max(0, netUsd)
@@ -1244,7 +1244,7 @@
       const outSorted = [...expense].sort((a,b)=> sortOutDir==="desc" ? b.usd-a.usd : a.usd-b.usd);
 
       if(inSorted.length===0){
-        incomeList.innerHTML = `<div class="empty">Kirim yo‘q</div>`;
+        incomeList.innerHTML = `<div class="empty">Kirim yoвЂq</div>`;
       } else {
         incomeList.innerHTML = inSorted.map(x=>{
           const pct = totalIn>0 ? (x.usd/totalIn*100) : 0;
@@ -1261,7 +1261,7 @@
       }
 
       if(outSorted.length===0){
-        expenseList.innerHTML = `<div class="empty">Chiqim yo‘q</div>`;
+        expenseList.innerHTML = `<div class="empty">Chiqim yoвЂq</div>`;
       } else {
         expenseList.innerHTML = outSorted.map(x=>{
           const pct = totalOut>0 ? (x.usd/totalOut*100) : 0;
@@ -1299,7 +1299,7 @@
 
     function colorFor(i, mode){
       // theme palette: green-ish for in, red-ish for out
-      // use HSL steps to keep “brand” style
+      // use HSL steps to keep вЂњbrandвЂќ style
       const baseHue = (mode==="in") ? 145 : 6;
       const hueJitter = (i*22) % 70;
       const hue = baseHue + (mode==="in" ? hueJitter : -hueJitter);
@@ -1587,12 +1587,12 @@
 
     sortInBtn.addEventListener("click", ()=>{
       sortInDir = (sortInDir==="desc") ? "asc" : "desc";
-      sortInBtn.textContent = `Kirim USD ${sortInDir==="desc" ? "↓" : "↑"}`;
+      sortInBtn.textContent = `Kirim USD ${sortInDir==="desc" ? "в†“" : "в†‘"}`;
       applyLiquidOnly();
     });
     sortOutBtn.addEventListener("click", ()=>{
       sortOutDir = (sortOutDir==="desc") ? "asc" : "desc";
-      sortOutBtn.textContent = `Chiqim USD ${sortOutDir==="desc" ? "↓" : "↑"}`;
+      sortOutBtn.textContent = `Chiqim USD ${sortOutDir==="desc" ? "в†“" : "в†‘"}`;
       applyLiquidOnly();
     });
 
@@ -1683,7 +1683,7 @@
         const b=toEl.value||"";
         if(!a && !b){ textEl.textContent="Barcha sana"; return; }
         if(a && (!b || a===b)){ textEl.textContent=fmtUZ(a); return; }
-        textEl.textContent = `${fmtUZ(a)} — ${fmtUZ(b)}`;
+        textEl.textContent = `${fmtUZ(a)} вЂ” ${fmtUZ(b)}`;
       }
       function daysInMonth(y,m){ return new Date(y,m+1,0).getDate(); }
       function weekdayMon0(d){ const w=d.getDay(); return (w+6)%7; }
@@ -1813,3 +1813,4 @@
   </script>
 </body>
 </html>
+
