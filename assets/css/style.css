@@ -860,6 +860,7 @@ footer.main-footer nav.footer-nav ul li a{
 	z-index: 1;
 }
 .input_1 > span.active,.textarea_1 > span.active{
+	z-index: 2;
 	color:#003A2F;
 	font-size: 10px;
 	top:0px;
