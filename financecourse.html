@@ -295,22 +295,49 @@
     }
 
     .fc-price-box {
-      background: transparent;
-      border: 1px solid #d9e2e8;
-      border-radius: 12px;
-      padding: 24px;
+      border: 1px solid #d5dfe4;
+      border-radius: 18px;
+      padding: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.3));
+      box-shadow: 0 12px 28px rgba(5, 68, 56, .08);
     }
-    .fc-price-copy {
-      text-align: center;
-      color: #003f37;
+    .fc-price-tiers {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .fc-tier-card {
+      border: 1px solid #cad8df;
+      border-radius: 14px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,.8);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .fc-tier-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.08);
+    }
+    .fc-tier-label {
+      font-size: 13px;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+      color: #45656b;
       font-weight: 700;
-      font-size: 40px;
-      line-height: 1.5;
-      margin-bottom: 22px;
+      margin-bottom: 6px;
     }
-    .fc-price-copy .hl {
-      background: #e2e2e2;
-      padding: 0 6px;
+    .fc-tier-price {
+      font-size: 42px;
+      line-height: 1.05;
+      color: #003f37;
+      font-weight: 800;
+      font-family: "Montserrat", sans-serif;
+    }
+    .fc-tier-currency {
+      font-size: 18px;
+      font-weight: 700;
+      margin-left: 6px;
+      color: #0a5a4b;
     }
 
     .fc-table-wrap { overflow-x: auto; }
@@ -318,26 +345,35 @@
       width: 100%;
       border-collapse: collapse;
       min-width: 700px;
-      background: transparent;
+      border: 1px solid #c4d2d9;
+      border-radius: 12px;
+      overflow: hidden;
     }
     .fc-table th,
     .fc-table td {
-      border: 1px solid #666;
+      border: 1px solid #c4d2d9;
       text-align: center;
-      padding: 10px 12px;
-      font-size: 28px;
-      color: #232323;
+      padding: 12px 14px;
+      font-size: 24px;
+      color: #1f2c2f;
     }
-    .fc-table th { background: #e9e9e9; font-weight: 700; }
+    .fc-table th {
+      background: #ecf2f5;
+      font-weight: 700;
+      color: #003f37;
+    }
+    .fc-table tbody tr:nth-child(even) { background: rgba(236,242,245,.4); }
+    .fc-table tbody tr:hover { background: rgba(240,198,81,.16); }
 
     @media (max-width: 1199px) {
       .fc-hero-title { font-size: 42px; }
       .fc-center-copy { font-size: 34px; }
       .fc-adv-card .txt { font-size: 21px; }
       .fc-module-list li { font-size: 18px; }
-      .fc-price-copy { font-size: 34px; }
+      .fc-tier-price { font-size: 34px; }
       .fc-bonus .txt { font-size: 26px; }
       .fc-point .txt { font-size: 18px; }
+      .fc-table th, .fc-table td { font-size: 20px; }
     }
     @media (max-width: 991px) {
       .fc-grid-2 { grid-template-columns: 1fr; }
@@ -349,9 +385,10 @@
       .fc-hero-box .fc-center-copy { font-size: 18px; line-height: 1.4; }
       .fc-adv-card .txt { font-size: 18px; }
       .fc-module-list li { font-size: 17px; }
-      .fc-table th,
-      .fc-table td { font-size: 20px; }
-      .fc-price-copy { font-size: 26px; }
+      .fc-price-box { padding: 20px; }
+      .fc-price-tiers { grid-template-columns: 1fr; }
+      .fc-tier-price { font-size: 28px; }
+      .fc-table th, .fc-table td { font-size: 16px; }
       .fc-bonus { grid-template-columns: 1fr; }
       .fc-bonus-icon { margin: 0 auto; }
       .fc-bonus .txt { font-size: 22px; text-align: center; }
@@ -415,11 +452,11 @@
         <div class="col-md-6 wow fadeInRight">
           <div class="fc-hero-box">
             <h2 class="fc-hero-title">MAXSUS<br>MOLIYA</h2>
-            <div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Кимлар учун?</div>
+            <div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Kimlar uchun?</div>
             <div class="fc-center-copy wow fadeInUp" data-wow-delay=".1s">
-              Фақат ҳозирда бирор компанияда ҳисоб-китоб билан шуғулланаётганлар учун мўлжалланган.<br><br>
-              Сабаби, бу курсда кўпроқ
-              <span class="fc-red">чуқурлаштирилган молиявий бошқарув инструментлари</span> ўргатилади.
+              Faqat hozirda biror kompaniyada hisob-kitob bilan shug'ullanayotganlar uchun mo'ljallangan.<br><br>
+              Sababi, bu kursda ko'proq
+              <span class="fc-red">chuqurlashtirilgan moliyaviy boshqaruv instrumentlari</span> o'rgatiladi.
             </div>
           </div>
         </div>
@@ -429,55 +466,55 @@
 
   <section class="fc-wrap fc-section">
     <div class="container">
-      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Қандай муаммоларни ечади?</div></div>
+      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Qanday muammolarni echadi?</div></div>
       <div class="fc-grid-2">
-        <div class="fc-point wow fadeInUp"><i class="icon ion-cash"></i><div class="txt">Доимий пул етишмаслиги, яъни <span class="fc-red">кассовий разрыв</span>.</div></div>
-        <div class="fc-point wow fadeInUp" data-wow-delay=".1s"><i class="icon ion-arrow-graph-up-right"></i><div class="txt"><span class="fc-red">Қарз ва инвестицияларда</span> нотўғри қарорлар...</div></div>
-        <div class="fc-point wow fadeInUp" data-wow-delay=".15s"><i class="icon ion-calendar"></i><div class="txt"><span class="fc-red">Режасиз</span> ишлаш</div></div>
-        <div class="fc-point wow fadeInUp" data-wow-delay=".2s"><i class="icon ion-social-usd"></i><div class="txt"><span class="fc-red">Тушум</span> бор - <span class="fc-red">фойда</span> йўқ.</div></div>
-        <div class="fc-point wow fadeInUp" data-wow-delay=".25s"><i class="icon ion-calculator"></i><div class="txt"><span class="fc-red">Ҳисоб-китобдаги</span> хатолар</div></div>
-        <div class="fc-point wow fadeInUp" data-wow-delay=".3s"><i class="icon ion-university"></i><div class="txt"><span class="fc-red">Таннархни ҳисоблаш</span> ва тўғри <span class="fc-red">бошқарув ҳисоботи</span></div></div>
+        <div class="fc-point wow fadeInUp"><i class="icon ion-cash"></i><div class="txt">Doimiy pul etishmasligi, ya'ni <span class="fc-red">kassa uzilishi</span>.</div></div>
+        <div class="fc-point wow fadeInUp" data-wow-delay=".1s"><i class="icon ion-arrow-graph-up-right"></i><div class="txt"><span class="fc-red">Qarz va investitsiyalarda</span> noto'g'ri qarorlar...</div></div>
+        <div class="fc-point wow fadeInUp" data-wow-delay=".15s"><i class="icon ion-calendar"></i><div class="txt"><span class="fc-red">Rejasiz</span> ishlash</div></div>
+        <div class="fc-point wow fadeInUp" data-wow-delay=".2s"><i class="icon ion-social-usd"></i><div class="txt"><span class="fc-red">Tushum</span> bor - <span class="fc-red">foyda</span> yo'q.</div></div>
+        <div class="fc-point wow fadeInUp" data-wow-delay=".25s"><i class="icon ion-calculator"></i><div class="txt"><span class="fc-red">Hisob-kitobdagi</span> xatolar</div></div>
+        <div class="fc-point wow fadeInUp" data-wow-delay=".3s"><i class="icon ion-university"></i><div class="txt"><span class="fc-red">Tannarxni hisoblash</span> va to'g'ri <span class="fc-red">boshqaruv hisoboti</span></div></div>
       </div>
     </div>
   </section>
 
   <section class="fc-wrap fc-section">
     <div class="container">
-      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Сизни курсда нималар кутмоқда...</div></div>
+      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Sizni kursda nimalar kutmoqda...</div></div>
       <div class="fc-grid-2">
-        <div class="fc-point wow fadeInUp"><i class="icon ion-ios-book"></i><div class="txt">1 ой назария, 1 ой амалийёт</div></div>
-        <div class="fc-point wow fadeInUp" data-wow-delay=".1s"><i class="icon ion-easel"></i><div class="txt">Оддий ва тушунарли тақдимот</div></div>
-        <div class="fc-point wow fadeInUp" data-wow-delay=".15s"><i class="icon ion-ios-lightbulb"></i><div class="txt">Бизнесдаги муоммоларга доир йечимлар</div></div>
-        <div class="fc-point wow fadeInUp" data-wow-delay=".2s"><i class="icon ion-network"></i><div class="txt">Кучли молиячилар билан нетворкинг</div></div>
-        <div class="fc-point wow fadeInUp" data-wow-delay=".25s"><i class="icon ion-chatbubbles"></i><div class="txt">Менторлар ёрдами</div></div>
-        <div class="fc-point wow fadeInUp" data-wow-delay=".3s"><i class="icon ion-ios-paper-outline"></i><div class="txt">Энг эффектив инструментлар</div></div>
+        <div class="fc-point wow fadeInUp"><i class="icon ion-ios-book"></i><div class="txt">1 oy nazariya, 1 oy amaliyot</div></div>
+        <div class="fc-point wow fadeInUp" data-wow-delay=".1s"><i class="icon ion-easel"></i><div class="txt">Oddiy va tushunarli taqdimot</div></div>
+        <div class="fc-point wow fadeInUp" data-wow-delay=".15s"><i class="icon ion-ios-lightbulb"></i><div class="txt">Biznesdagi muammolarga doir yechimlar</div></div>
+        <div class="fc-point wow fadeInUp" data-wow-delay=".2s"><i class="icon ion-network"></i><div class="txt">Kuchli moliyachilar bilan netvorking</div></div>
+        <div class="fc-point wow fadeInUp" data-wow-delay=".25s"><i class="icon ion-chatbubbles"></i><div class="txt">Mentorlar yordami</div></div>
+        <div class="fc-point wow fadeInUp" data-wow-delay=".3s"><i class="icon ion-ios-paper-outline"></i><div class="txt">Eng effektiv instrumentlar</div></div>
       </div>
     </div>
   </section>
 
   <section class="fc-wrap fc-section">
     <div class="container">
-      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Курснинг афзалликлари</div></div>
+      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Kursning afzalliklari</div></div>
       <div class="fc-adv-grid">
         <div class="fc-adv-card wow fadeInUp">
           <div class="fc-adv-icon"><i class="icon ion-ios-lightbulb"></i></div>
-          <p class="txt">Оддий ва тушунарли ёндашув.</p>
+          <p class="txt">Oddiy va tushunarli yondashuv.</p>
         </div>
         <div class="fc-adv-card wow fadeInUp" data-wow-delay=".08s">
           <div class="fc-adv-icon"><i class="icon ion-ios-pulse-strong"></i></div>
-          <p class="txt">Стратегик қарорлар учун молиячи харизмаси.</p>
+          <p class="txt">Strategik qarorlar uchun moliyachi xarizmasi.</p>
         </div>
         <div class="fc-adv-card wow fadeInUp" data-wow-delay=".14s">
           <div class="fc-adv-icon"><i class="icon ion-ios-briefcase"></i></div>
-          <p class="txt">Реал бизнес муаммоларига мос методология.</p>
+          <p class="txt">Real biznes muammolariga mos metodologiya.</p>
         </div>
         <div class="fc-adv-card wow fadeInUp" data-wow-delay=".2s">
           <div class="fc-adv-icon"><i class="icon ion-ios-analytics"></i></div>
-          <p class="txt">Барқарор бошқарув ва узоқ муддатли натижалар учун ечимлар.</p>
+          <p class="txt">Barqaror boshqaruv va uzoq muddatli natijalar uchun yechimlar.</p>
         </div>
         <div class="fc-adv-card wow fadeInUp" data-wow-delay=".26s">
           <div class="fc-adv-icon"><i class="icon ion-ios-gear"></i></div>
-          <p class="txt">Ҳозирги кунда ишлайдиган молия инструментлари.</p>
+          <p class="txt">Hozirgi kunda ishlaydigan moliya instrumentlari.</p>
         </div>
       </div>
     </div>
@@ -485,24 +522,24 @@
 
   <section class="fc-wrap fc-section">
     <div class="container">
-      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Курс модуллари (назария)</div></div>
+      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Kurs modullari (nazariya)</div></div>
       <div class="fc-module-deck">
         <div class="fc-module-panel wow fadeInLeft">
             <span class="fc-module-cap">Fundamental blok</span>
             <ul class="fc-module-list">
-              <li>Бизнесда молиянинг мухимлилиги</li>
-              <li>Молиявий ҳисоботлар ва Активлар тушунчаси</li>
-              <li>Даромад ва харажатларни ҳисобга олиш (P&amp;L)</li>
-              <li>Пул оқимларини бошқариш (CashFlow)</li>
+              <li>Biznesda moliyaning muximliligi</li>
+              <li>Moliyaviy hisobotlar va Aktivlar tushunchasi</li>
+              <li>Daromad va xarajatlarni hisobga olish (P&amp;L)</li>
+              <li>Pul oqimlarini boshqarish (CashFlow)</li>
             </ul>
         </div>
         <div class="fc-module-panel wow fadeInRight">
             <span class="fc-module-cap">Pro blok</span>
             <ul class="fc-module-list">
-              <li>Асосий воситаларни ҳисобга олиш. Амортизация. Захиралар билан ишлаш</li>
-              <li>Пассивлар, иш хакини ҳисоблаш ва KPI системаси</li>
-              <li>Таннарх ҳисоблаш турлари ва методлари</li>
-              <li>Молиявий таҳлил. Бизнесни рақамларда ўқиш</li>
+              <li>Asosiy vositalarni hisobga olish. Amortizatsiya. Zaxiralar bilan ishlash</li>
+              <li>Passivlar, ish haqini hisoblash va KPI sistemasi</li>
+              <li>Tannarx hisoblash turlari va metodlari</li>
+              <li>Moliyaviy tahlil. Biznesni raqamlarda o'qish</li>
             </ul>
         </div>
       </div>
@@ -511,24 +548,24 @@
 
   <section class="fc-wrap fc-section">
     <div class="container">
-      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Курс модуллари (амалийёт)</div></div>
+      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Kurs modullari (amaliyot)</div></div>
       <div class="fc-module-deck">
         <div class="fc-module-panel wow fadeInLeft">
             <span class="fc-module-cap">Savdo amaliyoti</span>
             <ul class="fc-module-list">
-              <li>Икки ёқлама ёзув</li>
-              <li>Олди-сотди бизнеси молиявий ҳисоботларини шакллантириш</li>
-              <li>Олди-сотди бизнеси молиявий ҳисоботларини шакллантириш</li>
-              <li>Олди-сотди бизнеси балансини ёпиш</li>
+              <li>Ikki yoqlama yozuv</li>
+              <li>Oldi-sotdi biznesi moliyaviy hisobotlarini shakllantirish</li>
+              <li>Oldi-sotdi biznesi moliyaviy hisobotlarini shakllantirish</li>
+              <li>Oldi-sotdi biznesi balansini yopish</li>
             </ul>
         </div>
         <div class="fc-module-panel wow fadeInRight">
             <span class="fc-module-cap">Ishlab chiqarish</span>
             <ul class="fc-module-list">
-              <li>Ишлаб чиқариш бизнеси молиявий ҳисоботларини шакллантириш</li>
-              <li>Ишлаб чиқариш бизнесида таннарх ҳисоблаш</li>
-              <li>Ишлаб чиқариш бизнесида фойда/зарар ҳисоблаш</li>
-              <li>Ишлаб чиқариш бизнеси балансини ёпиш</li>
+              <li>Ishlab chiqarish biznesi moliyaviy hisobotlarini shakllantirish</li>
+              <li>Ishlab chiqarish biznesida tannarx hisoblash</li>
+              <li>Ishlab chiqarish biznesida foyda/zarar hisoblash</li>
+              <li>Ishlab chiqarish biznesi balansini yopish</li>
             </ul>
         </div>
       </div>
@@ -537,11 +574,11 @@
 
   <section class="fc-wrap fc-section">
     <div class="container">
-      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">БОНУС</div></div>
+      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">BONUS</div></div>
       <div class="fc-bonus wow fadeInUp" data-wow-delay=".1s">
         <div class="fc-bonus-icon"><i class="icon ion-pricetag"></i></div>
-        <div class="txt"><small>Қўшимча имконият</small>Махсус молия онлайн дарслиги
-          <div class="fc-bonus-price">қиймати: 2 млн сўм</div>
+        <div class="txt"><small>Qo'shimcha imkoniyat</small>Maxsus moliya onlayn darsligi
+          <div class="fc-bonus-price">qiymati: 2 mln so'm</div>
         </div>
       </div>
     </div>
@@ -549,41 +586,47 @@
 
   <section class="fc-wrap fc-section">
     <div class="container">
-      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Тарифлар ва нархлар</div></div>
+      <div style="text-align:center;"><div class="fc-badge-title montserrat-text uppercase wow fadeInUp">Tariflar va narxlar</div></div>
       <div class="fc-price-box wow fadeInUp" data-wow-delay=".1s">
-        <div class="fc-price-copy">
-          Офлайн курс нархи <span class="hl">10.000.000</span> сўм<br>
-          Онлайн курс нархи <span class="hl">2.000.000</span> сўм
+        <div class="fc-price-tiers">
+          <div class="fc-tier-card">
+            <div class="fc-tier-label">Oflayn kurs narxi</div>
+            <div class="fc-tier-price">10.000.000<span class="fc-tier-currency">so'm</span></div>
+          </div>
+          <div class="fc-tier-card">
+            <div class="fc-tier-label">Onlayn kurs narxi</div>
+            <div class="fc-tier-price">2.000.000<span class="fc-tier-currency">so'm</span></div>
+          </div>
         </div>
         <div class="fc-table-wrap">
           <table class="fc-table">
             <thead>
               <tr>
-                <th>Скидкалар</th>
-                <th>1 киши учун</th>
-                <th>2+ киши нархи</th>
+                <th>Chegirmalar</th>
+                <th>1 kishi uchun</th>
+                <th>2+ kishi narxi</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>15 кун+ олдин</td>
+                <td>15 kun+ oldin</td>
                 <td>9.000.000</td>
                 <td>8.000.000</td>
               </tr>
               <tr>
-                <td>7 кун олдин</td>
+                <td>7 kun oldin</td>
                 <td>9.500.000</td>
                 <td>8.500.000</td>
               </tr>
               <tr>
-                <td>7 кундан кам</td>
+                <td>7 kundan kam</td>
                 <td>10.000.000</td>
                 <td>9.000.000</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p style="text-align:right;color:#777;margin-top:16px">*Нархлар бошқарув томонидан ўзгартирилиши мумкин</p>
+        <p style="text-align:right;color:#777;margin-top:16px">*Narxlar boshqaruv tomonidan o'zgartirilishi mumkin</p>
       </div>
     </div>
   </section>
@@ -737,3 +780,4 @@
   </script>
 </body>
 </html>
+
