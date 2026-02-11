@@ -1,0 +1,463 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Gekto - Maxsus Moliya</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Avazbek Kurbanmuradov">
+  <meta name="theme-color" content="#003a2f">
+  <meta name="description" content="Maxsus Moliya - chuqurlashtirilgan moliyaviy boshqaruv kursi.">
+
+  <link rel="icon" href="assets/img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/img/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/img/android-chrome-512x512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/ionicons.min.css">
+  <link rel="stylesheet" href="assets/css/animsition.min.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    .fc-light { background: #efefef; }
+    .fc-title-bar {
+      display: inline-block;
+      background: #f0c651;
+      color: #01493e;
+      border-radius: 8px;
+      padding: 10px 28px;
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 30px;
+    }
+    .fc-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+    .fc-hero-grid img { width: 100%; max-width: 520px; display: block; margin: 0 auto; }
+    .fc-hero-text h2 { font-size: 64px; line-height: 1.05; margin: 0 0 6px; }
+    .fc-hero-text p { font-size: 46px; margin: 0; color: #015146; }
+
+    .fc-center-text {
+      font-size: 26px;
+      line-height: 1.6;
+      color: #003f37;
+      font-weight: 700;
+      text-align: center;
+    }
+    .fc-red { color: #f70000; }
+
+    .fc-icon-item { display: flex; gap: 12px; margin-bottom: 30px; color: #003f37; }
+    .fc-icon-item i { font-size: 46px; color: #0a5a4b; line-height: 1; }
+    .fc-icon-item .txt { font-size: 20px; font-weight: 700; line-height: 1.35; }
+
+    .fc-list { color: #003f37; font-size: 22px; font-weight: 700; line-height: 1.55; }
+    .fc-list li { margin-bottom: 8px; }
+
+    .fc-table-wrap { overflow-x: auto; }
+    .fc-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      min-width: 680px;
+    }
+    .fc-table th, .fc-table td {
+      border: 1px solid #666;
+      padding: 10px 12px;
+      text-align: center;
+      font-size: 28px;
+    }
+    .fc-table th { background: #e8e8e8; font-weight: 700; }
+
+    .fc-bonus-box {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 28px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .fc-bonus-box i { font-size: 220px; color: #0a5a4b; line-height: 1; text-align: center; }
+    .fc-bonus-box .txt { font-size: 22px; font-weight: 700; color: #003f37; }
+
+    @media (max-width: 991px) {
+      .fc-hero-grid { grid-template-columns: 1fr; }
+      .fc-hero-text h2 { font-size: 44px; }
+      .fc-hero-text p { font-size: 32px; }
+      .fc-center-text { font-size: 22px; }
+      .fc-list { font-size: 18px; }
+      .fc-bonus-box { grid-template-columns: 1fr; text-align: center; }
+      .fc-bonus-box i { font-size: 150px; }
+    }
+  </style>
+</head>
+<body class="animsition">
+  <header class="main-header">
+    <div class="container">
+      <div class="logo">
+        <a href="index.html"><img src="assets/img/logo.png" alt="logo"></a>
+      </div>
+
+      <div class="menu">
+        <nav class="desktop-nav">
+          <ul class="first-level">
+            <li><a href="index.html" class="animsition-link">Asosiy</a></li>
+            <li><a href="about.html" class="animsition-link">Biz haqimizda</a></li>
+            <li><a href="services.html" class="animsition-link">Xizmatlarimiz</a></li>
+            <li><a href="">Portfolio</a>
+              <ul class="second-level">
+                <li><a href="portfolio-1.html" class="animsition-link">Proyektlarimiz</a></li>
+                <li><a href="single-project.html" class="animsition-link">Moliya tizimi</a></li>
+                <li><a href="single-project-2.html" class="animsition-link">Moliya modeli</a></li>
+              </ul>
+            </li>
+            <li><a href="">Kurslarimiz</a>
+              <ul class="second-level">
+                <li><a href="moliya.html" class="animsition-link">Oson Moliya</a></li>
+                <li><a href="financecourse.html" class="animsition-link">Maxsus Moliya</a></li>
+              </ul>
+            </li>
+            <li><a href="contact.html" class="animsition-link">Kontaktlarimiz</a></li>
+          </ul>
+        </nav>
+        <nav class="mobile-nav"></nav>
+        <div class="menu-icon">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="site-hero_2">
+    <div class="page-title">
+      <div class="big-title montserrat-text">MAXSUS MOLIYA</div>
+      <div class="small-title montserrat-text">Kurs taqdimoti</div>
+    </div>
+  </div>
+
+  <section class="fc-light">
+    <div class="container" style="padding:60px 0;">
+      <div class="fc-hero-grid">
+        <div>
+          <img src="assets/img/hero-person.png" alt="Maxsus moliya kursi">
+        </div>
+        <div class="fc-hero-text">
+          <h2 class="montserrat-text uppercase">MAXSUS MOLIYA</h2>
+          <p>Kurs taqdimoti</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fc-light">
+    <div class="container" style="padding:46px 0 64px;text-align:center;">
+      <div class="fc-title-bar montserrat-text uppercase">Кимлар учун?</div>
+      <div class="fc-center-text">
+        Фақат ҳозирда бирор компанияда<br>
+        ҳисоб-китоб билан шуғулланаётганлар<br>
+        учун мўлжалланган.<br><br>
+        Сабаби, бу курсда кўпроқ<br>
+        <span class="fc-red">чуқурлаштирилган молиявий бошқарув<br>инструментлари</span> ўргатилади.
+      </div>
+    </div>
+  </section>
+
+  <section class="fc-light">
+    <div class="container" style="padding:46px 0 30px;">
+      <div style="text-align:center"><div class="fc-title-bar montserrat-text uppercase">Қандай муаммоларни ечади?</div></div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="fc-icon-item"><i class="icon ion-cash"></i><div class="txt">Доимий пул етишмаслиги,<br>яъни <span class="fc-red">кассовий разрыв.</span></div></div>
+          <div class="fc-icon-item"><i class="icon ion-calendar"></i><div class="txt"><span class="fc-red">Режасиз</span><br>ишлаш</div></div>
+          <div class="fc-icon-item"><i class="icon ion-calculator"></i><div class="txt"><span class="fc-red">Ҳисоб-китобдаги</span><br>хатолар</div></div>
+        </div>
+        <div class="col-md-6">
+          <div class="fc-icon-item"><i class="icon ion-arrow-graph-up-right"></i><div class="txt"><span class="fc-red">Қарз ва инвестицияларда</span><br>нотўғри қарорлар...</div></div>
+          <div class="fc-icon-item"><i class="icon ion-social-usd"></i><div class="txt"><span class="fc-red">Тушум</span> бор - <span class="fc-red">фойда</span><br>йўқ.</div></div>
+          <div class="fc-icon-item"><i class="icon ion-university"></i><div class="txt"><span class="fc-red">Таннархни ҳисоблаш</span> ва тўғри<br><span class="fc-red">бошқарув ҳисоботи</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fc-light">
+    <div class="container" style="padding:46px 0 30px;">
+      <div style="text-align:center"><div class="fc-title-bar montserrat-text uppercase">Сизни курсда нималар кутмоқда...</div></div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="fc-icon-item"><i class="icon ion-ios-book"></i><div class="txt">1 ой назария,<br>1 ой амалийёт</div></div>
+          <div class="fc-icon-item"><i class="icon ion-ios-lightbulb"></i><div class="txt">Бизнесдаги муоммоларга<br>доир йечимлар</div></div>
+          <div class="fc-icon-item"><i class="icon ion-chatbubbles"></i><div class="txt">Менторлар<br>ёрдами</div></div>
+        </div>
+        <div class="col-md-6">
+          <div class="fc-icon-item"><i class="icon ion-easel"></i><div class="txt">Оддий ва тушунарли<br>тақдимот</div></div>
+          <div class="fc-icon-item"><i class="icon ion-network"></i><div class="txt">Кучли молиячилар<br>билан нетворкинг</div></div>
+          <div class="fc-icon-item"><i class="icon ion-ios-paper-outline"></i><div class="txt">Энг эффектив<br>инструментлар</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fc-light">
+    <div class="container" style="padding:46px 0 30px;">
+      <div style="text-align:center"><div class="fc-title-bar montserrat-text uppercase">Курснинг афзалликлари</div></div>
+      <ul class="fc-list" style="max-width:920px;margin:0 auto;">
+        <li>Оддий ва тушунарли ёндашув.</li>
+        <li>Стратегик қарорлар учун молиячи харизмаси.</li>
+        <li>Реал бизнес муаммоларига мос методология.</li>
+        <li>Барқарор бошқарув ва узоқ муддатли натижалар учун ечимлар.</li>
+        <li>Ҳозирги кунда ишлайдиган молия инструментлари.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="fc-light">
+    <div class="container" style="padding:46px 0 30px;">
+      <div style="text-align:center"><div class="fc-title-bar montserrat-text uppercase">Курс модуллари (назария)</div></div>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="fc-list">
+            <li>Бизнесда молиянинг мухимлилиги</li>
+            <li>Молиявий ҳисоботлар ва Активлар тушунчаси</li>
+            <li>Даромад ва харажатларни ҳисобга олиш (P&amp;L)</li>
+            <li>Пул оқимларини бошқариш (CashFlow)</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul class="fc-list">
+            <li>Асосий воситаларни ҳисобга олиш. Амортизация. Захиралар билан ишлаш</li>
+            <li>Пассивлар, иш хакини ҳисоблаш ва KPI системаси</li>
+            <li>Таннарх ҳисоблаш турлари ва методлари</li>
+            <li>Молиявий таҳлил. Бизнесни рақамларда ўқиш</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fc-light">
+    <div class="container" style="padding:46px 0 30px;">
+      <div style="text-align:center"><div class="fc-title-bar montserrat-text uppercase">Курс модуллари (амалийёт)</div></div>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="fc-list">
+            <li>Икки ёқлама ёзув</li>
+            <li>Олди-сотди бизнеси молиявий ҳисоботларини шакллантириш</li>
+            <li>Олди-сотди бизнеси молиявий ҳисоботларини шакллантириш</li>
+            <li>Олди-сотди бизнеси балансини ёпиш</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul class="fc-list">
+            <li>Ишлаб чиқариш бизнеси молиявий ҳисоботларини шакллантириш</li>
+            <li>Ишлаб чиқариш бизнесида таннарх ҳисоблаш</li>
+            <li>Ишлаб чиқариш бизнесида фойда/зарар ҳисоблаш</li>
+            <li>Ишлаб чиқариш бизнеси балансини ёпиш</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fc-light">
+    <div class="container" style="padding:46px 0 30px;">
+      <div style="text-align:center"><div class="fc-title-bar montserrat-text uppercase">БОНУС</div></div>
+      <div class="fc-bonus-box">
+        <i class="icon ion-ios-gift"></i>
+        <div class="txt">Махсус молия онлайн дарслиги<br>(қиймати 2 млн сўм)</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fc-light">
+    <div class="container" style="padding:46px 0 60px;">
+      <div style="text-align:center"><div class="fc-title-bar montserrat-text uppercase">Тарифлар ва нархлар</div></div>
+      <div class="fc-center-text" style="margin-bottom:28px;">
+        Офлайн курс нархи <span style="background:#dedede;padding:0 6px;">10.000.000</span> сўм<br>
+        Онлайн курс нархи <span style="background:#dedede;padding:0 6px;">2.000.000</span> сўм
+      </div>
+      <div class="fc-table-wrap">
+        <table class="fc-table">
+          <thead>
+            <tr>
+              <th>Скидкалар</th>
+              <th>1 киши учун</th>
+              <th>2+ киши нархи</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>15 кун+ олдин</td>
+              <td>9.000.000</td>
+              <td>8.000.000</td>
+            </tr>
+            <tr>
+              <td>7 кун олдин</td>
+              <td>9.500.000</td>
+              <td>8.500.000</td>
+            </tr>
+            <tr>
+              <td>7 кундан кам</td>
+              <td>10.000.000</td>
+              <td>9.000.000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="text-align:right;color:#777;margin-top:16px">*Нархлар бошқарув томонидан ўзгартирилиши мумкин</p>
+    </div>
+  </section>
+
+  <section id="contact" class="green-section wow fadeInUp" style="padding:50px 0">
+    <div class="container">
+      <div class="col-md-6 col-sm-12">
+        <div class="row">
+          <span class="white-text montserrat-text uppercase" style="font-size:30px;display:block;margin-top:12%;">Ro'yxatdan o'ting, siz bilan bog'lanamiz</span>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="row">
+          <div class="white-section" style="padding:20px">
+            <span class="montserrat-text uppercase" style="font-size:24px">Ariza qoldirish</span>
+            <p>Kursga yozilish uchun ma'lumotlaringizni kiriting</p>
+            <form id="leadFormFinanceCourse">
+              <div class="input_1">
+                <input id="activity" type="text" autocomplete="organization-title" />
+                <span>Biznesingiz faoliyat turini kiriting</span>
+              </div>
+              <div class="input_1">
+                <input id="name" type="text" autocomplete="name" />
+                <span>Ismingiz</span>
+              </div>
+              <div class="input_1">
+                <input id="phone" type="text" inputmode="numeric" autocomplete="tel" maxlength="13" />
+                <span>Telefon raqamingiz</span>
+              </div>
+              <button type="submit" class="btn green" style="margin-top:20px"><span>Ro'yxatdan o'tish</span></button>
+              <div id="leadMsg" style="margin-top:10px"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="main-footer wow fadeInUp">
+    <div class="container">
+      <div class="col-md-8 col-sm-12">
+        <div class="row">
+          <nav class="footer-nav">
+            <p style="font-weight:bold;">"Murakkab moliyani sodda tilda tushuntiramiz"</p>
+            <p style="text-align:center;font-weight:bold;">Fazliddin Davronov</p>
+            <ul>
+              <li><a href="index.html" class="animsition-link link">Asosiy</a></li>
+              <li><a href="about.html" class="animsition-link link">Biz haqimizda</a></li>
+              <li><a href="services.html" class="animsition-link link">Xizmatlarimiz</a></li>
+              <li><a href="portfolio-1.html" class="animsition-link link">Proyektlarimiz</a></li>
+              <li><a href="moliya.html" class="animsition-link link">Oson Moliya</a></li>
+              <li><a href="contact.html" class="animsition-link link">Kontaktlarimiz</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-12" style="text-align:right">
+        <div class="row">
+          <div class="gray-text">Gekto &copy;2022. Huquqlar himoyalangan.</div>
+          <ul class="social-icons" style="margin-top:30px;float:right">
+            <li><a href="#"><i class="icon ion-social-facebook"></i></a></li>
+            <li><a href="#"><i class="icon ion-social-twitter"></i></a></li>
+            <li><a href="#"><i class="icon ion-social-youtube"></i></a></li>
+            <li><a href="#"><i class="icon ion-social-linkedin"></i></a></li>
+            <li><a href="#"><i class="icon ion-social-pinterest"></i></a></li>
+            <li><a href="#"><i class="icon ion-social-instagram"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="text/javascript" src="assets/js/jquery-2.1.4.min.js"></script>
+  <script type="text/javascript" src="assets/js/smoothScroll.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.animsition.min.js"></script>
+  <script type="text/javascript" src="assets/js/wow.min.js"></script>
+  <script type="text/javascript" src="assets/js/main.js"></script>
+  <script>
+    (function () {
+      const header = document.querySelector('header.main-header');
+      if (!header) return;
+      const toggle = () => header.classList.toggle('scrolled', window.scrollY > 10);
+      toggle();
+      window.addEventListener('scroll', toggle, { passive: true });
+    })();
+
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec";
+    const SECRET = "mySecret123";
+
+    const form = document.getElementById("leadFormFinanceCourse");
+    const activityEl = document.getElementById("activity");
+    const phoneEl = document.getElementById("phone");
+    const nameEl = document.getElementById("name");
+    const msgEl = document.getElementById("leadMsg");
+
+    function normalizePhone(v) {
+      let d = String(v || "").replace(/\D/g, "");
+      if (d.startsWith("998")) d = d.slice(3);
+      d = d.slice(0, 9);
+      if (d.length < 9) return "";
+      return "+998" + d;
+    }
+
+    phoneEl.addEventListener("focus", () => { if (!phoneEl.value) phoneEl.value = "+998"; });
+    phoneEl.addEventListener("input", () => {
+      let d = phoneEl.value.replace(/\D/g, "");
+      if (d.startsWith("998")) d = d.slice(3);
+      phoneEl.value = "+998" + d.slice(0, 9);
+    });
+    phoneEl.addEventListener("blur", () => { if (phoneEl.value === "+998") phoneEl.value = ""; });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        name: ((nameEl.value || "").trim() + (activityEl.value ? ` | Faoliyat: ${activityEl.value.trim()}` : "")).trim(),
+        phone: normalizePhone(phoneEl.value),
+        page: location.href,
+        secret: SECRET
+      };
+
+      if (!payload.phone) {
+        msgEl.style.color = "#b91c1c";
+        msgEl.textContent = "Telefon raqamini to'liq kiriting.";
+        return;
+      }
+
+      msgEl.style.color = "#334155";
+      msgEl.textContent = "Yuborilmoqda...";
+
+      try {
+        await fetch(ENDPOINT, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        form.reset();
+        msgEl.style.color = "#166534";
+        msgEl.textContent = "Ma'lumot yuborildi. Tez orada bog'lanamiz.";
+      } catch (_) {
+        msgEl.style.color = "#b91c1c";
+        msgEl.textContent = "Xatolik. Qayta urinib ko'ring.";
+      }
+    });
+
+    $(window).on('load', function () {
+      new WOW().init();
+    });
+  </script>
+</body>
+</html>
