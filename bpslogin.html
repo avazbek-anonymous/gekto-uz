@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>BPS.system вЂ” Login</title>
+  <title>BPS.system — Login</title>
   <style>
     :root{
       --bg:#07121b;
@@ -68,7 +68,7 @@
       outline:none;
       background: transparent;
       color: rgba(255,255,255,.92);
-      font-size: 16px; /* iPhone: Р±РµР· auto-zoom */
+      font-size: 16px; /* iPhone: без auto-zoom */
     }
 
     .row{ display:flex; gap:10px; align-items:center; justify-content:flex-end; }
@@ -113,7 +113,7 @@
 <body>
   <div class="card">
     <div class="title"><div class="logo">G</div>Gekto | BPS (Erkin)</div>
-    <p class="sub">Kassa вЂ” kirish uchun login va parol kiriting</p>
+    <p class="sub">Kassa — kirish uchun login va parol kiriting</p>
 
     <div class="field">
       <label>Login</label>
@@ -122,7 +122,7 @@
 
     <div class="field">
       <label>Parol</label>
-      <input id="pass" type="password" autocomplete="current-password" placeholder="вЂўвЂўвЂўвЂўвЂўвЂўвЂўвЂў">
+      <input id="pass" type="password" autocomplete="current-password" placeholder="••••••••">
     </div>
 
     <div class="row">
@@ -134,8 +134,8 @@
   <script>
     /************ CONFIG ************/
      const ENDPOINT  = "https://script.google.com/macros/s/AKfycbyZD2z3CcNpQhGFh-e_Qfmhu91B7imqNKQ0dr2Gm4_V2KzTlvNEJMpRYnjOAfu_CCwiQg/exec";
-    const API_SECRET = "bpsSecret123"; // РµСЃР»Рё РІРєР»СЋС‡РёР» РІ Apps Script вЂ” РїСЂРѕРїРёС€Рё
-    const LOGIN_URL = "/bpslogin"; // С‚РµРєСѓС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р°
+    const API_SECRET = "bpsSecret123"; // если включил в Apps Script — пропиши
+    const LOGIN_URL = "/bpslogin"; // текущая страница
 
     /************ JSONP ************/
     function loadJSONP(url){
@@ -184,7 +184,7 @@
       localStorage.removeItem("bps_lastActivity");
     }
 
-    // РµСЃР»Рё С‚РѕРєРµРЅ РµС‰С‘ Р¶РёРІ вЂ” СЃСЂР°Р·Сѓ РІ РєР°СЃСЃСѓ
+    // если токен ещё жив — сразу в кассу
     (async function autoGo(){
       const t = localStorage.getItem("bps_token") || "";
       if (!t) return;
@@ -205,7 +205,7 @@
       const lg = inpLogin.value.trim();
       const ps = inpPass.value.trim();
       if(!lg || !ps){
-        setMsg("err","Login/Parol boвЂsh");
+        setMsg("err","Login/Parol bo‘sh");
         return;
       }
 
@@ -221,12 +221,12 @@
 
         localStorage.setItem("bps_token", res.token);
         localStorage.setItem("bps_user", JSON.stringify(res.user || {}));
-        localStorage.setItem("bps_lastActivity", String(Date.now())); // СЃС‚Р°СЂС‚ Р°РєС‚РёРІРЅРѕСЃС‚Рё
+        localStorage.setItem("bps_lastActivity", String(Date.now())); // старт активности
 
-        setMsg("ok","Qabul qilindi! OвЂtilmoqda...");
+        setMsg("ok","Qabul qilindi! O‘tilmoqda...");
         location.replace("/bps");
       }catch(e){
-        setMsg("err","Xatolik: serverga ulanib boвЂlmadi");
+        setMsg("err","Xatolik: serverga ulanib bo‘lmadi");
       }finally{
         btn.disabled = false;
       }

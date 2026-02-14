@@ -521,12 +521,12 @@
 					});
 			}
 
-			// вљ пёЏ Р—РґРµСЃСЊ РІР°Р¶РЅРѕРµ РѕС‚Р»РёС‡РёРµ
+			// ⚠️ Здесь важное отличие
 			document.querySelectorAll('#side-menu a').forEach(function (link) {
 				var url = link.getAttribute('href');
 
-				// 1) РїСЂРѕРїСѓСЃРєР°РµРј РїСѓСЃС‚С‹Рµ Рё РІРЅРµС€РЅРёРµ
-				// 2) РїСЂРѕРїСѓСЃРєР°РµРј Р’РЎР•, РіРґРµ РµСЃС‚СЊ '#'
+				// 1) пропускаем пустые и внешние
+				// 2) пропускаем ВСЕ, где есть '#'
 				if (url && !url.startsWith('http') && !url.includes('#')) {
 					link.addEventListener('click', function (e) {
 						e.preventDefault();
@@ -535,7 +535,7 @@
 				}
 			});
 
-			// РіСЂСѓР·РёРј РіР»Р°РІРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+			// грузим главную страницу по умолчанию
 			loadPage('/pages/main.html');
 		});
 	</script-->
@@ -684,13 +684,13 @@
 			}
 			if (type === "success") {
 				msgEl.classList.add("is-success");
-				msgEl.innerHTML = `<span>вњ…</span><span>${text}</span>`;
+				msgEl.innerHTML = `<span>✅</span><span>${text}</span>`;
 				msgEl.style.display = "inline-flex";
 				return;
 			}
 			if (type === "error") {
 				msgEl.classList.add("is-error");
-				msgEl.innerHTML = `<span>вљ пёЏ</span><span>${text}</span>`;
+				msgEl.innerHTML = `<span>⚠️</span><span>${text}</span>`;
 				msgEl.style.display = "inline-flex";
 				return;
 			}

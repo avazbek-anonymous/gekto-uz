@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Tests вЂ” Cash Tracker</title>
+  <title>Tests — Cash Tracker</title>
 
   <style>
     :root{
@@ -28,7 +28,7 @@
         radial-gradient(1000px 520px at 18% 12%, rgba(16,185,129,.18), transparent 60%),
         radial-gradient(900px 520px at 88% 38%, rgba(59,130,246,.14), transparent 55%),
         var(--bg);
-      overflow: hidden; /* С‡С‚РѕР±С‹ РІСЃС‘ РїРѕРјРµС‰Р°Р»РѕСЃСЊ РІ РѕРєРЅРѕ */
+      overflow: hidden; /* чтобы всё помещалось в окно */
     }
     .wrap{
       height: calc(100vh - 32px);
@@ -238,7 +238,7 @@
     /* bottom: filters left + table right */
     .bottom{
       flex: 1;
-      min-height: 0; /* РІР°Р¶РЅРѕ РґР»СЏ СЃРєСЂРѕР»Р»Р° РІРЅСѓС‚СЂРё */
+      min-height: 0; /* важно для скролла внутри */
       display:grid;
       grid-template-columns: 320px 1fr;
       gap: 12px;
@@ -342,13 +342,13 @@
     <!-- header -->
     <div class="top">
       <div>
-        <h1>Tests вЂ” Cash Tracker</h1>
-        <div class="sub">MaвЂ™lumotlar Google Sheets в†’ <b>Tests</b> listidan olinadi va JS ichida hisoblanadi.</div>
+        <h1>Tests — Cash Tracker</h1>
+        <div class="sub">Ma’lumotlar Google Sheets → <b>Tests</b> listidan olinadi va JS ichida hisoblanadi.</div>
       </div>
 
       <div class="toolbar">
         <div class="field" style="min-width:220px">
-          <label>Kurs (USDв†’UZS)</label>
+          <label>Kurs (USD→UZS)</label>
           <input id="rateTop" type="number" step="1" min="1" placeholder="12050" />
           <small>UZS</small>
         </div>
@@ -361,27 +361,27 @@
     <!-- balances -->
     <div class="grid4">
       <div class="card">
-        <h3>Р‘Р°РЅРє</h3>
+        <h3>Банк</h3>
         <div class="balance"><span id="balBank">0</span><span class="cur">UZS</span></div>
-        <div class="hint">Prihod в€’ Rashod</div>
+        <div class="hint">Prihod − Rashod</div>
       </div>
 
       <div class="card">
-        <h3>РќР°Р»РёС‡РЅС‹Рµ UZS</h3>
+        <h3>Наличные UZS</h3>
         <div class="balance"><span id="balCashUzs">0</span><span class="cur">UZS</span></div>
         <div class="hint">Naqd UZS</div>
       </div>
 
       <div class="card">
-        <h3>РќР°Р»РёС‡РЅС‹Рµ USD</h3>
+        <h3>Наличные USD</h3>
         <div class="balance"><span id="balCashUsd">0</span><span class="cur">USD</span></div>
         <div class="hint">Naqd USD</div>
       </div>
 
       <div class="card">
-        <h3>РљР°СЂС‚Р°</h3>
+        <h3>Карта</h3>
         <div class="balance"><span id="balCard">0</span><span class="cur">UZS</span></div>
-        <div class="hint">Prihod в€’ Rashod</div>
+        <div class="hint">Prihod − Rashod</div>
       </div>
     </div>
 
@@ -392,8 +392,8 @@
           <h3 style="margin:0;">Yangi operatsiya</h3>
 
           <div class="toggle" aria-label="operation type">
-            <button id="tIn" class="tbtn in active" type="button">РџСЂРёС…РѕРґ</button>
-            <button id="tOut" class="tbtn out" type="button">Р Р°СЃС…РѕРґ</button>
+            <button id="tIn" class="tbtn in active" type="button">Приход</button>
+            <button id="tOut" class="tbtn out" type="button">Расход</button>
           </div>
 
           <span id="formMsg" class="pill" style="display:none;"></span>
@@ -404,16 +404,16 @@
 
       <div class="entryGrid">
         <div class="field">
-          <label>РљРѕС€РµР»РµРє</label>
+          <label>Кошелек</label>
           <select id="wallet">
-            <option value="Р‘Р°РЅРє">Р‘Р°РЅРє</option>
-            <option value="РќР°Р»РёС‡РЅС‹Рµ">РќР°Р»РёС‡РЅС‹Рµ</option>
-            <option value="РљР°СЂС‚Р°">РљР°СЂС‚Р°</option>
+            <option value="Банк">Банк</option>
+            <option value="Наличные">Наличные</option>
+            <option value="Карта">Карта</option>
           </select>
         </div>
 
         <div class="field" id="currencyBox" style="display:none;">
-          <label>РўРёРї РІР°Р»СЋС‚С‹</label>
+          <label>Тип валюты</label>
           <select id="currency">
             <option value="UZS">UZS</option>
             <option value="USD">USD</option>
@@ -421,7 +421,7 @@
         </div>
 
         <div class="field">
-          <label>РЎСѓРјРјР°</label>
+          <label>Сумма</label>
           <div class="amountwrap">
             <input id="amount" type="text" inputmode="decimal" placeholder="0" />
             <span id="amountCur" class="badge">UZS</span>
@@ -429,17 +429,17 @@
         </div>
 
         <div class="field">
-          <label>РЎС‚Р°С‚СЊСЏ</label>
+          <label>Статья</label>
           <input id="article" type="text" placeholder="Masalan: Reklama, Oylik, Xarid..." />
         </div>
 
         <div class="field">
-          <label>РљРѕРЅС‚СЂР°РіРµРЅС‚</label>
+          <label>Контрагент</label>
           <input id="counterparty" type="text" placeholder="Masalan: Yetkazib beruvchi / Mijoz..." />
         </div>
 
         <div class="pill" style="justify-content:center;">
-          <span class="mono">Р”Р°С‚Р°: avtomatik</span>
+          <span class="mono">Дата: avtomatik</span>
         </div>
       </div>
     </div>
@@ -451,33 +451,33 @@
 
         <div class="filtersGrid">
           <div class="field">
-            <label>Р”Р°С‚Р°</label>
+            <label>Дата</label>
             <input id="fDate" type="date" />
           </div>
 
           <div class="field">
-            <label>РљРѕС€РµР»РµРє</label>
+            <label>Кошелек</label>
             <select id="fWallet">
               <option value="all">Barchasi</option>
-              <option value="Р‘Р°РЅРє">Р‘Р°РЅРє</option>
-              <option value="РќР°Р»РёС‡РЅС‹Рµ">РќР°Р»РёС‡РЅС‹Рµ</option>
-              <option value="РљР°СЂС‚Р°">РљР°СЂС‚Р°</option>
+              <option value="Банк">Банк</option>
+              <option value="Наличные">Наличные</option>
+              <option value="Карта">Карта</option>
             </select>
           </div>
 
           <div class="field">
-            <label>РљРѕРЅС‚СЂР°РіРµРЅС‚</label>
+            <label>Контрагент</label>
             <select id="fCounterparty">
               <option value="all">Barchasi</option>
             </select>
           </div>
 
           <div class="field">
-            <label>РўРёРї</label>
+            <label>Тип</label>
             <select id="fType">
               <option value="all">Barchasi</option>
-              <option value="IN">РџСЂРёС…РѕРґ</option>
-              <option value="OUT">Р Р°СЃС…РѕРґ</option>
+              <option value="IN">Приход</option>
+              <option value="OUT">Расход</option>
             </select>
           </div>
 
@@ -490,16 +490,16 @@
 
         <div class="totRow">
           <div>
-            <div class="totLbl">РС‚РѕРіРѕ РџСЂРёС…РѕРґ</div>
-            <div class="tiny">filtr boвЂyicha</div>
+            <div class="totLbl">Итого Приход</div>
+            <div class="tiny">filtr bo‘yicha</div>
           </div>
           <div id="totIn" class="totVal sum-in">0</div>
         </div>
 
         <div class="totRow">
           <div>
-            <div class="totLbl">РС‚РѕРіРѕ Р Р°СЃС…РѕРґ</div>
-            <div class="tiny">filtr boвЂyicha</div>
+            <div class="totLbl">Итого Расход</div>
+            <div class="tiny">filtr bo‘yicha</div>
           </div>
           <div id="totOut" class="totVal sum-out">0</div>
         </div>
@@ -510,14 +510,14 @@
           <table>
             <thead>
               <tr>
-                <th>Р”Р°С‚Р°</th>
-                <th>РљРѕС€РµР»РµРє</th>
-                <th>Р’Р°Р»СЋС‚Р°</th>
-                <th>РЎС‚Р°С‚СЊСЏ</th>
-                <th>РљРѕРЅС‚СЂР°РіРµРЅС‚</th>
-                <th>РџСЂРёС…РѕРґ</th>
-                <th>Р Р°СЃС…РѕРґ</th>
-                <th>РљСѓСЂСЃ</th>
+                <th>Дата</th>
+                <th>Кошелек</th>
+                <th>Валюта</th>
+                <th>Статья</th>
+                <th>Контрагент</th>
+                <th>Приход</th>
+                <th>Расход</th>
+                <th>Курс</th>
               </tr>
             </thead>
             <tbody id="tbody">
@@ -695,12 +695,12 @@
         const net = (r.income - r.expense);
         const rate = r.rate > 0 ? r.rate : topRate;
 
-        if (r.wallet === "РќР°Р»РёС‡РЅС‹Рµ"){
+        if (r.wallet === "Наличные"){
           if (r.currency === "USD") cashUSD += net;
           else cashUZS += net;
-        } else if (r.wallet === "Р‘Р°РЅРє"){
+        } else if (r.wallet === "Банк"){
           bankUZS += (r.currency === "USD") ? net * rate : net;
-        } else if (r.wallet === "РљР°СЂС‚Р°"){
+        } else if (r.wallet === "Карта"){
           cardUZS += (r.currency === "USD") ? net * rate : net;
         }
       }
@@ -743,7 +743,7 @@
         `;
       }).join("");
 
-      // С‡С‚РѕР±С‹ вЂњ10 СЃС‚СЂРѕРєвЂќ РІРёР·СѓР°Р»СЊРЅРѕ Р±С‹Р»Рѕ СЃС‚Р°Р±РёР»СЊРЅРѕ вЂ” РІСЃРµРіРґР° СЃРІРµСЂС…Сѓ
+      // чтобы “10 строк” визуально было стабильно — всегда сверху
       tableScroll.scrollTop = 0;
     }
 
@@ -789,8 +789,8 @@
       if (outUSD) outParts.push(`${formatNum(outUSD)} USD`);
       if (!outParts.length) outParts.push("0");
 
-      totIn.textContent = inParts.join(" В· ");
-      totOut.textContent = outParts.join(" В· ");
+      totIn.textContent = inParts.join(" · ");
+      totOut.textContent = outParts.join(" · ");
     }
 
     function applyFilters(){
@@ -853,7 +853,7 @@
 
     function updateWalletUI(){
       const w = walletEl.value;
-      if (w === "РќР°Р»РёС‡РЅС‹Рµ"){
+      if (w === "Наличные"){
         currencyBox.style.display = "";
       } else {
         currencyBox.style.display = "none";
@@ -894,11 +894,11 @@
 
     async function addOperation(){
       const wallet = walletEl.value;
-      const currency = (wallet === "РќР°Р»РёС‡РЅС‹Рµ") ? currencyEl.value : "UZS";
+      const currency = (wallet === "Наличные") ? currencyEl.value : "UZS";
 
       const amount = parseAmount(amountEl.value);
       if (!amount || amount <= 0){
-        showFormMsg("err", "Summa 0 boвЂlishi mumkin emas");
+        showFormMsg("err", "Summa 0 bo‘lishi mumkin emas");
         return;
       }
 
@@ -935,14 +935,14 @@
         articleEl.value = "";
         counterpartyEl.value = "";
 
-        showFormMsg("ok", "Qabul qilindi вњ…");
+        showFormMsg("ok", "Qabul qilindi ✅");
         setTimeout(() => showFormMsg("hide",""), 1400);
 
         await new Promise(r => setTimeout(r, 500));
         await refresh();
       } catch (e){
         console.error(e);
-        showFormMsg("err", "Xatolik. Qayta urinib koвЂring.");
+        showFormMsg("err", "Xatolik. Qayta urinib ko‘ring.");
       } finally {
         btnAdd.disabled = false;
       }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Marinade вЂ” Login</title>
+  <title>Marinade — Login</title>
   <style>
     :root{
       --bg:#0b1220; --card:#0f1b33; --text:#e9eefc; --muted:#9fb0d0;
@@ -88,28 +88,28 @@
       <div class="logo"></div>
       <div>
         <div class="title">Marinade</div>
-        <div class="sub">Р’С…РѕРґ РІ СЃРёСЃС‚РµРјСѓ СЃРєР»Р°РґСЃРєРёС… РѕРїРµСЂР°С†РёР№</div>
+        <div class="sub">Вход в систему складских операций</div>
       </div>
     </div>
 
     <div class="card">
-      <label>Р›РѕРіРёРЅ</label>
-      <input id="login" autocomplete="username" placeholder="Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ"/>
+      <label>Логин</label>
+      <input id="login" autocomplete="username" placeholder="Введите логин"/>
 
-      <label>РџР°СЂРѕР»СЊ</label>
-      <input id="parol" type="password" autocomplete="current-password" placeholder="Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ"/>
+      <label>Пароль</label>
+      <input id="parol" type="password" autocomplete="current-password" placeholder="Введите пароль"/>
 
       <div class="row">
-        <button id="btn">Р’РѕР№С‚Рё</button>
+        <button id="btn">Войти</button>
       </div>
 
       <div id="err" class="err"></div>
-      <div class="mini">РЎРµСЃСЃРёСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё Р·Р°РІРµСЂС€РёС‚СЃСЏ С‡РµСЂРµР· 2 С‡Р°СЃР° Р±РµР· Р°РєС‚РёРІРЅРѕСЃС‚Рё.</div>
+      <div class="mini">Сессия автоматически завершится через 2 часа без активности.</div>
     </div>
   </div>
 
   <script>
-    // TODO: РІСЃС‚Р°РІСЊ URL СЃРІРѕРµРіРѕ Apps Script Web App
+    // TODO: вставь URL своего Apps Script Web App
     const API_URL = "https://script.google.com/macros/s/AKfycbwM3NP9EzCUKFnqKDVbPJKAZ7qoKEsyOoMCClSppAsTTD5q2zczskL8lX9xSbayoocRSA/exec";
 
     const LS = {
@@ -132,7 +132,7 @@
       const body = new URLSearchParams({ action, ...data });
       const res = await fetch(API_URL, { method:"POST", body });
       const json = await res.json();
-      if(!json.ok) throw new Error(json.error || "РћС€РёР±РєР°");
+      if(!json.ok) throw new Error(json.error || "Ошибка");
       return json;
     }
 
@@ -168,10 +168,10 @@
       hideErr();
       const login = document.getElementById("login").value.trim();
       const parol = document.getElementById("parol").value;
-      if(!login || !parol){ showErr("Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ Рё РїР°СЂРѕР»СЊ"); return; }
+      if(!login || !parol){ showErr("Введите логин и пароль"); return; }
 
       btn.disabled = true;
-      btn.innerHTML = `<span class="spinner"></span>Р’С…РѕРґРёРј...`;
+      btn.innerHTML = `<span class="spinner"></span>Входим...`;
 
       try{
         const r = await api("login", { login, parol });
@@ -180,10 +180,10 @@
         setLast();
         location.href = "./marinade.html";
       }catch(e){
-        showErr(e.message || "РћС€РёР±РєР° РІС…РѕРґР°");
+        showErr(e.message || "Ошибка входа");
       }finally{
         btn.disabled = false;
-        btn.textContent = "Р’РѕР№С‚Рё";
+        btn.textContent = "Войти";
       }
     }
 

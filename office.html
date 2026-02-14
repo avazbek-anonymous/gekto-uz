@@ -745,9 +745,9 @@
       </div>
 
       <nav class="nav">
-        <a href="#/tasks" data-route="tasks"><span class="ico">рџ§©</span><span class="txt">Vazifalar</span></a>
-        <a href="#/projects" data-route="projects"><span class="ico">рџ“Њ</span><span class="txt">Loyihalar</span></a>
-        <a href="#/users" data-route="users"><span class="ico">рџ‘Ґ</span><span class="txt">Foydalanuvchilar</span></a>
+        <a href="#/tasks" data-route="tasks"><span class="ico">🧩</span><span class="txt">Vazifalar</span></a>
+        <a href="#/projects" data-route="projects"><span class="ico">📌</span><span class="txt">Loyihalar</span></a>
+        <a href="#/users" data-route="users"><span class="ico">👥</span><span class="txt">Foydalanuvchilar</span></a>
       </nav>
 
       <div class="muted" style="margin-top:auto;padding:6px 10px;">G-SOFT</div>
@@ -762,12 +762,12 @@
         </button>
 
         <div class="hdrLeft">
-          <div id="hdrTitle" class="hdrTitle">вЂ”</div>
-          <div id="hdrSub" class="hdrSub">вЂ”</div>
+          <div id="hdrTitle" class="hdrTitle">—</div>
+          <div id="hdrSub" class="hdrSub">—</div>
         </div>
 
         <div class="hdrRight">
-          <span id="userPill" class="pill">рџ‘¤ -</span>
+          <span id="userPill" class="pill">👤 -</span>
           <span id="clock" class="pill">--:--:--</span>
 
           <button id="themeBtn" class="themeBtn" title="Theme">
@@ -795,18 +795,18 @@
     <aside class="drawer" onclick="event.stopPropagation()">
       <div class="drawerTop">
         <div class="drawerTitle">G-SOFT</div>
-        <button class="xBtn" id="drawerClose" title="Close">вњ•</button>
+        <button class="xBtn" id="drawerClose" title="Close">✕</button>
       </div>
-      <div class="muted" id="drawerUser">вЂ”</div>
+      <div class="muted" id="drawerUser">—</div>
 
       <nav class="drawerNav" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
-        <a href="#/tasks" data-route="tasks"><span class="ico">рџ§©</span><span>Vazifalar</span></a>
-        <a href="#/projects" data-route="projects"><span class="ico">рџ“Њ</span><span>Loyihalar</span></a>
-        <a href="#/users" data-route="users"><span class="ico">рџ‘Ґ</span><span>Foydalanuvchilar</span></a>
+        <a href="#/tasks" data-route="tasks"><span class="ico">🧩</span><span>Vazifalar</span></a>
+        <a href="#/projects" data-route="projects"><span class="ico">📌</span><span>Loyihalar</span></a>
+        <a href="#/users" data-route="users"><span class="ico">👥</span><span>Foydalanuvchilar</span></a>
       </nav>
 
       <div style="margin-top:auto;display:flex;gap:10px;">
-        <button class="btn icon" id="drawerTheme" title="Theme">рџЊ“</button>
+        <button class="btn icon" id="drawerTheme" title="Theme">🌓</button>
         <button class="btn danger" id="drawerLogout" style="flex:1;">Chiqish</button>
       </div>
     </aside>
@@ -815,9 +815,9 @@
   <!-- Bottom Nav (mobile) -->
   <nav class="bottomNav" aria-label="Bottom navigation">
     <div class="row">
-      <a href="#/tasks" data-route="tasks"><div class="bico">рџ§©</div><span>Vazifalar</span></a>
-      <a href="#/projects" data-route="projects"><div class="bico">рџ“Њ</div><span>Loyihalar</span></a>
-      <a href="#/users" data-route="users"><div class="bico">рџ‘Ґ</div><span>Users</span></a>
+      <a href="#/tasks" data-route="tasks"><div class="bico">🧩</div><span>Vazifalar</span></a>
+      <a href="#/projects" data-route="projects"><div class="bico">📌</div><span>Loyihalar</span></a>
+      <a href="#/users" data-route="users"><div class="bico">👥</div><span>Users</span></a>
     </div>
   </nav>
 
@@ -825,8 +825,8 @@
   <div id="overlay" class="overlay" aria-hidden="true">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="modalHead">
-        <div id="modalTitle" class="modalTitle">вЂ”</div>
-        <button class="xBtn" id="modalClose">вњ•</button>
+        <div id="modalTitle" class="modalTitle">—</div>
+        <button class="xBtn" id="modalClose">✕</button>
       </div>
       <div id="modalBody"></div>
     </div>
@@ -838,7 +838,7 @@
       <div class="loadingRow">
         <div class="spinner"></div>
         <div>
-          <div class="loadingTitle" id="loadingTitle">YuklanmoqdaвЂ¦</div>
+          <div class="loadingTitle" id="loadingTitle">Yuklanmoqda…</div>
           <div class="loadingSub" id="loadingSub">Iltimos, kuting</div>
         </div>
       </div>
@@ -847,7 +847,7 @@
 
 <script>
   /************ CONFIG ************/
-  const ENDPOINT = "https://script.google.com/macros/s/AKfycbyGW5vwkyYWmsbSP2_wHFMBoSjJcYLGz7r0gR-R-e5al-efv1hchZIYKCxc5HxG0gvR/exec"; // <-- РІСЃС‚Р°РІСЊ СЃРІРѕР№ WebApp exec URL
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbyGW5vwkyYWmsbSP2_wHFMBoSjJcYLGz7r0gR-R-e5al-efv1hchZIYKCxc5HxG0gvR/exec"; // <-- вставь свой WebApp exec URL
   const API_SECRET = "Gekto2022@";
   const LOGIN_URL = "./login.html";
   const IDLE_MS = 3 * 60 * 1000;
@@ -872,7 +872,7 @@
   /************ LOADING (BLOCK UI) ************/
   const loadingTitleEl = document.getElementById("loadingTitle");
   const loadingSubEl = document.getElementById("loadingSub");
-  function showLoading(title="YuklanmoqdaвЂ¦", sub="Iltimos, kuting"){
+  function showLoading(title="Yuklanmoqda…", sub="Iltimos, kuting"){
     loadingTitleEl.textContent = title;
     loadingSubEl.textContent = sub;
     document.body.classList.add("isLoading");
@@ -973,10 +973,10 @@
   }
   setInterval(tick, 1000); tick();
 
-  document.getElementById("userPill").textContent = `рџ‘¤ ${USER?.ism || USER?.login || "-" } вЂў ${USER?.rol || "-"}`;
+  document.getElementById("userPill").textContent = `👤 ${USER?.ism || USER?.login || "-" } • ${USER?.rol || "-"}`;
 
   document.getElementById("btnLogout").addEventListener("click", async ()=>{
-    await withLoading("ChiqishвЂ¦","Sessiya yopilmoqda", async ()=>{
+    await withLoading("Chiqish…","Sessiya yopilmoqda", async ()=>{
       try{ await api("logout"); }catch(e){}
     });
     lockToLogin();
@@ -987,7 +987,7 @@
   const btnBurger = document.getElementById("btnBurger");
   const drawerClose = document.getElementById("drawerClose");
   const drawerUser = document.getElementById("drawerUser");
-  drawerUser.textContent = `рџ‘¤ ${USER?.ism || USER?.login || "-"} вЂў ${USER?.rol || "-"}`;
+  drawerUser.textContent = `👤 ${USER?.ism || USER?.login || "-"} • ${USER?.rol || "-"}`;
 
   function openDrawer(){
     drawerOverlay.classList.add("open");
@@ -1005,7 +1005,7 @@
   document.getElementById("drawerLogout").addEventListener("click", async ()=>{
     markActivity();
     closeDrawer();
-    await withLoading("ChiqishвЂ¦","Sessiya yopilmoqda", async ()=>{
+    await withLoading("Chiqish…","Sessiya yopilmoqda", async ()=>{
       try{ await api("logout"); }catch(e){}
     });
     lockToLogin();
@@ -1099,7 +1099,7 @@
           <div class="bselValue" title="${escapeHtml(getOptLabel(cfg.options, value))}">
             ${escapeHtml(getOptLabel(cfg.options, value))}
           </div>
-          <div class="bselCaret">в–ѕ</div>
+          <div class="bselCaret">▾</div>
         </div>
         <div class="bselMenu"></div>
       </div>
@@ -1190,8 +1190,8 @@
   const page = document.getElementById("page");
 
   const Routes = {
-    tasks:    { title:"Vazifalar", sub:"Kanban вЂў drag & timer", render: renderTasks },
-    projects: { title:"Loyihalar", sub:"Kanban вЂў drag", render: renderProjects },
+    tasks:    { title:"Vazifalar", sub:"Kanban • drag & timer", render: renderTasks },
+    projects: { title:"Loyihalar", sub:"Kanban • drag", render: renderProjects },
     users:    { title:"Foydalanuvchilar", sub:"Users & roles", render: renderUsers },
   };
 
@@ -1228,10 +1228,10 @@
 
   const TASK_COLS = [
     {key:"BOSHLANMAGAN", title:"Boshlanmagan", hint:"0 vaqt"},
-    {key:"PAUZA",        title:"Pauza",        hint:"toвЂxtatilgan"},
+    {key:"PAUZA",        title:"Pauza",        hint:"to‘xtatilgan"},
     {key:"JARAYONDA",    title:"Jarayonda",    hint:"1 ta vazifa"},
-    {key:"BAJARILDI",    title:"Bajarildi",    hint:"вњ…"},
-    {key:"OTMENA",       title:"Otmena",       hint:"вќЊ"}
+    {key:"BAJARILDI",    title:"Bajarildi",    hint:"✅"},
+    {key:"OTMENA",       title:"Otmena",       hint:"❌"}
   ];
 
   const PROJECT_COLS = [
@@ -1310,8 +1310,8 @@
     if(hasProject){
       const p = findProjectById(task.projectId);
       if(isPM() && p && String(p.pmId) === String(USER.id)) return true; // PM can edit tasks of their project
-      // РёСЃРїРѕР»РЅРёС‚РµР»СЋ СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ "РјРёРЅРёРјР°Р»СЊРЅРѕ" РјРѕР¶РЅРѕ, РЅРѕ РїРѕ С‚РІРѕРµРјСѓ РїСЂР°РІРёР»Сѓ РіР»Р°РІРЅРѕРµ: PM + admin
-      // РѕСЃС‚Р°РІРёРј: РёСЃРїРѕР»РЅРёС‚РµР»СЊ РјРѕР¶РµС‚ РјРµРЅСЏС‚СЊ СЃС‚Р°С‚СѓСЃ/С‚Р°Р№РјРµСЂ РІ Р»СЋР±РѕРј СЃР»СѓС‡Р°Рµ (РёРЅР°С‡Рµ РµРјСѓ РЅРµ СЂР°Р±РѕС‚Р°С‚СЊ)
+      // исполнителю редактировать "минимально" можно, но по твоему правилу главное: PM + admin
+      // оставим: исполнитель может менять статус/таймер в любом случае (иначе ему не работать)
       if(String(task.assigneeId) === String(USER.id)) return true;
       return false;
     }else{
@@ -1355,7 +1355,7 @@
             <div class="muted">Faqat admin</div>
           </div>
         </div>
-        <div class="warnBox">Ruxsat yoвЂq.</div>
+        <div class="warnBox">Ruxsat yo‘q.</div>
       </div>`;
       return;
     }
@@ -1368,8 +1368,8 @@
             <div class="muted">admin / pm / fin</div>
           </div>
           <div class="toolbarRight">
-            <button class="btn primary" id="btnAddUser">вћ• QoвЂshish</button>
-            <button class="btn" id="btnReloadUsers">рџ”„ Yangilash</button>
+            <button class="btn primary" id="btnAddUser">➕ Qo‘shish</button>
+            <button class="btn" id="btnReloadUsers">🔄 Yangilash</button>
           </div>
         </div>
 
@@ -1395,7 +1395,7 @@
   }
 
   async function loadUsersAdmin(force=false){
-    await withLoading("FoydalanuvchilarвЂ¦", "MaвЂ™lumotlar yuklanmoqda", async ()=>{
+    await withLoading("Foydalanuvchilar…", "Ma’lumotlar yuklanmoqda", async ()=>{
       const r = await api("users_list");
       if(r?.ok) USERS_ADMIN = r.users || [];
       // also rebuild public
@@ -1411,15 +1411,15 @@
   function mask(p){
     if(!p) return "";
     const s = String(p);
-    if(s.length <= 2) return "вЂўвЂў";
-    return "вЂў".repeat(Math.min(10, s.length));
+    if(s.length <= 2) return "••";
+    return "•".repeat(Math.min(10, s.length));
   }
 
   function drawUsersAdmin(){
     const body = document.getElementById("uBody");
     if(!body) return;
     if(!USERS_ADMIN.length){
-      body.innerHTML = `<tr><td colspan="6" class="muted">YoвЂq</td></tr>`;
+      body.innerHTML = `<tr><td colspan="6" class="muted">Yo‘q</td></tr>`;
       return;
     }
 
@@ -1429,9 +1429,9 @@
         <td data-label="Login" class="mono">${escapeHtml(u.login || "")}</td>
         <td data-label="Parol" class="mono" title="${escapeHtml(u.parol||"")}">${escapeHtml(mask(u.parol))}</td>
         <td data-label="Rol">${roleChip(u.rol)}</td>
-        <td data-label="Active">${u.active ? "вњ…" : "в›”"}</td>
+        <td data-label="Active">${u.active ? "✅" : "⛔"}</td>
         <td data-label="Edit">
-          <button class="iconBtn" data-edit="${escapeHtml(u.id)}" title="Edit">вњЏпёЏ</button>
+          <button class="iconBtn" data-edit="${escapeHtml(u.id)}" title="Edit">✏️</button>
         </td>
       </tr>
     `).join("");
@@ -1459,7 +1459,7 @@
       </div>
       <div class="grid" style="margin-top:10px;">
         <div class="f"><label>Login</label><input id="fLogin" value="${escapeHtml(user?.login||"")}" /></div>
-        <div class="f"><label>Parol ${isEdit ? '(boвЂsh qoldirsang oвЂzgarmaydi)' : ''}</label><input id="fParol" type="password" value="" /></div>
+        <div class="f"><label>Parol ${isEdit ? '(bo‘sh qoldirsang o‘zgarmaydi)' : ''}</label><input id="fParol" type="password" value="" /></div>
       </div>
 
       <div class="grid" style="margin-top:10px;">
@@ -1469,7 +1469,7 @@
         </div>
         <div class="f">
           <label> </label>
-          <div class="muted" style="padding:10px 6px;">ID koвЂrinmaydi (auto)</div>
+          <div class="muted" style="padding:10px 6px;">ID ko‘rinmaydi (auto)</div>
         </div>
       </div>
 
@@ -1521,7 +1521,7 @@
 
       const payload = { id:user?.id||"", ism, login, rol, active, parol };
 
-      await withLoading("SaqlashвЂ¦","Foydalanuvchi yangilanmoqda", async ()=>{
+      await withLoading("Saqlash…","Foydalanuvchi yangilanmoqda", async ()=>{
         const res = await api("users_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
         if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
       });
@@ -1542,11 +1542,11 @@
         <div class="cardTitleRow">
           <div class="cardTitleBlock">
             <div class="cardTitle">Loyihalar</div>
-            <div class="muted">Drag & drop вЂў Info -> tahrirlash вЂў OвЂtish -> Vazifalar</div>
+            <div class="muted">Drag & drop • Info -> tahrirlash • O‘tish -> Vazifalar</div>
           </div>
           <div class="toolbarRight">
-            ${canCreateProject() ? `<button class="btn primary" id="btnAddProject">вћ• Loyiha</button>` : ``}
-            <button class="btn" id="btnRefreshProjects">рџ”„ Yangilash</button>
+            ${canCreateProject() ? `<button class="btn primary" id="btnAddProject">➕ Loyiha</button>` : ``}
+            <button class="btn" id="btnRefreshProjects">🔄 Yangilash</button>
           </div>
         </div>
 
@@ -1560,14 +1560,14 @@
 
     document.getElementById("btnRefreshProjects").onclick = async ()=>{
       markActivity();
-      await withLoading("LoyihalarвЂ¦","Yangilanmoqda", async ()=>{
+      await withLoading("Loyihalar…","Yangilanmoqda", async ()=>{
         await ensurePublicUsers(true);
         await loadProjects(true);
       });
       drawProjectsBoard();
     };
 
-    await withLoading("LoyihalarвЂ¦","Yuklanmoqda", async ()=>{
+    await withLoading("Loyihalar…","Yuklanmoqda", async ()=>{
       await ensurePublicUsers();
       await loadProjects();
     });
@@ -1612,14 +1612,14 @@
           <div class="pCard" draggable="${canDrag ? "true":"false"}" data-id="${escapeHtml(p.id)}" title="${canDrag ? "Drag to move":"No permission"}">
             <div class="pTitle">${escapeHtml(p.title || "(No title)")}</div>
             <div class="pMeta">
-              ${p.ownerName ? `рџ‘¤ ${escapeHtml(p.ownerName)}<br/>` : ""}
-              ${p.product ? `рџ“¦ ${escapeHtml(p.product)}<br/>` : ""}
-              ${p.pmName ? `рџ§­ PM: ${escapeHtml(p.pmName)}<br/>` : ""}
-              ${p.deadline ? `вЏі ${escapeHtml(fmtDate(p.deadline))}` : ""}
+              ${p.ownerName ? `👤 ${escapeHtml(p.ownerName)}<br/>` : ""}
+              ${p.product ? `📦 ${escapeHtml(p.product)}<br/>` : ""}
+              ${p.pmName ? `🧭 PM: ${escapeHtml(p.pmName)}<br/>` : ""}
+              ${p.deadline ? `⏳ ${escapeHtml(fmtDate(p.deadline))}` : ""}
             </div>
             <div class="pBtns">
               <button class="miniBtn" data-info="${escapeHtml(p.id)}">Info</button>
-              <button class="miniBtn primary" data-go="${escapeHtml(p.id)}">OвЂtish</button>
+              <button class="miniBtn primary" data-go="${escapeHtml(p.id)}">O‘tish</button>
             </div>
           </div>
         `;
@@ -1665,7 +1665,7 @@
         pr.status = newStatus;
         drawProjectsBoard();
 
-        await withLoading("SaqlashвЂ¦","Loyiha status yangilanmoqda", async ()=>{
+        await withLoading("Saqlash…","Loyiha status yangilanmoqda", async ()=>{
           const res = await api("project_update_status", { payload: encodeURIComponent(JSON.stringify({id:pid, status:newStatus})) });
           if(!res?.ok){
             await loadProjects(true);
@@ -1686,7 +1686,7 @@
     const pmOptions = USERS_PUBLIC.filter(u=>String(u.rol).toLowerCase()==="pm").map(u=>({value:u.id, label:u.ism, small:u.login||""}));
     const defaultPm = isPM() ? USER.id : (pmOptions[0]?.value || "");
 
-    openModal("вћ• Yangi loyiha", `
+    openModal("➕ Yangi loyiha", `
       <div class="grid">
         <div class="f"><label>Nomi</label><input id="pr_title" placeholder="Project nomi"></div>
         <div class="f"><label>Status</label><div id="pr_status"></div></div>
@@ -1768,12 +1768,12 @@
 
       if(!payload.title){ msg.textContent = "Nomi shart"; return; }
 
-      await withLoading("SaqlashвЂ¦","Loyiha yaratilmoqda", async ()=>{
+      await withLoading("Saqlash…","Loyiha yaratilmoqda", async ()=>{
         const res = await api("project_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
         if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
       });
 
-      await withLoading("YangilashвЂ¦","Loyihalar yuklanmoqda", async ()=>{
+      await withLoading("Yangilash…","Loyihalar yuklanmoqda", async ()=>{
         await loadProjects(true);
       });
       closeModal();
@@ -1823,7 +1823,7 @@
       <div class="muted" id="pr_msg" style="margin-top:10px;min-height:18px"></div>
 
       <div class="modalActions">
-        <button class="btn" id="pr_go">OвЂtish</button>
+        <button class="btn" id="pr_go">O‘tish</button>
         ${canEdit ? `<button class="btn primary" id="pr_save">Saqlash</button>` : ``}
         <button class="btn" id="pr_close">Yopish</button>
       </div>
@@ -1879,7 +1879,7 @@
           pmId: isAdmin() ? pmCtrl.getValue() : p.pmId
         };
 
-        await withLoading("SaqlashвЂ¦","Project yangilanmoqda", async ()=>{
+        await withLoading("Saqlash…","Project yangilanmoqda", async ()=>{
           const res = await api("project_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
           if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
         });
@@ -1910,11 +1910,11 @@
         <div class="cardTitleRow">
           <div class="cardTitleBlock">
             <div class="cardTitle">Vazifalar</div>
-            <div class="muted">Boshlanmagan/Pauza -> Jarayonda (drag) вЂў Jarayonda: 1 ta/user вЂў Bajarildi/Otmena -> Pauza qaytarish</div>
+            <div class="muted">Boshlanmagan/Pauza -> Jarayonda (drag) • Jarayonda: 1 ta/user • Bajarildi/Otmena -> Pauza qaytarish</div>
           </div>
           <div class="toolbarRight">
-            ${canCreateTask() ? `<button class="btn primary" id="btnAddTask">вћ• Vazifa</button>` : ``}
-            <button class="btn" id="btnRefreshTasks">рџ”„ Yangilash</button>
+            ${canCreateTask() ? `<button class="btn primary" id="btnAddTask">➕ Vazifa</button>` : ``}
+            <button class="btn" id="btnRefreshTasks">🔄 Yangilash</button>
           </div>
         </div>
 
@@ -1924,7 +1924,7 @@
             ${isAdmin() ? `<div id="filterUser"></div>` : ``}
           </div>
           <div class="toolbarRight">
-            <span class="pill" id="tasksHint">вљЎ tezkor</span>
+            <span class="pill" id="tasksHint">⚡ tezkor</span>
           </div>
         </div>
 
@@ -1938,7 +1938,7 @@
 
     document.getElementById("btnRefreshTasks").onclick = async ()=>{
       markActivity();
-      await withLoading("VazifalarвЂ¦","Yangilanmoqda", async ()=>{
+      await withLoading("Vazifalar…","Yangilanmoqda", async ()=>{
         await ensurePublicUsers(true);
         await loadProjects(true);
         await loadTasks(FILTER_PROJECT || "NO_PROJECT", isAdmin()?FILTER_USER:"ALL");
@@ -1947,7 +1947,7 @@
       drawTasksBoard();
     };
 
-    await withLoading("VazifalarвЂ¦","Yuklanmoqda", async ()=>{
+    await withLoading("Vazifalar…","Yuklanmoqda", async ()=>{
       await ensurePublicUsers();
       await loadProjects();
       await loadTasks(FILTER_PROJECT || "NO_PROJECT", isAdmin()?FILTER_USER:"ALL");
@@ -1977,7 +1977,7 @@
       onChange: async (v)=>{
         markActivity();
         FILTER_PROJECT = v;
-        await withLoading("FiltrвЂ¦","Vazifalar yangilanmoqda", async ()=>{
+        await withLoading("Filtr…","Vazifalar yangilanmoqda", async ()=>{
           await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
         });
         drawTasksBoard();
@@ -1998,7 +1998,7 @@
         onChange: async (v)=>{
           markActivity();
           FILTER_USER = v;
-          await withLoading("FiltrвЂ¦","Vazifalar yangilanmoqda", async ()=>{
+          await withLoading("Filtr…","Vazifalar yangilanmoqda", async ()=>{
             await loadTasks(FILTER_PROJECT, FILTER_USER);
           });
           drawTasksBoard();
@@ -2045,9 +2045,9 @@
           <div style="min-width:0">
             <div class="tTitle">${escapeHtml(title)}</div>
             <div class="tMeta">
-              ${proj ? `<span class="chip">рџ“Њ ${escapeHtml(proj)}</span>` : ``}
-              ${deadline ? `<span class="chip">вЏі ${escapeHtml(deadline)}</span>` : ``}
-              ${canSeeAssignee && assName ? `<span class="chip">рџ‘¤ ${escapeHtml(assName)}</span>` : ``}
+              ${proj ? `<span class="chip">📌 ${escapeHtml(proj)}</span>` : ``}
+              ${deadline ? `<span class="chip">⏳ ${escapeHtml(deadline)}</span>` : ``}
+              ${canSeeAssignee && assName ? `<span class="chip">👤 ${escapeHtml(assName)}</span>` : ``}
             </div>
           </div>
           <div class="tBadges">
@@ -2057,8 +2057,8 @@
         </div>
 
         <div class="tLine">
-          <span>${escapeHtml(upd ? ("рџ•’ "+upd) : "")}</span>
-          <span class="muted">${canMoveTask(t) ? "в†”пёЏ drag" : "рџ”’"}</span>
+          <span>${escapeHtml(upd ? ("🕒 "+upd) : "")}</span>
+          <span class="muted">${canMoveTask(t) ? "↔️ drag" : "🔒"}</span>
         </div>
 
         ${String(t.status)==="OTMENA" && t.cancelReason ? `<div class="reason">Sabab: ${escapeHtml(t.cancelReason)}</div>` : ``}
@@ -2146,7 +2146,7 @@
         // only allow:
         // - Boshlanmagan/Pauza/Jarayonda -> Jarayonda/Pauza
         // - Bajarildi/Otmena -> Pauza
-        // (Done/Cancel Р»СѓС‡С€Рµ РєРЅРѕРїРєР°РјРё)
+        // (Done/Cancel лучше кнопками)
         const allowed =
           (to==="JARAYONDA" && (from==="BOSHLANMAGAN" || from==="PAUZA")) ||
           (to==="PAUZA" && (from==="JARAYONDA" || from==="BAJARILDI" || from==="OTMENA")) ||
@@ -2170,7 +2170,7 @@
     if(status==="PAUZA" && opts.clearReason) t.cancelReason = "";
     drawTasksBoard();
 
-    await withLoading("SaqlashвЂ¦","Vazifa yangilanmoqda", async ()=>{
+    await withLoading("Saqlash…","Vazifa yangilanmoqda", async ()=>{
       const payload = {
         id: taskId,
         status,
@@ -2210,9 +2210,9 @@
     const userOptions = USERS_PUBLIC.map(u=>({value:u.id, label:u.ism, small:u.rol||""}));
     const defaultAssignee = USER.id;
 
-    openModal("вћ• Yangi vazifa", `
+    openModal("➕ Yangi vazifa", `
       <div class="grid">
-        <div class="f"><label>Vazifa nomi (ixtiyoriy)</label><input id="t_title" placeholder="Agar boвЂsh boвЂlsa description 3 soвЂz"></div>
+        <div class="f"><label>Vazifa nomi (ixtiyoriy)</label><input id="t_title" placeholder="Agar bo‘sh bo‘lsa description 3 so‘z"></div>
         <div class="f"><label>Deadline</label><input id="t_deadline" placeholder="2025-12-31 18:00"></div>
       </div>
 
@@ -2289,12 +2289,12 @@
         return;
       }
 
-      await withLoading("SaqlashвЂ¦","Vazifa yaratilmoqda", async ()=>{
+      await withLoading("Saqlash…","Vazifa yaratilmoqda", async ()=>{
         const res = await api("task_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
         if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
       });
 
-      await withLoading("YangilashвЂ¦","Vazifalar yuklanmoqda", async ()=>{
+      await withLoading("Yangilash…","Vazifalar yuklanmoqda", async ()=>{
         await loadTasks(FILTER_PROJECT, isAdmin()?FILTER_USER:"ALL");
       });
 
@@ -2366,7 +2366,7 @@
           <div class="pill">${escapeHtml(status)}</div>
         </div>
         <div class="f"><label>Spent / Updated</label>
-          <div class="pill">вЏ± ${escapeHtml(spent)} вЂў рџ•’ ${escapeHtml(upd||"-")}</div>
+          <div class="pill">⏱ ${escapeHtml(spent)} • 🕒 ${escapeHtml(upd||"-")}</div>
         </div>
       </div>
 
@@ -2375,15 +2375,15 @@
       <div id="mt_msg" class="muted" style="margin-top:10px;min-height:18px"></div>
 
       <div class="modalActions">
-        ${showStart ? `<button class="btn primary" id="mt_start">в–¶ Start</button>` : ``}
-        ${showPause ? `<button class="btn" id="mt_pause">вЏё Pauza</button>` : ``}
-        ${showDone ? `<button class="btn" id="mt_done">вњ… Bajarildi</button>` : ``}
-        ${showCancel ? `<button class="btn danger" id="mt_cancel">вќЊ Otmena</button>` : ``}
-        ${showReturn ? `<button class="btn" id="mt_return">в†© Vazifani qaytarish</button>` : ``}
+        ${showStart ? `<button class="btn primary" id="mt_start">▶ Start</button>` : ``}
+        ${showPause ? `<button class="btn" id="mt_pause">⏸ Pauza</button>` : ``}
+        ${showDone ? `<button class="btn" id="mt_done">✅ Bajarildi</button>` : ``}
+        ${showCancel ? `<button class="btn danger" id="mt_cancel">❌ Otmena</button>` : ``}
+        ${showReturn ? `<button class="btn" id="mt_return">↩ Vazifani qaytarish</button>` : ``}
       </div>
 
       <div class="modalActions">
-        ${canEditFields ? `<button class="btn" id="mt_save">рџ’ѕ Saqlash</button>` : ``}
+        ${canEditFields ? `<button class="btn" id="mt_save">💾 Saqlash</button>` : ``}
         <button class="btn" id="mt_close">Yopish</button>
       </div>
     `);
@@ -2441,12 +2441,12 @@
         if(!isAdmin()){
           const newHasProject = !!payload.projectId;
           if(!newHasProject && String(payload.assigneeId)!==String(USER.id)){
-            msg.textContent = "Bez proyekt boвЂlsa, ijrochi faqat oвЂzi boвЂlishi mumkin.";
+            msg.textContent = "Bez proyekt bo‘lsa, ijrochi faqat o‘zi bo‘lishi mumkin.";
             return;
           }
         }
 
-        await withLoading("SaqlashвЂ¦","Vazifa saqlanmoqda", async ()=>{
+        await withLoading("Saqlash…","Vazifa saqlanmoqda", async ()=>{
           const res = await api("task_upsert", { payload: encodeURIComponent(JSON.stringify(payload)) });
           if(!res?.ok){ msg.textContent = "Xatolik: " + (res?.error||""); return; }
         });

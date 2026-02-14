@@ -206,7 +206,7 @@
       letter-spacing:.2px;
     }
     thead tr.cols th{
-      top:36px; /* РІС‹СЃРѕС‚Р° РїРµСЂРІРѕР№ СЃС‚СЂРѕРєРё */
+      top:36px; /* высота первой строки */
       z-index:5;
     }
     tbody td{
@@ -356,7 +356,7 @@
 
     <div class="dockScroll">
       <div class="field">
-        <label>PРѕСЃС‚Р°РІС‰РёРє</label>
+        <label>Pоставщик</label>
         <select id="fSupplier">
           <option value="all">Barchasi</option>
         </select>
@@ -395,18 +395,18 @@
         <select id="fStock">
           <option value="all">Barchasi</option>
           <option value="yes">Ha (bor)</option>
-          <option value="no">YoвЂq</option>
+          <option value="no">Yo‘q</option>
         </select>
       </div>
 
       <!-- ===== Columns (show/hide) ===== -->
       <div class="field" id="colsSection">
-        <label>Ustunlar (koвЂrsatish / yashirish)</label>
+        <label>Ustunlar (ko‘rsatish / yashirish)</label>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
-          <button id="btnColsAll" class="btn small" type="button">Barchasini koвЂrsat</button>
+          <button id="btnColsAll" class="btn small" type="button">Barchasini ko‘rsat</button>
         </div>
         <div class="muted" style="margin-top:8px">
-          Ustun checkboxini oвЂchirib вЂ” yashirasiz. Jadval sarlavhasidagi <b>Г—</b> tugmasi bilan ham yashirish mumkin.
+          Ustun checkboxini o‘chirib — yashirasiz. Jadval sarlavhasidagi <b>×</b> tugmasi bilan ham yashirish mumkin.
         </div>
       </div>
 
@@ -419,7 +419,7 @@
 
       <div id="colsList" class="colsList"></div>
 
-      <div class="muted">* Menyu yashirin вЂ” chap chetga olib boring.</div>
+      <div class="muted">* Menyu yashirin — chap chetga olib boring.</div>
     </div>
   </aside>
 
@@ -427,17 +427,17 @@
 
   <header class="topHeader">
     <div class="hdrLeft">
-      <div class="hdrTitle">Azaly вЂ” <b>Analiz</b></div>
-      <div class="hdrSub">Р›РёСЃС‚ вЂњРђРЅР°Р»РёР·вЂќ вЂў 1-СЃС‚СЂРѕРєР°: РіСЂСѓРїРїРёСЂРѕРІРєР° вЂў 2-СЃС‚СЂРѕРєР°: РЅР°Р·РІР°РЅРёСЏ</div>
+      <div class="hdrTitle">Azaly — <b>Analiz</b></div>
+      <div class="hdrSub">Лист “Анализ” • 1-строка: группировка • 2-строка: названия</div>
     </div>
 
     <div class="hdrRight">
-      <span id="userPill" class="pill">рџ‘¤ -</span>
+      <span id="userPill" class="pill">👤 -</span>
       <button id="btnCols" class="btn" type="button">Ustunlar</button>
       <button id="btnReload" class="btn" type="button">Yangilash</button>
       <button id="btnLogout" class="btn danger" type="button">Chiqish</button>
       <span id="status" class="pill"><span class="muted">Yuklanmoqda...</span></span>
-      <button id="burger" class="burger" title="Filters" type="button">в°</button>
+      <button id="burger" class="burger" title="Filters" type="button">☰</button>
     </div>
   </header>
 
@@ -445,7 +445,7 @@
     <section class="card tableCard">
       <div class="tableTop">
         <div class="tableTitle">Jadval</div>
-        <div id="meta" class="tableMeta">вЂ”</div>
+        <div id="meta" class="tableMeta">—</div>
       </div>
 
       <div class="tableScroll" id="tableScroll">
@@ -592,8 +592,8 @@
       }
 
       hiddenColsBar.innerHTML = hidden.length
-        ? hidden.map(n=>`<button class="chipBtn" type="button" data-colname="${escapeHtml(n)}" title="KoвЂrsatish">${escapeHtml(n)}</button>`).join("")
-        : `<span class="muted">Yashirilgan ustun yoвЂq</span>`;
+        ? hidden.map(n=>`<button class="chipBtn" type="button" data-colname="${escapeHtml(n)}" title="Ko‘rsatish">${escapeHtml(n)}</button>`).join("")
+        : `<span class="muted">Yashirilgan ustun yo‘q</span>`;
 
       let html = "";
       for(let i=0;i<HEADERS.length;i++){
@@ -642,7 +642,7 @@
       const totalPages = getTotalPages();
 
       if(total === 0){
-        pager.innerHTML = `<div class="pagerInfo">MaвЂ™lumot yoвЂq</div>`;
+        pager.innerHTML = `<div class="pagerInfo">Ma’lumot yo‘q</div>`;
         return;
       }
 
@@ -652,14 +652,14 @@
       const items = getPageItems(CURRENT_PAGE, totalPages);
 
       pager.innerHTML = `
-        <div class="pagerInfo">${start+1}вЂ“${end} / ${total} вЂў Sahifa ${CURRENT_PAGE}/${totalPages}</div>
+        <div class="pagerInfo">${start+1}–${end} / ${total} • Sahifa ${CURRENT_PAGE}/${totalPages}</div>
         <div class="pagerBtns">
-          <button class="pageBtn" type="button" data-page="prev" ${CURRENT_PAGE<=1 ? "disabled" : ""}>вЂ№ Oldingi 100 ta</button>
+          <button class="pageBtn" type="button" data-page="prev" ${CURRENT_PAGE<=1 ? "disabled" : ""}>‹ Oldingi 100 ta</button>
           ${items.map(it => it === "..."
-            ? `<span class="pageDots">вЂ¦</span>`
+            ? `<span class="pageDots">…</span>`
             : `<button class="pageBtn ${it===CURRENT_PAGE ? "active" : ""}" type="button" data-page="${it}">${it}</button>`
           ).join("")}
-          <button class="pageBtn" type="button" data-page="next" ${CURRENT_PAGE>=totalPages ? "disabled" : ""}>Keyingi 100 ta вЂє</button>
+          <button class="pageBtn" type="button" data-page="next" ${CURRENT_PAGE>=totalPages ? "disabled" : ""}>Keyingi 100 ta ›</button>
         </div>
       `;
     }
@@ -678,9 +678,9 @@
       renderBody(slice);
 
       if(total){
-        metaEl.textContent = `KoвЂrsatildi: ${start+1}вЂ“${end} / ${total.toLocaleString("ru-RU")} вЂў Jami: ${ROWS.length.toLocaleString("ru-RU")}`;
+        metaEl.textContent = `Ko‘rsatildi: ${start+1}–${end} / ${total.toLocaleString("ru-RU")} • Jami: ${ROWS.length.toLocaleString("ru-RU")}`;
       }else{
-        metaEl.textContent = `KoвЂrsatildi: 0 / 0 вЂў Jami: ${ROWS.length.toLocaleString("ru-RU")}`;
+        metaEl.textContent = `Ko‘rsatildi: 0 / 0 • Jami: ${ROWS.length.toLocaleString("ru-RU")}`;
       }
 
       renderPager();
@@ -814,7 +814,7 @@
             <th data-col-idx="${i}">
               <div class="thWrap">
                 <span class="thTxt">${escapeHtml(HEADERS[i] || "")}</span>
-                <button class="thHideBtn" type="button" data-hide-col="${i}" title="Yashirish">Г—</button>
+                <button class="thHideBtn" type="button" data-hide-col="${i}" title="Yashirish">×</button>
               </div>
             </th>
           `).join("")}
@@ -839,24 +839,24 @@
       return i==null ? "" : row[i];
     }
     function isSoldRow(row){
-      const v = cell(row, "РЎРѕС‚РёР»РіР°РЅ");
+      const v = cell(row, "Сотилган");
       const s = normLower(v);
       if(s === "") return false;
-      if(["РґР°","ha","yes","true","1","sotilgan","sold"].some(x=>s===x)) return true;
-      if(s.includes("РґР°")) return true;
+      if(["да","ha","yes","true","1","sotilgan","sold"].some(x=>s===x)) return true;
+      if(s.includes("да")) return true;
       if(s.includes("ha")) return true;
       return false;
     }
     function inStockRow(row){
-      const q = toNum(cell(row, "РќРµС‡С‚Р° РєРѕР»РіР°РЅР»РёРіРё"));
+      const q = toNum(cell(row, "Нечта колганлиги"));
       if(q > 0) return true;
-      const s = toNum(cell(row, "РљРѕР»РіР°РЅ СЃСѓРјРјР°СЃРё")) || toNum(cell(row, "USD РєРѕР»РіР°РЅР»РёРіРё"));
+      const s = toNum(cell(row, "Колган суммаси")) || toNum(cell(row, "USD колганлиги"));
       return s > 0;
     }
     function matchQuery(row, q){
       if(!q) return true;
-      const code = normLower(cell(row, "РљРѕРґРё"));
-      const art  = normLower(cell(row, "РђСЂС‚РёРєСѓР» РЅРѕРјРё"));
+      const code = normLower(cell(row, "Коди"));
+      const art  = normLower(cell(row, "Артикул номи"));
       return (code.includes(q) || art.includes(q));
     }
 
@@ -870,9 +870,9 @@
 
       const out = [];
       for(const r of ROWS){
-        if(sup !== "all" && normStr(cell(r,"РџРѕСЃС‚Р°РІС‰РёРє")) !== sup) continue;
-        if(cat !== "all" && normStr(cell(r,"РљР°С‚РµРіРѕСЂРёСЏ")) !== cat) continue;
-        if(sez !== "all" && normStr(cell(r,"РЎРµР·РѕРЅ")) !== sez) continue;
+        if(sup !== "all" && normStr(cell(r,"Поставщик")) !== sup) continue;
+        if(cat !== "all" && normStr(cell(r,"Категория")) !== cat) continue;
+        if(sez !== "all" && normStr(cell(r,"Сезон")) !== sez) continue;
 
         if(sold === "sold" && !isSoldRow(r)) continue;
         if(sold === "unsold" && isSoldRow(r)) continue;
@@ -908,12 +908,12 @@
       }
 
       if(!list || list.length===0){
-        tbody.innerHTML = `<tr><td class="empty" colspan="${vis.length}">MaвЂ™lumot yoвЂq</td></tr>`;
+        tbody.innerHTML = `<tr><td class="empty" colspan="${vis.length}">Ma’lumot yo‘q</td></tr>`;
         return;
       }
 
       tbody.innerHTML = "";
-      const COL_IMG = idx("РўРѕРІР°СЂ СЂР°СЃРјРё");
+      const COL_IMG = idx("Товар расми");
 
       let i=0;
       const chunk = 180;
@@ -987,7 +987,7 @@
       lockToLogin();
     });
 
-    // column hide from header (Г—)
+    // column hide from header (×)
     thead.addEventListener("click", (e)=>{
       const btn = e.target.closest("[data-hide-col]");
       if(!btn) return;
@@ -1067,7 +1067,7 @@
         USER = res.user;
         localStorage.setItem(USER_KEY, JSON.stringify(USER));
       }
-      userPill.textContent = `рџ‘¤ ${USER?.login || "-"}`;
+      userPill.textContent = `👤 ${USER?.login || "-"}`;
 
       fillSelect(fSupplier, OPTIONS.suppliers);
       fillSelect(fCategory, OPTIONS.categories);

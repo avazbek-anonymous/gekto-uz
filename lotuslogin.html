@@ -27,26 +27,26 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="brand"><div class="dot"></div><h1>LOTUS вЂў Login</h1></div>
+    <div class="brand"><div class="dot"></div><h1>LOTUS • Login</h1></div>
     <div class="card">
-      <p class="sub">РЎРµСЃСЃРёСЏ РґРµР№СЃС‚РІСѓРµС‚ РґРѕ 23:59:59 (РўР°С€РєРµРЅС‚).</p>
+      <p class="sub">Сессия действует до 23:59:59 (Ташкент).</p>
 
-      <label>Р›РѕРіРёРЅ</label>
+      <label>Логин</label>
       <input id="login" autocomplete="username" placeholder="Login"/>
 
-      <label>РџР°СЂРѕР»СЊ</label>
+      <label>Пароль</label>
       <input id="password" type="password" autocomplete="current-password" placeholder="Parol"/>
 
-      <button id="btn" onclick="onLogin()">Р’РѕР№С‚Рё</button>
+      <button id="btn" onclick="onLogin()">Войти</button>
       <div id="msg" class="msg"></div>
     </div>
   </div>
 
 <script>
-  // === Р’РЎРўРђР’Р¬ РЎР®Р”Рђ Web App URL ===
+  // === ВСТАВЬ СЮДА Web App URL ===
   const API_URL = "https://script.google.com/macros/s/AKfycbwAhWboyZuVAE9RtcRMye39XKygcQBWRrXKjiWRd681cayTk_HEYeiDYV0iGy1oJ60VGA/exec";
   // ===============================
-  const SECRET = "mySecret123"; // РґРѕР»Р¶РµРЅ СЃРѕРІРїР°СЃС‚СЊ СЃ LOTUS_SECRET
+  const SECRET = "mySecret123"; // должен совпасть с LOTUS_SECRET
   const STORAGE_KEY = "lotus_token";
 
   function showMsg(s, isErr){
@@ -57,7 +57,7 @@
   function setBusy(b, text){
     const btn = document.getElementById("btn");
     btn.disabled = b;
-    btn.innerHTML = b ? `<span class="spin"></span>${text||"..."}` : "Р’РѕР№С‚Рё";
+    btn.innerHTML = b ? `<span class="spin"></span>${text||"..."}` : "Войти";
   }
 
   function jsonp(action, params){
@@ -106,22 +106,22 @@
   async function onLogin(){
     const login = document.getElementById("login").value.trim();
     const password = document.getElementById("password").value.trim();
-    if (!login || !password) return showMsg("Р—Р°РїРѕР»РЅРё Р»РѕРіРёРЅ Рё РїР°СЂРѕР»СЊ.", true);
+    if (!login || !password) return showMsg("Заполни логин и пароль.", true);
 
     showMsg("");
-    setBusy(true, "Р’С…РѕРґРёРј...");
+    setBusy(true, "Входим...");
 
     try{
       const r = await jsonp("login", { login, password });
       if (!r || !r.ok){
-        showMsg("РќРµРІРµСЂРЅС‹Р№ Р»РѕРіРёРЅ РёР»Рё РїР°СЂРѕР»СЊ.", true);
+        showMsg("Неверный логин или пароль.", true);
         setBusy(false);
         return;
       }
       localStorage.setItem(STORAGE_KEY, r.token);
       window.location.replace("/lotus.html");
     }catch(e){
-      showMsg("РћС€РёР±РєР° СЃРѕРµРґРёРЅРµРЅРёСЏ (JSONP).", true);
+      showMsg("Ошибка соединения (JSONP).", true);
       setBusy(false);
     }
   }
