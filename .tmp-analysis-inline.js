@@ -1,596 +1,4 @@
-﻿<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Diagnostika biznesa - Gekto</title>
-  <meta name="theme-color" content="#003a2f">
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/ionicons.min.css">
-  <link rel="stylesheet" href="assets/css/flexslider.css">
-  <link rel="stylesheet" href="assets/css/animsition.min.css">
-  <link rel="stylesheet" href="assets/css/animate.css">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.css">
-  <style>
-    .analysis-wrap {
-      padding: 40px 0 70px;
-      background: linear-gradient(180deg, #f5f9f7 0%, #ffffff 35%)
-    }
-
-    .analysis-shell {
-      max-width: 980px;
-      margin: 0 auto
-    }
-
-    .analysis-card {
-      background: #fff;
-      border: 1px solid #e4eee9;
-      border-radius: 14px;
-      padding: 24px;
-      box-shadow: 0 10px 28px rgba(0, 58, 47, .07);
-      margin-bottom: 18px
-    }
-
-    .analysis-head {
-      margin-bottom: 16px
-    }
-
-    .analysis-head h2 {
-      margin: 0;
-      color: #003a2f;
-      font-size: 30px;
-      line-height: 1.2
-    }
-
-    .analysis-sub {
-      color: #4b5a56;
-      font-size: 14px;
-      margin-top: 8px
-    }
-
-    .analysis-hidden {
-      display: none
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px
-    }
-
-    .field label {
-      display: block;
-      font-size: 12px;
-      color: #5f6d68;
-      margin-bottom: 6px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .3px
-    }
-
-    .field input,
-    .field select {
-      width: 100%;
-      border: 1px solid #cfe0da;
-      border-radius: 10px;
-      padding: 12px 12px;
-      font-size: 15px;
-      background: #fff;
-      color: #1f2b28
-    }
-
-    .field input:focus,
-    .field select:focus {
-      outline: none;
-      border-color: #0e8067;
-      box-shadow: 0 0 0 3px rgba(14, 128, 103, .15)
-    }
-
-    .actions {
-      margin-top: 16px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap
-    }
-
-    .mode-card {
-      border: 1px solid #d9e9e3;
-      border-radius: 12px;
-      padding: 15px;
-      cursor: pointer;
-      transition: .2s;
-      background: #fff
-    }
-
-    .mode-card.active {
-      border-color: #0e8067;
-      box-shadow: 0 0 0 3px rgba(14, 128, 103, .15)
-    }
-
-    .mode-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #003a2f
-    }
-
-    .mode-meta {
-      font-size: 13px;
-      color: #4b5a56;
-      margin-top: 6px
-    }
-
-    .progress-wrap {
-      height: 10px;
-      background: #edf2f0;
-      border-radius: 999px;
-      overflow: hidden;
-      margin: 10px 0 18px
-    }
-
-    .progress-bar {
-      height: 10px;
-      background: #003a2f;
-      width: 0;
-      transition: width .2s ease
-    }
-
-    .question {
-      font-size: 23px;
-      line-height: 1.45;
-      color: #1f2b28;
-      margin-bottom: 14px
-    }
-
-    .block-tag {
-      display: inline-block;
-      background: #eaf5f1;
-      color: #0f6c58;
-      font-size: 11px;
-      padding: 5px 8px;
-      border-radius: 999px;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      font-weight: 700
-    }
-
-    .scale {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 12px;
-      color: #5f6d68;
-      margin-top: 8px
-    }
-
-    .calc-top {
-      border-radius: 14px;
-      padding: 22px 14px;
-      text-align: center;
-      color: #fff
-    }
-
-    .calc-caption {
-      font-size: 13px;
-      opacity: .8
-    }
-
-    .calc-level {
-      font-size: 16px;
-      font-weight: 700;
-      margin-top: 8px
-    }
-
-    .calc-value {
-      font-size: 46px;
-      line-height: 1.1;
-      font-weight: 800;
-      margin-top: 4px
-    }
-
-    .calc-slider-wrap {
-      padding: 0 18px;
-      margin-top: -8px
-    }
-
-    .c-50 {
-      background-image: linear-gradient(-37deg, #A67F66 0%, #C49A7F 19%, #A2795E 40%, #A47C62 66%, #EBC5A4 100%)
-    }
-
-    .c-150 {
-      background-image: linear-gradient(-50deg, #9FA6AC 0%, #868C94 40%, #C4CBD1 79%, #B3BBC0 100%)
-    }
-
-    .c-250 {
-      background-image: linear-gradient(-25deg, #EFDA86 0%, #C69637 40%, #FEF2AE 79%, #D3CC72 100%)
-    }
-
-    .c-350 {
-      background-image: linear-gradient(-50deg, #70BEFF 0%, #6999DA 40%, #BAE2FF 79%, #D3E9F8 100%)
-    }
-
-    .c-500 {
-      background-image: linear-gradient(-50deg, #70ffa7 0%, #69daa5 40%, #baffc0 79%, #d3f8d5 100%)
-    }
-
-    .noUi-target {
-      background: #9AAAC1;
-      border: none;
-      box-shadow: none
-    }
-
-    .noUi-connect {
-      background: #0E84FF
-    }
-
-    .noUi-horizontal {
-      height: 14px;
-      border-radius: 10px
-    }
-
-    .noUi-horizontal .noUi-handle {
-      width: 32px;
-      height: 32px;
-      top: -10px;
-      right: -26px;
-      border: none;
-      border-radius: 50%;
-      background: #0E84FF;
-      box-shadow: 0 11px 19px 0 rgba(12, 71, 124, .48)
-    }
-
-    .noUi-handle:before {
-      content: '';
-      display: block;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 20px;
-      height: 20px;
-      background: #d8e4f5;
-      border-radius: 50%;
-      transform: translate(-50%, -50%)
-    }
-
-    .noUi-handle:after {
-      display: none
-    }
-
-    .noUi-horizontal .noUi-tooltip {
-      display: none;
-      font-weight: 700;
-      font-size: 13px;
-      color: #1a273a;
-      background: #fff;
-      box-shadow: 0 11px 28px 0 rgba(255, 255, 255, .3);
-      padding: 5px 11px;
-      border: none;
-      border-radius: 20px;
-      text-transform: uppercase
-    }
-
-    .kpi {
-      border: 1px solid #e4eee9;
-      border-radius: 12px;
-      padding: 16px;
-      background: #fff;
-      height: 100%
-    }
-
-    .score {
-      font-size: 42px;
-      font-weight: 800;
-      color: #003a2f;
-      line-height: 1
-    }
-
-    .level {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .4px;
-      color: #4c5a56;
-      margin-top: 8px
-    }
-
-    .chart-box {
-      border: 1px solid #e4eee9;
-      border-radius: 12px;
-      padding: 12px;
-      margin-top: 12px
-    }
-
-    .chart-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      color: #4c5a56;
-      font-weight: 700;
-      margin-bottom: 8px
-    }
-
-    .list-clean {
-      padding-left: 18px;
-      margin: 0
-    }
-
-    .list-clean li {
-      margin-bottom: 8px
-    }
-
-    .row-item {
-      border-bottom: 1px solid #edf2f0;
-      padding: 9px 0
-    }
-
-    .row-item:last-child {
-      border-bottom: none
-    }
-
-    .err {
-      font-size: 12px;
-      color: #b94040;
-      margin-top: 8px;
-      display: none
-    }
-
-    .note {
-      font-size: 12px;
-      color: #5f6d68;
-      margin-top: 10px
-    }
-
-    @media (max-width:900px) {
-      .analysis-head h2 {
-        font-size: 24px
-      }
-
-      .question {
-        font-size: 20px
-      }
-    }
-
-    @media (max-width:768px) {
-      .analysis-wrap {
-        padding: 20px 0 50px
-      }
-
-      .analysis-card {
-        padding: 16px;
-        border-radius: 12px
-      }
-
-      .grid {
-        grid-template-columns: 1fr
-      }
-
-      .scale {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 5px
-      }
-
-      .score {
-        font-size: 34px
-      }
-
-      .calc-value {
-        font-size: 34px
-      }
-
-      .calc-slider-wrap {
-        padding: 0 6px
-      }
-    }
-  </style>
-</head>
-
-<body class="animsition">
-  <header class="main-header">
-    <div class="container">
-      <div class="logo"><a href="index.html"><img src="assets/img/logo.png" alt="logo"></a></div>
-      <div class="menu">
-        <nav class="desktop-nav">
-          <ul class="first-level">
-            <li><a href="index.html" class="animsition-link">Asosiy</a></li>
-            <li><a href="about.html" class="animsition-link">Biz haqimizda</a></li>
-            <li><a href="services.html" class="animsition-link">Xizmatlarimiz</a></li>
-            <li><a href="contact.html" class="animsition-link">Kontaktlarimiz</a></li>
-          </ul>
-        </nav>
-        <nav class="mobile-nav"></nav>
-        <div class="menu-icon">
-          <div class="line"></div>
-          <div class="line"></div>
-          <div class="line"></div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <section class="analysis-wrap">
-    <div class="container">
-      <div class="analysis-shell">
-
-        <div id="screen-intro" class="analysis-card">
-          <div class="analysis-head">
-            <h2>Biznes Diagnostika Testi</h2>
-            <div class="analysis-sub">Avval ma'lumotlaringizni kiriting, keyin test turini tanlaysiz.</div>
-          </div>
-          <div class="grid">
-            <div class="field"><label for="fullName">Ismingiz</label><input id="fullName" type="text"
-                placeholder="Ism familiya"></div>
-            <div class="field"><label for="phone">Raqamingiz</label><input id="phone" type="tel"
-                placeholder="+998 XX XXX XX XX"></div>
-            <div class="field"><label for="businessName">Biznesingiz nomi</label><input id="businessName" type="text"
-                placeholder="Kompaniya nomi"></div>
-            <div class="field"><label for="sector">Sohani tanlang</label><select id="sector"></select></div>
-          </div>
-          <div id="introErr" class="err">Iltimos, barcha maydonlarni to'ldiring.</div>
-          <div class="actions"><button id="goMode" class="btn green"><span>Testni boshlash</span></button></div>
-        </div>
-
-        <div id="screen-mode" class="analysis-card analysis-hidden">
-          <div class="analysis-head">
-            <h2>Test turi</h2>
-            <div class="analysis-sub">Variantni tanlang. Natijada foiz, zaif nuqtalar, tavsiyalar va hisobotlar chiqadi.
-            </div>
-          </div>
-          <div class="grid">
-            <label class="mode-card active" id="modeNormalCard"><input type="radio" name="mode" value="normal" checked
-                style="display:none">
-              <div class="mode-title">Oddiy test</div>
-              <div class="mode-meta">40 savol: 20 Moliyaviy + 20 Menejment. Tez diagnostika.</div>
-            </label>
-            <label class="mode-card" id="modeDeepCard"><input type="radio" name="mode" value="deep"
-                style="display:none">
-              <div class="mode-title">Chuqur tahlil</div>
-              <div class="mode-meta">80 savol: 40 Moliyaviy + 40 Menejment. Chuqur auditga yaqin natija.</div>
-            </label>
-          </div>
-          <div class="actions"><button id="backIntro" class="btn"><span>Orqaga</span></button><button id="startTest"
-              class="btn green"><span>Boshlash</span></button></div>
-        </div>
-
-        <div id="screen-quiz" class="analysis-card analysis-hidden">
-          <div class="analysis-head">
-            <h2 id="quizTitle">Savol 1 / 40</h2>
-          </div>
-          <div class="progress-wrap">
-            <div class="progress-bar" id="progressBar"></div>
-          </div>
-          <div class="block-tag" id="blockTag">Moliyaviy</div>
-          <div class="question" id="questionText"></div>
-          <div id="sliderTheme" class="calc-top c-250">
-            <div class="calc-caption">Baholash darajasi</div>
-            <div id="levelValue" class="calc-value">3</div>
-            <div id="levelText" class="calc-level">Qisman mos</div>
-          </div>
-          <div class="calc-slider-wrap">
-            <div id="answerSlider"></div>
-          </div>
-          <div class="actions"><button id="quizBack" class="btn"><span>Orqaga</span></button><button id="quizNext"
-              class="btn green"><span>Keyingi</span></button></div>
-        </div>
-
-        <div id="screen-result" class="analysis-hidden">
-          <div class="analysis-card">
-            <div class="analysis-head">
-              <h2>Natijalar</h2>
-              <div class="analysis-sub">Sizning biznes diagnostika hisobotingiz</div>
-            </div>
-            <div class="score" id="overallScore">0%</div>
-            <div class="level" id="overallLevel">-</div>
-            <p id="overallLine" style="margin-top:8px"></p>
-          </div>
-          <div class="row">
-            <div class="col-md-6 col-sm-12">
-              <div class="kpi">
-                <div class="chart-title">Moliyaviy natija</div>
-                <div class="score" id="financeScore">0%</div>
-                <div class="level" id="financeLevel">-</div>
-                <p id="financeLine"></p>
-              </div>
-            </div>
-            <div class="col-md-6 col-sm-12">
-              <div class="kpi">
-                <div class="chart-title">Menejment natija</div>
-                <div class="score" id="managementScore">0%</div>
-                <div class="level" id="managementLevel">-</div>
-                <p id="managementLine"></p>
-              </div>
-            </div>
-          </div>
-          <div class="analysis-card">
-            <div class="chart-box">
-              <div class="chart-title">Finance Radar</div><svg id="financeRadar" viewBox="0 0 360 300"
-                style="width:100%"></svg>
-            </div>
-            <div class="chart-box">
-              <div class="chart-title">Management Radar</div><svg id="managementRadar" viewBox="0 0 360 300"
-                style="width:100%"></svg>
-            </div>
-            <div class="chart-box">
-              <div class="chart-title">Eng past kategoriyalar</div><svg id="weakBar" viewBox="0 0 420 260"
-                style="width:100%"></svg>
-            </div>
-            <div class="chart-box">
-              <div class="chart-title">Muammo turlari</div><svg id="problemDonut" viewBox="0 0 360 260"
-                style="width:100%"></svg>
-            </div>
-          </div>
-          <div class="analysis-card">
-            <div class="chart-title">Bosh xulosa</div>
-            <p id="mainConclusion"></p>
-            <div class="chart-title" style="margin-top:14px">Tavsiyalar</div>
-            <ul id="insights" class="list-clean"></ul>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="analysis-card">
-                <div class="chart-title">Top-5 zaif savollar</div>
-                <div id="weakQuestions"></div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="analysis-card">
-                <div class="chart-title">Top-5 kuchli savollar</div>
-                <div id="strongQuestions"></div>
-              </div>
-            </div>
-          </div>
-          <div class="analysis-card">
-            <div class="chart-title">7 kunlik tezkor reja</div>
-            <ul id="quickPlan" class="list-clean"></ul>
-            <div class="chart-title" style="margin-top:14px">Sizga kerak bo'ladigan hisobotlar</div>
-            <ul id="neededReports" class="list-clean"></ul>
-            <div class="note" style="font-size:14px;color:#1f2b28;margin-top:12px">Agar ushbu masalalarni hal qilish,
-              amaliy tavsiya olish yoki biznesingizni tizimlashtirishni xohlasangiz, biz bilan bog'laning</div>
-            <div class="actions">
-              <button id="pdfAndSend" class="btn green"><span>PDF yuklab olish</span>
-              </button>
-              <button id="printResult" class="btn"><span>Chop etish</span></button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <footer class="main-footer wow fadeInUp">
-    <div class="container">
-      <div class="col-md-8 col-sm-12">
-        <div class="row">
-          <nav class="footer-nav">
-            <p style="font-weight:bold;">"Murakkab moliyani sodda tilda tushuntiramiz"</p>
-            <p style="text-align:center;font-weight:bold;">Fazliddin Davronov</p>
-            <ul>
-              <li><a href="index.html" class="animsition-link link">Asosiy</a></li>
-              <li><a href="about.html" class="animsition-link link">Biz haqimizda</a></li>
-              <li><a href="services.html" class="animsition-link link">Xizmatlarimiz</a></li>
-              <li><a href="contact.html" class="animsition-link link">Kontaktlarimiz</a></li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-      <div class="col-md-4 col-sm-12" style="text-align:right">
-        <div class="row">
-          <div class="gray-text">Gekto &copy;2022. Huquqlar himoyalangan.</div>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script src="assets/js/jquery-2.1.4.min.js"></script>
-  <script src="assets/js/isotope.pkgd.min.js"></script>
-  <script src="assets/js/jquery.flexslider.js"></script>
-  <script src="assets/js/smoothScroll.js"></script>
-  <script src="assets/js/jquery.animsition.min.js"></script>
-  <script src="assets/js/wow.min.js"></script>
-  <script src="assets/js/main.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <script>
+﻿
     const CONTACTS = {
       tel1: '998930050180',
       tel2: '998770086000',
@@ -718,6 +126,7 @@
     ];
     const DEEP_FINANCE = DEEP_FINANCE_BASE.concat(NORMAL_FINANCE);
     const DEEP_MANAGEMENT = DEEP_MANAGEMENT_BASE.concat(NORMAL_MANAGEMENT);
+    const DRAFT_KEY = 'analysis_draft_v2';
     const app = {
       mode: 'normal',
       questions: [],
@@ -1220,6 +629,22 @@
       return ok
     }
 
+    function saveDraft() {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({
+        mode: app.mode,
+        current: app.current,
+        answers: app.answers,
+        user: app.user
+      }))
+    }
+
+    function loadDraft() {
+      try {
+        return JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null')
+      } catch {
+        return null
+      }
+    }
     async function loadLogoMeta() {
       return new Promise(resolve => {
         const img = new Image();
@@ -1553,6 +978,7 @@
           renderQuestion();
           return;
         }
+        localStorage.removeItem(DRAFT_KEY);
         renderResult();
         show('screen-result');
         window.scrollTo({
@@ -1560,12 +986,44 @@
           behavior: 'smooth'
         })
       });
+      el('saveExit').addEventListener('click', () => {
+        saveCurrent();
+        saveDraft();
+        alert('Draft saqlandi. Keyin davom ettirasiz.');
+        show('screen-intro')
+      });
       el('printResult').addEventListener('click', () => window.print());
       el('pdfAndSend').addEventListener('click', onPdfAndSend);
+    }
+
+    function restoreDraftButton() {
+      const d = loadDraft();
+      if (!d) return;
+      const btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.innerHTML = '<span>Draftni davom ettirish</span>';
+      btn.addEventListener('click', () => {
+        app.mode = d.mode || 'normal';
+        app.current = d.current || 0;
+        app.answers = d.answers || {};
+        app.user = d.user || app.user;
+        el('fullName').value = app.user.name || '';
+        el('phone').value = app.user.phone || '';
+        el('businessName').value = app.user.business || '';
+        el('sector').value = app.user.sector || '';
+        show('screen-mode');
+        document.querySelector(`input[name="mode"][value="${app.mode}"]`).checked = true;
+        renderModeCards();
+        app.questions = buildQuestions(app.mode);
+        show('screen-quiz');
+        renderQuestion()
+      });
+      el('screen-intro').querySelector('.actions').appendChild(btn)
     }
     (function init() {
       fillSectors();
       initEvents();
+      restoreDraftButton();
       const header = document.querySelector('header.main-header');
       if (header) {
         const t = () => header.classList.toggle('scrolled', window.scrollY > 10);
@@ -1582,7 +1040,4 @@
         new WOW().init();
       }
     })();
-  </script>
-</body>
-
-</html>
+  
