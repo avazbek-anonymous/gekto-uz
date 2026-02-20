@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="assets/css/animsition.min.css">
 <link rel="stylesheet" href="assets/css/animate.css">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.css">
 <style>
 .analysis-wrap{padding:40px 0 70px;background:linear-gradient(180deg,#f5f9f7 0%,#ffffff 35%)}
 .analysis-shell{max-width:980px;margin:0 auto}
@@ -33,6 +34,22 @@
 .question{font-size:23px;line-height:1.45;color:#1f2b28;margin-bottom:14px}
 .block-tag{display:inline-block;background:#eaf5f1;color:#0f6c58;font-size:11px;padding:5px 8px;border-radius:999px;margin-bottom:10px;text-transform:uppercase;font-weight:700}
 .scale{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#5f6d68;margin-top:8px}
+.calc-top{border-radius:14px;padding:22px 14px;text-align:center;color:#fff}
+.calc-caption{font-size:13px;opacity:.8}
+.calc-level{font-size:16px;font-weight:700;margin-top:8px}
+.calc-value{font-size:46px;line-height:1.1;font-weight:800;margin-top:4px}
+.calc-slider-wrap{padding:0 18px;margin-top:-8px}
+.c-50{background-image:linear-gradient(-37deg,#A67F66 0%,#C49A7F 19%,#A2795E 40%,#A47C62 66%,#EBC5A4 100%)}
+.c-150{background-image:linear-gradient(-50deg,#9FA6AC 0%,#868C94 40%,#C4CBD1 79%,#B3BBC0 100%)}
+.c-250{background-image:linear-gradient(-25deg,#EFDA86 0%,#C69637 40%,#FEF2AE 79%,#D3CC72 100%)}
+.c-500{background-image:linear-gradient(-50deg,#70BEFF 0%,#6999DA 40%,#BAE2FF 79%,#D3E9F8 100%)}
+.noUi-target{background:#9AAAC1;border:none;box-shadow:none}
+.noUi-connect{background:#0E84FF}
+.noUi-horizontal{height:14px;border-radius:10px}
+.noUi-horizontal .noUi-handle{width:52px;height:52px;top:-20px;right:-26px;border:none;border-radius:50%;background:#0E84FF;box-shadow:0 11px 19px 0 rgba(12,71,124,.48)}
+.noUi-handle:before{content:'';display:block;position:absolute;left:50%;top:50%;width:20px;height:20px;background:#d8e4f5;border-radius:50%;transform:translate(-50%,-50%)}
+.noUi-handle:after{display:none}
+.noUi-horizontal .noUi-tooltip{font-weight:700;font-size:13px;color:#1a273a;background:#fff;box-shadow:0 11px 28px 0 rgba(255,255,255,.3);padding:5px 11px;border:none;border-radius:20px;text-transform:uppercase}
 .kpi{border:1px solid #e4eee9;border-radius:12px;padding:16px;background:#fff;height:100%}
 .score{font-size:42px;font-weight:800;color:#003a2f;line-height:1}
 .level{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:#4c5a56;margin-top:8px}
@@ -45,7 +62,7 @@
 .err{font-size:12px;color:#b94040;margin-top:8px;display:none}
 .note{font-size:12px;color:#5f6d68;margin-top:10px}
 @media (max-width:900px){.analysis-head h2{font-size:24px}.question{font-size:20px}}
-@media (max-width:768px){.analysis-wrap{padding:20px 0 50px}.analysis-card{padding:16px;border-radius:12px}.grid{grid-template-columns:1fr}.scale{display:grid;grid-template-columns:1fr 1fr;gap:5px}.score{font-size:34px}}
+@media (max-width:768px){.analysis-wrap{padding:20px 0 50px}.analysis-card{padding:16px;border-radius:12px}.grid{grid-template-columns:1fr}.scale{display:grid;grid-template-columns:1fr 1fr;gap:5px}.score{font-size:34px}.calc-value{font-size:34px}.calc-slider-wrap{padding:0 6px}}
 </style>
 </head>
 <body class="animsition">
@@ -86,7 +103,12 @@
 <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
 <div class="block-tag" id="blockTag">Moliyaviy</div>
 <div class="question" id="questionText"></div>
-<input id="answerSlider" type="range" min="1" max="5" step="1" value="3" style="width:100%">
+<div id="sliderTheme" class="calc-top c-250">
+<div class="calc-caption">Baholash darajasi</div>
+<div id="levelValue" class="calc-value">3</div>
+<div id="levelText" class="calc-level">Qisman mos</div>
+</div>
+<div class="calc-slider-wrap"><div id="answerSlider"></div></div>
 <div class="scale"><span>1 - Umuman mos emas</span><span>2 - Kam mos</span><span>3 - Qisman mos</span><span>4 - Ko'p mos</span><span>5 - To'liq mos</span></div>
 <div class="actions"><button id="quizBack" class="btn"><span>Orqaga</span></button><button id="quizNext" class="btn green"><span>Keyingi</span></button><button id="saveExit" class="btn"><span>Saqlash va chiqish</span></button></div>
 </div>
@@ -115,10 +137,13 @@
 <script src="assets/js/jquery.animsition.min.js"></script>
 <script src="assets/js/wow.min.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script>
 const CONTACTS={tel1:'998930050180',tel2:'998770086000',telegram:'@gekto_consulting',mail:'info@gekto.uz',address:'Chilonzor, Muqumiy k. 41/3'};
 const TELEGRAM_CONFIG={botToken:'',chatId:'',topicId:''};
+const ENDPOINT="https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec";
+const SECRET="mySecret123";
 const SECTORS=['Agrobiznes','Arxitektura va dizayn','Avtoservis','Bank va moliya','Boshqa','Chakana savdo','Dorixona','E-commerce','Eksport-import','Franshiza','Gozallik va salomatlik','HoReCa (kafe/restoran)','IT va raqamli xizmatlar','Ishlab chiqarish','Konsalting','Logistika','Marketing agentligi','Qurilish','Sanoat xizmatlari','Ta'+'lim','Tekstil','Telekommunikatsiya','Turizm','Ulgurji savdo','Xizmat ko'+'rsatish','Yuridik xizmatlar'];
 const FIN_CATS=['cashflow','profitability','forecasting','working_capital','inventory','pricing','tax_legal'];
 const MAN_CATS=['processes','delegation','team_kpi','hr','motivation','planning','sales_ops'];
@@ -130,8 +155,13 @@ const DEEP_MANAGEMENT_BASE=["Menda kompaniya bo'yicha SOP/reglamentlar yozilgan 
 const DEEP_FINANCE=DEEP_FINANCE_BASE.concat(NORMAL_FINANCE);
 const DEEP_MANAGEMENT=DEEP_MANAGEMENT_BASE.concat(NORMAL_MANAGEMENT);
 const DRAFT_KEY='analysis_draft_v2';
-const app={mode:'normal',questions:[],current:0,answers:{},user:{name:'',phone:'',business:'',sector:''},result:null};
+const app={mode:'normal',questions:[],current:0,answers:{},user:{name:'',phone:'',business:'',sector:''},result:null,rawScore:3,slider:null};
 const el=id=>document.getElementById(id);
+const SCORE_LABELS={1:'Umuman mos emas',2:'Kam mos',3:'Qisman mos',4:"Ko'p mos",5:"To'liq mos"};
+function scoreClass(score){if(score<=1)return'c-50';if(score===2)return'c-150';if(score===3)return'c-250';return'c-500'}
+function nearestScore(raw){return Math.max(1,Math.min(5,Math.round(raw)))}
+function updateSliderVisual(raw){const score=nearestScore(raw);el('levelValue').textContent=String(score);el('levelText').textContent=SCORE_LABELS[score];el('sliderTheme').className='calc-top '+scoreClass(score)}
+function initAnswerSlider(){if(app.slider)return;noUiSlider.create(el('answerSlider'),{start:[3],connect:[true,false],step:0.01,range:{min:1,max:5},tooltips:[{to:(v)=>SCORE_LABELS[nearestScore(v)].toUpperCase()}]});app.slider=el('answerSlider').noUiSlider;app.slider.on('update',(values)=>{app.rawScore=Number(values[0]);updateSliderVisual(app.rawScore)});app.slider.on('change',(values)=>{const score=nearestScore(Number(values[0]));app.rawScore=score;app.slider.set(score);saveCurrent()});}
 function fillSectors(){const s=el('sector');const sorted=[...SECTORS].sort((a,b)=>a.localeCompare(b));s.innerHTML='<option value="">Tanlang...</option>'+sorted.map(x=>`<option value="${x}">${x}</option>`).join('');}
 function levelByPercent(p){if(p<=24)return'Kritk (kritik holat)';if(p<=49)return'Past (zaif tizim)';if(p<=69)return"O'rtacha (barqaror emas)";if(p<=84)return"Yaxshi (o'sish bor)";return"Kuchli (tizim yo'lga qo'yilgan)"}
 function catAt(cats,i){return cats[i%cats.length]}function makeQuestions(list,block,prefix,cats){return list.map((text,i)=>({id:prefix+(i+1),text,block,category:catAt(cats,i),weight:1}))}
@@ -139,8 +169,8 @@ function interleave(a,b){const out=[];const n=Math.max(a.length,b.length);for(le
 function buildQuestions(mode){if(mode==='normal')return interleave(makeQuestions(NORMAL_FINANCE,'finance','fn',FIN_CATS),makeQuestions(NORMAL_MANAGEMENT,'management','mn',MAN_CATS));return interleave(makeQuestions(DEEP_FINANCE,'finance','fd',FIN_CATS),makeQuestions(DEEP_MANAGEMENT,'management','md',MAN_CATS));}
 function show(screen){['screen-intro','screen-mode','screen-quiz','screen-result'].forEach(id=>el(id).classList.add('analysis-hidden'));el(screen).classList.remove('analysis-hidden')}
 function renderModeCards(){const m=document.querySelector('input[name="mode"]:checked').value;el('modeNormalCard').classList.toggle('active',m==='normal');el('modeDeepCard').classList.toggle('active',m==='deep')}
-function renderQuestion(){const q=app.questions[app.current];const total=app.questions.length;const v=app.answers[q.id]||3;el('quizTitle').textContent=`Savol ${app.current+1} / ${total}`;el('progressBar').style.width=((app.current+1)/total*100)+'%';el('questionText').textContent=q.text;el('blockTag').textContent=q.block==='finance'?'Moliyaviy':'Menejment';el('answerSlider').value=v;el('quizBack').disabled=app.current===0;el('quizNext').innerHTML=app.current===total-1?'<span>Natijani ko\'rish</span>':'<span>Keyingi</span>'}
-function saveCurrent(){const q=app.questions[app.current];app.answers[q.id]=Number(el('answerSlider').value)}
+function renderQuestion(){const q=app.questions[app.current];const total=app.questions.length;const v=app.answers[q.id]||3;el('quizTitle').textContent=`Savol ${app.current+1} / ${total}`;el('progressBar').style.width=((app.current+1)/total*100)+'%';el('questionText').textContent=q.text;el('blockTag').textContent=q.block==='finance'?'Moliyaviy':'Menejment';initAnswerSlider();app.rawScore=v;app.slider.set(v);updateSliderVisual(v);el('quizBack').disabled=app.current===0;el('quizNext').innerHTML=app.current===total-1?'<span>Natijani ko\'rish</span>':'<span>Keyingi</span>'}
+function saveCurrent(){const q=app.questions[app.current];app.answers[q.id]=nearestScore(app.rawScore)}
 function computeBlock(block){const items=app.questions.filter(x=>x.block===block);let raw=0,min=0,max=0;const cp={};items.forEach(q=>{const v=app.answers[q.id]||3;raw+=v*q.weight;min+=1*q.weight;max+=5*q.weight;if(!cp[q.category])cp[q.category]={raw:0,min:0,max:0};cp[q.category].raw+=v*q.weight;cp[q.category].min+=1*q.weight;cp[q.category].max+=5*q.weight});const percent=Math.round(((raw-min)/(max-min))*100)||0;const categoryPercent={};Object.keys(cp).forEach(k=>categoryPercent[k]=Math.round(((cp[k].raw-cp[k].min)/(cp[k].max-cp[k].min))*100)||0);return{percent,categoryPercent}}
 function extremes(desc){const arr=app.questions.map(q=>({text:q.text,score:app.answers[q.id]||3,category:q.category}));arr.sort((a,b)=>desc?b.score-a.score:a.score-b.score);return arr.slice(0,5)}
 function weakCategories(fin,man){const arr=[];Object.keys(fin.categoryPercent).forEach(k=>arr.push({category:k,value:fin.categoryPercent[k]}));Object.keys(man.categoryPercent).forEach(k=>arr.push({category:k,value:man.categoryPercent[k]}));arr.sort((a,b)=>a.value-b.value);return arr.slice(0,5)}
@@ -160,8 +190,9 @@ function saveDraft(){localStorage.setItem(DRAFT_KEY,JSON.stringify({mode:app.mod
 function loadDraft(){try{return JSON.parse(localStorage.getItem(DRAFT_KEY)||'null')}catch{return null}}
 async function loadLogoDataUrl(){return new Promise(resolve=>{const img=new Image();img.crossOrigin='anonymous';img.onload=()=>{const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d');x.drawImage(img,0,0);resolve(c.toDataURL('image/png'));};img.onerror=()=>resolve(null);img.src='assets/img/logo.png';})}
 async function buildPdfBlob(){if(!window.jspdf||!window.jspdf.jsPDF)throw new Error('PDF kutubxonasi yuklanmadi');const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:'pt',format:'a4'});const W=595,H=842;doc.setFillColor(0,58,47);doc.rect(0,0,W,86,'F');const logo=await loadLogoDataUrl();if(logo){try{doc.addImage(logo,'PNG',40,20,120,40)}catch{doc.setTextColor(255,255,255);doc.setFontSize(16);doc.text('GEKTO',40,48)}}else{doc.setTextColor(255,255,255);doc.setFontSize(16);doc.text('GEKTO',40,48)}doc.setTextColor(255,255,255);doc.setFontSize(13);doc.text('Biznes Diagnostika Hisoboti',W-220,48);doc.setTextColor(20,35,30);doc.setFontSize(12);let y=120;doc.text(`Biznes nomi: ${app.user.business}`,40,y);y+=20;doc.text(`Sohasi: ${app.user.sector}`,40,y);y+=20;doc.text(`Ism: ${app.user.name}`,40,y);y+=20;doc.text(`Telefon: ${app.user.phone}`,40,y);y+=30;doc.setDrawColor(210,228,222);doc.line(40,y,W-40,y);y+=22;doc.setFontSize(14);doc.setTextColor(0,58,47);doc.text('Natijalar',40,y);y+=20;doc.setFontSize(12);doc.setTextColor(20,35,30);doc.text(`Umumiy: ${app.result.overall}% (${levelByPercent(app.result.overall)})`,40,y);y+=18;doc.text(`Moliyaviy: ${app.result.fin.percent}% (${levelByPercent(app.result.fin.percent)})`,40,y);y+=18;doc.text(`Menejment: ${app.result.man.percent}% (${levelByPercent(app.result.man.percent)})`,40,y);y+=22;doc.setFontSize(11);const addLines=(title,arr)=>{doc.setTextColor(0,58,47);doc.text(title,40,y);y+=14;doc.setTextColor(20,35,30);arr.forEach(line=>{const txt=doc.splitTextToSize('- '+line,510);doc.text(txt,40,y);y+=txt.length*13+4;if(y>740){doc.addPage();y=50}})};addLines('Asosiy xulosa:',[app.result.main]);addLines('Tavsiyalar:',app.result.insights);addLines('7 kunlik reja:',app.result.plan);addLines('Kerak bo`ladigan hisobotlar:',app.result.reports);if(y>690){doc.addPage();y=50}doc.setDrawColor(210,228,222);doc.line(40,y+10,W-40,y+10);y+=28;doc.setTextColor(0,58,47);doc.text('Kontaktlar',40,y);y+=16;doc.setTextColor(20,35,30);doc.text(`Tel: ${CONTACTS.tel1} / ${CONTACTS.tel2}`,40,y);y+=14;doc.text(`Telegram: ${CONTACTS.telegram}`,40,y);y+=14;doc.text(`Mail: ${CONTACTS.mail}`,40,y);y+=14;doc.text(`Adres: ${CONTACTS.address}`,40,y);return doc.output('blob')}
-async function sendPdfToTelegram(blob){if(!TELEGRAM_CONFIG.botToken||!TELEGRAM_CONFIG.chatId)return false;const fd=new FormData();fd.append('chat_id',TELEGRAM_CONFIG.chatId);if(TELEGRAM_CONFIG.topicId)fd.append('message_thread_id',TELEGRAM_CONFIG.topicId);const caption=`Yangi diagnostika: ${app.user.business}\nSohasi: ${app.user.sector}\nIsm: ${app.user.name}\nTel: ${app.user.phone}\nUmumiy: ${app.result.overall}%`;fd.append('caption',caption);fd.append('document',new File([blob],`diagnostika_${Date.now()}.pdf`,{type:'application/pdf'}));const r=await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendDocument`,{method:'POST',body:fd});return r.ok}
-async function onPdfAndSend(){try{const blob=await buildPdfBlob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='gekto-diagnostika.pdf';a.click();URL.revokeObjectURL(url);const sent=await sendPdfToTelegram(blob);if(!sent){alert('PDF yuklandi. Telegram yuborish uchun TELEGRAM_CONFIG ichiga botToken va chatId kiriting.')}}catch(e){alert('PDF yaratishda xatolik: '+e.message)}}
+async function sendViaEndpoint(pdfBase64){const payload={name:`${app.user.name} | Biznes: ${app.user.business} | Sohasi: ${app.user.sector}`,phone:app.user.phone,page:location.href,secret:SECRET,summary:`Umumiy: ${app.result.overall}% | Moliyaviy: ${app.result.fin.percent}% | Menejment: ${app.result.man.percent}%`,pdf:pdfBase64||''};try{await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});return true}catch{return false}}
+async function sendPdfToTelegram(blob){if(TELEGRAM_CONFIG.botToken&&TELEGRAM_CONFIG.chatId){const fd=new FormData();fd.append('chat_id',TELEGRAM_CONFIG.chatId);if(TELEGRAM_CONFIG.topicId)fd.append('message_thread_id',TELEGRAM_CONFIG.topicId);const caption=`Yangi diagnostika: ${app.user.business}\nSohasi: ${app.user.sector}\nIsm: ${app.user.name}\nTel: ${app.user.phone}\nUmumiy: ${app.result.overall}%`;fd.append('caption',caption);fd.append('document',new File([blob],`diagnostika_${Date.now()}.pdf`,{type:'application/pdf'}));const r=await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendDocument`,{method:'POST',body:fd});if(r.ok)return true;}let pdf64='';if(blob.size<800000){const b64=await new Promise(res=>{const fr=new FileReader();fr.onload=()=>res(String(fr.result).split(',')[1]||'');fr.onerror=()=>res('');fr.readAsDataURL(blob)});pdf64=b64||'';}return await sendViaEndpoint(pdf64)}
+async function onPdfAndSend(){try{const blob=await buildPdfBlob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='gekto-diagnostika.pdf';a.click();URL.revokeObjectURL(url);const sent=await sendPdfToTelegram(blob);if(sent){alert('PDF yuklandi va so\'rov Telegramga yuborildi.')}else{alert('PDF yuklandi, lekin yuborishda xatolik bo\'ldi.')}}catch(e){alert('PDF yaratishda xatolik: '+e.message)}}
 function initEvents(){
 el('goMode').addEventListener('click',()=>{if(!validateIntro())return;show('screen-mode')});
 el('backIntro').addEventListener('click',()=>show('screen-intro'));
@@ -169,7 +200,6 @@ document.querySelectorAll('input[name="mode"]').forEach(r=>r.addEventListener('c
 el('modeNormalCard').addEventListener('click',()=>{document.querySelector('input[name="mode"][value="normal"]').checked=true;renderModeCards()});
 el('modeDeepCard').addEventListener('click',()=>{document.querySelector('input[name="mode"][value="deep"]').checked=true;renderModeCards()});
 el('startTest').addEventListener('click',()=>{app.mode=document.querySelector('input[name="mode"]:checked').value;app.questions=buildQuestions(app.mode);app.current=0;app.answers={};show('screen-quiz');renderQuestion()});
-el('answerSlider').addEventListener('input',saveCurrent);
 el('quizBack').addEventListener('click',()=>{saveCurrent();if(app.current>0)app.current--;renderQuestion()});
 el('quizNext').addEventListener('click',()=>{saveCurrent();if(app.current<app.questions.length-1){app.current++;renderQuestion();return;}localStorage.removeItem(DRAFT_KEY);renderResult();show('screen-result');window.scrollTo({top:0,behavior:'smooth'})});
 el('saveExit').addEventListener('click',()=>{saveCurrent();saveDraft();alert('Draft saqlandi. Keyin davom ettirasiz.');show('screen-intro')});
