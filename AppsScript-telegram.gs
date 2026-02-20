@@ -34,19 +34,21 @@ function doPost(e) {
 
     const ss = SpreadsheetApp.openById(SHEET_ID);
     const sh = ss.getSheetByName(SHEET_SITE_NAME) || ss.insertSheet(SHEET_SITE_NAME);
+    // Backward-compatible columns:
+    // [ts, name, phone, page, company, sector, summary, pdf_flag]
     sh.appendRow([
       ts,
       name,
       phone,
+      page,
       company,
       sector,
-      page,
       summary,
       pdfBase64 ? "pdf_attached" : "no_pdf"
     ]);
 
     const text =
-      "📩 Yangi diagnostika so'rovi\n" +
+      "📩 Yangi so‘rov (lead)\n" +
       "👤 Ism: " + (name || "-") + "\n" +
       "📞 Telefon: " + phone + "\n" +
       "🏢 Kompaniya: " + (company || "-") + "\n" +
@@ -88,13 +90,14 @@ function doGet(e) {
 
     for (let i = from; i < values.length; i++) {
       const r = values[i];
+      // Backward-compatible response (old consumers expect name/phone/page)
       rows.push({
         ts: r[0] instanceof Date ? Utilities.formatDate(r[0], tz, "yyyy-MM-dd HH:mm:ss") : String(r[0] || ""),
         name: String(r[1] || ""),
         phone: String(r[2] || ""),
-        company: String(r[3] || ""),
-        sector: String(r[4] || ""),
-        page: String(r[5] || ""),
+        page: String(r[3] || ""),
+        company: String(r[4] || ""),
+        sector: String(r[5] || ""),
         summary: String(r[6] || ""),
         pdf: String(r[7] || "")
       });
@@ -141,6 +144,10 @@ function sendTelegramPdf_(pdfBase64, companyName) {
   const code = res.getResponseCode();
   const body = res.getContentText();
   if (code !== 200) throw new Error("Telegram sendDocument error " + code + ": " + body);
+}
+
+function testTelegram() {
+  sendTelegramMessage_("✅ TEST: xabar Apps Scriptdan");
 }
 
 function sanitizeFile_(name) {
