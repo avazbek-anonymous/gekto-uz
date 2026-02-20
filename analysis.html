@@ -188,10 +188,202 @@ function renderResult(){const fin=computeBlock('finance'),man=computeBlock('mana
 function validateIntro(){const name=el('fullName').value.trim(),phone=el('phone').value.trim(),business=el('businessName').value.trim(),sector=el('sector').value;const ok=name&&phone&&business&&sector;el('introErr').style.display=ok?'none':'block';if(ok){app.user={name,phone,business,sector}}return ok}
 function saveDraft(){localStorage.setItem(DRAFT_KEY,JSON.stringify({mode:app.mode,current:app.current,answers:app.answers,user:app.user}))}
 function loadDraft(){try{return JSON.parse(localStorage.getItem(DRAFT_KEY)||'null')}catch{return null}}
-async function loadLogoDataUrl(){return new Promise(resolve=>{const img=new Image();img.crossOrigin='anonymous';img.onload=()=>{const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const x=c.getContext('2d');x.drawImage(img,0,0);resolve(c.toDataURL('image/png'));};img.onerror=()=>resolve(null);img.src='assets/img/logo.png';})}
-async function buildPdfBlob(){if(!window.jspdf||!window.jspdf.jsPDF)throw new Error('PDF kutubxonasi yuklanmadi');const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:'pt',format:'a4'});const W=595,H=842;doc.setFillColor(0,58,47);doc.rect(0,0,W,86,'F');const logo=await loadLogoDataUrl();if(logo){try{doc.addImage(logo,'PNG',40,20,120,40)}catch{doc.setTextColor(255,255,255);doc.setFontSize(16);doc.text('GEKTO',40,48)}}else{doc.setTextColor(255,255,255);doc.setFontSize(16);doc.text('GEKTO',40,48)}doc.setTextColor(255,255,255);doc.setFontSize(13);doc.text('Biznes Diagnostika Hisoboti',W-220,48);doc.setTextColor(20,35,30);doc.setFontSize(12);let y=120;doc.text(`Biznes nomi: ${app.user.business}`,40,y);y+=20;doc.text(`Sohasi: ${app.user.sector}`,40,y);y+=20;doc.text(`Ism: ${app.user.name}`,40,y);y+=20;doc.text(`Telefon: ${app.user.phone}`,40,y);y+=30;doc.setDrawColor(210,228,222);doc.line(40,y,W-40,y);y+=22;doc.setFontSize(14);doc.setTextColor(0,58,47);doc.text('Natijalar',40,y);y+=20;doc.setFontSize(12);doc.setTextColor(20,35,30);doc.text(`Umumiy: ${app.result.overall}% (${levelByPercent(app.result.overall)})`,40,y);y+=18;doc.text(`Moliyaviy: ${app.result.fin.percent}% (${levelByPercent(app.result.fin.percent)})`,40,y);y+=18;doc.text(`Menejment: ${app.result.man.percent}% (${levelByPercent(app.result.man.percent)})`,40,y);y+=22;doc.setFontSize(11);const addLines=(title,arr)=>{doc.setTextColor(0,58,47);doc.text(title,40,y);y+=14;doc.setTextColor(20,35,30);arr.forEach(line=>{const txt=doc.splitTextToSize('- '+line,510);doc.text(txt,40,y);y+=txt.length*13+4;if(y>740){doc.addPage();y=50}})};addLines('Asosiy xulosa:',[app.result.main]);addLines('Tavsiyalar:',app.result.insights);addLines('7 kunlik reja:',app.result.plan);addLines('Kerak bo`ladigan hisobotlar:',app.result.reports);if(y>690){doc.addPage();y=50}doc.setDrawColor(210,228,222);doc.line(40,y+10,W-40,y+10);y+=28;doc.setTextColor(0,58,47);doc.text('Kontaktlar',40,y);y+=16;doc.setTextColor(20,35,30);doc.text(`Tel: ${CONTACTS.tel1} / ${CONTACTS.tel2}`,40,y);y+=14;doc.text(`Telegram: ${CONTACTS.telegram}`,40,y);y+=14;doc.text(`Mail: ${CONTACTS.mail}`,40,y);y+=14;doc.text(`Adres: ${CONTACTS.address}`,40,y);return doc.output('blob')}
-async function sendViaEndpoint(pdfBase64){const payload={name:`${app.user.name} | Biznes: ${app.user.business} | Sohasi: ${app.user.sector}`,phone:app.user.phone,page:location.href,secret:SECRET,summary:`Umumiy: ${app.result.overall}% | Moliyaviy: ${app.result.fin.percent}% | Menejment: ${app.result.man.percent}%`,pdf:pdfBase64||''};try{await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});return true}catch{return false}}
-async function sendPdfToTelegram(blob){if(TELEGRAM_CONFIG.botToken&&TELEGRAM_CONFIG.chatId){const fd=new FormData();fd.append('chat_id',TELEGRAM_CONFIG.chatId);if(TELEGRAM_CONFIG.topicId)fd.append('message_thread_id',TELEGRAM_CONFIG.topicId);const caption=`Yangi diagnostika: ${app.user.business}\nSohasi: ${app.user.sector}\nIsm: ${app.user.name}\nTel: ${app.user.phone}\nUmumiy: ${app.result.overall}%`;fd.append('caption',caption);fd.append('document',new File([blob],`diagnostika_${Date.now()}.pdf`,{type:'application/pdf'}));const r=await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendDocument`,{method:'POST',body:fd});if(r.ok)return true;}let pdf64='';if(blob.size<800000){const b64=await new Promise(res=>{const fr=new FileReader();fr.onload=()=>res(String(fr.result).split(',')[1]||'');fr.onerror=()=>res('');fr.readAsDataURL(blob)});pdf64=b64||'';}return await sendViaEndpoint(pdf64)}
+async function loadLogoMeta(){
+  return new Promise(resolve=>{
+    const img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=()=>{
+      const c=document.createElement('canvas');
+      c.width=img.width;
+      c.height=img.height;
+      const x=c.getContext('2d');
+      x.drawImage(img,0,0);
+      resolve({dataUrl:c.toDataURL('image/png'),width:img.width,height:img.height});
+    };
+    img.onerror=()=>resolve(null);
+    img.src='assets/img/logo.png';
+  });
+}
+async function svgToPngDataUrl(id){
+  const svg=el(id);
+  if(!svg)return null;
+  const xml=new XMLSerializer().serializeToString(svg);
+  const blob=new Blob([xml],{type:'image/svg+xml;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const vb=svg.viewBox&&svg.viewBox.baseVal;
+  const width=(vb&&vb.width)?vb.width:(svg.clientWidth||360);
+  const height=(vb&&vb.height)?vb.height:(svg.clientHeight||220);
+  return await new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>{
+      const c=document.createElement('canvas');
+      c.width=width;
+      c.height=height;
+      const ctx=c.getContext('2d');
+      ctx.fillStyle='#ffffff';
+      ctx.fillRect(0,0,width,height);
+      ctx.drawImage(img,0,0,width,height);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL('image/png'));
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);resolve(null)};
+    img.src=url;
+  });
+}
+function addTextList(doc,title,items,startY,page){
+  const maxW=515;
+  let y=startY;
+  const ensure=(h)=>{if(y+h>page.h-40){doc.addPage();y=40;}};
+  ensure(20);
+  doc.setFontSize(12);
+  doc.setTextColor(0,58,47);
+  doc.text(title,40,y);
+  y+=16;
+  doc.setTextColor(20,35,30);
+  doc.setFontSize(10.5);
+  items.forEach(line=>{
+    const rows=doc.splitTextToSize('- '+line,maxW);
+    ensure(rows.length*13+4);
+    doc.text(rows,40,y);
+    y+=rows.length*13+4;
+  });
+  return y+4;
+}
+async function buildPdfBlob(){
+  if(!window.jspdf||!window.jspdf.jsPDF)throw new Error('PDF kutubxonasi yuklanmadi');
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'pt',format:'a4'});
+  const page={w:595,h:842};
+  let y=0;
+
+  doc.setFillColor(0,58,47);
+  doc.rect(0,0,page.w,96,'F');
+
+  const logo=await loadLogoMeta();
+  if(logo){
+    const maxW=130,maxH=54;
+    const ratio=Math.min(maxW/logo.width,maxH/logo.height);
+    const w=logo.width*ratio,h=logo.height*ratio;
+    doc.addImage(logo.dataUrl,'PNG',38,21,w,h);
+  }else{
+    doc.setFontSize(18);doc.setTextColor(255,255,255);doc.text('GEKTO',40,54);
+  }
+
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(20);
+  const title='Biznes Diagnostika Hisoboti';
+  const tw=doc.getTextWidth(title);
+  doc.text(title,(page.w-tw)/2,56);
+
+  y=120;
+  doc.setFillColor(244,250,247);
+  doc.roundedRect(36,y,523,96,10,10,'F');
+  doc.setDrawColor(212,231,223);
+  doc.roundedRect(36,y,523,96,10,10,'S');
+  doc.setTextColor(0,58,47);
+  doc.setFontSize(11);
+  doc.text('Mijoz ma\'lumotlari',52,y+22);
+  doc.setTextColor(20,35,30);
+  doc.setFontSize(12);
+  doc.text(`Biznes nomi: ${app.user.business}`,52,y+44);
+  doc.text(`Sohasi: ${app.user.sector}`,52,y+64);
+  doc.text(`Ism: ${app.user.name}`,320,y+44);
+  doc.text(`Telefon: ${app.user.phone}`,320,y+64);
+
+  y+=118;
+  doc.setFontSize(16);
+  doc.setTextColor(0,58,47);
+  doc.text('Natijalar',40,y);
+  y+=12;
+
+  const cards=[
+    {label:'Umumiy',v:`${app.result.overall}%`,lvl:levelByPercent(app.result.overall)},
+    {label:'Moliyaviy',v:`${app.result.fin.percent}%`,lvl:levelByPercent(app.result.fin.percent)},
+    {label:'Menejment',v:`${app.result.man.percent}%`,lvl:levelByPercent(app.result.man.percent)}
+  ];
+  let cx=40;
+  cards.forEach(c=>{
+    doc.setFillColor(250,253,252);
+    doc.roundedRect(cx,y,166,70,8,8,'F');
+    doc.setDrawColor(220,234,228);
+    doc.roundedRect(cx,y,166,70,8,8,'S');
+    doc.setFontSize(10);doc.setTextColor(80,95,89);doc.text(c.label,cx+10,y+16);
+    doc.setFontSize(20);doc.setTextColor(0,58,47);doc.text(c.v,cx+10,y+40);
+    doc.setFontSize(9.5);doc.setTextColor(60,72,67);doc.text(c.lvl,cx+10,y+56);
+    cx+=178;
+  });
+  y+=84;
+
+  const chartIds=['financeRadar','managementRadar','weakBar','problemDonut'];
+  const chartImages=await Promise.all(chartIds.map(svgToPngDataUrl));
+  const chW=250,chH=165;
+  for(let i=0;i<chartImages.length;i+=2){
+    if(y+chH+24>page.h-40){doc.addPage();y=40;}
+    [0,1].forEach((k)=>{
+      const idx=i+k,img=chartImages[idx];
+      if(!img)return;
+      const x=k===0?40:305;
+      doc.setFillColor(255,255,255);
+      doc.roundedRect(x,y,250,165,8,8,'F');
+      doc.setDrawColor(220,234,228);
+      doc.roundedRect(x,y,250,165,8,8,'S');
+      doc.addImage(img,'PNG',x+8,y+8,chW-16,chH-16);
+    });
+    y+=178;
+  }
+
+  y=addTextList(doc,'Asosiy xulosa',[app.result.main],y,page);
+  y=addTextList(doc,'Tavsiyalar',app.result.insights,y,page);
+  y=addTextList(doc,'Top-5 zaif savollar',app.result.weakQ.map(x=>`${x.score}/5 - ${x.text}`),y,page);
+  y=addTextList(doc,'Top-5 kuchli savollar',app.result.strongQ.map(x=>`${x.score}/5 - ${x.text}`),y,page);
+  y=addTextList(doc,'7 kunlik reja',app.result.plan,y,page);
+  y=addTextList(doc,'Kerak bo`ladigan hisobotlar',app.result.reports,y,page);
+
+  if(y+90>page.h-40){doc.addPage();y=40;}
+  doc.setDrawColor(212,231,223);
+  doc.line(40,y,page.w-40,y);
+  y+=18;
+  doc.setFontSize(12);doc.setTextColor(0,58,47);doc.text('Kontaktlar',40,y);
+  y+=16;doc.setFontSize(11);doc.setTextColor(20,35,30);
+  doc.text(`Tel: ${CONTACTS.tel1} / ${CONTACTS.tel2}`,40,y);y+=14;
+  doc.text(`Telegram: ${CONTACTS.telegram}`,40,y);y+=14;
+  doc.text(`Mail: ${CONTACTS.mail}`,40,y);y+=14;
+  doc.text(`Adres: ${CONTACTS.address}`,40,y);
+
+  return doc.output('blob');
+}
+async function sendViaEndpoint(pdfBase64){
+  const payload={
+    name:app.user.name,
+    phone:app.user.phone,
+    company:app.user.business,
+    sector:app.user.sector,
+    page:location.href,
+    secret:SECRET,
+    summary:`Umumiy: ${app.result.overall}% | Moliyaviy: ${app.result.fin.percent}% | Menejment: ${app.result.man.percent}%`,
+    pdf:pdfBase64||''
+  };
+  try{
+    await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    return true;
+  }catch{
+    return false;
+  }
+}
+async function sendPdfToTelegram(blob){
+  if(TELEGRAM_CONFIG.botToken&&TELEGRAM_CONFIG.chatId){
+    const fd=new FormData();
+    fd.append('chat_id',TELEGRAM_CONFIG.chatId);
+    if(TELEGRAM_CONFIG.topicId)fd.append('message_thread_id',TELEGRAM_CONFIG.topicId);
+    const caption=`Yangi diagnostika: ${app.user.business}\nSohasi: ${app.user.sector}\nIsm: ${app.user.name}\nTel: ${app.user.phone}\nUmumiy: ${app.result.overall}%`;
+    fd.append('caption',caption);
+    fd.append('document',new File([blob],`diagnostika_${Date.now()}.pdf`,{type:'application/pdf'}));
+    const r=await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendDocument`,{method:'POST',body:fd});
+    if(r.ok)return true;
+  }
+  const pdf64=await new Promise(res=>{const fr=new FileReader();fr.onload=()=>res(String(fr.result).split(',')[1]||'');fr.onerror=()=>res('');fr.readAsDataURL(blob)});
+  return await sendViaEndpoint(pdf64||'');
+}
 async function onPdfAndSend(){try{const blob=await buildPdfBlob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='gekto-diagnostika.pdf';a.click();URL.revokeObjectURL(url);const sent=await sendPdfToTelegram(blob);if(sent){alert('PDF yuklandi va so\'rov Telegramga yuborildi.')}else{alert('PDF yuklandi, lekin yuborishda xatolik bo\'ldi.')}}catch(e){alert('PDF yaratishda xatolik: '+e.message)}}
 function initEvents(){
 el('goMode').addEventListener('click',()=>{if(!validateIntro())return;show('screen-mode')});
