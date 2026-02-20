@@ -22,11 +22,11 @@
 <header class="main-header"><div class="container"><div class="logo"><a href="index.html"><img src="assets/img/logo.png" alt="logo"></a></div><div class="menu"><nav class="desktop-nav"><ul class="first-level"><li><a href="index.html" class="animsition-link">Asosiy</a></li><li><a href="about.html" class="animsition-link">Biz haqimizda</a></li><li><a href="services.html" class="animsition-link">Xizmatlarimiz</a></li><li><a href="">Portfolio</a><ul class="second-level"><li><a href="portfolio-1.html" class="animsition-link">Proyektlarimiz</a></li><li><a href="single-project.html" class="animsition-link">Moliya tizimi</a></li><li><a href="single-project-2.html" class="animsition-link">Moliya modeli</a></li></ul></li><li><a href="">Kurslarimiz</a><ul class="second-level"><li><a href="moliya.html" class="animsition-link">Oson Moliya</a></li><li><a href="financecourse.html" class="animsition-link">Maxsus Moliya</a></li></ul></li><li><a href="contact.html" class="animsition-link">Kontaktlarimiz</a></li></ul></nav><nav class="mobile-nav"></nav><div class="menu-icon"><div class="line"></div><div class="line"></div><div class="line"></div></div></div></div></header>
 <div class="site-hero_2"><div class="page-title"><div class="big-title montserrat-text">Diagnostika biznesa</div><div class="small-title montserrat-text">Moliyaviy + Menejment self-assessment</div></div></div>
 <section class="analysis-app"><div class="container">
-<div id="s1" class="cardx"><div class="section-title" style="margin-bottom:15px"><span>1-qadam: Tahlil turini tanlang</span><p class="montserrat-text uppercase">Oddiy (20) yoki Chuqur (40)</p></div>
-<label style="display:block;border:1px solid #ddd;padding:14px;margin-bottom:10px"><input type="radio" name="mode" value="normal" checked> <b>Oddiy</b> - 20 savol</label>
-<label style="display:block;border:1px solid #ddd;padding:14px"><input type="radio" name="mode" value="deep"> <b>Chuqur</b> - 40 savol</label>
+<div id="s1" class="cardx"><div class="section-title" style="margin-bottom:15px"><span>1-qadam: Tahlil turini tanlang</span><p class="montserrat-text uppercase">Oddiy (40) yoki Chuqur (80)</p></div>
+<label style="display:block;border:1px solid #ddd;padding:14px;margin-bottom:10px"><input type="radio" name="mode" value="normal" checked> <b>Oddiy</b> - 40 savol</label>
+<label style="display:block;border:1px solid #ddd;padding:14px"><input type="radio" name="mode" value="deep"> <b>Chuqur</b> - 80 savol</label>
 <div style="margin-top:16px"><button id="start" class="btn green"><span>Boshlash</span></button> <button id="restore" class="btn" style="display:none"><span>Saqlangan draftni davom ettirish</span></button></div></div>
-<div id="s2" class="cardx hidden"><div class="montserrat-text uppercase" id="ptext">Savol 1 / 20</div><div class="prog"><div class="bar" id="pbar"></div></div><div class="q" id="qtext"></div>
+<div id="s2" class="cardx hidden"><div class="montserrat-text uppercase" id="ptext">Savol 1 / 40</div><div class="prog"><div class="bar" id="pbar"></div></div><div class="q" id="qtext"></div>
 <div style="padding:10px 0"><input id="slider" type="range" min="1" max="5" value="3" style="width:100%"><div class="labels"><span>1 - Umuman mos emas</span><span>2 - Kam mos</span><span>3 - Qisman mos</span><span>4 - Ko'p mos</span><span>5 - To'liq mos</span></div></div>
 <div style="margin-top:18px"><button id="back" class="btn"><span>Orqaga</span></button> <button id="next" class="btn green"><span>Keyingi</span></button> <button id="save" class="btn"><span>Saqlash va chiqish</span></button></div></div>
 <div id="s3" class="hidden">
@@ -41,15 +41,117 @@
 <script src="assets/js/jquery-2.1.4.min.js"></script><script src="assets/js/isotope.pkgd.min.js"></script><script src="assets/js/jquery.flexslider.js"></script><script src="assets/js/smoothScroll.js"></script><script src="assets/js/jquery.animsition.min.js"></script><script src="assets/js/wow.min.js"></script><script src="assets/js/main.js"></script>
 <script>
 const L={cashflow:'CashFlow',profitability:'Marja/Foyda',forecasting:'Prognoz',working_capital:'Qarz/Aylanma',inventory:'Ombor',pricing:'Narx',tax_legal:'Soliq/Hujjat',processes:'Jarayon/SOP',delegation:'Delegatsiya',team_kpi:'KPI/Nazorat',hr:'HR',motivation:'Motivatsiya',planning:'Rejalash',sales_ops:'Sales/CRM'};
-const NF=['cashflow','profitability','forecasting','working_capital','inventory','profitability','pricing','cashflow','forecasting','tax_legal'];
-const NM=['processes','delegation','team_kpi','planning','delegation','hr','sales_ops','planning','motivation','team_kpi'];
-const DF=['forecasting','tax_legal','cashflow','forecasting','profitability','profitability','pricing','profitability','working_capital','working_capital','cashflow','inventory','inventory','forecasting','profitability','tax_legal','cashflow','forecasting','pricing','forecasting'];
-const DM=['processes','team_kpi','planning','hr','delegation','delegation','hr','hr','processes','planning','team_kpi','sales_ops','planning','planning','motivation','motivation','planning','delegation','team_kpi','sales_ops'];
-const QNf=['Pul oqimini haftalik nazorat qilaman','Har oy P&L koraman','Plan-fakt tahlili bor','Debitor/kreditor intizomi bor','Ombor muzlagan pul nazorati bor','Mahsulot marjasini bilaman','Narx siyosatini yangilayman','Cash gap indikatorlari bor','Xarajatlar limitlangan','Soliq-hujjat risk rejasi bor'];
-const QNm=['Jarayonlar reglamenti bor','Rol-masuliyat aniq','Har rol KPI bilan olchanadi','Haftalik yigilish bor','Delegatsiya standarti bor','Onboarding tizimi bor','CRM intizomi bor','Rahbar strategiyaga vaqt ajratadi','Motivatsiya tizimi bor','Dashboard mavjud'];
-const QDf=['Har oy P&L hisobotini tuzaman','Har oy Balansni koraman','CashFlowni 4 hafta oldin rejalayman','Plan-Faktni muntazam qilaman','Mahsulot/xizmat marjasini aniq bilaman','Unit-economicsni bilaman','Chegirma tasirini hisoblayman','Kop sotdik lekin foyda yoq sababini topaman','Debitor limit/muddat/eslatma bor','Kreditor tolov prioriteti va kalendar bor','Cash gap signal korsatkichlari bor','ABC/XYZ qilib muzlagan pulni kamaytiraman','Zaxira min/max belgilangan','Xarajat kategoriyasi va limiti bor','Marketing ROI ni kuzataman','Soliq va hujjat riskini oldindan rejalayman','Biznesdan pul yechish qoidasi bor','Investitsiya paybackni hisoblayman','Narx siyosatini bozor boicha yangilayman','3-6-12 oy moliyaviy model qilaman'];
-const QDm=['SOP/reglamentlar yozilgan','Har rol KPI mavjud','Haftalik jamoa yigilishi bor','1:1 uchrashuvlar otkazaman','Delegatsiyada natija-muddat-standart aniq','RACI matritsa joriy qilingan','Onboarding 1-7-30 kun rejasi bor','Xodim oqitish standarti bor','Intizom qoidasi adolatli','Prioritet tizimi bor','Mijoz sifati NPS/feedback olchanadi','CRM lead-deal-yopilish nazoratda','Risk-reja mavjud','Ish kunim tizimlashtirilgan','Madaniyat va qadriyatlar yozilgan','Motivatsiya pul+etirofga boglangan','OKR/plan har oy yangilanadi','Rahbar hammasini ozi qilmaslik rejasiga ega','Har bolim metrikalari bir joyda','Yagona ish kanallari belgilangan'];
-function build(mode){const a=[];if(mode==='normal'){QNf.forEach((t,i)=>a.push({id:'fn'+(i+1),text:t,block:'finance',category:NF[i],weight:1}));QNm.forEach((t,i)=>a.push({id:'mn'+(i+1),text:t,block:'management',category:NM[i],weight:1}));}else{QDf.forEach((t,i)=>a.push({id:'fd'+(i+1),text:t,block:'finance',category:DF[i],weight:1}));QDm.forEach((t,i)=>a.push({id:'md'+(i+1),text:t,block:'management',category:DM[i],weight:1}));}return a;}
+const FIN_CATS=['cashflow','profitability','forecasting','working_capital','inventory','pricing','tax_legal'];
+const MAN_CATS=['processes','delegation','team_kpi','hr','motivation','planning','sales_ops'];
+
+const NORMAL_FINANCE=[
+"Men biznesim oldida turgan barcha moliyaviy muammolarni muvaffaqiyatli hal qilaman.",
+"Men keyingi oyda / 3 oy / 6 oy / 12 oyda qancha sof foyda olishimni bilaman",
+"Men bu yil biznes foydasini kamida 50% ga qanday oshirishni aniq bilaman.",
+"So'nggi 12 oy ichida men biznes daromadlarining barqaror o'sishini ko'rdim.",
+"Mening biznesimdagi foyda menga zaxiralarni yaratishga imkon beradi",
+"Ba'zida pulim yo'qligi sababli marketing xarajatlarini kamaytirganim ham bo'ladi.",
+"Men doimiy ravishda o'z biznesimdagi xarajatlarni kamaytirish va optimallashtirish ustida ishlayapman.",
+"Ba'zida mavsumdan tashqari mening biznesimdagi daromadim sezilarli darajada kamayishi ham bo'lib turadi",
+"Barcha pulim oborotda va men uni qanday chiqarib olishni bilmayapman",
+"Mening biznesim o'sib bormoqda, ammo pulda o'zgarish yo'q.",
+"Men vaqti-vaqti bilan biznesdagi resurslarimning ABC tahlilini o'tkazaman.",
+"Mening biznesimning kreditlari va qarzlari meni bezovta qilmoqda",
+"Pul yetishmovchiligiga ko'p uchrayman, deyarli oddiy holday ko'rinadigan bo'lgan",
+"Pullarimni ombordagi tovarlar va asosiy vositalarga ko'p tikaman. Ularda muzlatib yuraman",
+"Men har doim ish haqini o'z vaqtida va kechiktirmasdan to'layman.",
+"Men har doim soliqlarni o'z vaqtida va kechiktirmasdan to'layman.",
+"Men pulni oqilona boshqaraman va barcha biznes xarajatlarini oldindan rejalashtiraman.",
+"Men biznes xarajatlarim nima ekanligini va har bir mahsulot qancha foyda keltirishini aniq bilaman.",
+"Biznesimda ishchilarga motivatsiya sistemasini shakllantirganman",
+"Men savdo, marketing va moliyaviy model orqali biznesdagi foydaga qanday ta'sir qilishni aniq bilaman"
+];
+
+const NORMAL_MANAGEMENT=[
+"Barcha biznes jarayonlari aniq tuzilgan va men deyarli operatsionkada emasman",
+"Men 24/7 ishlayman va sog'ligimdan shubhalanaman.",
+"Men ko'pincha oilam oldida o'zimni aybdor his qilaman, chunki ular bilan kam vaqt o'tkazaman.",
+"Men vazifalarni xodimlarimdan ko'ra yaxshiroq bajaraman va ko'pincha o'zim qilaman",
+"Ba'zida ishchilarim kun davomida to'liq ishlashiga shubha qilaman",
+"Xodimlarimning ish samaradorligi pasayib borayotgani uchun dam ololmayapman.",
+"Mening biznesim katta oilaga o'xshaydi. Biz bir-birimizga ishonamiz va hech qanday rasmiy kelishuvlar tuzmaymiz.",
+"Mening xodimlarim ko'pincha ularning ishi kompaniyadagi boshqa xodimlarga qanday ta'sir qilishini tushunishmaydi.",
+"Mening biznesim boshqaruvida hal qila olmaydigan muammolar bor.",
+"Ish hajmidan ortiq ishlagan xodimlarni rag'batlantirish tizimini joriy qilganman.",
+"Mening har bir xodimim hisobotlarni yuritadi, bu menga biznesning asosiy ko'rsatkichlari va jamoaning ish yukini har kuni kuzatib borish imkonini beradi.",
+"Menda kompaniya uchun tashkiliy tuzilma bor va hamma kim nima uchun javobgar ekanligini tushunadi.",
+"Men biznesdagi rolimni aniq tushunaman",
+"Men biznesimdagi barcha biznes jarayonlarni bilaman va rivojlanish strategiyasi yozilgan",
+"Menda har bir xodim uchun nomoddiy motivatsiya aniq yozilgan.",
+"Men o'z biznesim uchun xodimlarni topishni oson deb bilaman, chunki ular qanday ko'nikma va malakalarga ega bo'lishi kerakligini va suhbat davomida ularni qanday sinab ko'rish kerakligini tushunaman.",
+"Men barcha yangi xodimlarni yozma tartib-qoidalar bilan ta'minlayman. Ushbu protseduralar ularga tez o'rganishga va birinchi kundanoq natijalarga erishishga yordam beradi.",
+"Men ishimdagi kundalik tartibdan stressdaman.",
+"Biznesda qattiqqo'llik qilib turaman. Bo'lmasa ishchilar ishni tashlab qo'yishadi",
+"Men ko'proq ishlay olaman, meni ko'p chalg'itishadi"
+];
+
+const DEEP_FINANCE_BASE=[
+"Men har oy P&L (Daromad-Xarajat-Foyda) hisobotini tuzaman va qarorlarni shunga tayangan holda qilaman.",
+"Men har oy Balansni ko'raman: aktivlar, majburiyatlar va kapital o'zgarishini tushunaman.",
+"Men CashFlow rejani (kirim/chiqim prognoz) kamida 4 hafta oldinga tuzaman.",
+"Men Plan-Fakt tahlilini muntazam qilaman va chetga chiqish sabablarini yozib boraman.",
+"Men har bir mahsulot/xizmat bo'yicha sof marjani (to'liq xarajatlar bilan) aniq bilaman.",
+"Men unit-economicsni bilaman: 1 ta sotuvdan tushadigan foyda, o'zini oqlash nuqtasi.",
+"Men chegirmalar (skidka) foydaga qanday ta'sir qilishini hisoblayman va cheklov qo'yganman.",
+"Men ko'p sotdik, lekin foyda yo'q holatining sababini tez topa olaman (narx, marja, xarajat, qaytarim).",
+"Men debitor qarz bo'yicha limit, muddat, eslatma va undirish tartibini joriy qilganman.",
+"Men kreditor qarz bo'yicha to'lov ustuvorligi (prioritet) va kalendarini yuritaman.",
+"Men cash gap (naqdlik uzilishi) bo'lishidan oldin signal beradigan ko'rsatkichlarga egaman.",
+"Men ombordagi tovarlar bo'yicha ABC/XYZni muntazam qilaman va muzlagan pulni kamaytiraman.",
+"Men zaxiralar (stock) uchun min/max darajalarni belgilaganman.",
+"Men xarajatlarni kategoriyalarga ajratganman va keraksiz xarajatlar uchun limitlar bor.",
+"Men marketing bo'yicha ROIni kuzataman: qaysi kanal foyda beradi, qaysi biri yo'q.",
+"Men soliq va hujjatlar bo'yicha risklarni bilaman va oldindan rejalashtiraman.",
+"Men biznesdan pul yechish (dividend/egaga to'lov) bo'yicha aniq qoida ishlab chiqqanman.",
+"Men asosiy vositalarga investitsiya qilganda qaytish muddatini (payback) hisoblayman.",
+"Men narx siyosatini bozordagi o'zgarishlarga qarab yangilab turaman (kurs, xarid narxi, raqobat).",
+"Men 3-6-12 oyga moliyaviy model qilib, foyda va naqdlik ssenariylarini ko'raman."
+];
+
+const DEEP_MANAGEMENT_BASE=[
+"Menda kompaniya bo'yicha SOP/reglamentlar yozilgan va xodimlar shunga amal qiladi.",
+"Har bir rol uchun aniq KPI bor va ular muntazam o'lchanadi.",
+"Men haftalik jamoa yig'ilishi (reja, muammo, natija) formatini joriy qilganman.",
+"Men xodimlar bilan 1:1 uchrashuvlar o'tkazaman (rivojlanish, muammo, feedback).",
+"Men vazifalarni delegatsiya qilganimda natija, muddat, standart va nazorat nuqtasini aniq belgilayman.",
+"Men kompaniyada kim nima uchun javobgar degan RACI/mas'uliyat matritsasini joriy qilganman.",
+"Yangi xodimlar uchun onboarding (1-7-30 kun) rejasi bor.",
+"Men xodimlarni o'qitish bo'yicha minimal standartni belgilaganman (skript, product knowledge, xizmat).",
+"Men intizom va qoidabuzarlik bo'yicha adolatli tizimga egaman (ogohlantirish, jarima/bonus qoidasi).",
+"Biznesda shoshilinch ishlar ko'payib ketmasligi uchun prioritet tizimi bor.",
+"Men mijozlar bilan ishlashda sifatni o'lchayman (NPS/feedback/shikoyatlar statistikasi).",
+"Men sotuv jarayonida CRM intizomini nazorat qilaman (lead → deal → yopilish).",
+"Menda kutilmagan xatoliklarga tayyor risk-reja bor (xodim ketishi, yetkazib berish, kurs).",
+"Men o'zimning ish kunimni tizimlashtirganman: fokus vaqti, uchrashuvlar, operatsionka balansi.",
+"Men kompaniya madaniyatini yozma tarzda belgilaganman (qadriyatlar, standartlar, xizmat sifati).",
+"Men xodimlar motivatsiyasini faqat pulga emas, o'sish va e'tirofga ham bog'laganman.",
+"Men har oy jamoa bilan maqsadlarni (OKR/plan) ko'rib chiqaman va yangilayman.",
+"Men rahbar sifatida hamma narsani o'zim qilaman odatini kamaytirish uchun reja qilganman.",
+"Men har bir bo'limdan asosiy metrikalarni bir joyga yig'ib turaman (dashboard).",
+"Men kompaniyada ma'lumot yo'qolishi bo'lmasligi uchun yagona ish kanallarini belgilaganman (chat/CRM/task)."
+];
+
+const DEEP_FINANCE=DEEP_FINANCE_BASE.concat(NORMAL_FINANCE);
+const DEEP_MANAGEMENT=DEEP_MANAGEMENT_BASE.concat(NORMAL_MANAGEMENT);
+
+function catAt(cats,index){return cats[index%cats.length]}
+function joinBlock(items,block,prefix,cats){return items.map((text,i)=>({id:prefix+(i+1),text,block,category:catAt(cats,i),weight:1}))}
+function interleave(fin,man){const out=[];const n=Math.max(fin.length,man.length);for(let i=0;i<n;i++){if(i<fin.length)out.push(fin[i]);if(i<man.length)out.push(man[i]);}return out}
+function build(mode){
+  if(mode==='normal'){
+    const fin=joinBlock(NORMAL_FINANCE,'finance','fn',FIN_CATS);
+    const man=joinBlock(NORMAL_MANAGEMENT,'management','mn',MAN_CATS);
+    return interleave(fin,man);
+  }
+  const fin=joinBlock(DEEP_FINANCE,'finance','fd',FIN_CATS);
+  const man=joinBlock(DEEP_MANAGEMENT,'management','md',MAN_CATS);
+  return interleave(fin,man);
+}
 const K='analysis_draft_v1';const S={mode:'normal',q:[],i:0,a:{}};
 const e=id=>document.getElementById(id),s1=e('s1'),s2=e('s2'),s3=e('s3');
 function lvl(p){if(p<=24)return'Kritk (kritik holat)';if(p<=49)return'Past (zaif tizim)';if(p<=69)return"O'rtacha (barqaror emas)";if(p<=84)return"Yaxshi (o'sish bor)";return"Kuchli (tizim yo'lga qo'yilgan)"}
@@ -79,3 +181,4 @@ if(localStorage.getItem(K))e('restore').style.display='inline-block';e('pdf').on
 </script>
 <script>$(window).load(function(){new WOW().init();});</script>
 </body></html>
+
