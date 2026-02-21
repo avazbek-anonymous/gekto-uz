@@ -597,11 +597,67 @@ footer.main-footer nav.footer-nav ul li a{
 
 /*site hero 2 */
 .site-hero_2{
-	background: url("../img/For%20Site/1743505823257.png") no-repeat;
+	background-color: #0d1f3f;
+	background-repeat: no-repeat;
 	background-size: cover;
+	background-position: center center;
+	overflow: hidden;
+	isolation: isolate;
 	height: 500px;
 	width: 100%;
 	position: relative;
+}
+.site-hero_2:before{
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgba(7, 20, 45, .52), rgba(7, 20, 45, .40));
+	z-index: 0;
+}
+.site-hero_2.hero-about{ background-image: url("../img/For%20Site/How-to-Secure-Small-Business-Financing-in-Canada.jpg"); }
+.site-hero_2.hero-services{ background-image: url("../img/For%20Site/The-importance-of-effective-financial-management-in-todays-businesses-1024x570.jpg"); }
+.site-hero_2.hero-contact{ background-image: url("../img/For%20Site/Accountants_Daily_Articleshutterstock_2413760877_1_jkznsh.webp"); }
+.site-hero_2.hero-moliya{ background-image: url("../img/For%20Site/1750214710.webp"); }
+.site-hero_2.hero-financecourse{ background-image: url("../img/For%20Site/1743505823257.png"); }
+.site-hero_2.hero-portfolio{ background-image: url("../img/For%20Site/Analyst-compares-data.webp"); }
+.site-hero_2.hero-single-project{ background-image: url("../img/For%20Site/FUNDAMENTALS-OF-FINANCE.jpg"); }
+.site-hero_2.hero-single-project2{ background-image: url("../img/For%20Site/Scope-of-business-finance-Benefits-importance-Features.jpg"); }
+@media (max-width: 991px){
+	.site-hero_2{
+		height: 360px;
+		background-position: center center;
+	}
+}
+@media (max-width: 767px){
+	.site-hero_2{
+		height: 300px;
+		background-position: center center;
+	}
+}
+@media (max-width: 480px){
+	.site-hero_2{
+		height: 260px;
+		background-position: center center;
+	}
+}
+.site-hero_2 .page-title{
+	z-index: 1;
+	width: min(92%, 980px);
+	padding: 0 12px;
+}
+.site-hero_2 .page-title .big-title{
+	font-size: 36px;
+	color: #ffffff;
+	text-shadow: 0 8px 28px rgba(0,0,0,.35);
+}
+.site-hero_2 .page-title .small-title{
+	font-size: 14px;
+	color: #ffffff;
+	text-shadow: 0 6px 24px rgba(0,0,0,.32);
+}
+@media (max-width: 767px){
+	.site-hero_2 .page-title .big-title{ font-size: 28px; }
+	.site-hero_2 .page-title .small-title{ font-size: 13px; }
 }
 .site-hero_2 .page-title{
 	position: absolute;
@@ -612,8 +668,6 @@ footer.main-footer nav.footer-nav ul li a{
 	        transform:translate(-50%, -50%);
 	text-align: center;
 }
-.site-hero_2 .page-title .big-title{font-size: 36px;}
-.site-hero_2 .page-title .small-title{font-size: 14px;}
 
 /* hide Portfolio in header (desktop + mobile) */
 header.main-header nav.desktop-nav ul.first-level > li:has(> a[href="portfolio-1.html"]),
