@@ -415,8 +415,9 @@
             <p>Kursga yozilish uchun ma'lumotlaringizni kiriting</p>
             <form id="leadFormMoliya">
               <div class="input_1">
-                <input id="activity" type="text" autocomplete="organization-title">
-                <span>Biznesingiz faoliyat turini kiriting</span>
+                <select id="sector" autocomplete="organization-title">
+                  <option value="">Sohani tanlang</option>
+                </select>
               </div>
               <div class="input_1">
                 <input id="name" type="text" autocomplete="name">
@@ -487,12 +488,23 @@
 
     const ENDPOINT = "https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec";
     const SECRET = "mySecret123";
+    const SECTORS = ['Agrobiznes', 'Arxitektura va dizayn', 'Avtoservis', 'Bank va moliya', 'Boshqa', 'Chakana savdo',
+      'Dorixona', 'E-commerce', 'Eksport-import', 'Franshiza', 'Gozallik va salomatlik', 'HoReCa (kafe/restoran)',
+      'IT va raqamli xizmatlar', 'Ishlab chiqarish', 'Konsalting', 'Logistika', 'Marketing agentligi', 'Qurilish',
+      'Sanoat xizmatlari', 'Ta' + 'lim', 'Tekstil', 'Telekommunikatsiya', 'Turizm', 'Ulgurji savdo', 'Xizmat ko' +
+      'rsatish', 'Yuridik xizmatlar'
+    ];
 
     const form = document.getElementById("leadFormMoliya");
-    const activityEl = document.getElementById("activity");
+    const sectorEl = document.getElementById("sector");
     const phoneEl = document.getElementById("phone");
     const nameEl = document.getElementById("name");
     const msgEl = document.getElementById("leadMsg");
+
+    (function fillSectors() {
+      const sorted = [...SECTORS].sort((a, b) => a.localeCompare(b));
+      sectorEl.innerHTML = '<option value="">Sohani tanlang</option>' + sorted.map(x => `<option value="${x}">${x}</option>`).join('');
+    })();
 
     function normalizePhone(v) {
       let d = String(v || "").replace(/\D/g, "");
@@ -512,12 +524,19 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      const sector = (sectorEl.value || "").trim();
       const payload = {
-        name: ((nameEl.value || "").trim() + (activityEl.value ? ` | Faoliyat: ${activityEl.value.trim()}` : "")).trim(),
+        name: ((nameEl.value || "").trim() + (sector ? ` | Soha: ${sector}` : "")).trim(),
         phone: normalizePhone(phoneEl.value),
         page: location.href,
         secret: SECRET
       };
+
+      if (!sector) {
+        msgEl.style.color = "#b91c1c";
+        msgEl.textContent = "Sohani tanlang.";
+        return;
+      }
 
       if (!payload.phone) {
         msgEl.style.color = "#b91c1c";

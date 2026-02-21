@@ -413,6 +413,11 @@
 						</p>
 						<form id="leadForm">
 							<div class="input_1">
+								<select id="sector" autocomplete="organization-title">
+									<option value="">Sohani tanlang</option>
+								</select>
+							</div>
+							<div class="input_1">
 								<input id="name" type="text" autocomplete="name" />
 								<span>Ismingiz</span>
 							</div>
@@ -586,13 +591,25 @@
 		const ENDPOINT =
 			"https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec";
 		const SECRET = "mySecret123";
+		const SECTORS = ['Agrobiznes', 'Arxitektura va dizayn', 'Avtoservis', 'Bank va moliya', 'Boshqa', 'Chakana savdo',
+			'Dorixona', 'E-commerce', 'Eksport-import', 'Franshiza', 'Gozallik va salomatlik', 'HoReCa (kafe/restoran)',
+			'IT va raqamli xizmatlar', 'Ishlab chiqarish', 'Konsalting', 'Logistika', 'Marketing agentligi', 'Qurilish',
+			'Sanoat xizmatlari', 'Ta' + 'lim', 'Tekstil', 'Telekommunikatsiya', 'Turizm', 'Ulgurji savdo', 'Xizmat ko' +
+			'rsatish', 'Yuridik xizmatlar'
+		];
 
 		const form = document.getElementById("leadForm");
+		const sectorEl = document.getElementById("sector");
 		const phoneEl = document.getElementById("phone");
 		const nameEl = document.getElementById("name");
 		const msgEl = document.getElementById("leadMsg");
 		const btn = form.querySelector('button[type="submit"]');
 		const btnTextEl = btn ? btn.querySelector("span") : null;
+
+		(function fillSectors() {
+			const sorted = [...SECTORS].sort((a, b) => a.localeCompare(b));
+			sectorEl.innerHTML = '<option value="">Sohani tanlang</option>' + sorted.map(x => `<option value="${x}">${x}</option>`).join('');
+		})();
 
 		// --- inject styles for loader + messages ---
 		(function injectLeadStyles() {
@@ -714,13 +731,19 @@
 		// --- submit ---
 		form.addEventListener("submit", async (e) => {
 			e.preventDefault();
+			const sector = (sectorEl.value || "").trim();
 
 			const payload = {
-				name: (nameEl.value || "").trim(),
+				name: ((nameEl.value || "").trim() + (sector ? ` | Soha: ${sector}` : "")).trim(),
 				phone: (phoneEl.value || "").trim(),
 				page: location.href,
 				secret: SECRET
 			};
+
+			if (!sector) {
+				setMsg("error", "Sohani tanlang.");
+				return;
+			}
 
 			if (!payload.phone || payload.phone.length < 13) {
 				setMsg("error", "Telefon raqamini to'liq kiriting.");
