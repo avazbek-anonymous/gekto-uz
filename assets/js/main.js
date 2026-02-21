@@ -69,6 +69,15 @@
 
 		// NAVBAR
 		var _link = $("nav.desktop-nav ul.first-level").children("li");
+
+		// Remove Portfolio item from header menus (desktop + mobile clone source)
+		$("nav.desktop-nav ul.first-level > li").each(function(){
+			var li = $(this);
+			if(li.find('> a[href="portfolio-1.html"]').length || li.find('> ul.second-level a[href="portfolio-1.html"]').length){
+				li.remove();
+			}
+		});
+
 		var shown = false;
 		// show navbar 
 		$(".menu-icon").click(function(){
@@ -100,6 +109,12 @@
 
 		// dropdown - mobile
 		$("nav.mobile-nav").html($("nav.desktop-nav").html()); // set navbar
+		$("nav.mobile-nav ul.first-level > li").each(function(){
+			var li = $(this);
+			if(li.find('> a[href="portfolio-1.html"]').length || li.find('> ul.second-level a[href="portfolio-1.html"]').length){
+				li.remove();
+			}
+		});
 
 		var mobile_link = $("nav.mobile-nav ul.first-level").children("li");
 		mobile_link.children("a").click(function(e){

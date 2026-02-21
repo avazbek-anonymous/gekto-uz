@@ -597,7 +597,7 @@ footer.main-footer nav.footer-nav ul li a{
 
 /*site hero 2 */
 .site-hero_2{
-	background: url("../img/site-hero4.png") no-repeat;
+	background: url("../img/For%20Site/1743505823257.png") no-repeat;
 	background-size: cover;
 	height: 500px;
 	width: 100%;
@@ -614,6 +614,14 @@ footer.main-footer nav.footer-nav ul li a{
 }
 .site-hero_2 .page-title .big-title{font-size: 36px;}
 .site-hero_2 .page-title .small-title{font-size: 14px;}
+
+/* hide Portfolio in header (desktop + mobile) */
+header.main-header nav.desktop-nav ul.first-level > li:has(> a[href="portfolio-1.html"]),
+header.main-header nav.desktop-nav ul.first-level > li:has(> ul.second-level > li > a[href="portfolio-1.html"]),
+header.main-header nav.mobile-nav ul.first-level > li:has(> a[href="portfolio-1.html"]),
+header.main-header nav.mobile-nav ul.first-level > li:has(> ul.second-level > li > a[href="portfolio-1.html"]) {
+	display: none !important;
+}
 
 
 .agency{
