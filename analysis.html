@@ -19,6 +19,51 @@
       background: linear-gradient(180deg, #f5f9f7 0%, #ffffff 35%)
     }
 
+    .analysis-banner {
+      padding-top: 116px;
+      margin-bottom: 18px
+    }
+
+    .analysis-banner-card {
+      max-width: 980px;
+      margin: 0 auto;
+      background: #fff url("assets/img/first-page-hero.png") center/cover no-repeat;
+      border: 1px solid #dbe9e3;
+      border-radius: 14px;
+      box-shadow: 0 10px 28px rgba(0, 58, 47, .07);
+      text-align: center;
+      padding: 28px 24px
+    }
+
+    .analysis-banner-card .small-title {
+      color: #60606e;
+      padding: 6px 12px;
+      background-color: #FFD05A;
+      display: inline-block;
+      font-size: 14px;
+      text-transform: uppercase;
+      font-weight: 700
+    }
+
+    .analysis-banner-card .big-title {
+      font-size: 34px;
+      color: #60606e;
+      padding: 10px 26px;
+      border: solid 8px #60606e;
+      display: inline-block;
+      margin: 12px 0 14px;
+      text-transform: uppercase;
+      font-weight: 700
+    }
+
+    .analysis-banner-card p {
+      max-width: 760px;
+      margin: 0 auto;
+      color: #60606e;
+      font-size: 20px;
+      line-height: 1.4
+    }
+
     .analysis-shell {
       max-width: 980px;
       margin: 0 auto
@@ -350,6 +395,31 @@
     }
 
     @media (max-width:768px) {
+      .analysis-banner {
+        padding-top: 84px;
+        margin-bottom: 10px
+      }
+
+      .analysis-banner-card {
+        padding: 18px 14px;
+        border-radius: 12px
+      }
+
+      .analysis-banner-card .small-title {
+        font-size: 12px
+      }
+
+      .analysis-banner-card .big-title {
+        font-size: 18px;
+        border-width: 6px;
+        padding: 8px 12px;
+        margin: 10px 0 10px
+      }
+
+      .analysis-banner-card p {
+        font-size: 16px
+      }
+
       .analysis-wrap {
         padding: 20px 0 50px
       }
@@ -406,6 +476,17 @@
       </div>
     </div>
   </header>
+
+  <section class="analysis-banner">
+    <div class="container">
+      <div class="analysis-banner-card">
+        <div><span class="small-title montserrat-text">biz o'rgatamiz</span></div>
+        <div class="big-title montserrat-text">boshqaruv moliyasi</div>
+        <p>Moliyachi va biznes egalarini "raqam bilan boshqarish"ga olib chiqamiz: byudjet, plan/fakt, pul oqimi,
+          foyda va KPI. Nazorat kuchayadi, qarorlar aniq bo'ladi.</p>
+      </div>
+    </div>
+  </section>
 
   <section class="analysis-wrap">
     <div class="container">
@@ -536,7 +617,6 @@
             <div class="actions">
               <button id="pdfAndSend" class="btn green"><span>PDF yuklab olish</span>
               </button>
-              <button id="printResult" class="btn"><span>Chop etish</span></button>
             </div>
           </div>
         </div>
@@ -1437,7 +1517,6 @@
           behavior: 'smooth'
         })
       });
-      el('printResult').addEventListener('click', () => window.print());
       el('pdfAndSend').addEventListener('click', onPdfAndSend);
     }
     (function init() {
