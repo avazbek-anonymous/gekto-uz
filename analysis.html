@@ -1441,8 +1441,14 @@
           renderQuestion();
           return;
         }
-        renderResult();
         show('screen-result');
+        try {
+          renderResult();
+        } catch (e) {
+          console.error('renderResult error:', e);
+          const line = el('overallLine');
+          if (line) line.textContent = 'Natijani hisoblashda xatolik yuz berdi. Sahifani yangilab qayta urinib ko`ring.';
+        }
         window.scrollTo({
           top: 0,
           behavior: 'smooth'
