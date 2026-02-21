@@ -482,7 +482,7 @@
             <div class="level" id="overallLevel">-</div>
             <p id="overallLine" style="margin-top:8px"></p>
           </div>
-          <div class="row">
+          <!--div class="row">
             <div class="col-md-12 col-sm-12">
               <div class="kpi">
                 <div class="chart-title">Moliyaviy natija</div>
@@ -491,7 +491,7 @@
                 <p id="financeLine"></p>
               </div>
             </div>
-          </div>
+          </div-->
           <div class="analysis-card">
             <div class="chart-box">
               <div class="chart-title">Finance Radar</div><svg id="financeRadar" viewBox="0 0 360 300"
@@ -1280,28 +1280,40 @@
       });
       y += 84;
 
-      const chartIds = ['financeRadar', 'weakBar', 'problemDonut'];
-      const chartImages = await Promise.all(chartIds.map(svgToPngDataUrl));
-      const chW = 250,
-        chH = 165;
-      for (let i = 0; i < chartImages.length; i += 2) {
-        if (y + chH + 24 > page.h - 40) {
+      const chartMeta = [{
+          id: 'financeRadar',
+          title: 'Finance Radar'
+        },
+        {
+          id: 'weakBar',
+          title: 'Eng past kategoriyalar'
+        },
+        {
+          id: 'problemDonut',
+          title: 'Muammo turlari'
+        }
+      ];
+      const chartImages = await Promise.all(chartMeta.map(c => svgToPngDataUrl(c.id)));
+      const cardX = 40,
+        cardW = 515,
+        cardH = 190,
+        pad = 12;
+      chartImages.forEach((img, i) => {
+        if (!img) return;
+        if (y + cardH + 24 > page.h - 40) {
           doc.addPage();
           y = 40;
         }
-        [0, 1].forEach((k) => {
-          const idx = i + k,
-            img = chartImages[idx];
-          if (!img) return;
-          const x = k === 0 ? 40 : 305;
-          doc.setFillColor(255, 255, 255);
-          doc.roundedRect(x, y, 250, 165, 8, 8, 'F');
-          doc.setDrawColor(220, 234, 228);
-          doc.roundedRect(x, y, 250, 165, 8, 8, 'S');
-          doc.addImage(img, 'PNG', x + 8, y + 8, chW - 16, chH - 16);
-        });
-        y += 178;
-      }
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(cardX, y, cardW, cardH, 8, 8, 'F');
+        doc.setDrawColor(220, 234, 228);
+        doc.roundedRect(cardX, y, cardW, cardH, 8, 8, 'S');
+        doc.setFontSize(11);
+        doc.setTextColor(0, 58, 47);
+        doc.text(chartMeta[i].title, cardX + 12, y + 18);
+        doc.addImage(img, 'PNG', cardX + pad, y + 26, cardW - pad * 2, cardH - 38);
+        y += cardH + 14;
+      });
 
       y = addTextList(doc, 'Asosiy xulosa', [app.result.main], y, page);
       y = addTextList(doc, 'Tavsiyalar', app.result.insights, y, page);
