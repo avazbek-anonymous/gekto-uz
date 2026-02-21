@@ -439,12 +439,12 @@
             <label class="mode-card active" id="modeNormalCard"><input type="radio" name="mode" value="normal" checked
                 style="display:none">
               <div class="mode-title">Oddiy test</div>
-              <div class="mode-meta">40 savol: 20 Moliyaviy + 20 Menejment. Tez diagnostika.</div>
+              <div class="mode-meta">20 ta moliyaviy savol. Tez diagnostika.</div>
             </label>
             <label class="mode-card" id="modeDeepCard"><input type="radio" name="mode" value="deep"
                 style="display:none">
               <div class="mode-title">Chuqur tahlil</div>
-              <div class="mode-meta">80 savol: 40 Moliyaviy + 40 Menejment. Chuqur auditga yaqin natija.</div>
+              <div class="mode-meta">40 ta moliyaviy savol. Chuqur auditga yaqin natija.</div>
             </label>
           </div>
           <div class="actions"><button id="backIntro" class="btn"><span>Orqaga</span></button><button id="startTest"
@@ -483,7 +483,7 @@
             <p id="overallLine" style="margin-top:8px"></p>
           </div>
           <div class="row">
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-12 col-sm-12">
               <div class="kpi">
                 <div class="chart-title">Moliyaviy natija</div>
                 <div class="score" id="financeScore">0%</div>
@@ -491,22 +491,10 @@
                 <p id="financeLine"></p>
               </div>
             </div>
-            <div class="col-md-6 col-sm-12">
-              <div class="kpi">
-                <div class="chart-title">Menejment natija</div>
-                <div class="score" id="managementScore">0%</div>
-                <div class="level" id="managementLevel">-</div>
-                <p id="managementLine"></p>
-              </div>
-            </div>
           </div>
           <div class="analysis-card">
             <div class="chart-box">
               <div class="chart-title">Finance Radar</div><svg id="financeRadar" viewBox="0 0 360 300"
-                style="width:100%"></svg>
-            </div>
-            <div class="chart-box">
-              <div class="chart-title">Management Radar</div><svg id="managementRadar" viewBox="0 0 360 300"
                 style="width:100%"></svg>
             </div>
             <div class="chart-box">
@@ -598,13 +586,8 @@
       mail: 'info@gekto.uz',
       address: 'Chilonzor, Muqumiy k. 41/3'
     };
-    const TELEGRAM_CONFIG = {
-      botToken: '',
-      chatId: '',
-      topicId: ''
-    };
     const ENDPOINT =
-      "https://script.google.com/macros/s/AKfycbzN6zZrY27H4tqLSBPBPxj6A7fBqf0z7Zn0HsWwR8vsGKZe7WJ2t0qs9E14K5PYV9o5/exec";
+      "https://api.ofis.gekto.uz/api/analysis/lead";
     const SECRET = "mySecret123";
     const SECTORS = ['Agrobiznes', 'Arxitektura va dizayn', 'Avtoservis', 'Bank va moliya', 'Boshqa', 'Chakana savdo',
       'Dorixona', 'E-commerce', 'Eksport-import', 'Franshiza', 'Gozallik va salomatlik', 'HoReCa (kafe/restoran)',
@@ -614,7 +597,6 @@
     ];
     const FIN_CATS = ['cashflow', 'profitability', 'forecasting', 'working_capital', 'inventory', 'pricing',
       'tax_legal'];
-    const MAN_CATS = ['processes', 'delegation', 'team_kpi', 'hr', 'motivation', 'planning', 'sales_ops'];
     const LABELS = {
       cashflow: 'CashFlow',
       profitability: 'Marja/Foyda',
@@ -622,14 +604,7 @@
       working_capital: 'Qarz/Aylanma',
       inventory: 'Ombor',
       pricing: 'Narx',
-      tax_legal: 'Soliq/Hujjat',
-      processes: 'Jarayon/SOP',
-      delegation: 'Delegatsiya',
-      team_kpi: 'KPI/Nazorat',
-      hr: 'HR',
-      motivation: 'Motivatsiya',
-      planning: 'Rejalash',
-      sales_ops: 'Sales/CRM'
+      tax_legal: 'Soliq/Hujjat'
     };
     const NORMAL_FINANCE = ["Men biznesim oldida turgan barcha moliyaviy muammolarni muvaffaqiyatli hal qilaman.",
       "Men keyingi oyda / 3 oy / 6 oy / 12 oyda qancha sof foyda olishimni bilaman",
@@ -651,27 +626,6 @@
       "Men biznes xarajatlarim nima ekanligini va har bir mahsulot qancha foyda keltirishini aniq bilaman.",
       "Biznesimda ishchilarga motivatsiya sistemasini shakllantirganman",
       "Men savdo, marketing va moliyaviy model orqali biznesdagi foydaga qanday ta'sir qilishni aniq bilaman"
-    ];
-    const NORMAL_MANAGEMENT = ["Barcha biznes jarayonlari aniq tuzilgan va men deyarli operatsionkada emasman",
-      "Men 24/7 ishlayman va sog'ligimdan shubhalanaman.",
-      "Men ko'pincha oilam oldida o'zimni aybdor his qilaman, chunki ular bilan kam vaqt o'tkazaman.",
-      "Men vazifalarni xodimlarimdan ko'ra yaxshiroq bajaraman va ko'pincha o'zim qilaman",
-      "Ba'zida ishchilarim kun davomida to'liq ishlashiga shubha qilaman",
-      "Xodimlarimning ish samaradorligi pasayib borayotgani uchun dam ololmayapman.",
-      "Mening biznesim katta oilaga o'xshaydi. Biz bir-birimizga ishonamiz va hech qanday rasmiy kelishuvlar tuzmaymiz.",
-      "Mening xodimlarim ko'pincha ularning ishi kompaniyadagi boshqa xodimlarga qanday ta'sir qilishini tushunishmaydi.",
-      "Mening biznesim boshqaruvida hal qila olmaydigan muammolar bor.",
-      "Ish hajmidan ortiq ishlagan xodimlarni rag'batlantirish tizimini joriy qilganman.",
-      "Mening har bir xodimim hisobotlarni yuritadi, bu menga biznesning asosiy ko'rsatkichlari va jamoaning ish yukini har kuni kuzatib borish imkonini beradi.",
-      "Menda kompaniya uchun tashkiliy tuzilma bor va hamma kim nima uchun javobgar ekanligini tushunadi.",
-      "Men biznesdagi rolimni aniq tushunaman",
-      "Men biznesimdagi barcha biznes jarayonlarni bilaman va rivojlanish strategiyasi yozilgan",
-      "Menda har bir xodim uchun nomoddiy motivatsiya aniq yozilgan.",
-      "Men o'z biznesim uchun xodimlarni topishni oson deb bilaman, chunki ular qanday ko'nikma va malakalarga ega bo'lishi kerakligini va suhbat davomida ularni qanday sinab ko'rish kerakligini tushunaman.",
-      "Men barcha yangi xodimlarni yozma tartib-qoidalar bilan ta'minlayman. Ushbu protseduralar ularga tez o'rganishga va birinchi kundanoq natijalarga erishishga yordam beradi.",
-      "Men ishimdagi kundalik tartibdan stressdaman.",
-      "Biznesda qattiqqo'llik qilib turaman. Bo'lmasa ishchilar ishni tashlab qo'yishadi",
-      "Men ko'proq ishlay olaman, meni ko'p chalg'itishadi"
     ];
     const DEEP_FINANCE_BASE = [
       "Men har oy P&L (Daromad-Xarajat-Foyda) hisobotini tuzaman va qarorlarni shunga tayangan holda qilaman.",
@@ -695,29 +649,7 @@
       "Men narx siyosatini bozordagi o'zgarishlarga qarab yangilab turaman (kurs, xarid narxi, raqobat).",
       "Men 3-6-12 oyga moliyaviy model qilib, foyda va naqdlik ssenariylarini ko'raman."
     ];
-    const DEEP_MANAGEMENT_BASE = ["Menda kompaniya bo'yicha SOP/reglamentlar yozilgan va xodimlar shunga amal qiladi.",
-      "Har bir rol uchun aniq KPI bor va ular muntazam o'lchanadi.",
-      "Men haftalik jamoa yig'ilishi (reja, muammo, natija) formatini joriy qilganman.",
-      "Men xodimlar bilan 1:1 uchrashuvlar o'tkazaman (rivojlanish, muammo, feedback).",
-      "Men vazifalarni delegatsiya qilganimda natija, muddat, standart va nazorat nuqtasini aniq belgilayman.",
-      "Men kompaniyada kim nima uchun javobgar degan RACI/mas'uliyat matritsasini joriy qilganman.",
-      "Yangi xodimlar uchun onboarding (1-7-30 kun) rejasi bor.",
-      "Men xodimlarni o'qitish bo'yicha minimal standartni belgilaganman (skript, product knowledge, xizmat).",
-      "Men intizom va qoidabuzarlik bo'yicha adolatli tizimga egaman (ogohlantirish, jarima/bonus qoidasi).",
-      "Biznesda shoshilinch ishlar ko'payib ketmasligi uchun prioritet tizimi bor.",
-      "Men mijozlar bilan ishlashda sifatni o'lchayman (NPS/feedback/shikoyatlar statistikasi).",
-      "Men sotuv jarayonida CRM intizomini nazorat qilaman (lead → deal → yopilish).",
-      "Menda kutilmagan xatoliklarga tayyor risk-reja bor (xodim ketishi, yetkazib berish, kurs).",
-      "Men o'zimning ish kunimni tizimlashtirganman: fokus vaqti, uchrashuvlar, operatsionka balansi.",
-      "Men kompaniya madaniyatini yozma tarzda belgilaganman (qadriyatlar, standartlar, xizmat sifati).",
-      "Men xodimlar motivatsiyasini faqat pulga emas, o'sish va e'tirofga ham bog'laganman.",
-      "Men har oy jamoa bilan maqsadlarni (OKR/plan) ko'rib chiqaman va yangilayman.",
-      "Men rahbar sifatida hamma narsani o'zim qilaman odatini kamaytirish uchun reja qilganman.",
-      "Men har bir bo'limdan asosiy metrikalarni bir joyga yig'ib turaman (dashboard).",
-      "Men kompaniyada ma'lumot yo'qolishi bo'lmasligi uchun yagona ish kanallarini belgilaganman (chat/CRM/task)."
-    ];
     const DEEP_FINANCE = DEEP_FINANCE_BASE.concat(NORMAL_FINANCE);
-    const DEEP_MANAGEMENT = DEEP_MANAGEMENT_BASE.concat(NORMAL_MANAGEMENT);
     const app = {
       mode: 'normal',
       questions: [],
@@ -828,10 +760,8 @@
     }
 
     function buildQuestions(mode) {
-      if (mode === 'normal') return interleave(makeQuestions(NORMAL_FINANCE, 'finance', 'fn', FIN_CATS), makeQuestions(
-        NORMAL_MANAGEMENT, 'management', 'mn', MAN_CATS));
-      return interleave(makeQuestions(DEEP_FINANCE, 'finance', 'fd', FIN_CATS), makeQuestions(DEEP_MANAGEMENT,
-        'management', 'md', MAN_CATS));
+      if (mode === 'normal') return makeQuestions(NORMAL_FINANCE, 'finance', 'fn', FIN_CATS);
+      return makeQuestions(DEEP_FINANCE, 'finance', 'fd', FIN_CATS);
     }
 
     function show(screen) {
@@ -853,7 +783,7 @@
       el('quizTitle').textContent = `Savol ${app.current+1} / ${total}`;
       el('progressBar').style.width = ((app.current + 1) / total * 100) + '%';
       el('questionText').textContent = q.text;
-      el('blockTag').textContent = q.block === 'finance' ? 'Moliyaviy' : 'Menejment';
+      el('blockTag').textContent = 'Moliyaviy';
       initAnswerSlider();
       app.rawScore = v;
       app.slider.set(v);
@@ -907,15 +837,11 @@
       return arr.slice(0, 5)
     }
 
-    function weakCategories(fin, man) {
+    function weakCategories(fin) {
       const arr = [];
       Object.keys(fin.categoryPercent).forEach(k => arr.push({
         category: k,
         value: fin.categoryPercent[k]
-      }));
-      Object.keys(man.categoryPercent).forEach(k => arr.push({
-        category: k,
-        value: man.categoryPercent[k]
       }));
       arr.sort((a, b) => a.value - b.value);
       return arr.slice(0, 5)
@@ -929,23 +855,14 @@
         inventory: 'Omborda muzlagan pul yuqori.',
         pricing: 'Narx va chegirma nazorati zaif.',
         tax_legal: 'Soliq-hujjat intizomi bo`yicha risklar bor.',
-        forecasting: 'Plan-fakt va prognoz sust.',
-        delegation: 'Delegatsiya zaif: operatsion yuk rahbarda.',
-        processes: 'Jarayonlar odamga bog`langan.',
-        team_kpi: 'KPI nazorati yetarli emas.',
-        hr: 'Yollash/onboarding tizimi sust.',
-        motivation: 'Motivatsiya tizimi notekis.',
-        planning: 'Rejalash intizomi sust.',
-        sales_ops: 'CRM/sales intizomi sust.'
+        forecasting: 'Plan-fakt va prognoz sust.'
       };
       return map[c] || 'Ushbu yo`nalishda tizimni kuchaytirish kerak.'
     }
 
-    function mainConclusion(f, m, weak) {
-      if (f < 50 && m >= 50) return "Tizimning ayrim elementlari bor, lekin pul nazorati sust.";
-      if (f >= 50 && m < 50) return "Pul ko'rinadi, lekin jarayonlar rahbarga bog'langan.";
-      if (f < 50 && m < 50) return "Operatsionka va pul oqimi bir vaqtda bosim qilmoqda.";
-      if (f >= 70 && m >= 70) return "Tizimlar yaxshi yo'lga qo'yilgan, endi masshtablash bosqichi.";
+    function mainConclusion(f, weak) {
+      if (f < 50) return "Moliyaviy tizim zaif: cashflow va foyda nazoratini kuchaytirish kerak.";
+      if (f >= 70) return "Moliyaviy tizim yaxshi yo'lga qo'yilgan, endi masshtablash bosqichi.";
       return `Asosiy risk zonasi: ${LABELS[weak]||weak}.`
     }
 
@@ -978,9 +895,6 @@
         if (x.category === 'profitability') out.push('Har mahsulot bo`yicha marja jadvalini yarating.');
         if (x.category === 'working_capital') out.push('Debitor bo`yicha limit va eslatma tartibini kiriting.');
         if (x.category === 'inventory') out.push('ABC/XYZ tahlili orqali muzlagan pulni kamaytiring.');
-        if (x.category === 'delegation') out.push('RACI rol-mas`uliyat matritsasini yozing.');
-        if (x.category === 'planning') out.push('Haftalik 30 daqiqalik reja yig`ilishini joriy qiling.');
-        if (x.category === 'team_kpi') out.push('3-5 asosiy KPI ni kundalik dashboardga chiqaring.')
       });
       return [...new Set(out)].slice(0, 6)
     }
@@ -992,9 +906,6 @@
         if (['profitability', 'pricing'].includes(x.category)) s.add('P&L va marja nazorati');
         if (x.category === 'working_capital') s.add('Debitor/Kreditor monitoring');
         if (x.category === 'inventory') s.add('ABC/XYZ (ombor)');
-        if (['team_kpi', 'planning', 'delegation', 'processes', 'hr', 'motivation'].includes(x.category)) s.add(
-          'KPI Dashboard');
-        if (x.category === 'sales_ops') s.add('CRM funnel hisoboti')
       });
       s.add('Balans (oylik)');
       s.add('Plan-Fakt (oylik)');
@@ -1092,8 +1003,7 @@
         marja: ['profitability', 'pricing'],
         qarz: ['working_capital'],
         ombor: ['inventory'],
-        jarayon: ['processes', 'delegation', 'planning'],
-        nazorat: ['team_kpi', 'hr', 'motivation', 'sales_ops', 'tax_legal']
+        nazorat: ['tax_legal']
       };
       const val = {
         naqdlik: 0,
@@ -1152,28 +1062,22 @@
     }
 
     function renderResult() {
-      const fin = computeBlock('finance'),
-        man = computeBlock('management');
-      const overall = Math.round((fin.percent + man.percent) / 2);
+      const fin = computeBlock('finance');
+      const overall = fin.percent;
       const weakQ = extremes(false),
         strongQ = extremes(true),
-        weak = weakCategories(fin, man);
-      const main = mainConclusion(fin.percent, man.percent, weak[0] ? weak[0].category : 'cashflow');
+        weak = weakCategories(fin);
+      const main = mainConclusion(fin.percent, weak[0] ? weak[0].category : 'cashflow');
       el('overallScore').textContent = overall + '%';
       el('overallLevel').textContent = levelByPercent(overall);
       el('overallLine').textContent = main;
       el('financeScore').textContent = fin.percent + '%';
       el('financeLevel').textContent = levelByPercent(fin.percent);
-      el('managementScore').textContent = man.percent + '%';
-      el('managementLevel').textContent = levelByPercent(man.percent);
       el('financeLine').textContent = fin.percent < 50 ? "Pul oqimi va foyda nazorati zaif." : fin.percent < 70 ?
         "Asos bor, lekin intizomni kuchaytirish kerak." : "Moliyaviy tizim barqaror.";
-      el('managementLine').textContent = man.percent < 50 ? "Jarayonlar va delegatsiya sust." : man.percent < 70 ?
-        "Boshqaruvni standartlash kerak." : "Menejment tizimi yaxshi.";
       el('mainConclusion').textContent = main;
       const insights = [];
       if (fin.percent < 50) insights.push("Pul oqimi va foyda nazorati zaif. CashGap bosimi bor.");
-      if (man.percent < 50) insights.push("Jarayonlar va delegatsiya sust: operatsion yuk rahbarda.");
       weak.slice(0, 4).forEach(x => insights.push(insightByCategory(x.category)));
       const uniq = [...new Set(insights)].slice(0, 7);
       while (uniq.length < 3) uniq.push('1-3 ustuvor yo`nalishni tanlab haftalik nazoratni ishga tushiring.');
@@ -1182,16 +1086,13 @@
       renderQA('strongQuestions', strongQ, false);
       renderList('quickPlan', planByWeak(weak));
       renderList('neededReports', reportsByWeak(weak));
-      const fk = ['cashflow', 'profitability', 'forecasting', 'working_capital', 'inventory', 'pricing', 'tax_legal'],
-        mk = ['processes', 'delegation', 'team_kpi', 'hr', 'motivation', 'planning', 'sales_ops'];
+      const fk = ['cashflow', 'profitability', 'forecasting', 'working_capital', 'inventory', 'pricing', 'tax_legal'];
       renderRadar('financeRadar', fk, fk.map(k => fin.categoryPercent[k] || 0));
-      renderRadar('managementRadar', mk, mk.map(k => man.categoryPercent[k] || 0));
       renderBar(weak);
       renderDonut(weak);
       app.result = {
         overall,
         fin,
-        man,
         weak,
         weakQ,
         strongQ,
@@ -1356,19 +1257,9 @@
       y += 12;
 
       const cards = [{
-          label: 'Umumiy',
-          v: `${app.result.overall}%`,
-          lvl: levelByPercent(app.result.overall)
-        },
-        {
           label: 'Moliyaviy',
           v: `${app.result.fin.percent}%`,
           lvl: levelByPercent(app.result.fin.percent)
-        },
-        {
-          label: 'Menejment',
-          v: `${app.result.man.percent}%`,
-          lvl: levelByPercent(app.result.man.percent)
         }
       ];
       let cx = 40;
@@ -1390,7 +1281,7 @@
       });
       y += 84;
 
-      const chartIds = ['financeRadar', 'managementRadar', 'weakBar', 'problemDonut'];
+      const chartIds = ['financeRadar', 'weakBar', 'problemDonut'];
       const chartImages = await Promise.all(chartIds.map(svgToPngDataUrl));
       const chW = 250,
         chH = 165;
@@ -1456,40 +1347,26 @@
         sector: app.user.sector,
         page: location.href,
         secret: SECRET,
-        summary: `Umumiy: ${app.result.overall}% | Moliyaviy: ${app.result.fin.percent}% | Menejment: ${app.result.man.percent}%`,
+        summary: `Moliyaviy: ${app.result.fin.percent}%`,
         pdf: pdfBase64 || ''
       };
       try {
-        await fetch(ENDPOINT, {
+        const r = await fetch(ENDPOINT, {
           method: 'POST',
-          mode: 'no-cors',
+          mode: 'cors',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(payload)
         });
-        return true;
+        if (!r.ok) return false;
+        const j = await r.json().catch(() => null);
+        return !!(j && j.ok);
       } catch {
         return false;
       }
     }
     async function sendPdfToTelegram(blob) {
-      if (TELEGRAM_CONFIG.botToken && TELEGRAM_CONFIG.chatId) {
-        const fd = new FormData();
-        fd.append('chat_id', TELEGRAM_CONFIG.chatId);
-        if (TELEGRAM_CONFIG.topicId) fd.append('message_thread_id', TELEGRAM_CONFIG.topicId);
-        const caption =
-          `Yangi diagnostika: ${app.user.business}\nSohasi: ${app.user.sector}\nIsm: ${app.user.name}\nTel: ${app.user.phone}\nUmumiy: ${app.result.overall}%`;
-        fd.append('caption', caption);
-        fd.append('document', new File([blob], `diagnostika_${Date.now()}.pdf`, {
-          type: 'application/pdf'
-        }));
-        const r = await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendDocument`, {
-          method: 'POST',
-          body: fd
-        });
-        if (r.ok) return true;
-      }
       const pdf64 = await new Promise(res => {
         const fr = new FileReader();
         fr.onload = () => res(String(fr.result).split(',')[1] || '');
