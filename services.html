@@ -130,7 +130,7 @@
 				</div>
 
 				<div class="col-md-6 wow fadeInUp" data-wow-delay=".1s">
-					<img src="assets/img/img1.jpg" alt="img" style="width:100%">
+					<img src="assets/img/For%20Site/8.jpg" alt="img" style="width:100%">
 				</div>
 			</div><!-- end row -->
 		</div><!-- end container -->
@@ -326,13 +326,22 @@
 						<p>
 							+998 XX XXX XX XX
 						</p>
-						<form action="#" method="post">
+						<form class="js-lead-form" novalidate>
 							<div class="input_1">
-								<input type="text" name="mail">
-								<span>Raqamingiz</span>
+								<select name="sector" autocomplete="organization-title">
+									<option value="">Sohani tanlang</option>
+								</select>
 							</div>
-							<button type="submit" class="btn green"
-								style="margin-top:20px"><span>Jo'natish</span></button>
+							<div class="input_1">
+								<input type="text" name="name" autocomplete="name">
+								<span>Ismingiz</span>
+							</div>
+							<div class="input_1">
+								<input type="text" name="phone" inputmode="numeric" autocomplete="tel" maxlength="13">
+								<span>Telefon raqamingiz</span>
+							</div>
+							<button type="submit" class="btn green" style="margin-top:20px"><span>Jo'natish</span></button>
+							<div class="js-lead-msg" style="margin-top:10px"></div>
 						</form>
 					</div>
 				</div>
@@ -388,6 +397,7 @@
 	<script type="text/javascript" src="assets/js/jquery.animsition.min.js"></script>
 	<script type="text/javascript" src="assets/js/wow.min.js"></script>
 	<script type="text/javascript" src="assets/js/main.js"></script>
+    <script type="text/javascript" src="assets/js/lead-form-global.js"></script>
 	<script>
 		(function () {
 			const header = document.querySelector('header.main-header');
@@ -412,6 +422,8 @@
 </body>
 
 </html>
+
+
 
 
 

@@ -305,7 +305,7 @@
 		<div class="agency">
 			<div class="col-md-5 col-sm-12">
 				<div class="row">
-					<img src="assets/img/agency.jpg" alt="image">
+					<img src="assets/img/For%20Site/2.webp" alt="image">
 				</div>
 			</div>
 			<div class="col-md-offset-1 col-md-6 col-sm-12">
@@ -390,7 +390,7 @@
 
 			<div class="col-md-5 col-sm-12 services-right wow fadeInUp" data-wow-delay=".1s">
 				<div class="row">
-					<img src="assets/img/serv.jpg" alt="image">
+					<img src="assets/img/For%20Site/3.webp" alt="image">
 				</div>
 			</div>
 
@@ -585,12 +585,22 @@
 						<p>
 							Напишите почту — и мы отправим короткий чек-лист внедрения, пример отчётов и шаги, чтобы ваша команда быстро начала вести учёт правильно.
 						</p>
-						<form action="#" method="post">
+						<form class="js-lead-form" novalidate>
 							<div class="input_1">
-								<input type="text" name="email">
-								<span>ваш e-mail</span>
+								<select name="sector" autocomplete="organization-title">
+									<option value="">Sohani tanlang</option>
+								</select>
 							</div>
-							<button type="submit" class="btn green" style="margin-top:20px"><span>отправить</span></button>
+							<div class="input_1">
+								<input type="text" name="name" autocomplete="name">
+								<span>Ismingiz</span>
+							</div>
+							<div class="input_1">
+								<input type="text" name="phone" inputmode="numeric" autocomplete="tel" maxlength="13">
+								<span>Telefon raqamingiz</span>
+							</div>
+							<button type="submit" class="btn green" style="margin-top:20px"><span>Jo'natish</span></button>
+							<div class="js-lead-msg" style="margin-top:10px"></div>
 						</form>
 					</div>
 				</div>
@@ -643,6 +653,7 @@
 	<script type="text/javascript" src="assets/js/jquery.animsition.min.js"></script>
 	<script type="text/javascript" src="assets/js/wow.min.js"></script>
 	<script type="text/javascript" src="assets/js/main.js"></script>
+    <script type="text/javascript" src="assets/js/lead-form-global.js"></script>
 
 	<script type="text/javascript" charset="utf-8">
 		$(window).load(function() {
@@ -685,6 +696,10 @@
 	</script>
 </body>
 </html>
+
+
+
+
 
 
 

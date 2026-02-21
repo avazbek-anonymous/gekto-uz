@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 @Author: Akhouad-me
 @URL: http://www.akhouad.me
@@ -319,11 +319,11 @@ ul.social-icons li a{
 header.main-header{
   height: 100px;
   width: 100%;
-  position: fixed;          /* фиксированный */
+  position: fixed;          /* С„РёРєСЃРёСЂРѕРІР°РЅРЅС‹Р№ */
   top: 0;
   left: 0;
   z-index: 999;
-  background: #fff;         /* по умолчанию белый */
+  background: #fff;         /* РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Р±РµР»С‹Р№ */
   transition: background .25s ease, box-shadow .25s ease, color .25s ease;
 }
 
@@ -356,20 +356,20 @@ header.main-header .logo{
 	line-height: 100px;
 }
 
-/* состояние при скролле */
+/* СЃРѕСЃС‚РѕСЏРЅРёРµ РїСЂРё СЃРєСЂРѕР»Р»Рµ */
 header.main-header.scrolled{
   background: #003A2F;
   box-shadow: 0 8px 22px rgba(0,0,0,.12);
 }
 
-/* цвет текста/ссылок при скролле */
+/* С†РІРµС‚ С‚РµРєСЃС‚Р°/СЃСЃС‹Р»РѕРє РїСЂРё СЃРєСЂРѕР»Р»Рµ */
 header.main-header.scrolled a,
 header.main-header.scrolled .desktop-nav a,
 header.main-header.scrolled .mobile-nav a{
   color: #FFD05A !important;
 }
 
-/* (по желанию) линии бургер-меню тоже желтые */
+/* (РїРѕ Р¶РµР»Р°РЅРёСЋ) Р»РёРЅРёРё Р±СѓСЂРіРµСЂ-РјРµРЅСЋ С‚РѕР¶Рµ Р¶РµР»С‚С‹Рµ */
 header.main-header.scrolled .menu-icon .line{
   background: #FFD05A;
 }
@@ -614,14 +614,14 @@ footer.main-footer nav.footer-nav ul li a{
 	background: linear-gradient(180deg, rgba(7, 20, 45, .52), rgba(7, 20, 45, .40));
 	z-index: 0;
 }
-.site-hero_2.hero-about{ background-image: url("../img/For%20Site/How-to-Secure-Small-Business-Financing-in-Canada.jpg"); }
-.site-hero_2.hero-services{ background-image: url("../img/For%20Site/The-importance-of-effective-financial-management-in-todays-businesses-1024x570.jpg"); }
-.site-hero_2.hero-contact{ background-image: url("../img/For%20Site/Accountants_Daily_Articleshutterstock_2413760877_1_jkznsh.webp"); }
-.site-hero_2.hero-moliya{ background-image: url("../img/For%20Site/1750214710.webp"); }
-.site-hero_2.hero-financecourse{ background-image: url("../img/For%20Site/1743505823257.png"); }
-.site-hero_2.hero-portfolio{ background-image: url("../img/For%20Site/Analyst-compares-data.webp"); }
-.site-hero_2.hero-single-project{ background-image: url("../img/For%20Site/FUNDAMENTALS-OF-FINANCE.jpg"); }
-.site-hero_2.hero-single-project2{ background-image: url("../img/For%20Site/Scope-of-business-finance-Benefits-importance-Features.jpg"); }
+.site-hero_2.hero-about{ background-image: url("../img/For%20Site/2.webp"); }
+.site-hero_2.hero-services{ background-image: url("../img/For%20Site/8.jpg"); }
+.site-hero_2.hero-contact{ background-image: url("../img/For%20Site/4.jpg"); }
+.site-hero_2.hero-moliya{ background-image: url("../img/For%20Site/1.webp"); }
+.site-hero_2.hero-financecourse{ background-image: url("../img/For%20Site/9.png"); }
+.site-hero_2.hero-portfolio{ background-image: url("../img/For%20Site/3.webp"); }
+.site-hero_2.hero-single-project{ background-image: url("../img/For%20Site/5.jpg"); }
+.site-hero_2.hero-single-project2{ background-image: url("../img/For%20Site/7.jpg"); }
 @media (max-width: 991px){
 	.site-hero_2{
 		height: 360px;
@@ -1089,13 +1089,13 @@ header.main-header nav.mobile-nav ul.first-level > li:has(> ul.second-level > li
 }
 
 .pricing_plan .list{
-  flex: 1 1 auto;     /* список занимает место */
+  flex: 1 1 auto;     /* СЃРїРёСЃРѕРє Р·Р°РЅРёРјР°РµС‚ РјРµСЃС‚Рѕ */
   margin-bottom: 18px;
 }
 
 .pricing_plan .btn{
-  margin-top: auto;   /* кнопка уходит вниз */
-  align-self: stretch; /* если хочешь одинаковую ширину */
+  margin-top: auto;   /* РєРЅРѕРїРєР° СѓС…РѕРґРёС‚ РІРЅРёР· */
+  align-self: stretch; /* РµСЃР»Рё С…РѕС‡РµС€СЊ РѕРґРёРЅР°РєРѕРІСѓСЋ С€РёСЂРёРЅСѓ */
   text-align: center;
 }
 
@@ -1376,21 +1376,21 @@ header.main-header nav.mobile-nav ul.first-level > li:has(> ul.second-level > li
 /* ===== History timeline (stable) ===== */
 .history-scroll{
   position: relative;
-  --history-top: 120px;   /* высота твоего fixed header + небольшой запас */
-  --step-h: 32vh;         /* длина шага: меньше = ближе следующие секции */
-  scroll-margin-top: 140px; /* чтобы при переходе по #history не пряталось под header */
+  --history-top: 120px;   /* РІС‹СЃРѕС‚Р° С‚РІРѕРµРіРѕ fixed header + РЅРµР±РѕР»СЊС€РѕР№ Р·Р°РїР°СЃ */
+  --step-h: 32vh;         /* РґР»РёРЅР° С€Р°РіР°: РјРµРЅСЊС€Рµ = Р±Р»РёР¶Рµ СЃР»РµРґСѓСЋС‰РёРµ СЃРµРєС†РёРё */
+  scroll-margin-top: 140px; /* С‡С‚РѕР±С‹ РїСЂРё РїРµСЂРµС…РѕРґРµ РїРѕ #history РЅРµ РїСЂСЏС‚Р°Р»РѕСЃСЊ РїРѕРґ header */
 }
 
-/* важно: контейнер должен быть relative для режима "прилип внизу" */
+/* РІР°Р¶РЅРѕ: РєРѕРЅС‚РµР№РЅРµСЂ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ relative РґР»СЏ СЂРµР¶РёРјР° "РїСЂРёР»РёРї РІРЅРёР·Сѓ" */
 .history-scroll .container{
   position: relative;
   overflow: visible;
 }
 
-/* spacer (JS будет менять высоту, чтобы контент не прыгал) */
+/* spacer (JS Р±СѓРґРµС‚ РјРµРЅСЏС‚СЊ РІС‹СЃРѕС‚Сѓ, С‡С‚РѕР±С‹ РєРѕРЅС‚РµРЅС‚ РЅРµ РїСЂС‹РіР°Р») */
 .history-sticky-spacer{ height: 0; }
 
-/* мы НЕ используем CSS sticky — липкость делаем JS */
+/* РјС‹ РќР• РёСЃРїРѕР»СЊР·СѓРµРј CSS sticky вЂ” Р»РёРїРєРѕСЃС‚СЊ РґРµР»Р°РµРј JS */
 .history-sticky{
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -1464,18 +1464,18 @@ header.main-header nav.mobile-nav ul.first-level > li:has(> ul.second-level > li
 .history-panel__year{ font-size: 22px; font-weight: 800; margin-bottom: 6px; }
 .history-panel__title{ margin-bottom: 10px; }
 
-/* steps = длина скролла */
+/* steps = РґР»РёРЅР° СЃРєСЂРѕР»Р»Р° */
 .history-steps{ position: relative; z-index: 1; }
 .history-step{
   height: var(--step-h);
-  min-height: 200px;  /* чтобы observer не “пропускал” шаги */
+  min-height: 200px;  /* С‡С‚РѕР±С‹ observer РЅРµ вЂњРїСЂРѕРїСѓСЃРєР°Р»вЂќ С€Р°РіРё */
 }
 .history-step:last-child{
   height: calc(var(--step-h) / 2);
   min-height: 140px;
 }
 
-/* mobile (телефоны) */
+/* mobile (С‚РµР»РµС„РѕРЅС‹) */
 @media (max-width: 767px){
   .history-left{ display:none; }
   .history-steps{ display:none; }
@@ -1497,14 +1497,14 @@ header.main-header nav.mobile-nav ul.first-level > li:has(> ul.second-level > li
 html, body { overflow-x: hidden; }
 img, video, iframe { max-width: 100%; height: auto; }
 
-/* иногда помогает bootstrap-колонкам не раздувать ширину */
+/* РёРЅРѕРіРґР° РїРѕРјРѕРіР°РµС‚ bootstrap-РєРѕР»РѕРЅРєР°Рј РЅРµ СЂР°Р·РґСѓРІР°С‚СЊ С€РёСЂРёРЅСѓ */
 [class*="col-"] { min-width: 0; }
 
 @media (max-width: 767px) {
-  /* УБИРАЕМ раздувающий padding в футере */
+  /* РЈР‘РР РђР•Рњ СЂР°Р·РґСѓРІР°СЋС‰РёР№ padding РІ С„СѓС‚РµСЂРµ */
   .main-footer p[style*="padding-right"] { padding-right: 0 !important; }
 
-  /* Центрируем футер в мобилке */
+  /* Р¦РµРЅС‚СЂРёСЂСѓРµРј С„СѓС‚РµСЂ РІ РјРѕР±РёР»РєРµ */
   .main-footer .col-md-4,
   .main-footer .col-md-8 { text-align: center !important; }
 
@@ -1516,15 +1516,15 @@ img, video, iframe { max-width: 100%; height: auto; }
     margin-top: 15px !important;
   }
 
-  /* Кнопку "Biz haqimizda" не держим float-right на мобилке */
+  /* РљРЅРѕРїРєСѓ "Biz haqimizda" РЅРµ РґРµСЂР¶РёРј float-right РЅР° РјРѕР±РёР»РєРµ */
   .agency a.btn.green {display: inline-block; }
 
-  /* HERO уменьшить */
+  /* HERO СѓРјРµРЅСЊС€РёС‚СЊ */
   .site-hero .big-title { font-size: 20px !important; line-height: 1.15 !important; }
   .site-hero .small-title { font-size: 12px !important; }
   .site-hero p { font-size: 16px !important; width: 80% !important;line-height: 1.5 !important; }
 
-  /* newsletter тексты уменьшить (у тебя там inline font-size) */
+  /* newsletter С‚РµРєСЃС‚С‹ СѓРјРµРЅСЊС€РёС‚СЊ (Сѓ С‚РµР±СЏ С‚Р°Рј inline font-size) */
   .green-section .white-text { font-size: 20px !important; margin-top: 0 !important; }
   .green-section .white-section span { font-size: 18px !important; }
   .section-title span {
@@ -1550,7 +1550,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 /* ===== ABOUT (mobile fix) ===== */
 @media (max-width: 767px) {
 
-  /* 2 колонки -> в столбик */
+  /* 2 РєРѕР»РѕРЅРєРё -> РІ СЃС‚РѕР»Р±РёРє */
   .about-split .col-md-6{
     float: none !important;
     width: 100% !important;
@@ -1560,7 +1560,7 @@ img, video, iframe { max-width: 100%; height: auto; }
     margin-top: 26px;
   }
 
-  /* убираем “обтекание” заголовка */
+  /* СѓР±РёСЂР°РµРј вЂњРѕР±С‚РµРєР°РЅРёРµвЂќ Р·Р°РіРѕР»РѕРІРєР° */
   .about-split .section-title{
     float: none !important;
     width: 100% !important;
@@ -1580,7 +1580,7 @@ img, video, iframe { max-width: 100%; height: auto; }
     line-height: 1.35 !important;
   }
 
-  /* основной текст: читабельно + переносы */
+  /* РѕСЃРЅРѕРІРЅРѕР№ С‚РµРєСЃС‚: С‡РёС‚Р°Р±РµР»СЊРЅРѕ + РїРµСЂРµРЅРѕСЃС‹ */
   .about-split > .container p{
     font-size: 14px;
     line-height: 1.65;
@@ -1590,10 +1590,11 @@ img, video, iframe { max-width: 100%; height: auto; }
     hyphens: auto;
   }
 
-  /* если у тебя “подчёркивание/полоска” у span уезжает — центрируем */
+  /* РµСЃР»Рё Сѓ С‚РµР±СЏ вЂњРїРѕРґС‡С‘СЂРєРёРІР°РЅРёРµ/РїРѕР»РѕСЃРєР°вЂќ Сѓ span СѓРµР·Р¶Р°РµС‚ вЂ” С†РµРЅС‚СЂРёСЂСѓРµРј */
   .about-split .section-title span:after,
   .about-split .section-title span::after{
     left: 50% !important;
     transform: translateX(-50%) !important;
   }
 }
+
