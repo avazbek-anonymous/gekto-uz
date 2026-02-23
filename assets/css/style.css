@@ -945,7 +945,7 @@ header.main-header nav.mobile-nav ul.first-level > li:has(> ul.second-level > li
 	        transform:translateY(-50%);
 	font-family: "Montserrat", sans-serif;
 	font-weight: 700;
-	font-size: 12px;
+	font-size: 12px!important;
 	text-transform: uppercase;
 	color:#cdcdcd;
 	-webkit-transition:all .2s ease-in-out;
@@ -1526,7 +1526,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 
   /* newsletter С‚РµРєСЃС‚С‹ СѓРјРµРЅСЊС€РёС‚СЊ (Сѓ С‚РµР±СЏ С‚Р°Рј inline font-size) */
   .green-section .white-text { font-size: 20px !important; margin-top: 0 !important; }
-  .green-section .white-section span { font-size: 18px !important; }
+  .green-section .white-section span { font-size: 18px}
   .section-title span {
 	font-size: 20px !important;
   }
