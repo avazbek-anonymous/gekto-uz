@@ -609,7 +609,7 @@
             <ul id="quickPlan" class="list-clean"></ul>
             <div class="chart-title" style="margin-top:14px">Sizga kerak bo'ladigan hisobotlar</div>
             <ul id="neededReports" class="list-clean"></ul>
-            <div class="note" style="font-size:14px;color:#1f2b28;margin-top:12px">Agar ushbu masalalarni hal qilish,
+            <div class="note" style="font-size:14px;color:#1f2b28;margin-top:12px; font-weight: 500;">Agar ushbu masalalarni hal qilish,
               amaliy tavsiya olish yoki biznesingizni tizimlashtirishni xohlasangiz, biz bilan bog'laning</div>
             <div class="actions">
               <button id="pdfAndSend" class="btn green"><span>PDF yuklab olish</span>
@@ -1394,8 +1394,10 @@
       }
       doc.setTextColor(30, 45, 39);
       doc.setFontSize(11);
+      doc.setFont("helvetica", "bold"); // <-- жирный
       doc.text("Agar ushbu masalalarni hal qilishni xohlasangiz, quyidagi kontaktlar orqali biz bilan bog'laning.",
         40, y);
+      doc.setFont("helvetica", "normal"); // <-- вернуть обычный
       y += 20;
       doc.setDrawColor(212, 231, 223);
       doc.line(40, y, page.w - 40, y);
