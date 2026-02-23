@@ -103,43 +103,49 @@
 		<div class="container">
 			<div class="col-md-6 col-sm-12">
 				<div class="row">
-					<span class="white-text montserrat-text uppercase" style="font-size:30px;display:block;">
-						Biznesingizni tizimli moliya bilan o'stiramiz
+					<span class="white-text montserrat-text uppercase"
+						style="font-size:30px;display:block;margin-top: 15%;">
+						Biznesingizni biz bilan rivojlantirmoqchimisiz?
 					</span>
-					<a href="#" class="btn white" style="margin-top:30px"><span>Konsultatsiya olish</span></a>
+					<!--a href="#" class="btn white" style="margin-top:30px"><span>Aloqaga chiqish</span></a-->
 				</div>
 			</div>
 
 			<div class="col-md-6 col-sm-12">
 				<div class="row">
 					<div class="white-section" style="padding:20px">
-						<span class="montserrat-text uppercase" style="font-size:24px">Ariza qoldiring</span>
+						<span class="montserrat-text uppercase" style="font-size:24px">Raqamingizni qoldiring</span>
 						<p>
-							Qisqa ma'lumot qoldiring, mutaxassisimiz siz bilan bog'lanib, biznesingiz uchun mos moliyaviy yechimni taklif qiladi.
+							+998 XX XXX XX XX
 						</p>
-						<form class="js-lead-form" novalidate>
+						<form id="leadForm">
 							<div class="input_1">
-								<select name="sector" autocomplete="organization-title">
+								<select id="sector" autocomplete="organization-title">
 									<option value="">Sohani tanlang</option>
 								</select>
 							</div>
 							<div class="input_1">
-								<input type="text" name="name" autocomplete="name">
+								<input id="name" type="text" autocomplete="name" />
 								<span>Ismingiz</span>
 							</div>
+
 							<div class="input_1">
-								<input type="text" name="phone" inputmode="numeric" autocomplete="tel" maxlength="13">
-								<span>Telefon raqamingiz</span>
+								<input id="phone" type="text" inputmode="numeric" autocomplete="tel" maxlength="13" />
+								<span>Raqamingiz</span>
 							</div>
-							<button type="submit" class="btn green" style="margin-top:20px"><span>Jo'natish</span></button>
-							<div class="js-lead-msg" style="margin-top:10px"></div>
+
+							<button type="submit" class="btn green" style="margin-top:20px">
+								<span>Jo'natish</span>
+							</button>
+
+							<div id="leadMsg"></div>
 						</form>
+
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-
 
 	<!-- FOOTER -->
 	<footer class="main-footer wow fadeInUp">
